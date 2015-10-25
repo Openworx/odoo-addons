@@ -17,7 +17,7 @@ body {
 }
 
 #oe_main_menu_navbar {
-    background: #893b74 none repeat scroll 0 0 !important;
+    background: #A24689 none repeat scroll 0 0 !important;
     border-radius: 0;
     box-shadow: 0 0 8px #666666;
     z-index: 1001;
@@ -32,7 +32,7 @@ body {
 
 .navbar-inverse {
     background-color: #ffffff;
-    border-color: #893b74;
+    border-color: #A24689;
 }
 
 
