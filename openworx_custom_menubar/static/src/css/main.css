@@ -53,13 +53,12 @@ body {
 }	
 
 
-/* set hover and focus to lightblue */
 .navbar .nav > li > a:focus,
 .navbar .nav > li > a:hover {
 	background-color: #7E376B;
 	color: #ffffff;
 }
-/* set active item to darkgreen */
+
 .navbar .nav > .active > a,
 .navbar .nav > .active > a:hover,
 .navbar .nav > .active > a:focus {
