@@ -12,7 +12,6 @@
     'website': 'http://www.openworx.nl',
     'images': [],
     'depends': ['base', 'sale'],
-    'sequence': 18,
     'data': [
         'report_packing_slip.xml',
     ],
