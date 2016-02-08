@@ -1,0 +1,83 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+#	* packing_slip
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 8.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2016-02-08 14:08+0000\n"
+"PO-Revision-Date: 2016-02-08 14:08+0000\n"
+"Last-Translator: <>\n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
+
+#. module: packing_slip
+#: view:website:packing_slip.report_packing_slip_document
+msgid "Date Ordered:"
+msgstr ""
+
+#. module: packing_slip
+#: view:website:packing_slip.report_packing_slip_document
+msgid "Description"
+msgstr ""
+
+#. module: packing_slip
+#: view:website:packing_slip.report_packing_slip_document
+msgid "Invoice address:"
+msgstr ""
+
+#. module: packing_slip
+#: view:website:packing_slip.report_packing_slip_document
+msgid "Invoice and shipping address:"
+msgstr ""
+
+#. module: packing_slip
+#: model:ir.actions.report.xml,name:packing_slip.packing_slip_id
+#: view:website:packing_slip.report_packing_slip_document
+msgid "Packing Slip"
+msgstr ""
+
+#. module: packing_slip
+#: view:website:packing_slip.report_packing_slip_document
+msgid "Payment Term:"
+msgstr ""
+
+#. module: packing_slip
+#: view:website:packing_slip.report_packing_slip_document
+msgid "Quantity"
+msgstr ""
+
+#. module: packing_slip
+#: view:website:packing_slip.report_packing_slip_document
+msgid "Quotation Date:"
+msgstr ""
+
+#. module: packing_slip
+#: view:website:packing_slip.report_packing_slip_document
+msgid "Salesperson:"
+msgstr ""
+
+#. module: packing_slip
+#: view:website:packing_slip.report_packing_slip_document
+msgid "Shipping address:"
+msgstr ""
+
+#. module: packing_slip
+#: view:website:packing_slip.report_packing_slip_document
+msgid "Signature"
+msgstr ""
+
+#. module: packing_slip
+#: view:website:packing_slip.report_packing_slip_document
+msgid "VAT:"
+msgstr ""
+
+#. module: packing_slip
+#: view:website:packing_slip.report_packing_slip_document
+msgid "Your Reference:"
+msgstr ""
+
