@@ -11,8 +11,7 @@
 	    src: url(/kix-code/static/src/font/Kixbrg__.ttf);
 	}
 </style>
-			<span t-field="o.partner_id.zip" style="font-family: KIX Barcode;" />
-		    <span t-field="o.partner_id.street_number" style="font-family: KIX Barcode;" />
+			<span t-field="o.partner_id.zip" style="font-family: KIX Barcode;" /><span t-field="o.partner_id.street_number" style="font-family: KIX Barcode;" />
             </xpath>
         </template>
     </data>
