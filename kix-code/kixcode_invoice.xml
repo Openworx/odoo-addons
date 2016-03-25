@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+        <template id="kixcode_invoice" inherit_id="account.report_invoice_document">
+             <xpath expr="//address[@t-field='o.partner_id']" position="after">
+	
+
+<style>
+	@font-face {
+	    font-family: KIX Barcode;
+	    src: url(/kix-code/static/src/font/Kixbrg__.ttf);
+	}
+</style>
+			<span t-field="o.partner_id.zip" style="font-family: KIX Barcode;" />
+		    <span t-field="o.partner_id.street_number" style="font-family: KIX Barcode;" />
+            </xpath>
+        </template>
+    </data>
+</openerp>
