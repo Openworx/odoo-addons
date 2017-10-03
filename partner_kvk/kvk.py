@@ -25,6 +25,6 @@ from openerp import models, fields
 class ResPartner(models.Model):
     _inherit = 'res.partner'
 
-    kvk = fields.char('CoC')
+    kvk = fields.Char('CoC')
  
 
