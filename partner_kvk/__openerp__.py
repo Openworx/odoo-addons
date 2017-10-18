@@ -20,7 +20,7 @@
 
 {
 	'name' : 'Add KvK (Chamber of Commerce Registration Number) field to partner',
-	'version' : '9.0.1.0',
+	'version' : '8.0.1.0',
 	'category' : 'Customer Relationship Management',
 	'summary': 'Add KvK (Chamber of Commerce Registration Number) field to partner'
 	'author' : 'Openworx',
