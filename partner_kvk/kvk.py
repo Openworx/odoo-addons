@@ -18,13 +18,12 @@
 #
 ##############################################################################
 
-from openerp import models, fields
+from openerp.osv import fields, osv
 
-
-
-class ResPartner(models.Model):
+class res_partner(osv.osv):
     _inherit = 'res.partner'
 
-    kvk = fields.Char('CoC')
- 
+    _columns = {
+        'kvk': fields.char('CoC'),
+    }
 
