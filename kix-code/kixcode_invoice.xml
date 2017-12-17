@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<openerp>
+<odoo>
     <data>
         <template id="kixcode_invoice" inherit_id="account.report_invoice_document">
              <xpath expr="//address[@t-field='o.partner_id']" position="after">
@@ -15,4 +15,4 @@
             </xpath>
         </template>
     </data>
-</openerp>
+</odoo>
