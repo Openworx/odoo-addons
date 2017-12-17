@@ -4,7 +4,7 @@
     'name': 'PostNL KIX-Code',
     'version': '10.0.1',
     'author': 'Openworx',
-    'category': 'Base',
+    'category': 'Extra Tools',
     'license': 'LGPL-3',
     'summary': 'PostNL Address barcode on invoice',
     'description': """
@@ -14,7 +14,7 @@ PostNL maakt bij de sortering van post gebruik van een streepjescode: de KIX (Kl
     'images':[
         'images/kixcode.png'
     ],
-    'depends': ['report','partner_street_number'],
+    'depends': ['base', 'account', 'partner_street_number'],
     'data': [
         'kixcode_invoice.xml',
     ],
