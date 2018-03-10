@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+  <data>
+
+        <template id="lumen_theme_asset" name="Website asset for Bootswatch Lumen theme" inherit_id="website.assets_frontend">
+            <xpath expr="." position="inside">
+                <link rel="stylesheet" href="/theme_lumen/static/src/css/bootswatch-lumen.css"/>
+            </xpath>
+        </template>
+
+  </data>
+</odoo>
