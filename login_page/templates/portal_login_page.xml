@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    
+    <template id="assets__portal_login" inherit_id="web.assets_frontend">
+        <xpath expr="." position="inside">
+            <link rel="stylesheet" href="/login_page/static/src/css/loginpage.css" />
+        </xpath>
+    </template>
+
+    <template id="login" inherit_id="web.login" name="Login Inherit">
+        <xpath expr="//form[@class='oe_login_form']" position="before">
+            <div class="text-center">
+                 <img t-attf-src="/web/binary/company_logo{{ '?dbname='+db if db else '' }}"/>
+             </div>
+        </xpath>
+    </template>
+
+    <template id="portal_login" inherit_id="website.login_layout" name="Login Layout Inherit">
+        <xpath expr="//div[@class='oe_website_login_container']" position="after">
+            <style type="text/css">
+		#wrapwrap {
+		    background-color: #00aee3 !important;
+		}
+    
+	        .navbar {
+	             visibility: hidden;
+	        }
+
+	        footer {
+		    visibility: hidden;
+		}
+	    </style>
+        </xpath>
+    </template>
+    
+</odoo>
