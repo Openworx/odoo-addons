@@ -9,7 +9,7 @@
 Use budgets to compare actual with expected revenues and costs
 --------------------------------------------------------------
 
-This module is backported from Odoo version 20180927
+This module is backported from Odoo version 20180927. For Odoo 12.0 Community only.
 """,
     'summary': 'Budget Management backported to Odoo 12.0 CE',
     'depends': ['account'],
