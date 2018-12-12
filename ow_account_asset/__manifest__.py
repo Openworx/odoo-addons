@@ -11,7 +11,7 @@ Assets management
 Manage assets owned by a company or a person.
 Keeps track of depreciations, and creates corresponding journal entries.
 
-This module is backported from Odoo version 20180927
+This module is backported from Odoo version 20180927. For Odoo 12.0 Community only.
     """,
     'summary': 'Assets Management backported to Odoo 12.0 CE',
     'category': 'Accounting',
