@@ -1,0 +1,13 @@
+<odoo>
+    <record id="today_view_search_inherit_timesheet" model="ir.ui.view">
+        <field name="name">hr_timesheet_today.today_view_search_inherit_timesheet</field>
+        <field name="model">account.analytic.line</field>
+        <field name="inherit_id" ref="hr_timesheet.hr_timesheet_line_search"/>
+        <field name="arch" type="xml">
+            <xpath expr="//filter[@name='week']" position="before">
+                <separator/>
+                <filter string="Today" name="today" domain="[('date','&gt;=',time.strftime('%%Y-%%m-%%d'))]"/>
+            </xpath>
+        </field>
+    </record>
+</odoo>
