@@ -5,7 +5,7 @@
     "version": "11.0",
     "author": "Openworx",
     "website": "https://www.openworx.nl",
-    "category": "Human Resources",
+    'category': 'Generic Modules/Human Resources',
     "depends": ['hr_timesheet'],
     "data": [
         'views/timesheet_views.xml',
