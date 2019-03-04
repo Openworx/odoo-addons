@@ -8,7 +8,7 @@
     "version": "0.1",
     "author": "Openworx",
     "website": "https://www.openworx.nl",
-    'category': 'Accounting & Finance',
+    'category': 'Accounting &amp; Finance',
     "depends": ['account'],
     "data": [
         'views/invoice_iban_qr.xml',
