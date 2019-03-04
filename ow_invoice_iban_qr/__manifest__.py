@@ -8,7 +8,7 @@
     "version": "0.1",
     "author": "Openworx",
     "website": "https://www.openworx.nl",
-    'category': 'Invoicing Management',
+    'category': 'Accounting',
     "depends": ['account'],
     "data": [
         'views/invoice_iban_qr.xml',
