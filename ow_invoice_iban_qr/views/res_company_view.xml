@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+	<record id="res_company_form" model="ir.ui.view">
+		<field name="name">res.company.form</field>
+		<field name="model">res.company</field>
+		<field name="inherit_id" ref="base.view_company_form" />
+		<field name="arch" type="xml">
+			<xpath expr="//field[@name='currency_id']" position="after">
+				<field name="iban_qr_number" string="IBAN QR Code on Invoice" placeholder="NL91ABNA0417164300"/>
+			</xpath>
+		</field>
+	</record>
+</odoo>
