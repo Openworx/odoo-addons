@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!--
+    Copyright 2019 Openworx.
+    @author Mario Gielissen <mario@openworx.nl>
+    License LGPL-3.0 or later (http://www.gnu.org/licenses/lgpl.html).
+-->
+
+<odoo>
+    <data>
+	<template id="assets_notify" name="Openworx Notify" inherit_id="web.assets_backend">
+	    <xpath expr="//script[@src='/mail/static/src/js/systray/systray_messaging_menu.js']" position="replace">
+		<script type="application/javascript" src="/ow_notify/static/src/js/systray_messaging_menu.js"/>
+		</xpath>
+	</template>
+    </data>
+</odoo>
