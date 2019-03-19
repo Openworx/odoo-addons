@@ -11,8 +11,7 @@
     "description": """
     Sound and push notifications on new messages.
     """,
-    'images':[
-    ],
+    'images':['images/chat.png'],
     "author": "Openworx",
     "license": "LGPL-3",
     "installable": True,
