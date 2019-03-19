@@ -6,7 +6,7 @@
     "name": "Openworx Notify",
     "summary": "Sound and push notifications on new messages.",
     "version": "12.0.0.1",
-    "category": "Base",
+    'category': 'Tools',
     "website": "http://www.openworx.nl",
     "description": """
     Sound and push notifications on new messages.
