@@ -254,11 +254,37 @@ var MessagingMenu = Widget.extend({
      */
     _updateCounter: function () {
         var counter = this._computeCounter();
+		
+	/* If message counter increments, then beep and notify */
+
 	if (counter > last) {
 	    this._beep();
-	    var notification = new Notification("New Odoo message");
+
+     // Let's check if the browser supports notifications
+	if (!("Notification" in window)) {
+    // alert("This browser does not support desktop notification");
+	}
+
+	// Let's check whether notification permissions have already been granted
+	else if (Notification.permission === "granted") {
+    // If it's okay let's create a notification
+    var notification = new Notification("New Odoo notification");
+	}
+
+	// Otherwise, we need to ask the user for permission
+	else if (Notification.permission !== "denied") {
+		Notification.requestPermission().then(function (permission) {
+		// If the user accepts, let's create a notification
+		if (permission === "granted") {
+			var notification = new Notification("New Odoo notification");
+		}
+	});
+	}
+		
 	}
 	last = counter;
+	
+	/* End of notification function */
 
         this.$('.o_notification_counter').text(counter);
         this.$el.toggleClass('o_no_notification', !counter);
