@@ -1,0 +1,181 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!--
+    Copyright 2019 Openworx.
+    @author Mario Gielissen <mario@openworx.nl>
+    License LGPL-3.0 or later (http://www.gnu.org/licenses/lgpl.html).
+-->
+
+<odoo>
+    <data>
+        <template id="account_contract" name="Portal layout : contract menu entries" inherit_id="portal.portal_breadcrumbs" priority="20">
+            <xpath expr="//ol[hasclass('o_portal_submenu')]" position="inside">
+                <li t-if="page_name == 'contract' or contract" t-attf-class="breadcrumb-item #{'active ' if not contract else ''}">
+                    <a t-if="contract" t-attf-href="/my/contract?{{ keep_query() }}">Contracts</a>
+                    <t t-else="">Contracts</t>
+                </li>
+                <li t-if="contract" class="breadcrumb-item active">
+                    <t t-esc="contract.name" />
+                </li>
+            </xpath>
+        </template>
+        <template id="portal_my_home_contract" name="Portal My Home : contract entries" inherit_id="portal.portal_my_home" priority="30">
+            <xpath expr="//div[hasclass('o_portal_docs')]" position="inside">
+                <t t-if="contract_count" t-call="portal.portal_docs_entry">
+                    <t t-set="title">Contracts</t>
+                    <t t-set="url" t-value="'/my/contract'" />
+                    <t t-set="count" t-value="contract_count" />
+                </t>
+            </xpath>
+        </template>
+        <template id="contracts" name="My Contracts">
+            <t t-call="portal.portal_layout">
+                <t t-set="breadcrumbs_searchbar" t-value="True" />
+                <t t-call="portal.portal_searchbar">
+                    <t t-set="title">Contracts</t>
+                </t>
+                <t t-if="not contracts">
+                    <div class="alert alert-warning mt8" role="alert">
+				There are currently no contracts for your account.
+			</div>
+                </t>
+                <t t-if="contracts" t-call="portal.portal_table">
+                    <thead>
+                        <tr class="active">
+                            <th>Contract #</th>
+                            <th>Reference</th>
+                            <th class="text-right">Contract Start Date</th>
+                            <th class="text-right">Contract End Date</th>
+                            <th class="text-right">Next Invoice Date</th>
+                        </tr>
+                    </thead>
+                    <t t-foreach="contracts" t-as="contract">
+                        <tr>
+                            <td>
+                                <a t-att-href="'/my/contract/'+str(contract.id)">
+                                    <t t-esc="contract.name" />
+                                </a>
+                            </td>
+                            <td>
+                                <span t-field="contract.code" />
+                            </td>
+                            <td class="text-right">
+                                <span t-field="contract.date_start" />
+                            </td>
+                            <td class="text-right">
+                                <span t-field="contract.date_end" />
+                            </td>
+                            <td class="text-right">
+                                <span t-field="contract.recurring_next_date" />
+                            </td>
+                        </tr>
+                    </t>
+                </t>
+            </t>
+        </template>
+		
+        <!-- Complete page of the contract -->
+        <template id="contract_page" name="Contracts Detail Page">
+            <t t-call="portal.portal_layout">
+                <div id="wrap">
+                    <div class="container o_portal">
+                        <div id="wrap" class="o_portal_wrap">
+                            <div class="container mb64">
+                                <div class="card mt-0 border-top-0 rounded-0 rounded-bottom">
+                                    <div class="card-header" style="background: white;">
+                                        <div>
+                                            <div class="row">
+                                                <div class="col-md-9">
+                                                    <h1>
+                                                        <span t-esc="contract.name" />
+                                                    </h1>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div>
+                                            <div class="row">
+                                                <div class="col-md-6">
+                                                    <div>
+                                                        <strong>Client:</strong>
+                                                        <div t-field="contract.partner_id" t-field-options="{&quot;widget&quot;: &quot;contact&quot;, &quot;fields&quot;: [&quot;email&quot;, &quot;phone&quot;]}" />
+                                                    </div>
+                                                    <div>
+                                                        <strong>Reference:</strong>
+                                                        <span t-field="contract.code" />
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <div>
+                                                        <strong>Contract Start Date:</strong>
+                                                        <span t-field="contract.date_start" />
+                                                    </div>
+                                                    <div>
+                                                        <strong>Contract End Date:</strong>
+                                                        <span t-field="contract.date_end" />
+                                                    </div>
+                                                    <div>
+                                                        <strong>Next Invoice Date:</strong>
+                                                        <span t-field="contract.recurring_next_date" />
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <hr />
+                                            <t t-call="ow_contract_portal.contract_recurring_items" />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="mt32">
+                    <h4>
+                        <strong>Message and communication history</strong>
+                    </h4>
+                    <t t-call="portal.message_thread">
+                        <t t-set="object" t-value="contract" />
+                        <t t-set="pid" t-value="pid" />
+                        <t t-set="hash" t-value="hash" />
+                    </t>
+                </div>
+            </t>
+        </template>
+        <template id="contract_recurring_items" name="Recurring Items">
+            <section id="recurring_items">
+                <t t-if="contract.recurring_invoice_line_ids">
+                    <div class="card-body">
+                        <h3>Items</h3>
+                        <table class="table wq-table">
+                            <thead>
+                                <tr>
+                                    <th>Name</th>
+                                    <th>Quantity</th>
+                                    <th>UoM</th>
+                                    <th>Subtotal</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <t t-foreach="contract.recurring_invoice_line_ids" t-as="invoice_line">
+                                    <tr>
+                                        <td>
+                                            <span t-field="invoice_line.display_name" />
+                                        </td>
+                                        <td>
+                                            <span t-field="invoice_line.quantity" />
+                                        </td>
+                                        <td>
+                                            <span t-field="invoice_line.uom_id" />
+                                        </td>
+                                        <td>
+                                            <span t-field="invoice_line.price_subtotal" />
+                                        </td>
+                                    </tr>
+                                </t>
+                            </tbody>
+                        </table>
+                    </div>
+                </t>
+            </section>
+        </template>
+    </data>
+</odoo>
