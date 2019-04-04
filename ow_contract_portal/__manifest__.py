@@ -15,7 +15,7 @@
 	'images':['images/screenshot.png'],
     'website': 'http://www.openworx.nl',
     'depends': [
-        'website',
+        'portal',
         'contract',
     ],
     'data': [
