@@ -19,6 +19,7 @@
                 </li>
             </xpath>
         </template>
+		
         <template id="portal_my_home_contract" name="Portal My Home : contract entries" inherit_id="portal.portal_my_home" priority="30">
             <xpath expr="//div[hasclass('o_portal_docs')]" position="inside">
                 <t t-if="contract_count" t-call="portal.portal_docs_entry">
@@ -28,6 +29,7 @@
                 </t>
             </xpath>
         </template>
+		
         <template id="contracts" name="My Contracts">
             <t t-call="portal.portal_layout">
                 <t t-set="breadcrumbs_searchbar" t-value="True" />
@@ -77,80 +79,100 @@
         <!-- Complete page of the contract -->
         <template id="contract_page" name="Contracts Detail Page">
             <t t-call="portal.portal_layout">
-                <div id="wrap">
-                    <div class="container o_portal">
-                        <div id="wrap" class="o_portal_wrap">
-                            <div class="container mb64">
-                                <div class="card mt-0 border-top-0 rounded-0 rounded-bottom">
-                                    <div class="card-header" style="background: white;">
-                                        <div>
-                                            <div class="row">
-                                                <div class="col-md-9">
-                                                    <h1>
-                                                        <span t-esc="contract.name" />
-                                                    </h1>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div>
-                                            <div class="row">
-                                                <div class="col-md-6">
-                                                    <div>
-                                                        <strong>Client:</strong>
-                                                        <div t-field="contract.partner_id" t-field-options="{&quot;widget&quot;: &quot;contact&quot;, &quot;fields&quot;: [&quot;email&quot;, &quot;phone&quot;]}" />
-                                                    </div>
-                                                    <div>
-                                                        <strong>Reference:</strong>
-                                                        <span t-field="contract.code" />
-                                                    </div>
-                                                </div>
-                                                <div class="col-md-6">
-                                                    <div>
-                                                        <strong>Contract Start Date:</strong>
-                                                        <span t-field="contract.date_start" />
-                                                    </div>
-                                                    <div>
-                                                        <strong>Contract End Date:</strong>
-                                                        <span t-field="contract.date_end" />
-                                                    </div>
-                                                    <div>
-                                                        <strong>Next Invoice Date:</strong>
-                                                        <span t-field="contract.recurring_next_date" />
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <hr />
-                                            <t t-call="ow_contract_portal.contract_recurring_items" />
+                <t t-set="wrapwrap_classes" t-value="'o_portal_bg_dark'" />
+                <div class="row mt16 o_portal_sidebar">
+                    <!-- Sidebar -->
+                    <!-- <t t-call="portal.portal_record_sidebar">
+                    <t t-set="classes" t-value="'col-12 col-lg flex-lg-grow-0 d-print-none'"/>
+
+                    <t t-set="entries">
+                        <ul class="list-group list-group-flush flex-wrap flex-row flex-lg-column">
+
+
+                            <li t-if="contract.user_id" class="list-group-item flex-grow-1">
+                                <div class="small mb-1"><strong class="text-muted">Contract Manager:</strong></div>
+                                <div class="row flex-nowrap">
+                                    <div class="col flex-grow-0 pr-2">
+                                        <img class="rounded-circle mr4 float-left o_portal_contact_img" t-if="contract.user_id.image" t-attf-src="data:image/png;base64,#{contract.user_id.image}" alt="Contact"/>
+                                        <img class="rounded-circle mr4 float-left o_portal_contact_img" t-if="not contract.user_id.image" src="/web/static/src/img/placeholder.png" alt="Contact"/>
+                                    </div>
+                                    <div class="col pl-0" style="min-width: 150px">
+                                        <span t-field="contract.user_id" t-options='{"widget": "contact", "fields": ["name", "phone"], "no_marker": True}'/>
+                                        <a t-if="contract.user_id.email" t-attf-href="mailto:{{contract.user_id.email}}" class="small"><i class="fa fa-envelope"></i> Send email</a>
+                                    </div>
+                                </div>
+                            </li>
+                        </ul>
+                    </t>
+                </t> -->
+                    <!-- Contract detail page -->
+                    <div class="col-12 col-lg">
+                        <div class="card">
+                            <div class="card-header bg-white pb-2 pt-3" style="background: white;">
+                                <div>
+                                    <div class="row">
+                                        <div class="col-md-9">
+                                            <h1>
+                                                <span t-esc="contract.name" />
+                                            </h1>
                                         </div>
                                     </div>
                                 </div>
+                                <div>
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div>
+                                                <strong>Client:</strong>
+                                                <div t-field="contract.partner_id" t-field-options="{&quot;widget&quot;: &quot;contact&quot;, &quot;fields&quot;: [&quot;email&quot;, &quot;phone&quot;]}" />
+                                            </div>
+                                            <div>
+                                                <strong>Reference:</strong>
+                                                <span t-field="contract.code" />
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div>
+                                                <strong>Contract Start Date:</strong>
+                                                <span t-field="contract.date_start" />
+                                            </div>
+                                            <div>
+                                                <strong>Contract End Date:</strong>
+                                                <span t-field="contract.date_end" />
+                                            </div>
+                                            <div>
+                                                <strong>Next Invoice Date:</strong>
+                                                <span t-field="contract.recurring_next_date" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <hr />
+                                    <t t-call="ow_contract_portal.contract_recurring_items" />
+                                </div>
                             </div>
+                        </div>
+                        <div class="mt32">
+                            <h3 class="mt-4">Message and communication history</h3>
+                            <t t-call="portal.message_thread">
+                                <t t-set="object" t-value="contract" />
+                                <t t-set="chatter_mode" t-value="'json'" />
+                            </t>
                         </div>
                     </div>
                 </div>
-                <div class="mt32">
-                    <h4>
-                        <strong>Message and communication history</strong>
-                    </h4>
-                    <t t-call="portal.message_thread">
-                        <t t-set="object" t-value="contract" />
-                        <t t-set="pid" t-value="pid" />
-                        <t t-set="hash" t-value="hash" />
-                    </t>
-                </div>
             </t>
         </template>
+		
         <template id="contract_recurring_items" name="Recurring Items">
             <section id="recurring_items">
                 <t t-if="contract.recurring_invoice_line_ids">
                     <div class="card-body">
-                        <h3>Contract details</h3>
-                        <table class="table wq-table">
+                        <h5>Contract details</h5>
+                        <table class="table table-sm table-responsive-lg">
                             <thead>
                                 <tr>
                                     <th>Name</th>
                                     <th class="text-right">Quantity</th>
-									<th class="text-right">Unit Price</th>
+                                    <th class="text-right">Unit Price</th>
                                     <th class="text-right">Subtotal</th>
                                 </tr>
                             </thead>
@@ -161,9 +183,10 @@
                                             <span t-field="invoice_line.display_name" />
                                         </td>
                                         <td class="text-right">
-                                            <span t-field="invoice_line.quantity" /> <span t-field="invoice_line.uom_id" />
+                                            <span t-field="invoice_line.quantity" />
+                                            <span t-field="invoice_line.uom_id" />
                                         </td>
-										<td class="text-right">
+                                        <td class="text-right">
                                             <span t-field="invoice_line.price_unit" />
                                         </td>
                                         <td class="text-right">
