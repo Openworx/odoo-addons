@@ -7,7 +7,7 @@
     'category': 'Contract Management',
     'summary': 'View contracts in user portal',
     'version': '1.0',
-	'license': 'LGPL-3',
+	'license': 'AGPL-3',
     'author': 'Openworx',
     'description': """
         View contracts in user portal
