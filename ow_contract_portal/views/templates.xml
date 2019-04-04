@@ -144,29 +144,29 @@
             <section id="recurring_items">
                 <t t-if="contract.recurring_invoice_line_ids">
                     <div class="card-body">
-                        <h3>Items</h3>
+                        <h3>Contract details</h3>
                         <table class="table wq-table">
                             <thead>
                                 <tr>
                                     <th>Name</th>
-                                    <th>Quantity</th>
-                                    <th>UoM</th>
-                                    <th>Subtotal</th>
+                                    <th class="text-right">Quantity</th>
+									<th class="text-right">Unit Price</th>
+                                    <th class="text-right">Subtotal</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 <t t-foreach="contract.recurring_invoice_line_ids" t-as="invoice_line">
                                     <tr>
-                                        <td>
+                                        <td class="line-description">
                                             <span t-field="invoice_line.display_name" />
                                         </td>
-                                        <td>
-                                            <span t-field="invoice_line.quantity" />
+                                        <td class="text-right">
+                                            <span t-field="invoice_line.quantity" /> <span t-field="invoice_line.uom_id" />
                                         </td>
-                                        <td>
-                                            <span t-field="invoice_line.uom_id" />
+										<td class="text-right">
+                                            <span t-field="invoice_line.price_unit" />
                                         </td>
-                                        <td>
+                                        <td class="text-right">
                                             <span t-field="invoice_line.price_subtotal" />
                                         </td>
                                     </tr>
