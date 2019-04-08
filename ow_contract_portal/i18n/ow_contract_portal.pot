@@ -70,7 +70,7 @@ msgstr ""
 
 #. module: ow_contract_portal
 #: model_terms:ir.ui.view,arch_db:ow_contract_portal.contract_recurring_items
-msgid "Name"
+msgid "Description"
 msgstr ""
 
 #. module: ow_contract_portal
