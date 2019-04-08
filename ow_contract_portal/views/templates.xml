@@ -46,9 +46,9 @@
                         <tr class="active">
                             <th>Contract #</th>
                             <th>Reference</th>
-                            <th class="text-right">Contract Start Date</th>
-                            <th class="text-right">Contract End Date</th>
-                            <th class="text-right">Next Invoice Date</th>
+                            <th class="text-right">Start date</th>
+                            <th class="text-right">End date</th>
+                            <th class="text-right">Next invoice</th>
                         </tr>
                     </thead>
                     <t t-foreach="contracts" t-as="contract">
@@ -132,15 +132,19 @@
                                         </div>
                                         <div class="col-md-6">
                                             <div>
-                                                <strong>Contract Start Date:</strong>
+                                                <strong>Start date:</strong>
                                                 <span t-field="contract.date_start" />
                                             </div>
                                             <div>
-                                                <strong>Contract End Date:</strong>
+                                                <strong>End date:</strong>
                                                 <span t-field="contract.date_end" />
                                             </div>
+											<div>
+                                                <strong>Billing:</strong>
+                                                Every: <span t-field="contract.recurring_interval" /> <span t-field="contract.recurring_rule_type" />
+                                            </div>
                                             <div>
-                                                <strong>Next Invoice Date:</strong>
+                                                <strong>Next invoice:</strong>
                                                 <span t-field="contract.recurring_next_date" />
                                             </div>
                                         </div>
@@ -150,13 +154,13 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="mt32">
-                            <h3 class="mt-4">Message and communication history</h3>
+                        <!-- <div class="mt32">
+                            <h3 class="mt-4">History</h3>
                             <t t-call="portal.message_thread">
                                 <t t-set="object" t-value="contract" />
                                 <t t-set="chatter_mode" t-value="'json'" />
                             </t>
-                        </div>
+                        </div> -->
                     </div>
                 </div>
             </t>
