@@ -3,7 +3,8 @@
 	<template id="account_invoice_report_template" inherit_id="account.report_invoice_document">
 		<xpath expr="//p[@t-if='o.payment_term_id']" position="before">
 			<div t-if="o.type == 'out_invoice' and o.number and o.company_id.iban_qr_number" style="width: 100px; height: 100px;">
-				<p t-field="o.qr_image" t-options='{"widget": "image"}' />
+				<p t-field="o.qr_image" t-options="{&quot;widget&quot;: &quot;image&quot;}" style="border: 1px solid lightgray; border-radius: 5px; padding: 2px;"/>
+				<p class="text-center" style="font-size: 7px;">Scan QR with banking app.</p>
 			</div>
 		</xpath>
 	</template>
