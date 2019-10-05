@@ -3,7 +3,7 @@
 {
     'name': 'Website Portal Login Page',
     'summary': 'Make Odoo Website loginpage like fullscreen portal',
-    'version': '12.0.1.0',
+    'version': '13.0.1.0',
     'category': 'Website',
     'summary': """
 Make Odoo Website loginpage like fullscreen portal
