@@ -3,8 +3,8 @@
 # License LGPL-3.0 or later (http://www.gnu.org/licenses/lgpl.html).
 
 {
-    "name": "Web Responsive",
-    "summary": "Responsive web client, community-supported",
+    "name": "Dependency for backend_theme_v13",
+    "summary": "Dependency for backend_theme_v13. This module will be obsolete when web_responsive v13 is available in the Odoo Appstore.",
     "version": "13.0.1.0.0",
     "category": "Hidden",
     "website": "https://github.com/OCA/web",
