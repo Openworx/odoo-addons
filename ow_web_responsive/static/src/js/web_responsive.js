@@ -14,6 +14,7 @@ odoo.define('ow_web_responsive', function (require) {
     const Menu = require("web.Menu");
     const RelationalFields = require('web.relational_fields');
     const Chatter = require('mail.Chatter');
+    const ListRenderer = require('web.ListRenderer');
 
     /*
      * Helper function to know if are waiting
@@ -108,7 +109,7 @@ odoo.define('ow_web_responsive', function (require) {
                 {}
             );
             // Search only after timeout, for fast typers
-            this._search_def = $.Deferred();
+            this._search_def = false;
         },
 
         /**
@@ -169,9 +170,9 @@ odoo.define('ow_web_responsive', function (require) {
          * Schedule a search on current menu items.
          */
         _searchMenusSchedule: function () {
-            this._search_def.reject();
-            this._search_def = $.Deferred();
-            setTimeout(this._search_def.resolve.bind(this._search_def), 50);
+            this._search_def = new Promise((resolve) => {
+                setTimeout(resolve, 50);
+            });
             this._search_def.then(this._searchMenus.bind(this));
         },
 
@@ -392,6 +393,31 @@ odoo.define('ow_web_responsive', function (require) {
         },
     });
 
+    // Sticky Column Selector
+    ListRenderer.include({
+        _renderView: function () {
+            const self = this;
+            return this._super.apply(this, arguments).then(() => {
+                const $col_selector = self.$el.find(
+                    '.o_optional_columns_dropdown_toggle');
+                if ($col_selector.length !== 0) {
+                    const $th = self.$el.find('thead>tr:first>th:last');
+                    $col_selector.appendTo($th);
+                }
+            });
+        },
+
+        _onToggleOptionalColumnDropdown: function (ev) {
+            // FIXME: For some strange reason the 'stopPropagation' call
+            // in the main method don't work. Invoking here the same method
+            // does the expected behavior... O_O!
+            // This prevents the action of sorting the column from being
+            // launched.
+            ev.stopPropagation();
+            this._super.apply(this, arguments);
+        },
+    });
+
     // Responsive view "action" buttons
     FormRenderer.include({
 
@@ -452,7 +478,6 @@ odoo.define('ow_web_responsive', function (require) {
             $(menu_apps_dropdown).has('.dropdown-menu.show')
                 .has(uniq_sel).find('> a').dropdown('toggle');
             // Need close Sections Menu?
-            // TODO: Change to 'hide' in modern Bootstrap >4.1
             const menu_sections = document.querySelector(
                 '.o_menu_sections li.show');
             $(menu_sections).has(uniq_sel).find('.dropdown-toggle')
@@ -460,7 +485,7 @@ odoo.define('ow_web_responsive', function (require) {
             // Need close Mobile?
             const menu_sections_mobile = document.querySelector(
                 '.o_menu_sections.show');
-            $(menu_sections_mobile).has(uniq_sel).collapse('hide');
+            $(menu_sections_mobile).has(uniq_sel).hide();
         },
 
         _handleAction: function (action) {
