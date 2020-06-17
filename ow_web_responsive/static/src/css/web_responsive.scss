@@ -1,6 +1,8 @@
 /* Copyright 2018 Tecnativa - Jairo Llopis
  * License LGPL-3.0 or later (http://www.gnu.org/licenses/lgpl). */
 
+$chatter_zone_width: 35%;
+
 @mixin full-screen-dropdown {
     border: none;
     box-shadow: none;
@@ -40,8 +42,7 @@
             }
 
             .o_menu_sections,
-            .o_menu_systray,
-            {
+            .o_menu_systray {
                 padding: 0;
             }
         }
@@ -54,8 +55,7 @@
         // Hide big things
         .o_menu_brand,
         .o_menu_sections,
-        .oe_topbar_name,
-        {
+        .oe_topbar_name {
             display: none;
         }
 
@@ -83,8 +83,7 @@
 
             > li,
             .o_menu_entry_lvl_1,
-            .o_menu_header_lvl_1,
-            {
+            .o_menu_header_lvl_1 {
                 // Homogeneous background color
                 background-color: $dropdown-bg;
                 color: $dropdown-link-color;
@@ -135,7 +134,6 @@
 
 // Iconized full screen apps menu
 .o_menu_apps {
-
     .search-input:focus {
         border-color: $o-brand-primary;
     }
@@ -236,8 +234,7 @@ html .o_web_client .o_action_manager .o_action {
         .o_cp_buttons,
         .o_cp_left,
         .o_cp_right,
-        .o_cp_searchview,
-        {
+        .o_cp_searchview {
             flex: 1 1 100%;
             @include media-breakpoint-up(md) {
                 flex-basis: 50%;
@@ -249,8 +246,7 @@ html .o_web_client .o_action_manager .o_action {
         }
 
         .o_cp_searchview,
-        .o_cp_right,
-        {
+        .o_cp_right {
             flex-basis: 10%;
         }
 
@@ -274,7 +270,7 @@ html .o_web_client .o_action_manager .o_action {
                 padding-right: 0;
             }
 
-            &:nth-last-of-type(1n+3) {
+            &:nth-last-of-type(1n + 3) {
                 display: none;
             }
 
@@ -331,7 +327,8 @@ html .o_web_client .o_action_manager .o_action {
 }
 
 // Normal views
-.o_content, .modal-content {
+.o_content,
+.modal-content {
     max-width: 100%;
 
     // Form views
@@ -345,11 +342,16 @@ html .o_web_client .o_action_manager .o_action {
             padding-top: 0;
         }
 
+        .o_chatter_topbar {
+            height: auto;
+            flex-wrap: wrap-reverse;
+        }
+
         // Sticky statusbar
         .o_form_statusbar {
             position: sticky;
             top: 0;
-            z-index: 1;
+            z-index: 2;
         }
 
         // Support for long title (with ellipsis)
@@ -373,14 +375,13 @@ html .o_web_client .o_action_manager .o_action {
             .oe_button_box {
                 .o_dropdown_more {
                     button:last-child {
-                        border-right: 1px solid gray('400');
+                        border-right: 1px solid gray("400");
                     }
                 }
             }
 
             // Avoid overflow on forms with title and/or button box
-            .oe_title,
-            {
+            .oe_title {
                 max-width: 100%;
             }
 
@@ -435,8 +436,7 @@ html .o_web_client .o_action_manager .o_action {
 
             // Full width in form sheets
             .o_form_sheet,
-            .oe_chatter,
-            {
+            .oe_chatter {
                 min-width: auto;
                 max-width: 98%;
             }
@@ -453,7 +453,7 @@ html .o_web_client .o_action_manager .o_action {
 
                 // Display send button on small screens
                 .o_thread_composer {
-                    padding-left: $o-mail-thread-avatar-size*0.5;
+                    padding-left: $o-mail-thread-avatar-size * 0.5;
 
                     .o_composer_button_send {
                         display: initial !important; // Forced in core
@@ -464,9 +464,6 @@ html .o_web_client .o_action_manager .o_action {
                 }
 
                 .o_chatter_topbar {
-                    height: auto;
-                    flex-wrap: wrap-reverse;
-
                     > .o_topbar_right_area {
                         flex: 1 0 auto;
                         flex-wrap: wrap;
@@ -504,8 +501,8 @@ html .o_web_client .o_action_manager .o_action {
                 }
 
                 .o_chatter {
-                    border-left: 1px solid gray('400');
-                    flex: 0 0 35%;
+                    border-left: 1px solid gray("400");
+                    flex: 0 0 $chatter_zone_width;
                     max-width: initial;
                     min-width: initial;
                     overflow: auto;
@@ -516,7 +513,6 @@ html .o_web_client .o_action_manager .o_action {
                         position: sticky;
                         background-color: $o-view-background-color;
                         z-index: 1;
-                        overflow-x: auto;
 
                         // Scrollable input text to avoid hide conversation & buttons
                         .o_composer_text_field {
@@ -541,10 +537,11 @@ html .o_web_client .o_action_manager .o_action {
 
 // Sticky Header & Footer in List View
 .o_list_view {
-    .table-responsive  {
+    .table-responsive {
         .o_list_table {
             // th & td are here for compatibility with chrome
-            thead, thead tr:nth-child(1) th {
+            thead,
+            thead tr:nth-child(1) th {
                 position: sticky;
                 top: 0;
                 z-index: 1;
@@ -552,7 +549,8 @@ html .o_web_client .o_action_manager .o_action {
             thead tr:nth-child(1) th {
                 background-color: $o-list-footer-bg-color;
             }
-            tfoot, tfoot tr:nth-child(1) td {
+            tfoot,
+            tfoot tr:nth-child(1) td {
                 position: sticky;
                 bottom: 0;
             }
@@ -565,5 +563,86 @@ html .o_web_client .o_action_manager .o_action {
 
 // Waiting Cursor
 .oe_wait {
-  cursor: progress;
+    cursor: progress;
+}
+
+// Document Viewer
+.o_web_client.o_chatter_position_sided {
+    .o_modal_fullscreen.o_document_viewer {
+        // On-top of navbar
+        z-index: 10;
+
+        &.o_responsive_document_viewer {
+            /* Show sided viewer on large screens */
+            @include media-breakpoint-up(lg) {
+                width: $chatter_zone_width;
+                margin-left: auto;
+                right: 0;
+
+                /* Show/Hide control buttons (next, prev, etc..) */
+                &:hover .arrow,
+                &:hover .o_viewer_toolbar {
+                    display: flex;
+                }
+                .arrow,
+                .o_viewer_toolbar {
+                    display: none;
+                }
+
+                .o_viewer_img_wrapper {
+                    position: relative;
+
+                    .o_viewer_pdf {
+                        width: 95%;
+                    }
+                }
+            }
+
+            .o_minimize_btn {
+                display: none;
+            }
+        }
+        &:not(.o_responsive_document_viewer) {
+            .o_maximize_btn {
+                display: none;
+            }
+        }
+        @include media-breakpoint-down(lg) {
+            .o_minimize_btn,
+            .o_maximize_btn {
+                display: none;
+            }
+        }
+    }
+}
+/* Max/Min buttons only are usefull in sided mode */
+.o_web_client:not(.o_chatter_position_sided) {
+    .o_minimize_btn,
+    .o_maximize_btn {
+        display: none;
+    }
+}
+// Apply improvements for Document Viewer on all modes
+.o_modal_fullscreen .o_viewer_content {
+    .o_viewer-header {
+        .o_image_caption {
+            display: contents;
+        }
+
+        // Now uses a container to have more buttons
+        .o_buttons {
+            min-width: 35px;
+            text-align: right;
+
+            // Now close button ('X') it's a fa-icon
+            > .o_close_btn {
+                top: unset;
+                left: unset;
+                bottom: unset;
+                right: unset;
+                font-size: unset;
+                font-weight: unset;
+            }
+        }
+    }
 }

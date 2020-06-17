@@ -7,20 +7,20 @@ Web Responsive
    !! changes will be overwritten.                   !!
    !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
-.. |badge1| image:: https://img.shields.io/badge/maturity-Beta-yellow.png
+.. |badge1| image:: https://img.shields.io/badge/maturity-Production%2FStable-green.png
     :target: https://odoo-community.org/page/development-status
-    :alt: Beta
+    :alt: Production/Stable
 .. |badge2| image:: https://img.shields.io/badge/licence-LGPL--3-blue.png
     :target: http://www.gnu.org/licenses/lgpl-3.0-standalone.html
     :alt: License: LGPL-3
 .. |badge3| image:: https://img.shields.io/badge/github-OCA%2Fweb-lightgray.png?logo=github
-    :target: https://github.com/OCA/web/tree/12.0/web_responsive
+    :target: https://github.com/OCA/web/tree/13.0/web_responsive
     :alt: OCA/web
 .. |badge4| image:: https://img.shields.io/badge/weblate-Translate%20me-F47D42.png
-    :target: https://translation.odoo-community.org/projects/web-12-0/web-12-0-web_responsive
+    :target: https://translation.odoo-community.org/projects/web-13-0/web-13-0-web_responsive
     :alt: Translate me on Weblate
 .. |badge5| image:: https://img.shields.io/badge/runbot-Try%20me-875A7B.png
-    :target: https://runbot.odoo-community.org/runbot/162/12.0
+    :target: https://runbot.odoo-community.org/runbot/162/13.0
     :alt: Try me on Runbot
 
 |badge1| |badge2| |badge3| |badge4| |badge5| 
@@ -85,23 +85,29 @@ Features for computers:
 
 * Sticky chatter topbar
 
-  .. image:: https://raw.githubusercontent.com/OCA/web/12.0/web_responsive/static/img/chatter_topbar.gif
+  .. image:: https://raw.githubusercontent.com/OCA/web/13.0/web_responsive/static/img/chatter_topbar.gif
 
 * AppMenu waits for action finished to show the view
 
-  .. image:: https://raw.githubusercontent.com/OCA/web/12.0/web_responsive/static/img/appmenu.gif
+  .. image:: https://raw.githubusercontent.com/OCA/web/13.0/web_responsive/static/img/appmenu.gif
 
 * Sticky header & footer in list view
 
-  .. image:: https://raw.githubusercontent.com/OCA/web/12.0/web_responsive/static/img/listview.gif
+  .. image:: https://raw.githubusercontent.com/OCA/web/13.0/web_responsive/static/img/listview.gif
 
 * Sticky statusbar in form view
 
-  .. image:: https://raw.githubusercontent.com/OCA/web/12.0/web_responsive/static/img/formview.gif
+  .. image:: https://raw.githubusercontent.com/OCA/web/13.0/web_responsive/static/img/formview.gif
 
 * Followers and send button is displayed on mobile. Avatar is hidden.
 
-  .. image:: https://raw.githubusercontent.com/OCA/web/12.0/web_responsive/static/img/chatter.gif
+  .. image:: https://raw.githubusercontent.com/OCA/web/13.0/web_responsive/static/img/chatter.gif
+
+* When the chatter is configured on the side part, the document viewer fills that
+  part for side-by-side reading instead of full screen. You can still put it on full
+  width preview clicking on the new maximize button.
+
+  .. image:: https://raw.githubusercontent.com/OCA/web/13.0/web_responsive/static/img/document_viewer.gif
 
 **Table of contents**
 
@@ -113,7 +119,6 @@ Usage
 
 The following keyboard shortcuts are implemented:
 
-* Toggle app drawer - ``Alt + Shift + H``
 * Navigate app search results - Arrow keys
 * Choose app result - ``Enter``
 * ``Esc`` to close app drawer
@@ -127,6 +132,7 @@ Known issues / Roadmap
   new size. This is Odoo's own limitation.
 * App navigation with keyboard.
 * Make it more beautiful. Maybe OCA-branded?
+* Handle long titles on forms in a better way
 
 Bug Tracker
 ===========
@@ -134,7 +140,7 @@ Bug Tracker
 Bugs are tracked on `GitHub Issues <https://github.com/OCA/web/issues>`_.
 In case of trouble, please check there if your issue has already been reported.
 If you spotted it first, help us smashing it by providing a detailed and welcomed
-`feedback <https://github.com/OCA/web/issues/new?body=module:%20web_responsive%0Aversion:%2012.0%0A%0A**Steps%20to%20reproduce**%0A-%20...%0A%0A**Current%20behavior**%0A%0A**Expected%20behavior**>`_.
+`feedback <https://github.com/OCA/web/issues/new?body=module:%20web_responsive%0Aversion:%2013.0%0A%0A**Steps%20to%20reproduce**%0A-%20...%0A%0A**Current%20behavior**%0A%0A**Expected%20behavior**>`_.
 
 Do not contact contributors directly about support or help with technical issues.
 
@@ -146,7 +152,6 @@ Authors
 
 * LasLabs
 * Tecnativa
-* Alexandre Díaz
 
 Contributors
 ~~~~~~~~~~~~
@@ -171,6 +176,17 @@ OCA, or the Odoo Community Association, is a nonprofit organization whose
 mission is to support the collaborative development of Odoo features and
 promote its widespread use.
 
-This module is part of the `OCA/web <https://github.com/OCA/web/tree/12.0/web_responsive>`_ project on GitHub.
+.. |maintainer-Yajo| image:: https://github.com/Yajo.png?size=40px
+    :target: https://github.com/Yajo
+    :alt: Yajo
+.. |maintainer-Tardo| image:: https://github.com/Tardo.png?size=40px
+    :target: https://github.com/Tardo
+    :alt: Tardo
+
+Current `maintainers <https://odoo-community.org/page/maintainer-role>`__:
+
+|maintainer-Yajo| |maintainer-Tardo| 
+
+This module is part of the `OCA/web <https://github.com/OCA/web/tree/13.0/web_responsive>`_ project on GitHub.
 
 You are welcome to contribute. To learn how please visit https://odoo-community.org/page/Contribute.

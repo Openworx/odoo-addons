@@ -1,27 +1,44 @@
 /* Copyright 2018 Tecnativa - Jairo Llopis
  * License LGPL-3.0 or later (http://www.gnu.org/licenses/lgpl). */
 
-odoo.define('ow_web_responsive', function (require) {
-    'use strict';
+odoo.define("web_responsive", function(require) {
+    "use strict";
 
-    const ActionManager = require('web.ActionManager');
+    const ActionManager = require("web.ActionManager");
     const AbstractWebClient = require("web.AbstractWebClient");
     const AppsMenu = require("web.AppsMenu");
-    const BasicController = require('web.BasicController');
+    const BasicController = require("web.BasicController");
     const config = require("web.config");
     const core = require("web.core");
-    const FormRenderer = require('web.FormRenderer');
+    const FormRenderer = require("web.FormRenderer");
     const Menu = require("web.Menu");
-    const RelationalFields = require('web.relational_fields');
-    const Chatter = require('mail.Chatter');
-    const ListRenderer = require('web.ListRenderer');
+    const RelationalFields = require("web.relational_fields");
+    const Chatter = require("mail.Chatter");
+    const ListRenderer = require("web.ListRenderer");
+    const DocumentViewer = require("mail.DocumentViewer");
 
-    /*
-     * Helper function to know if are waiting
-     *
+    /* Hide AppDrawer in desktop and mobile modes.
+     * To avoid delays in pages with a lot of DOM nodes we make
+     * sub-groups' with 'querySelector' to improve the performance.
      */
-    function isWaiting () {
-        return $('.oe_wait').length !== 0;
+    function closeAppDrawer() {
+        _.defer(function() {
+            // Need close AppDrawer?
+            var menu_apps_dropdown = document.querySelector(".o_menu_apps .dropdown");
+            $(menu_apps_dropdown)
+                .has(".dropdown-menu.show")
+                .find("> a")
+                .dropdown("toggle");
+            // Need close Sections Menu?
+            // TODO: Change to 'hide' in modern Bootstrap >4.1
+            var menu_sections = document.querySelector(
+                ".o_menu_sections li.show .dropdown-toggle"
+            );
+            $(menu_sections).dropdown("toggle");
+            // Need close Mobile?
+            var menu_sections_mobile = document.querySelector(".o_menu_sections.show");
+            $(menu_sections_mobile).collapse("hide");
+        });
     }
 
     /**
@@ -69,7 +86,7 @@ odoo.define('ow_web_responsive', function (require) {
      * }
      * ```
      */
-    function findNames (memo, menu) {
+    function findNames(memo, menu) {
         if (menu.action) {
             var key = menu.parent_id ? menu.parent_id[1] + "/" : "";
             memo[key + menu.name] = menu;
@@ -81,33 +98,31 @@ odoo.define('ow_web_responsive', function (require) {
     }
 
     AppsMenu.include({
-        events: _.extend({
-            "keydown .search-input input": "_searchResultsNavigate",
-            "input .search-input input": "_searchMenusSchedule",
-            "click .o-menu-search-result": "_searchResultChosen",
-            "shown.bs.dropdown": "_searchFocus",
-            "hidden.bs.dropdown": "_searchReset",
-            "hide.bs.dropdown": "_hideAppsMenu",
-        }, AppsMenu.prototype.events),
+        events: _.extend(
+            {
+                "keydown .search-input input": "_searchResultsNavigate",
+                "input .search-input input": "_searchMenusSchedule",
+                "click .o-menu-search-result": "_searchResultChosen",
+                "shown.bs.dropdown": "_searchFocus",
+                "hidden.bs.dropdown": "_searchReset",
+                "hide.bs.dropdown": "_hideAppsMenu",
+            },
+            AppsMenu.prototype.events
+        ),
 
         /**
          * Rescue some menu data stripped out in original method.
          *
          * @override
          */
-        init: function (parent, menuData) {
+        init: function(parent, menuData) {
             this._super.apply(this, arguments);
             // Keep base64 icon for main menus
-            for (let n in this._apps) {
-                this._apps[n].web_icon_data =
-                    menuData.children[n].web_icon_data;
+            for (const n in this._apps) {
+                this._apps[n].web_icon_data = menuData.children[n].web_icon_data;
             }
             // Store menu data in a format searchable by fuzzy.js
-            this._searchableMenus = _.reduce(
-                menuData.children,
-                findNames,
-                {}
-            );
+            this._searchableMenus = _.reduce(menuData.children, findNames, {});
             // Search only after timeout, for fast typers
             this._search_def = false;
         },
@@ -115,7 +130,7 @@ odoo.define('ow_web_responsive', function (require) {
         /**
          * @override
          */
-        start: function () {
+        start: function() {
             this.$search_container = this.$(".search-container");
             this.$search_input = this.$(".search-input input");
             this.$search_results = this.$(".search-results");
@@ -127,9 +142,10 @@ odoo.define('ow_web_responsive', function (require) {
          *
          * @override
          */
-        _onAppsMenuItemClicked: function (ev) {
+        _onAppsMenuItemClicked: function(ev) {
             this._super.apply(this, arguments);
             ev.preventDefault();
+            ev.stopPropagation();
         },
 
         /**
@@ -141,17 +157,20 @@ odoo.define('ow_web_responsive', function (require) {
          * @returns {Object}
          * Menu definition, plus extra needed keys.
          */
-        _menuInfo: function (key) {
+        _menuInfo: function(key) {
             const original = this._searchableMenus[key];
-            return _.extend({
-                action_id: parseInt(original.action.split(',')[1], 10),
-            }, original);
+            return _.extend(
+                {
+                    action_id: parseInt(original.action.split(",")[1], 10),
+                },
+                original
+            );
         },
 
         /**
          * Autofocus on search field on big screens.
          */
-        _searchFocus: function () {
+        _searchFocus: function() {
             if (!config.device.isMobile) {
                 this.$search_input.focus();
             }
@@ -160,7 +179,7 @@ odoo.define('ow_web_responsive', function (require) {
         /**
          * Reset search input and results
          */
-        _searchReset: function () {
+        _searchReset: function() {
             this.$search_container.removeClass("has-results");
             this.$search_results.empty();
             this.$search_input.val("");
@@ -169,8 +188,8 @@ odoo.define('ow_web_responsive', function (require) {
         /**
          * Schedule a search on current menu items.
          */
-        _searchMenusSchedule: function () {
-            this._search_def = new Promise((resolve) => {
+        _searchMenusSchedule: function() {
+            this._search_def = new Promise(resolve => {
                 setTimeout(resolve, 50);
             });
             this._search_def.then(this._searchMenus.bind(this));
@@ -179,33 +198,23 @@ odoo.define('ow_web_responsive', function (require) {
         /**
          * Search among available menu items, and render that search.
          */
-        _searchMenus: function () {
+        _searchMenus: function() {
             const query = this.$search_input.val();
             if (query === "") {
                 this.$search_container.removeClass("has-results");
                 this.$search_results.empty();
                 return;
             }
-            var results = fuzzy.filter(
-                query,
-                _.keys(this._searchableMenus),
-                {
-                    pre: "<b>",
-                    post: "</b>",
-                }
-            );
-            this.$search_container.toggleClass(
-                "has-results",
-                Boolean(results.length)
-            );
+            var results = fuzzy.filter(query, _.keys(this._searchableMenus), {
+                pre: "<b>",
+                post: "</b>",
+            });
+            this.$search_container.toggleClass("has-results", Boolean(results.length));
             this.$search_results.html(
-                core.qweb.render(
-                    "ow_web_responsive.MenuSearchResults",
-                    {
-                        results: results,
-                        widget: this,
-                    }
-                )
+                core.qweb.render("web_responsive.MenuSearchResults", {
+                    results: results,
+                    widget: this,
+                })
             );
         },
 
@@ -214,7 +223,7 @@ odoo.define('ow_web_responsive', function (require) {
          *
          * @param {jQuery.Event} event
          */
-        _searchResultChosen: function (event) {
+        _searchResultChosen: function(event) {
             event.preventDefault();
             event.stopPropagation();
             const $result = $(event.currentTarget),
@@ -228,7 +237,7 @@ odoo.define('ow_web_responsive', function (require) {
                 previous_menu_id: data.parentId,
             });
             // Find app that owns the chosen menu
-            const app = _.find(this._apps, function (_app) {
+            const app = _.find(this._apps, function(_app) {
                 return text.indexOf(_app.name + suffix) === 0;
             });
             // Update navbar menus
@@ -240,7 +249,7 @@ odoo.define('ow_web_responsive', function (require) {
          *
          * @param {jQuery.Event} event
          */
-        _searchResultsNavigate: function (event) {
+        _searchResultsNavigate: function(event) {
             // Find current results and active element (1st by default)
             const all = this.$search_results.find(".o-menu-search-result"),
                 pre_focused = all.filter(".active") || $(all[0]);
@@ -256,20 +265,20 @@ odoo.define('ow_web_responsive', function (require) {
                 key = event.shiftKey ? "ArrowUp" : "ArrowDown";
             }
             switch (key) {
-            // Pressing enter is the same as clicking on the active element
-            case "Enter":
-                pre_focused.click();
-                break;
-            // Navigate up or down
-            case "ArrowUp":
-                offset--;
-                break;
-            case "ArrowDown":
-                offset++;
-                break;
-            default:
-                // Other keys are useless in this event
-                return;
+                // Pressing enter is the same as clicking on the active element
+                case "Enter":
+                    pre_focused.click();
+                    break;
+                // Navigate up or down
+                case "ArrowUp":
+                    offset--;
+                    break;
+                case "ArrowDown":
+                    offset++;
+                    break;
+                default:
+                    // Other keys are useless in this event
+                    return;
             }
             // Allow looping on results
             if (offset < 0) {
@@ -289,44 +298,40 @@ odoo.define('ow_web_responsive', function (require) {
         },
 
         /*
-        * Control if AppDrawer can be closed
-        */
-        _hideAppsMenu: function () {
-            return !isWaiting() && !this.$('input').is(':focus');
+         * Control if AppDrawer can be closed
+         */
+        _hideAppsMenu: function() {
+            return !this.$("input").is(":focus");
         },
     });
 
     BasicController.include({
-
         /**
          * Close the AppDrawer if the data set is dirty and a discard dialog
          * is opened
          *
          * @override
          */
-        canBeDiscarded: function (recordID) {
+        canBeDiscarded: function(recordID) {
             if (this.model.isDirty(recordID || this.handle)) {
-                $('.o_menu_apps .dropdown:has(.dropdown-menu.show) > a')
-                    .dropdown('toggle');
-                $('.o_menu_sections li.show .dropdown-toggle')
-                    .dropdown('toggle');
+                closeAppDrawer();
             }
             return this._super.apply(this, arguments);
         },
     });
 
     Menu.include({
-        events: _.extend({
-            // Clicking a hamburger menu item should close the hamburger
-            "click .o_menu_sections [role=menuitem]": "_hideMobileSubmenus",
-            // Opening any dropdown in the navbar should hide the hamburger
-            "show.bs.dropdown .o_menu_systray, .o_menu_apps":
-                "_hideMobileSubmenus",
-            // Prevent close section menu
-            "hide.bs.dropdown .o_menu_sections": "_hideMenuSection",
-        }, Menu.prototype.events),
+        events: _.extend(
+            {
+                // Clicking a hamburger menu item should close the hamburger
+                "click .o_menu_sections [role=menuitem]": "_onClickMenuItem",
+                // Opening any dropdown in the navbar should hide the hamburger
+                "show.bs.dropdown .o_menu_systray, .o_menu_apps": "_hideMobileSubmenus",
+            },
+            Menu.prototype.events
+        ),
 
-        start: function () {
+        start: function() {
             this.$menu_toggle = this.$(".o-menu-toggle");
             return this._super.apply(this, arguments);
         },
@@ -334,23 +339,23 @@ odoo.define('ow_web_responsive', function (require) {
         /**
          * Hide menus for current app if you're in mobile
          */
-        _hideMobileSubmenus: function () {
+        _hideMobileSubmenus: function() {
             if (
+                config.device.isMobile &&
                 this.$menu_toggle.is(":visible") &&
-                this.$section_placeholder.is(":visible") &&
-                !isWaiting()
+                this.$section_placeholder.is(":visible")
             ) {
                 this.$section_placeholder.collapse("hide");
             }
         },
 
         /**
-         * Hide Menu Section
+         * Prevent hide the menu (should be closed when action is loaded)
          *
-         * @returns {Boolean}
+         * @param {ClickEvent} ev
          */
-        _hideMenuSection: function () {
-            return !isWaiting();
+        _onClickMenuItem: function(ev) {
+            ev.stopPropagation();
         },
 
         /**
@@ -358,35 +363,23 @@ odoo.define('ow_web_responsive', function (require) {
          *
          * @override
          */
-        _updateMenuBrand: function () {
+        _updateMenuBrand: function() {
             if (!config.device.isMobile) {
                 return this._super.apply(this, arguments);
-            }
-        },
-
-        /**
-         * Don't display the menu if are waiting for an action to end
-         *
-         * @override
-         */
-        _onMouseOverMenu: function () {
-            if (!isWaiting()) {
-                this._super.apply(this, arguments);
             }
         },
     });
 
     RelationalFields.FieldStatus.include({
-
         /**
          * Fold all on mobiles.
          *
          * @override
          */
-        _setState: function () {
+        _setState: function() {
             this._super.apply(this, arguments);
             if (config.device.isMobile) {
-                _.map(this.status_information, (value) => {
+                _.map(this.status_information, value => {
                     value.fold = true;
                 });
             }
@@ -395,19 +388,20 @@ odoo.define('ow_web_responsive', function (require) {
 
     // Sticky Column Selector
     ListRenderer.include({
-        _renderView: function () {
+        _renderView: function() {
             const self = this;
             return this._super.apply(this, arguments).then(() => {
                 const $col_selector = self.$el.find(
-                    '.o_optional_columns_dropdown_toggle');
+                    ".o_optional_columns_dropdown_toggle"
+                );
                 if ($col_selector.length !== 0) {
-                    const $th = self.$el.find('thead>tr:first>th:last');
+                    const $th = self.$el.find("thead>tr:first>th:last");
                     $col_selector.appendTo($th);
                 }
             });
         },
 
-        _onToggleOptionalColumnDropdown: function (ev) {
+        _onToggleOptionalColumnDropdown: function(ev) {
             // FIXME: For some strange reason the 'stopPropagation' call
             // in the main method don't work. Invoking here the same method
             // does the expected behavior... O_O!
@@ -420,13 +414,12 @@ odoo.define('ow_web_responsive', function (require) {
 
     // Responsive view "action" buttons
     FormRenderer.include({
-
         /**
          * In mobiles, put all statusbar buttons in a dropdown.
          *
          * @override
          */
-        _renderHeaderButtons: function () {
+        _renderHeaderButtons: function() {
             const $buttons = this._super.apply(this, arguments);
             if (
                 !config.device.isMobile ||
@@ -437,9 +430,9 @@ odoo.define('ow_web_responsive', function (require) {
 
             // $buttons must be appended by JS because all events are bound
             $buttons.addClass("dropdown-menu");
-            const $dropdown = $(core.qweb.render(
-                'ow_web_responsive.MenuStatusbarButtons'
-            ));
+            const $dropdown = $(
+                core.qweb.render("web_responsive.MenuStatusbarButtons")
+            );
             $buttons.addClass("dropdown-menu").appendTo($dropdown);
             return $dropdown;
         },
@@ -447,10 +440,12 @@ odoo.define('ow_web_responsive', function (require) {
 
     // Chatter Hide Composer
     Chatter.include({
-        _openComposer: function (options) {
-            if (this._composer &&
-                    options.isLog === this._composer.options.isLog &&
-                    this._composer.$el.is(':visible')) {
+        _openComposer: function(options) {
+            if (
+                this._composer &&
+                options.isLog === this._composer.options.isLog &&
+                this._composer.$el.is(":visible")
+            ) {
                 this._closeComposer(false);
             } else {
                 this._super.apply(this, arguments);
@@ -460,37 +455,12 @@ odoo.define('ow_web_responsive', function (require) {
 
     // Hide AppDrawer or Menu when the action has been completed
     ActionManager.include({
-
         /**
-        * Because the menu aren't closed when click, this method
-        * searchs for the menu with the action executed to close it.
-        * To avoid delays in pages with a lot of DOM nodes we make
-        * 'sub-groups' with 'querySelector' to improve the performance.
-        *
-        * @param {action} action
-        * The executed action
-        */
-        _hideMenusByAction: function (action) {
-            const uniq_sel = '[data-action-id='+action.id+']';
-            // Need close AppDrawer?
-            const menu_apps_dropdown = document.querySelector(
-                '.o_menu_apps .dropdown');
-            $(menu_apps_dropdown).has('.dropdown-menu.show')
-                .has(uniq_sel).find('> a').dropdown('toggle');
-            // Need close Sections Menu?
-            const menu_sections = document.querySelector(
-                '.o_menu_sections li.show');
-            $(menu_sections).has(uniq_sel).find('.dropdown-toggle')
-                .dropdown('toggle');
-            // Need close Mobile?
-            const menu_sections_mobile = document.querySelector(
-                '.o_menu_sections.show');
-            $(menu_sections_mobile).has(uniq_sel).hide();
-        },
-
-        _handleAction: function (action) {
-            return this._super.apply(this, arguments).finally(
-                $.proxy(this, '_hideMenusByAction', action));
+         * @override
+         */
+        _appendController: function() {
+            this._super.apply(this, arguments);
+            closeAppDrawer();
         },
     });
 
@@ -507,7 +477,6 @@ odoo.define('ow_web_responsive', function (require) {
      * enable this behavior.
      */
     var KeyboardNavigationShiftAltMixin = {
-
         /**
          * Alter the key event to require pressing Shift.
          *
@@ -525,7 +494,7 @@ odoo.define('ow_web_responsive', function (require) {
          * @returns {keyEvent}
          * Altered event object
          */
-        _shiftPressed: function (keyEvent) {
+        _shiftPressed: function(keyEvent) {
             const alt = keyEvent.altKey || keyEvent.key === "Alt",
                 newEvent = _.extend({}, keyEvent),
                 shift = keyEvent.shiftKey || keyEvent.key === "Shift";
@@ -539,11 +508,11 @@ odoo.define('ow_web_responsive', function (require) {
             return newEvent;
         },
 
-        _onKeyDown: function (keyDownEvent) {
+        _onKeyDown: function(keyDownEvent) {
             return this._super(this._shiftPressed(keyDownEvent));
         },
 
-        _onKeyUp: function (keyUpEvent) {
+        _onKeyUp: function(keyUpEvent) {
             return this._super(this._shiftPressed(keyUpEvent));
         },
     };
@@ -551,4 +520,45 @@ odoo.define('ow_web_responsive', function (require) {
     // Include the SHIFT+ALT mixin wherever
     // `KeyboardNavigationMixin` is used upstream
     AbstractWebClient.include(KeyboardNavigationShiftAltMixin);
+
+    // DocumentViewer: Add support to maximize/minimize
+    DocumentViewer.include({
+        // Widget 'keydown' and 'keyup' events are only dispatched when
+        // this.$el is active, but now the modal have buttons that can obtain
+        // the focus. For this reason we now listen core events, that are
+        // dispatched every time.
+        events: _.extend(
+            _.omit(DocumentViewer.prototype.events, ["keydown", "keyup"]),
+            {
+                "click .o_maximize_btn": "_onClickMaximize",
+                "click .o_minimize_btn": "_onClickMinimize",
+                "shown.bs.modal": "_onShownModal",
+            }
+        ),
+
+        start: function() {
+            core.bus.on("keydown", this, this._onKeydown);
+            core.bus.on("keyup", this, this._onKeyUp);
+            return this._super.apply(this, arguments);
+        },
+
+        destroy: function() {
+            core.bus.off("keydown", this, this._onKeydown);
+            core.bus.off("keyup", this, this._onKeyUp);
+            this._super.apply(this, arguments);
+        },
+
+        _onShownModal: function() {
+            // Disable auto-focus to allow to use controls in edit mode.
+            // This only affects the active modal.
+            // More info: https://stackoverflow.com/a/14795256
+            $(document).off("focusin.modal");
+        },
+        _onClickMaximize: function() {
+            this.$el.removeClass("o_responsive_document_viewer");
+        },
+        _onClickMinimize: function() {
+            this.$el.addClass("o_responsive_document_viewer");
+        },
+    });
 });

@@ -4,5 +4,4 @@
   new size. This is Odoo's own limitation.
 * App navigation with keyboard.
 * Make it more beautiful. Maybe OCA-branded?
-* The button for manage list view columns dissapears when scroll because
-  can't have sticky position.
+* Handle long titles on forms in a better way
