@@ -1,0 +1,61 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+#	* ow_payment_received
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 12.0-20191106\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2020-06-29 12:42+0000\n"
+"PO-Revision-Date: 2020-06-29 12:42+0000\n"
+"Last-Translator: <>\n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
+
+#. module: ow_payment_received
+#: model:mail.template,body_html:ow_payment_received.invoice_payment_received
+msgid "\n"
+"            <p>Hello ${(object.partner_id.name)},<br><br>\n"
+"            This email is being sent to notify you we have received a payment for this invoice with reference ${(object.invoice_ids[0].number)}.<br><br>\n"
+"            Invoice number: ${(object.invoice_ids[0].number)}<br>\n"
+"            Invoice due date: ${(object.invoice_ids[0].date_due)}<br>\n"
+"            Invoice total amount: ${format_amount(object.invoice_ids[0].amount_total,object.currency_id)}<br><br>\n"
+"            Paid amount: ${format_amount(object.amount,object.currency_id)}<br><br>\n"
+"            After above payment(s) there is ${format_amount(object.invoice_ids[0].residual,object.currency_id)} outstanding on invoice ${(object.invoice_ids[0].number)}.<br><br>\n"
+"            Kind regards,<br>\n"
+"            <strong>${(object.company_id.name)}</strong> </p>"
+msgstr ""
+
+#. module: ow_payment_received
+#: model:ir.model,name:ow_payment_received.model_res_config_settings
+msgid "Config Settings"
+msgstr ""
+
+#. module: ow_payment_received
+#: model:ir.model.fields,field_description:ow_payment_received.field_res_config_settings__payment_mail_notify
+msgid "Notify invoice payment via email"
+msgstr ""
+
+#. module: ow_payment_received
+#: model:mail.template,subject:ow_payment_received.invoice_payment_received
+msgid "Payment received notice from ${(object.invoice_ids[0].number)}"
+msgstr ""
+
+#. module: ow_payment_received
+#: model:mail.template,report_name:ow_payment_received.invoice_payment_received
+msgid "Payment_${(object.invoice_ids[0].number)}"
+msgstr ""
+
+#. module: ow_payment_received
+#: model:ir.model,name:ow_payment_received.model_account_payment
+msgid "Payments"
+msgstr ""
+
+#. module: ow_payment_received
+#: model_terms:ir.ui.view,arch_db:ow_payment_received.res_config_settings_view_form
+msgid "Send payment received email to customer when a payment is registered on invoice."
+msgstr ""
+
