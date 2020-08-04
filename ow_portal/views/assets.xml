@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    
+    <template id="ow_portal" inherit_id="web.assets_frontend">
+        <xpath expr="." position="inside">
+            <link rel="stylesheet" href="/ow_portal/static/src/scss/style.scss" />
+        </xpath>
+    </template>
+
+</odoo>
