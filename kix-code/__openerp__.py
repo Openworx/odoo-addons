@@ -10,6 +10,7 @@
 PostNL maakt bij de sortering van post gebruik van een streepjescode: de KIX (KlantIndeX). Deze code voegt u toe aan de adresgegevens. De KIX bevat de gegevens die wij nodig hebben om uw post met de modernste sorteermachines te verwerken. Door de KIX bij het adres af te drukken helpt u ons om de kwaliteit van de dienstverlening te verbeteren.
     """,
     'website': 'http://www.openworx.nl',
+    'license': 'AGPL-3',
     'images':[
         'images/kixcode.png'
     ],
