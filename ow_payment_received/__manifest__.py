@@ -9,7 +9,7 @@
     'version': "1.0",
     'category': "Accounting/Accounting",
     'author': "Openworx",
-    'website': "http://www.openwporx.nl",
+    'website': "https://www.openworx.nl",
     'license': 'LGPL-3',
     'depends': [
         'account'
