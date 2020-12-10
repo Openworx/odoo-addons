@@ -6,7 +6,7 @@
     'name': "Invoice Payment received mail",
     'summary': "Send email when invoice payment is registered",
     'description': "Send email when invoice payment is registered",
-    'version': "1.0",
+    'version': "1.1",
     'category': "Accounting/Accounting",
     'author': "Openworx",
     'website': "https://www.openworx.nl",
