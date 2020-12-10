@@ -15,5 +15,8 @@ class AccountPayment(models.Model):
             if request.env['ir.config_parameter'].sudo().get_param('payment_mail_notify'):
                 for payment in self:
                     if payment.payment_type == 'inbound' and payment.partner_type == 'customer':
-                        template_id.send_mail(payment.id)
+                        try:
+                            template_id.send_mail(payment.id)
+                        except:
+                            pass
         return res
