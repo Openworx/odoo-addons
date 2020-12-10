@@ -1,0 +1,16 @@
+
+@charset "UTF-8";
+
+main .oe_website_login_container {
+
+    vertical-align: middle;
+    padding: 40px 65px 0px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    float: none;
+    background-color: #FFF;
+    box-shadow: 0.33px 3px 12px rgba(0, 0, 0, 0.3);
+    width: 400px;
+    margin: 40px auto;
+    }
+}

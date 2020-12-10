@@ -1,0 +1,68 @@
+/* Hack for custom themes */
+.o_portal_docs.list-group.ow_portal {
+    width: 100%;
+    display: inline-block;
+}
+
+
+.ow_portal {
+	width: 100%;
+	display: inline-block;
+	
+	.badge-pill {
+		font-size: 32px;
+	}
+	
+    .badge-secondary {
+        background-color: transparent;
+    }
+	
+	.list-group-item {
+	        float: left;
+		    margin: 10px;
+		    padding: 14px 18px;
+		    min-height: 130px;
+            width: 30%;
+            border-radius: 0px;
+		    font-size: 20px;
+		    
+            @media (max-width: 767px) {
+                width: 100%;
+            }
+	}
+	
+	[href="/my/quotes"] {
+		background-color: theme-color('primary');
+		color: #fff !important;
+	}
+
+	[href="/my/orders"]{
+		background-color: theme-color('secondary');
+		color: #fff !important;
+	}
+	
+    	[href="/my/purchase"]{
+		background-color: theme-color('epsilon');
+		color: #fff !important;
+	}
+
+	[href="/my/invoices"] {
+		background-color: theme-color('delta');
+		 color: #fff !important;
+	}
+
+	[href="/my/projects"] {
+		background-color: theme-color('epsilon');
+		color: #fff !important;
+	}
+
+	[href="/my/tasks"] {
+		background-color: theme-color('gamma');
+        color: #fff !important;
+	}
+    
+	[href="/my/timesheets"]{
+		background-color: theme-color('epsilon');
+		color: #fff !important;
+	}
+}

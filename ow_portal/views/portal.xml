@@ -1,0 +1,18 @@
+<odoo>
+
+    <template id="portal_width" inherit_id="portal.portal_layout">
+        <xpath expr="//div[hasclass('row')]/div[@t-attf-class='col-12 col-md col-lg-6']" position="attributes">
+            <attribute name="t-attf-class">col-12 col-md-12 col-lg-9</attribute>
+        </xpath>
+        <xpath expr="//div[@id='o_my_sidebar']" position="attributes">
+            <attribute name="class">col-lg-3 o_my_sidebar</attribute>
+        </xpath>
+    </template>
+    
+    <template id="portal_blocks" inherit_id="portal.portal_my_home">
+        <xpath expr="//div[hasclass('o_portal_docs')]" position="attributes">
+            <attribute name="class">o_portal_docs list-group ow_portal</attribute>
+        </xpath>
+    </template>
+    
+</odoo>
