@@ -19,6 +19,6 @@
     'data': [
     ],
     'images': ['images/image.png'],
-    'installable': False,
+    'installable': True,
     'application': False,
 }
