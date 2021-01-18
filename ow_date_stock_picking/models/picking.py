@@ -18,4 +18,4 @@ class StockPickingEdit(models.Model):
         for picking in self:
 #            if picking.state in ('done', 'cancel'):
 #                raise UserError(_("You cannot change the Scheduled Date on a done or cancelled transfer."))
-            picking.move_lines.write({'date_expected': picking.scheduled_date})
+            picking.move_lines.write({'date': picking.scheduled_date})
