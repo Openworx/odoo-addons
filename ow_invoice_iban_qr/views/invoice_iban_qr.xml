@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+	<template id="account_invoice_report_template" inherit_id="account.report_invoice_document">
+		<xpath expr="//p[@t-if='o.invoice_payment_term_id']" position="before">
+			<div t-if="o.move_type == 'out_invoice' and o.name and o.company_id.iban_qr_number" style="width: 100px; height: 100px;">
+                                <p t-field="o.qr_image" t-options='{"widget": "image"}' style="border: 1px solid lightgray; border-radius: 5px; padding: 2px;"/>
+				<p class="text-center" style="font-size: 7px; margin-top: -10px;">Scan QR with banking app.</p>
+			</div>
+			<br />
+		</xpath>
+	</template>
+</odoo>
