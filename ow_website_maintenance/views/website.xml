@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+   <template inherit_id="portal.frontend_layout" id="ow_website_maintainance" name="Main layout">
+      <xpath expr="//div[@id='wrapwrap']" position="attributes">
+         <attribute name="t-if">
+            not user_id.partner_id.name == 'Public user' or not website.ow_maintenance or request.httprequest.path=='/web/login'
+         </attribute>
+      </xpath>
+      <xpath expr="//div[@id='wrapwrap']" position="before">
+         <t t-if="user_id.partner_id.name == 'Public user' and website.ow_maintenance==True and request.httprequest.path!='/web/login'">
+            <html>
+               <head>
+                  <meta charset="utf-8"/>
+                  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+                  <style>
+                     body {
+                     overflow: hidden;
+                     background: #fff;
+                     background-size: cover;
+                     font-size: 17px;
+                     margin: 0;
+                     padding: 0;
+                     }
+                     .layout-align-center-vertical {
+                     -webkit-justify-content: center;
+                     -moz-justify-content: center;
+                     -ms-justify-content: center;
+                     justify-content: center;
+                     max-height: 100%;
+                     }
+                     .horizontal-align {
+                     position: relative;
+                     left: 50%;
+                     -webkit-transform: translateX(-50%);
+                     -ms-transform: translateX(-50%);
+                     transform: translateX(-50%);
+                     }
+                     .width-7, .size-7 {
+                     width: 392px !important;
+                     margin-top:100px;
+                     }
+                     .height-7, .size-7 {
+                     height: 392px !important;
+                     }
+                  </style>
+               </head>
+               <body>
+                  <div class="full-size layout-column layout-align-center-vertical bootstrap snippets bootdeys">
+                     <div class="size-7 horizontal-align">
+                        <div class="panel panel-default">
+                           <div class="panel-body text-center">
+                              <div style="padding-bottom: 20px;">
+                                 <span t-field="res_company.logo" t-options="{'widget': 'image'}" role="img" t-att-aria-label="'Logo of %s' % res_company.name" t-att-title="res_company.name"/>
+                              </div>                               
+                              <div t-if="website.ow_maintenance_title">
+                                 <h2><span t-field="website.ow_maintenance_title"/></h2>
+                              </div>
+                              <div t-if="website.ow_maintenance_message">
+                                 <span t-field="website.ow_maintenance_message" />
+                              </div>
+                           </div>
+                        </div>
+                     </div>
+                  </div>
+               </body>
+            </html>
+         </t>
+      </xpath>
+   </template>
+</odoo>
