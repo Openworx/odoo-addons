@@ -14,7 +14,7 @@ Website Maintenance/Coming Soon Mode
     'author': "Openworx",
     'website': 'https://www.openworx.nl',
     'license': 'LGPL-3',
-#    'images': ['images/screen.png'],
+    'images': ['images/screen.png'],
     'depends': [
 	'website',
 	'portal',
