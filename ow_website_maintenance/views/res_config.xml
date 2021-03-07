@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<odoo>
+    <record id="res_config_settings_view_form" model="ir.ui.view">
+        <field name="name">Website Maintenance</field>
+        <field name="model">res.config.settings</field>
+        <field name="inherit_id" ref="website.res_config_settings_view_form" />
+        <field name="arch" type="xml">
+            <xpath expr="//div[@id='website_settings']" position="after">
+                <h2>Website Maintenance Mode</h2>
+                <div class="row mt16 o_settings_container" id="ow_website_maintenance">
+                    <div class="col-12 col-md-6 o_setting_box">
+                        <group name="ow_website_maintenance">
+                            <field name="ow_maintenance"/>
+                            <field name="ow_maintenance_title"/>
+                            <field name="ow_maintenance_message"/>
+                        </group>
+                    </div>
+                </div>
+            </xpath>
+        </field>
+    </record>
+</odoo>
