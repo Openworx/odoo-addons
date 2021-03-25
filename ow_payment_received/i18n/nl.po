@@ -1,0 +1,98 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# 	* ow_payment_received
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 14.0-20210318\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2021-03-25 19:27+0000\n"
+"PO-Revision-Date: 2021-03-25 20:37+0100\n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 2.3\n"
+"Last-Translator: \n"
+"Language: nl\n"
+
+#. module: ow_payment_received
+#: model:mail.template,body_html:ow_payment_received.invoice_payment_received
+msgid ""
+"\n"
+"            <p>Hello ${(object.partner_id.name)},<br><br>\n"
+"            This email is being sent to notify you we have received a "
+"payment for this invoice with reference ${(object.ref)}.<br><br>\n"
+"            Invoice number: ${(object.ref)}<br>\n"
+"            Paid amount: ${format_amount(object.amount,object.currency_id)}"
+"<br><br>\n"
+"            Kind regards,<br>\n"
+"            <strong>${(object.company_id.name)}</strong></p>\n"
+"            \n"
+"        "
+msgstr ""
+"\n"
+"            <p>Beste ${(object.partner_id.name)},<br><br>\n"
+"             Deze e-mail is verzonden om te melden dat wij een betaling "
+"van u hebben ontvangen voor deze factuur met referentie ${(object.ref)}."
+"<br><br>\n"
+"           Factuurnummer: ${(object.ref)}<br>\n"
+"            Betaald bedrag: ${format_amount(object.amount,object."
+"currency_id)}<br><br>\n"
+"            Met vriendelijke groet,<br>\n"
+"            <strong>${(object.company_id.name)}</strong></p>\n"
+"            \n"
+"        "
+
+#. module: ow_payment_received
+#: model:ir.model,name:ow_payment_received.model_res_config_settings
+msgid "Config Settings"
+msgstr "Configuratie-instellingen"
+
+#. module: ow_payment_received
+#: model:ir.model.fields,field_description:ow_payment_received.field_account_payment__display_name
+#: model:ir.model.fields,field_description:ow_payment_received.field_res_config_settings__display_name
+msgid "Display Name"
+msgstr "Weergave naam"
+
+#. module: ow_payment_received
+#: model:ir.model.fields,field_description:ow_payment_received.field_account_payment__id
+#: model:ir.model.fields,field_description:ow_payment_received.field_res_config_settings__id
+msgid "ID"
+msgstr "ID"
+
+#. module: ow_payment_received
+#: model:ir.model.fields,field_description:ow_payment_received.field_account_payment____last_update
+#: model:ir.model.fields,field_description:ow_payment_received.field_res_config_settings____last_update
+msgid "Last Modified on"
+msgstr "Laatst gewijzigd op"
+
+#. module: ow_payment_received
+#: model:ir.model.fields,field_description:ow_payment_received.field_res_config_settings__payment_mail_notify
+msgid "Notify invoice payment via email"
+msgstr "Notificatie factuurbetaling via e-mail"
+
+#. module: ow_payment_received
+#: model:mail.template,subject:ow_payment_received.invoice_payment_received
+msgid "Payment received notice from ${(object.ref)}"
+msgstr "Betaling ontvangen van ${(object.ref)}"
+
+#. module: ow_payment_received
+#: model:mail.template,report_name:ow_payment_received.invoice_payment_received
+msgid "Payment_${(object.ref)}"
+msgstr "Betaalbewijs_${(object.ref)}"
+
+#. module: ow_payment_received
+#: model:ir.model,name:ow_payment_received.model_account_payment
+msgid "Payments"
+msgstr "Betalingen"
+
+#. module: ow_payment_received
+#: model_terms:ir.ui.view,arch_db:ow_payment_received.res_config_settings_view_form
+msgid ""
+"Send payment received email to customer when a payment is registered on "
+"invoice."
+msgstr ""
+"Stuur betaling ontvangen e-mail wanneer een betaling is geregistreerd op "
+"een factuur."
