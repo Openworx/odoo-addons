@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+    <record id="ow_invoice_tree_color" model="ir.ui.view">
+        <field name="name">account.move.tree.color</field>
+        <field name="model">account.move</field>
+        <field name="inherit_id" ref="account.view_invoice_tree"/>
+        <!--   <field name="mode">primary</field> -->
+        <field name="arch" type="xml">
+            <xpath expr="//tree" position="attributes">
+                <attribute name="decoration-danger" add="invoice_date_due &lt; current_date &lt; state == 'posted'"/>
+                <attribute name="decoration-success" add="invoice_payment_state == 'paid' &lt; state=='posted'"/>
+            </xpath>
+        </field>
+    </record>
+    </data>
+</odoo>
