@@ -6,7 +6,7 @@
 {
     'name': 'Invoice Treeview state color',
     'summary': 'Invoice Treeview state color',
-    'version': '1.0',
+    'version': '1.1',
     'category': 'Accounting',
     'summary': """
 Show colors on Invoice Treeview depending on state.
