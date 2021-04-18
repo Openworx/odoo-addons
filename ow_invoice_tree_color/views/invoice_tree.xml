@@ -8,7 +8,7 @@
         <!--   <field name="mode">primary</field> -->
         <field name="arch" type="xml">
             <xpath expr="//tree" position="attributes">
-                <attribute name="decoration-danger" add="invoice_date_due &lt; current_date &lt; state == 'posted'"/>
+                <attribute name="decoration-danger" add="invoice_date_due &lt; current_date &lt; invoice_payment_state == 'not_paid' &lt; state == 'posted'"/>
                 <attribute name="decoration-success" add="payment_state == 'paid' &lt; state=='posted'"/>
             </xpath>
         </field>
