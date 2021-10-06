@@ -25,4 +25,5 @@ Website Maintenance/Coming Soon Mode
     ],
     'installable': True,
     'application': False,
+
 }
