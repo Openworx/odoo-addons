@@ -12,7 +12,8 @@
     "depends": ['account'],
     "data": [
         'views/invoice_iban_qr.xml',
-		'views/res_company_view.xml',
+	'views/res_company_view.xml',
+	'security/ir.model.access.csv',
     ],
     "license": "LGPL-3",
     'images': ['images/ibanqr.png'],
