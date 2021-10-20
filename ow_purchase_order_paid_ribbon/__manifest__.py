@@ -14,7 +14,7 @@ Paid Ribbon on Purchase Order Form
     'website': 'https://www.openworx.nl',
     'license': 'LGPL-3',
     'depends': [
-	'sale',
+	'purchase',
     ],
     'data': [
         'views/purchase_order_form.xml',
