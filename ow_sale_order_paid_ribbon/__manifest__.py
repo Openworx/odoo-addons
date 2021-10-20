@@ -5,7 +5,7 @@
 {
     'name': 'Sales Order Paid Ribbon',
     'summary': 'Paid Ribbon on Sales Order Form',
-    'version': '1.0',
+    'version': '0.1',
     'category': 'Sales',
     'summary': """
 Paid Ribbon on Sales Order Form
