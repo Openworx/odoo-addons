@@ -5,7 +5,7 @@
 {
     'name': 'Purchase Order Paid Ribbon',
     'summary': 'Paid Ribbon on Purchase Order Form',
-    'version': '1.0',
+    'version': '0.1',
     'category': 'Purchases',
     'summary': """
 Paid Ribbon on Purchase Order Form
