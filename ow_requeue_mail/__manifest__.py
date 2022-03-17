@@ -4,7 +4,7 @@
     'name': 'Requeue Failed Mails',
     'summary': """Requeue failed mails""",
     'version': '1.0',
-    'category': 'Tools',
+    'category': 'Extra Tools',
     'description': """Requeue failed mails""",
     'author': 'Openworx',
     'website': 'https://www.openworx.nl',
