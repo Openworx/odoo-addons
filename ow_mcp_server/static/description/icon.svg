@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
+  <!-- Openworx corner brackets -->
+  <g fill="none" stroke-width="26" stroke-linecap="round">
+    <!-- Top-right ORANGE -->
+    <path d="M 356 62 L 476 62 L 476 182" stroke="#FF940D"/>
+    <!-- Bottom-left BLUE -->
+    <path d="M 156 450 L 36 450 L 36 330" stroke="#0098FF"/>
+  </g>
+
+  <!-- Edges of MCP node graph -->
+  <g stroke="#0A1128" stroke-width="18" stroke-linecap="round">
+    <line x1="256" y1="158" x2="360" y2="338"/>
+    <line x1="256" y1="158" x2="152" y2="338"/>
+    <line x1="152" y1="338" x2="360" y2="338"/>
+  </g>
+
+  <!-- Nodes -->
+  <circle cx="256" cy="158" r="46" fill="#0A1128"/>
+  <circle cx="152" cy="338" r="46" fill="#0098FF"/>
+  <circle cx="360" cy="338" r="46" fill="#FF940D"/>
+</svg>

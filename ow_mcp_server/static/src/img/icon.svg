@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" width="200" height="200">
+  <title>OW MCP Server</title>
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="0" y2="200" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#9B6A8F"/>
+      <stop offset="1" stop-color="#5E3B5A"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Rounded-square background, Odoo brand purple gradient -->
+  <rect width="200" height="200" rx="40" ry="40" fill="url(#bg)"/>
+
+  <!-- Three connected nodes forming an MCP-style mesh -->
+  <g stroke="#ffffff" stroke-width="6" stroke-linecap="round" fill="none">
+    <line x1="66" y1="78" x2="134" y2="78"/>
+    <line x1="66" y1="78" x2="100" y2="138"/>
+    <line x1="134" y1="78" x2="100" y2="138"/>
+  </g>
+  <g fill="#ffffff">
+    <circle cx="66" cy="78" r="16"/>
+    <circle cx="134" cy="78" r="16"/>
+    <circle cx="100" cy="138" r="16"/>
+  </g>
+</svg>

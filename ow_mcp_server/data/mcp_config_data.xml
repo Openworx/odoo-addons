@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo noupdate="1">
+    <!--
+        Ensure the singleton ow.mcp.config row exists without going through
+        a <record>. Using <record> would hit MCPConfig.create() on every
+        upgrade; when the row already exists (typical on upgrade, or after
+        a lazy create via get_singleton() at first request) that would
+        trip the singleton guard and abort the install. The function form
+        is naturally idempotent: get_singleton() returns the existing row
+        or creates one if absent.
+    -->
+    <function model="ow.mcp.config" name="get_singleton"/>
+</odoo>

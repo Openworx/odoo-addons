@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="res_config_settings_view_form" model="ir.ui.view">
+        <field name="name">res.config.settings.view.form.inherit.ow_mcp_server</field>
+        <field name="model">res.config.settings</field>
+        <field name="inherit_id" ref="base.res_config_settings_view_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//form" position="inside">
+                <app string="MCP Server" name="ow_mcp_server"
+                     groups="ow_mcp_server.group_mcp_admin">
+
+                    <block title="Transports" name="ow_mcp_transport">
+                        <setting id="ow_mcp_enable_http_transport"
+                                 string="Enable Streamable HTTP"
+                                 help="Expose POST /mcp for stateless MCP over HTTP. When off the endpoint returns 503.">
+                            <field name="ow_mcp_enable_http_transport"/>
+                        </setting>
+                        <setting id="ow_mcp_enable_sse"
+                                 string="Enable SSE Probe"
+                                 help="Enable the SSE ready probe on GET /mcp.">
+                            <field name="ow_mcp_enable_sse"/>
+                        </setting>
+                        <setting id="ow_mcp_require_https"
+                                 string="Require HTTPS"
+                                 help="Reject non-HTTPS requests. Trusts X-Forwarded-Proto only when proxy_mode is set in odoo.conf.">
+                            <field name="ow_mcp_require_https"/>
+                        </setting>
+                        <setting id="ow_mcp_max_body_bytes"
+                                 string="Maximum Request Body (bytes)"
+                                 help="Hard limit on incoming JSON-RPC payload size. Default 1,048,576 (1 MiB). 0 disables the limit.">
+                            <field name="ow_mcp_max_body_bytes"/>
+                        </setting>
+                    </block>
+
+                    <block title="YOLO Mode" name="ow_mcp_yolo">
+                        <setting id="ow_mcp_yolo_mode"
+                                 string="YOLO mode"
+                                 help="Dev-only override that bypasses the per-model access layer. Requires --dev or --test-enable AND OW_MCP_ALLOW_YOLO=1 to take effect.">
+                            <field name="ow_mcp_yolo_mode"/>
+                        </setting>
+                    </block>
+
+                    <block title="Limits and Formatting" name="ow_mcp_limits">
+                        <setting id="ow_mcp_default_limit"
+                                 string="Default search limit"
+                                 help="Page size used when the caller omits `limit`.">
+                            <field name="ow_mcp_default_limit"/>
+                        </setting>
+                        <setting id="ow_mcp_max_limit"
+                                 string="Maximum search limit"
+                                 help="Hard cap on `limit` accepted from the caller.">
+                            <field name="ow_mcp_max_limit"/>
+                        </setting>
+                        <setting id="ow_mcp_max_text_len"
+                                 string="Maximum text length"
+                                 help="Text / HTML fields are truncated to this many chars in MCP responses.">
+                            <field name="ow_mcp_max_text_len"/>
+                        </setting>
+                        <setting id="ow_mcp_max_relational_preview"
+                                 string="Maximum relational preview"
+                                 help="Entries previewed for one2many / many2many fields.">
+                            <field name="ow_mcp_max_relational_preview"/>
+                        </setting>
+                    </block>
+
+                    <block title="Rate Limit and Cache" name="ow_mcp_perf">
+                        <setting id="ow_mcp_rate_limit_per_minute"
+                                 string="Rate limit (per minute)"
+                                 help="Per-API-key sliding window. In-memory per worker; 0 disables the limiter.">
+                            <field name="ow_mcp_rate_limit_per_minute"/>
+                        </setting>
+                        <setting id="ow_mcp_cache_enabled"
+                                 string="Enable response cache"
+                                 help="Cache list_models / search_records / get_record per worker. Invalidated per-model on MCP writes.">
+                            <field name="ow_mcp_cache_enabled"/>
+                        </setting>
+                        <setting id="ow_mcp_cache_ttl_seconds"
+                                 string="Cache TTL (seconds)"
+                                 help="Lifetime of a cached entry. Ignored when the response cache is disabled.">
+                            <field name="ow_mcp_cache_ttl_seconds"/>
+                        </setting>
+                    </block>
+
+                    <block title="CORS" name="ow_mcp_cors">
+                        <setting id="ow_mcp_enable_cors"
+                                 string="Enable CORS"
+                                 help="Emit CORS headers and handle OPTIONS preflight.">
+                            <field name="ow_mcp_enable_cors"/>
+                        </setting>
+                        <setting id="ow_mcp_cors_origins"
+                                 string="Allowed origins"
+                                 help="One origin per line for exact match. Empty list falls back to wildcard (*).">
+                            <field name="ow_mcp_cors_origins"
+                                   placeholder="https://chat.example.com&#10;https://cursor.sh"/>
+                        </setting>
+                    </block>
+
+                    <block title="Audit Log" name="ow_mcp_audit">
+                        <setting id="ow_mcp_audit_log"
+                                 string="Enable audit log"
+                                 help="Record every MCP call in ow.mcp.audit.log (admin-only).">
+                            <field name="ow_mcp_audit_log"/>
+                        </setting>
+                        <setting id="ow_mcp_audit_retention_days"
+                                 string="Audit retention (days)"
+                                 help="Daily cron deletes rows older than this. 0 disables retention (rows kept forever).">
+                            <field name="ow_mcp_audit_retention_days"/>
+                        </setting>
+                    </block>
+
+                    <block title="IP Whitelist" name="ow_mcp_ip_whitelist">
+                        <setting id="ow_mcp_ip_whitelist"
+                                 string="IP / CIDR allowlist"
+                                 help="One IPv4/IPv6 address or CIDR per line (# and blank lines ignored). IPv4-mapped IPv6 (::ffff:1.2.3.4) matches the IPv4 entry. Empty = no restriction.">
+                            <field name="ow_mcp_ip_whitelist"
+                                   placeholder="10.0.0.0/8&#10;192.168.1.42&#10;2001:db8::/32&#10;::1&#10;fe80::/10"/>
+                        </setting>
+                    </block>
+
+                </app>
+            </xpath>
+        </field>
+    </record>
+
+    <!-- Action that opens Settings scrolled to the MCP Server app. -->
+    <record id="action_open_mcp_settings" model="ir.actions.act_window">
+        <field name="name">MCP Server Settings</field>
+        <field name="res_model">res.config.settings</field>
+        <field name="view_mode">form</field>
+        <field name="target">inline</field>
+        <field name="context">{'module': 'ow_mcp_server'}</field>
+    </record>
+
+</odoo>

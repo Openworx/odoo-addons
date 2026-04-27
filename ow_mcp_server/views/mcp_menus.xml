@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!--
+        Top-level "MCP" tab inside the Settings app, next to
+        "General Settings" and "Users & Companies". Configuration itself
+        lives in General Settings (res.config.settings app block); this
+        tab exposes the operational data: per-model rules and the audit
+        log.
+    -->
+    <menuitem id="menu_mcp_root"
+              name="MCP"
+              parent="base.menu_administration"
+              sequence="20"
+              groups="group_mcp_admin"/>
+
+    <menuitem id="menu_mcp_model_access"
+              name="Model Rules"
+              parent="menu_mcp_root"
+              action="action_mcp_model_access"
+              sequence="10"/>
+
+    <menuitem id="menu_mcp_audit_log"
+              name="Audit Logs"
+              parent="menu_mcp_root"
+              action="action_mcp_audit_log"
+              sequence="20"/>
+</odoo>
