@@ -5,136 +5,109 @@
     <title>OW MCP Server</title>
 </head>
 <body>
-<section style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif; max-width: 1080px; margin: 0 auto; padding: 48px 32px; color: #1a202c; line-height: 1.65; background: #ffffff;">
+<section style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif; max-width: 900px; margin: 0 auto; padding: 40px 24px; color: #1a202c; line-height: 1.65; background: #ffffff;">
 
-    <!-- TOP BAR -->
-    <div style="display: flex; align-items: center; justify-content: space-between; padding-bottom: 24px; border-bottom: 1px solid #edf2f7; margin-bottom: 56px;">
-        <img src="https://download.openworx.nl/logo.png" alt="Openworx" style="max-width: 180px; height: auto;"/>
-        <span style="font-size: 13px; color: #718096; letter-spacing: 0.06em; text-transform: uppercase; font-weight: 600;">Odoo 18 · MCP</span>
+    <!-- LOGO -->
+    <div style="text-align: center; padding-bottom: 28px; border-bottom: 1px solid #edf2f7; margin-bottom: 44px;">
+        <img src="https://download.openworx.nl/logo.png" alt="Openworx" style="max-width: 200px; height: auto;"/>
     </div>
 
     <!-- HERO -->
-    <div style="display: grid; grid-template-columns: 1.4fr 1fr; gap: 48px; align-items: center; margin-bottom: 88px;">
-
-        <!-- HERO TEXT -->
-        <div>
-            <span style="display: inline-block; background: #FFF4E6; color: #FF940D; font-size: 12px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; padding: 6px 14px; border-radius: 999px; margin-bottom: 24px;">Native MCP Server</span>
-            <h1 style="font-size: 56px; line-height: 1.05; margin: 0 0 24px 0; font-weight: 800; letter-spacing: -0.02em; color: #0A1128;">
-                <span style="color: #FF940D;">OW MCP Server.</span><br/>
-                Connect AI to your Odoo.
-            </h1>
-            <p style="font-size: 19px; color: #4a5568; margin: 0 0 32px 0; max-width: 540px;">
-                Native Model Context Protocol server for Odoo 18. Plug
-                <strong style="color: #0A1128;">Claude</strong>,
-                <strong style="color: #0A1128;">Cursor</strong>, and
-                <strong style="color: #0A1128;">Copilot</strong> straight into
-                your database — no bridge process, no pip dependencies.
-            </p>
-            <div style="display: flex; gap: 14px; flex-wrap: wrap;">
-                <span style="background: #FF940D; color: #fff; padding: 14px 22px; border-radius: 8px; font-weight: 600; font-size: 15px;">11 typed tools →</span>
-                <span style="background: #fff; color: #0098FF; padding: 14px 22px; border-radius: 8px; font-weight: 600; font-size: 15px; border: 2px solid #0098FF;">Bearer API keys only</span>
-            </div>
+    <div style="text-align: center; margin-bottom: 56px;">
+        <span style="display: inline-block; background: #FFF4E6; color: #FF940D; font-size: 12px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; padding: 6px 16px; border-radius: 999px; margin-bottom: 20px;">Native MCP Server for Odoo 18</span>
+        <h1 style="font-size: 44px; line-height: 1.1; margin: 0 0 20px 0; font-weight: 800; letter-spacing: -0.02em; color: #0A1128;">
+            <span style="color: #FF940D;">OW MCP Server.</span><br/>Connect AI to your Odoo.
+        </h1>
+        <p style="font-size: 18px; color: #4a5568; max-width: 620px; margin: 0 auto 28px auto;">
+            Native Model Context Protocol server for Odoo 18. Plug
+            <strong style="color: #0A1128;">Claude</strong>,
+            <strong style="color: #0A1128;">Cursor</strong>, and
+            <strong style="color: #0A1128;">Copilot</strong>
+            straight into your database — no bridge process, no pip dependencies.
+        </p>
+        <div style="background: #0A1128; border-radius: 10px; padding: 18px 24px; display: inline-block; text-align: left; border-left: 4px solid #FF940D;">
+            <code style="font-family: 'SF Mono', Menlo, Consolas, monospace; font-size: 14px; color: #e2e8f0; line-height: 1.7; display: block;">
+                <span style="color: #FF940D;">$</span> claude mcp add --transport http odoo \<br/>
+                &nbsp;&nbsp;https://odoo.example.com/mcp<br/>
+                <span style="color: #88c0ff;">→ Connected. 11 tools loaded.</span>
+            </code>
         </div>
-
-        <!-- HERO VISUAL with decorative brackets -->
-        <div style="position: relative; padding: 24px;">
-            <!-- Orange top-right bracket -->
-            <div style="position: absolute; top: 0; right: 0; width: 70px; height: 70px; border-top: 6px solid #FF940D; border-right: 6px solid #FF940D; border-radius: 0 18px 0 0;"></div>
-            <!-- Blue bottom-left bracket -->
-            <div style="position: absolute; bottom: 0; left: 0; width: 70px; height: 70px; border-bottom: 6px solid #0098FF; border-left: 6px solid #0098FF; border-radius: 0 0 0 18px;"></div>
-            <!-- Visual block -->
-            <div style="background: linear-gradient(135deg, #0A1128 0%, #0098FF 100%); border-radius: 14px; padding: 40px 32px; color: #fff; box-shadow: 0 12px 32px rgba(10, 17, 40, 0.22);">
-                <div style="font-family: 'SF Mono', Menlo, Consolas, monospace; font-size: 13px; line-height: 1.8; opacity: 0.95;">
-                    <div style="color: #FF940D;">$ claude mcp add \</div>
-                    <div style="padding-left: 16px;">--transport http odoo \</div>
-                    <div style="padding-left: 16px;">https://odoo.example.com/mcp</div>
-                    <div style="margin-top: 14px; color: #88c0ff;">→ Connected. 11 tools loaded.</div>
-                    <div style="color: #88c0ff;">→ Auth: Bearer (scope: mcp)</div>
-                </div>
-            </div>
-        </div>
-
     </div>
 
     <!-- WHAT IT DOES -->
-    <div style="margin-bottom: 80px;">
-        <h2 style="font-size: 36px; font-weight: 800; color: #0A1128; margin: 0 0 16px 0; letter-spacing: -0.02em;">
-            <span style="color: #FF940D;">What it does.</span>
-        </h2>
-        <p style="font-size: 18px; color: #4a5568; max-width: 780px; margin: 0;">
-            Exposes an MCP (JSON-RPC 2.0) endpoint at <code style="background: #f1f5f9; padding: 2px 8px; border-radius: 4px; color: #0A1128; font-size: 0.92em;">/mcp</code> on your Odoo
-            server. MCP-compatible AI assistants — Claude Code, Claude Desktop,
-            Cursor, GitHub Copilot, and others — speak to it directly to read
-            and mutate Odoo data. Eleven well-defined tools, LLM-friendly
-            output, and fine-grained permissions.
+    <div style="margin-bottom: 52px;">
+        <h2 style="font-size: 30px; font-weight: 800; color: #0A1128; margin: 0 0 14px 0; border-bottom: 3px solid #FF940D; padding-bottom: 10px;">What it does</h2>
+        <p style="font-size: 16px; color: #4a5568; margin: 0;">
+            Exposes an MCP (JSON-RPC 2.0) endpoint at <code style="background: #f1f5f9; padding: 2px 7px; border-radius: 4px; color: #0A1128; font-size: 0.9em;">/mcp</code> on your Odoo server.
+            MCP-compatible AI assistants — Claude Code, Claude Desktop, Cursor, GitHub Copilot —
+            speak to it directly to read and write Odoo data. Eleven well-defined tools,
+            LLM-friendly output, and fine-grained permissions.
         </p>
     </div>
 
     <!-- KEY FEATURES -->
-    <div style="margin-bottom: 80px;">
-        <h2 style="font-size: 36px; font-weight: 800; color: #0A1128; margin: 0 0 40px 0; letter-spacing: -0.02em;">
-            <span style="color: #FF940D;">Key features.</span>
-        </h2>
+    <div style="margin-bottom: 52px;">
+        <h2 style="font-size: 30px; font-weight: 800; color: #0A1128; margin: 0 0 24px 0; border-bottom: 3px solid #FF940D; padding-bottom: 10px;">Key features</h2>
 
-        <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 24px;">
+        <div style="border: 1px solid #e2e8f0; border-radius: 10px; overflow: hidden;">
 
-            <div style="padding: 28px; background: #ffffff; border: 1px solid #e2e8f0; border-radius: 12px; transition: all 0.2s;">
-                <div style="width: 44px; height: 44px; background: #FFF4E6; color: #FF940D; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 18px; margin-bottom: 16px;">01</div>
-                <h3 style="margin: 0 0 10px 0; color: #0A1128; font-size: 19px; font-weight: 700;">Native MCP, no bridge</h3>
-                <p style="margin: 0; color: #4a5568; font-size: 15px;">Speaks MCP protocol itself. No external translator process — addon <em>is</em> the MCP server.</p>
+            <div style="padding: 20px 22px; border-left: 4px solid #FF940D; border-bottom: 1px solid #edf2f7; background: #fff;">
+                <div style="display: inline-block; background: #FFF4E6; color: #FF940D; font-size: 11px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; padding: 3px 9px; border-radius: 4px; margin-bottom: 8px;">01</div>
+                <h3 style="margin: 0 0 6px 0; color: #0A1128; font-size: 17px; font-weight: 700;">Native MCP, no bridge</h3>
+                <p style="margin: 0; color: #4a5568; font-size: 15px;">Speaks MCP protocol itself. No external translator process — the addon <em>is</em> the MCP server.</p>
             </div>
 
-            <div style="padding: 28px; background: #ffffff; border: 1px solid #e2e8f0; border-radius: 12px;">
-                <div style="width: 44px; height: 44px; background: #E6F4FF; color: #0098FF; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 18px; margin-bottom: 16px;">02</div>
-                <h3 style="margin: 0 0 10px 0; color: #0A1128; font-size: 19px; font-weight: 700;">Eleven typed tools</h3>
-                <p style="margin: 0; color: #4a5568; font-size: 15px;">Full CRUD plus <code style="background: #f1f5f9; padding: 1px 6px; border-radius: 3px; font-size: 0.88em;">search_count</code>, <code style="background: #f1f5f9; padding: 1px 6px; border-radius: 3px; font-size: 0.88em;">read_group</code>, <code style="background: #f1f5f9; padding: 1px 6px; border-radius: 3px; font-size: 0.88em;">get_model_schema</code>. Each ships a JSON schema.</p>
+            <div style="padding: 20px 22px; border-left: 4px solid #0098FF; border-bottom: 1px solid #edf2f7; background: #fafbfc;">
+                <div style="display: inline-block; background: #E6F4FF; color: #0098FF; font-size: 11px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; padding: 3px 9px; border-radius: 4px; margin-bottom: 8px;">02</div>
+                <h3 style="margin: 0 0 6px 0; color: #0A1128; font-size: 17px; font-weight: 700;">Eleven typed tools</h3>
+                <p style="margin: 0; color: #4a5568; font-size: 15px;">Full CRUD plus <code style="background: #fff; padding: 1px 5px; border-radius: 3px; font-size: 0.88em;">search_count</code>, <code style="background: #fff; padding: 1px 5px; border-radius: 3px; font-size: 0.88em;">read_group</code>, <code style="background: #fff; padding: 1px 5px; border-radius: 3px; font-size: 0.88em;">get_model_schema</code>. Each ships a JSON schema so LLMs fill arguments correctly.</p>
             </div>
 
-            <div style="padding: 28px; background: #ffffff; border: 1px solid #e2e8f0; border-radius: 12px;">
-                <div style="width: 44px; height: 44px; background: #FFF4E6; color: #FF940D; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 18px; margin-bottom: 16px;">03</div>
-                <h3 style="margin: 0 0 10px 0; color: #0A1128; font-size: 19px; font-weight: 700;">LLM-friendly output</h3>
-                <p style="margin: 0; color: #4a5568; font-size: 15px;">Many2one as <code style="background: #f1f5f9; padding: 1px 6px; border-radius: 3px; font-size: 0.88em;">{id, name}</code>, ISO 8601 dates, pagination envelopes, HTML stripped, binaries summarised.</p>
+            <div style="padding: 20px 22px; border-left: 4px solid #FF940D; border-bottom: 1px solid #edf2f7; background: #fff;">
+                <div style="display: inline-block; background: #FFF4E6; color: #FF940D; font-size: 11px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; padding: 3px 9px; border-radius: 4px; margin-bottom: 8px;">03</div>
+                <h3 style="margin: 0 0 6px 0; color: #0A1128; font-size: 17px; font-weight: 700;">LLM-friendly output</h3>
+                <p style="margin: 0; color: #4a5568; font-size: 15px;">Many2one as <code style="background: #f1f5f9; padding: 1px 5px; border-radius: 3px; font-size: 0.88em;">{id, name}</code>, ISO 8601 dates, pagination envelopes with <code style="background: #f1f5f9; padding: 1px 5px; border-radius: 3px; font-size: 0.88em;">has_more</code>, HTML stripped, binaries summarised.</p>
             </div>
 
-            <div style="padding: 28px; background: #ffffff; border: 1px solid #e2e8f0; border-radius: 12px;">
-                <div style="width: 44px; height: 44px; background: #E6F4FF; color: #0098FF; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 18px; margin-bottom: 16px;">04</div>
-                <h3 style="margin: 0 0 10px 0; color: #0A1128; font-size: 19px; font-weight: 700;">Bearer API keys only</h3>
-                <p style="margin: 0; color: #4a5568; font-size: 15px;">Odoo built-in User API keys, scope <code style="background: #f1f5f9; padding: 1px 6px; border-radius: 3px; font-size: 0.88em;">mcp</code>. No password login, no session cookies. Revoke = instant cut-off.</p>
+            <div style="padding: 20px 22px; border-left: 4px solid #0098FF; border-bottom: 1px solid #edf2f7; background: #fafbfc;">
+                <div style="display: inline-block; background: #E6F4FF; color: #0098FF; font-size: 11px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; padding: 3px 9px; border-radius: 4px; margin-bottom: 8px;">04</div>
+                <h3 style="margin: 0 0 6px 0; color: #0A1128; font-size: 17px; font-weight: 700;">Bearer API keys only</h3>
+                <p style="margin: 0; color: #4a5568; font-size: 15px;">Odoo built-in User API keys, scope <code style="background: #fff; padding: 1px 5px; border-radius: 3px; font-size: 0.88em;">mcp</code>. No password login, no session cookies. Revoke = instant cut-off.</p>
             </div>
 
-            <div style="padding: 28px; background: #ffffff; border: 1px solid #e2e8f0; border-radius: 12px;">
-                <div style="width: 44px; height: 44px; background: #FFF4E6; color: #FF940D; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 18px; margin-bottom: 16px;">05</div>
-                <h3 style="margin: 0 0 10px 0; color: #0A1128; font-size: 19px; font-weight: 700;">Per-model access control</h3>
-                <p style="margin: 0; color: #4a5568; font-size: 15px;">Read / Write / Create / Delete per model. JSON field allow-lists. Layered on Odoo record rules and groups.</p>
+            <div style="padding: 20px 22px; border-left: 4px solid #FF940D; border-bottom: 1px solid #edf2f7; background: #fff;">
+                <div style="display: inline-block; background: #FFF4E6; color: #FF940D; font-size: 11px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; padding: 3px 9px; border-radius: 4px; margin-bottom: 8px;">05</div>
+                <h3 style="margin: 0 0 6px 0; color: #0A1128; font-size: 17px; font-weight: 700;">Per-model access control</h3>
+                <p style="margin: 0; color: #4a5568; font-size: 15px;">Read / Write / Create / Delete per model. Optional JSON field allow-lists. Layered on top of Odoo record rules and groups.</p>
             </div>
 
-            <div style="padding: 28px; background: #ffffff; border: 1px solid #e2e8f0; border-radius: 12px;">
-                <div style="width: 44px; height: 44px; background: #E6F4FF; color: #0098FF; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 18px; margin-bottom: 16px;">06</div>
-                <h3 style="margin: 0 0 10px 0; color: #0A1128; font-size: 19px; font-weight: 700;">Hardcoded safety blocklist</h3>
-                <p style="margin: 0; color: #4a5568; font-size: 15px;">Sensitive models (most of <code style="background: #f1f5f9; padding: 1px 6px; border-radius: 3px; font-size: 0.88em;">ir.*</code>, all <code style="background: #f1f5f9; padding: 1px 6px; border-radius: 3px; font-size: 0.88em;">res.users.*</code>, <code style="background: #f1f5f9; padding: 1px 6px; border-radius: 3px; font-size: 0.88em;">mail.mail</code>, <code style="background: #f1f5f9; padding: 1px 6px; border-radius: 3px; font-size: 0.88em;">bus.*</code>) — never exposed, even in YOLO mode.</p>
+            <div style="padding: 20px 22px; border-left: 4px solid #0098FF; border-bottom: 1px solid #edf2f7; background: #fafbfc;">
+                <div style="display: inline-block; background: #E6F4FF; color: #0098FF; font-size: 11px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; padding: 3px 9px; border-radius: 4px; margin-bottom: 8px;">06</div>
+                <h3 style="margin: 0 0 6px 0; color: #0A1128; font-size: 17px; font-weight: 700;">Hardcoded safety blocklist</h3>
+                <p style="margin: 0; color: #4a5568; font-size: 15px;">Most of <code style="background: #fff; padding: 1px 5px; border-radius: 3px; font-size: 0.88em;">ir.*</code>, all <code style="background: #fff; padding: 1px 5px; border-radius: 3px; font-size: 0.88em;">res.users.*</code>, <code style="background: #fff; padding: 1px 5px; border-radius: 3px; font-size: 0.88em;">auth_*</code>, <code style="background: #fff; padding: 1px 5px; border-radius: 3px; font-size: 0.88em;">mail.mail</code>, <code style="background: #fff; padding: 1px 5px; border-radius: 3px; font-size: 0.88em;">bus.*</code> — never exposed, even in YOLO mode.</p>
             </div>
 
-            <div style="padding: 28px; background: #ffffff; border: 1px solid #e2e8f0; border-radius: 12px;">
-                <div style="width: 44px; height: 44px; background: #FFF4E6; color: #FF940D; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 18px; margin-bottom: 16px;">07</div>
-                <h3 style="margin: 0 0 10px 0; color: #0A1128; font-size: 19px; font-weight: 700;">Multi-database ready</h3>
-                <p style="margin: 0; color: #4a5568; font-size: 15px;">Works with OCA's <code style="background: #f1f5f9; padding: 1px 6px; border-radius: 3px; font-size: 0.88em;">dbfilter_from_header</code>. One Odoo instance → multiple MCP endpoints, one per tenant.</p>
+            <div style="padding: 20px 22px; border-left: 4px solid #FF940D; border-bottom: 1px solid #edf2f7; background: #fff;">
+                <div style="display: inline-block; background: #FFF4E6; color: #FF940D; font-size: 11px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; padding: 3px 9px; border-radius: 4px; margin-bottom: 8px;">07</div>
+                <h3 style="margin: 0 0 6px 0; color: #0A1128; font-size: 17px; font-weight: 700;">Multi-database ready</h3>
+                <p style="margin: 0; color: #4a5568; font-size: 15px;">Works with OCA's <code style="background: #f1f5f9; padding: 1px 5px; border-radius: 3px; font-size: 0.88em;">dbfilter_from_header</code>. One Odoo instance → multiple MCP endpoints, one per tenant.</p>
             </div>
 
-            <div style="padding: 28px; background: #ffffff; border: 1px solid #e2e8f0; border-radius: 12px;">
-                <div style="width: 44px; height: 44px; background: #E6F4FF; color: #0098FF; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 18px; margin-bottom: 16px;">08</div>
-                <h3 style="margin: 0 0 10px 0; color: #0A1128; font-size: 19px; font-weight: 700;">Stdio bridge included</h3>
-                <p style="margin: 0; color: #4a5568; font-size: 15px;">Bundled <code style="background: #f1f5f9; padding: 1px 6px; border-radius: 3px; font-size: 0.88em;">ow_mcp_stdio.py</code> (stdlib only) for clients that need stdio transport.</p>
+            <div style="padding: 20px 22px; border-left: 4px solid #0098FF; border-bottom: 1px solid #edf2f7; background: #fafbfc;">
+                <div style="display: inline-block; background: #E6F4FF; color: #0098FF; font-size: 11px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; padding: 3px 9px; border-radius: 4px; margin-bottom: 8px;">08</div>
+                <h3 style="margin: 0 0 6px 0; color: #0A1128; font-size: 17px; font-weight: 700;">Stdio bridge included</h3>
+                <p style="margin: 0; color: #4a5568; font-size: 15px;">Bundled <code style="background: #fff; padding: 1px 5px; border-radius: 3px; font-size: 0.88em;">ow_mcp_stdio.py</code> (stdlib only, no pip) for clients that need stdio transport.</p>
             </div>
 
-            <div style="padding: 28px; background: #ffffff; border: 1px solid #e2e8f0; border-radius: 12px;">
-                <div style="width: 44px; height: 44px; background: #FFF4E6; color: #FF940D; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 18px; margin-bottom: 16px;">09</div>
-                <h3 style="margin: 0 0 10px 0; color: #0A1128; font-size: 19px; font-weight: 700;">YOLO dev mode</h3>
-                <p style="margin: 0; color: #4a5568; font-size: 15px;">Bypass MCP access config for local testing. Red banner in admin UI. Odoo native ACL still enforced.</p>
+            <div style="padding: 20px 22px; border-left: 4px solid #FF940D; border-bottom: 1px solid #edf2f7; background: #fff;">
+                <div style="display: inline-block; background: #FFF4E6; color: #FF940D; font-size: 11px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; padding: 3px 9px; border-radius: 4px; margin-bottom: 8px;">09</div>
+                <h3 style="margin: 0 0 6px 0; color: #0A1128; font-size: 17px; font-weight: 700;">YOLO dev mode</h3>
+                <p style="margin: 0; color: #4a5568; font-size: 15px;">Bypass MCP access config for fast local testing. Red banner in admin UI. Odoo native ACL always enforced.</p>
             </div>
 
-            <div style="padding: 28px; background: #ffffff; border: 1px solid #e2e8f0; border-radius: 12px;">
-                <div style="width: 44px; height: 44px; background: #E6F4FF; color: #0098FF; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 18px; margin-bottom: 16px;">10</div>
-                <h3 style="margin: 0 0 10px 0; color: #0A1128; font-size: 19px; font-weight: 700;">Battle-tested</h3>
+            <div style="padding: 20px 22px; border-left: 4px solid #0098FF; background: #fafbfc;">
+                <div style="display: inline-block; background: #E6F4FF; color: #0098FF; font-size: 11px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; padding: 3px 9px; border-radius: 4px; margin-bottom: 8px;">10</div>
+                <h3 style="margin: 0 0 6px 0; color: #0A1128; font-size: 17px; font-weight: 700;">Battle-tested</h3>
                 <p style="margin: 0; color: #4a5568; font-size: 15px;">200+ unit and integration tests: auth, pagination, blocklist, domain walker, nested-write guard, multicompany, audit redaction, full HttpCase flows.</p>
             </div>
 
@@ -142,142 +115,118 @@
     </div>
 
     <!-- THE TOOLS -->
-    <div style="margin-bottom: 80px;">
-        <h2 style="font-size: 36px; font-weight: 800; color: #0A1128; margin: 0 0 32px 0; letter-spacing: -0.02em;">
-            <span style="color: #FF940D;">Eleven tools.</span> One protocol.
-        </h2>
+    <div style="margin-bottom: 52px;">
+        <h2 style="font-size: 30px; font-weight: 800; color: #0A1128; margin: 0 0 24px 0; border-bottom: 3px solid #FF940D; padding-bottom: 10px;">Eleven tools. One protocol.</h2>
 
-        <div style="border: 1px solid #e2e8f0; border-radius: 12px; overflow: hidden;">
-        <table style="width: 100%; border-collapse: collapse; background: #fff;">
+        <div style="border: 1px solid #e2e8f0; border-radius: 10px; overflow: hidden;">
+        <table style="width: 100%; border-collapse: collapse; font-size: 15px;">
             <thead>
                 <tr style="background: #0A1128; color: #fff;">
-                    <th style="padding: 16px 20px; text-align: left; font-size: 14px; letter-spacing: 0.05em; text-transform: uppercase;">Tool</th>
-                    <th style="padding: 16px 20px; text-align: left; font-size: 14px; letter-spacing: 0.05em; text-transform: uppercase;">What it does</th>
+                    <th style="padding: 14px 18px; text-align: left; font-size: 13px; letter-spacing: 0.05em; text-transform: uppercase; width: 36%;">Tool</th>
+                    <th style="padding: 14px 18px; text-align: left; font-size: 13px; letter-spacing: 0.05em; text-transform: uppercase;">What it does</th>
                 </tr>
             </thead>
-            <tbody style="font-size: 15px; color: #2d3748;">
-                <tr style="border-bottom: 1px solid #edf2f7;">
-                    <td style="padding: 14px 20px;"><code style="color: #0098FF; font-weight: 600;">list_models</code></td>
-                    <td style="padding: 14px 20px;">Enumerate exposed models with CRUD flags and field allow-lists.</td>
+            <tbody>
+                <tr style="border-bottom: 1px solid #edf2f7; background: #fff;">
+                    <td style="padding: 12px 18px;"><code style="color: #0098FF; font-weight: 600;">list_models</code></td>
+                    <td style="padding: 12px 18px; color: #4a5568;">Enumerate exposed models with CRUD flags and field allow-lists.</td>
                 </tr>
-                <tr style="background: #fafbfc; border-bottom: 1px solid #edf2f7;">
-                    <td style="padding: 14px 20px;"><code style="color: #0098FF; font-weight: 600;">search_records</code></td>
-                    <td style="padding: 14px 20px;">Domain + fields + pagination. Returns <code style="background: #f1f5f9; padding: 1px 5px; border-radius: 3px; font-size: 0.88em;">{records, total, has_more, next_offset}</code>.</td>
+                <tr style="border-bottom: 1px solid #edf2f7; background: #fafbfc;">
+                    <td style="padding: 12px 18px;"><code style="color: #0098FF; font-weight: 600;">search_records</code></td>
+                    <td style="padding: 12px 18px; color: #4a5568;">Domain + fields + pagination. Returns <code style="background: #f1f5f9; padding: 1px 5px; border-radius: 3px; font-size: 0.88em;">{records, total, has_more, next_offset}</code>.</td>
                 </tr>
-                <tr style="border-bottom: 1px solid #edf2f7;">
-                    <td style="padding: 14px 20px;"><code style="color: #0098FF; font-weight: 600;">get_record</code></td>
-                    <td style="padding: 14px 20px;">Fetch one or many by id(s); reports missing ids.</td>
+                <tr style="border-bottom: 1px solid #edf2f7; background: #fff;">
+                    <td style="padding: 12px 18px;"><code style="color: #0098FF; font-weight: 600;">get_record</code></td>
+                    <td style="padding: 12px 18px; color: #4a5568;">Fetch one or many by id(s); reports missing ids.</td>
                 </tr>
-                <tr style="background: #fafbfc; border-bottom: 1px solid #edf2f7;">
-                    <td style="padding: 14px 20px;"><code style="color: #0098FF; font-weight: 600;">create_record</code></td>
-                    <td style="padding: 14px 20px;">Create a record, returns new id and an echo of created values.</td>
+                <tr style="border-bottom: 1px solid #edf2f7; background: #fafbfc;">
+                    <td style="padding: 12px 18px;"><code style="color: #0098FF; font-weight: 600;">create_record</code></td>
+                    <td style="padding: 12px 18px; color: #4a5568;">Create a record; returns new id and echo of created values.</td>
                 </tr>
-                <tr style="border-bottom: 1px solid #edf2f7;">
-                    <td style="padding: 14px 20px;"><code style="color: #0098FF; font-weight: 600;">update_record</code></td>
-                    <td style="padding: 14px 20px;">Update one or many records with a values dict.</td>
+                <tr style="border-bottom: 1px solid #edf2f7; background: #fff;">
+                    <td style="padding: 12px 18px;"><code style="color: #0098FF; font-weight: 600;">update_record</code></td>
+                    <td style="padding: 12px 18px; color: #4a5568;">Update one or many records with a values dict.</td>
                 </tr>
-                <tr style="background: #fafbfc; border-bottom: 1px solid #edf2f7;">
-                    <td style="padding: 14px 20px;"><code style="color: #0098FF; font-weight: 600;">delete_record</code></td>
-                    <td style="padding: 14px 20px;">Delete one or many records by id(s).</td>
+                <tr style="border-bottom: 1px solid #edf2f7; background: #fafbfc;">
+                    <td style="padding: 12px 18px;"><code style="color: #0098FF; font-weight: 600;">delete_record</code></td>
+                    <td style="padding: 12px 18px; color: #4a5568;">Delete one or many records by id(s).</td>
                 </tr>
-                <tr style="border-bottom: 1px solid #edf2f7;">
-                    <td style="padding: 14px 20px;"><code style="color: #0098FF; font-weight: 600;">search_count</code></td>
-                    <td style="padding: 14px 20px;">Count matching records without fetching them.</td>
+                <tr style="border-bottom: 1px solid #edf2f7; background: #fff;">
+                    <td style="padding: 12px 18px;"><code style="color: #0098FF; font-weight: 600;">search_count</code></td>
+                    <td style="padding: 12px 18px; color: #4a5568;">Count matching records without fetching them.</td>
                 </tr>
-                <tr style="background: #fafbfc; border-bottom: 1px solid #edf2f7;">
-                    <td style="padding: 14px 20px;"><code style="color: #0098FF; font-weight: 600;">get_model_schema</code></td>
-                    <td style="padding: 14px 20px;">Field definitions (name, type, required, relation, selection).</td>
+                <tr style="border-bottom: 1px solid #edf2f7; background: #fafbfc;">
+                    <td style="padding: 12px 18px;"><code style="color: #0098FF; font-weight: 600;">get_model_schema</code></td>
+                    <td style="padding: 12px 18px; color: #4a5568;">Field definitions (name, type, required, relation, selection).</td>
                 </tr>
-                <tr style="border-bottom: 1px solid #edf2f7;">
-                    <td style="padding: 14px 20px;"><code style="color: #0098FF; font-weight: 600;">read_group</code></td>
-                    <td style="padding: 14px 20px;">Group + aggregate, e.g. totals per state or amounts per month.</td>
+                <tr style="border-bottom: 1px solid #edf2f7; background: #fff;">
+                    <td style="padding: 12px 18px;"><code style="color: #0098FF; font-weight: 600;">read_group</code></td>
+                    <td style="padding: 12px 18px; color: #4a5568;">Group + aggregate, e.g. totals per state or amounts per month.</td>
                 </tr>
-                <tr style="background: #fafbfc; border-bottom: 1px solid #edf2f7;">
-                    <td style="padding: 14px 20px;"><code style="color: #0098FF; font-weight: 600;">get_user_context</code></td>
-                    <td style="padding: 14px 20px;">Caller identity, allowed companies, language, timezone.</td>
+                <tr style="border-bottom: 1px solid #edf2f7; background: #fafbfc;">
+                    <td style="padding: 12px 18px;"><code style="color: #0098FF; font-weight: 600;">get_user_context</code></td>
+                    <td style="padding: 12px 18px; color: #4a5568;">Caller identity, allowed companies, language, timezone.</td>
                 </tr>
-                <tr>
-                    <td style="padding: 14px 20px;"><code style="color: #0098FF; font-weight: 600;">list_modules</code></td>
-                    <td style="padding: 14px 20px;">Installed-modules inventory (MCP Administrator only).</td>
+                <tr style="background: #fff;">
+                    <td style="padding: 12px 18px;"><code style="color: #0098FF; font-weight: 600;">list_modules</code></td>
+                    <td style="padding: 12px 18px; color: #4a5568;">Installed-modules inventory (MCP Administrator only).</td>
                 </tr>
             </tbody>
         </table>
         </div>
-
-        <p style="margin-top: 16px; font-size: 14px; color: #718096;">
-        Every tool except <code style="background: #f1f5f9; padding: 1px 5px; border-radius: 3px; font-size: 0.92em;">list_models</code> and <code style="background: #f1f5f9; padding: 1px 5px; border-radius: 3px; font-size: 0.92em;">list_modules</code>
-        accepts an optional <code style="background: #f1f5f9; padding: 1px 5px; border-radius: 3px; font-size: 0.92em;">company_id</code> argument to switch the
-        active company for the duration of the call. Validated against the user's allowed companies.</p>
+        <p style="margin: 12px 0 0 0; font-size: 13px; color: #718096;">Every tool except <code style="background: #f1f5f9; padding: 1px 5px; border-radius: 3px;">list_models</code> and <code style="background: #f1f5f9; padding: 1px 5px; border-radius: 3px;">list_modules</code> accepts an optional <code style="background: #f1f5f9; padding: 1px 5px; border-radius: 3px;">company_id</code> argument, validated against the user's allowed companies.</p>
     </div>
 
     <!-- INSTALLATION -->
-    <div style="margin-bottom: 80px;">
-        <h2 style="font-size: 36px; font-weight: 800; color: #0A1128; margin: 0 0 32px 0; letter-spacing: -0.02em;">
-            <span style="color: #FF940D;">Installation.</span>
-        </h2>
+    <div style="margin-bottom: 52px;">
+        <h2 style="font-size: 30px; font-weight: 800; color: #0A1128; margin: 0 0 24px 0; border-bottom: 3px solid #FF940D; padding-bottom: 10px;">Installation</h2>
 
-        <ol style="font-size: 17px; line-height: 1.9; color: #2d3748; padding-left: 0; list-style: none; counter-reset: install;">
-            <li style="counter-increment: install; padding-left: 56px; position: relative; margin-bottom: 16px;">
-                <span style="position: absolute; left: 0; top: 4px; width: 36px; height: 36px; background: #FF940D; color: #fff; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 15px;">1</span>
-                <strong style="color: #0A1128;">Drop the module</strong> into your <code style="background: #f1f5f9; padding: 2px 6px; border-radius: 4px; font-size: 0.92em;">addons_path</code> (or git-clone into <code style="background: #f1f5f9; padding: 2px 6px; border-radius: 4px; font-size: 0.92em;">custom/addons/</code>).
-            </li>
-            <li style="counter-increment: install; padding-left: 56px; position: relative; margin-bottom: 16px;">
-                <span style="position: absolute; left: 0; top: 4px; width: 36px; height: 36px; background: #FF940D; color: #fff; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 15px;">2</span>
-                <strong style="color: #0A1128;">Update the apps list</strong>: Apps → Update Apps List (developer mode required).
-            </li>
-            <li style="counter-increment: install; padding-left: 56px; position: relative; margin-bottom: 16px;">
-                <span style="position: absolute; left: 0; top: 4px; width: 36px; height: 36px; background: #FF940D; color: #fff; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 15px;">3</span>
-                <strong style="color: #0A1128;">Install</strong> the module <em>OW MCP Server</em>. Administrator is added to <em>MCP Administrator</em> group automatically.
-            </li>
-        </ol>
+        <div style="margin-bottom: 14px; padding: 18px 20px 18px 64px; background: #fff; border: 1px solid #e2e8f0; border-radius: 8px; position: relative;">
+            <span style="position: absolute; left: 16px; top: 18px; width: 32px; height: 32px; background: #FF940D; color: #fff; border-radius: 50%; text-align: center; line-height: 32px; font-weight: 800; font-size: 14px;">1</span>
+            <strong style="color: #0A1128;">Drop the module</strong> into your <code style="background: #f1f5f9; padding: 2px 6px; border-radius: 4px; font-size: 0.9em;">addons_path</code> (or git-clone into <code style="background: #f1f5f9; padding: 2px 6px; border-radius: 4px; font-size: 0.9em;">custom/addons/</code>).
+        </div>
+        <div style="margin-bottom: 14px; padding: 18px 20px 18px 64px; background: #fafbfc; border: 1px solid #e2e8f0; border-radius: 8px; position: relative;">
+            <span style="position: absolute; left: 16px; top: 18px; width: 32px; height: 32px; background: #FF940D; color: #fff; border-radius: 50%; text-align: center; line-height: 32px; font-weight: 800; font-size: 14px;">2</span>
+            <strong style="color: #0A1128;">Update apps list:</strong> Apps → Update Apps List (developer mode required).
+        </div>
+        <div style="margin-bottom: 20px; padding: 18px 20px 18px 64px; background: #fff; border: 1px solid #e2e8f0; border-radius: 8px; position: relative;">
+            <span style="position: absolute; left: 16px; top: 18px; width: 32px; height: 32px; background: #FF940D; color: #fff; border-radius: 50%; text-align: center; line-height: 32px; font-weight: 800; font-size: 14px;">3</span>
+            <strong style="color: #0A1128;">Install</strong> the module <em>OW MCP Server</em>. Administrator added to <em>MCP Administrator</em> group automatically.
+        </div>
 
-        <p style="margin-top: 24px; padding: 16px 20px; background: #f1f5f9; border-radius: 8px; color: #4a5568; font-size: 15px;">
-            <strong style="color: #0A1128;">Dependencies:</strong> none beyond <code style="background: #fff; padding: 2px 6px; border-radius: 4px;">base</code> and <code style="background: #fff; padding: 2px 6px; border-radius: 4px;">base_setup</code> (both ship with Odoo). No pip packages on the Odoo server.
+        <p style="margin: 0; padding: 14px 18px; background: #f1f5f9; border-radius: 8px; color: #4a5568; font-size: 15px;">
+            <strong style="color: #0A1128;">Dependencies:</strong> none beyond <code style="background: #fff; padding: 1px 5px; border-radius: 3px;">base</code> and <code style="background: #fff; padding: 1px 5px; border-radius: 3px;">base_setup</code>. No pip packages on the Odoo server.
         </p>
     </div>
 
     <!-- SETUP -->
-    <div style="margin-bottom: 80px;">
-        <h2 style="font-size: 36px; font-weight: 800; color: #0A1128; margin: 0 0 32px 0; letter-spacing: -0.02em;">
-            <span style="color: #FF940D;">Setup.</span> Three minutes.
-        </h2>
+    <div style="margin-bottom: 52px;">
+        <h2 style="font-size: 30px; font-weight: 800; color: #0A1128; margin: 0 0 24px 0; border-bottom: 3px solid #FF940D; padding-bottom: 10px;">Setup in three minutes</h2>
 
-        <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px;">
-
-            <div style="background: #ffffff; border: 1px solid #e2e8f0; border-top: 4px solid #FF940D; padding: 24px; border-radius: 10px;">
-                <div style="font-size: 12px; font-weight: 700; color: #FF940D; letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 10px;">Step 1</div>
-                <h3 style="margin: 0 0 10px 0; color: #0A1128; font-size: 17px; font-weight: 700;">Create an API key</h3>
-                <p style="margin: 0; color: #4a5568; font-size: 14px;"><em>My Profile → Account Security → New API Key → Scope: <code style="background: #f1f5f9; padding: 1px 5px; border-radius: 3px;">mcp</code></em>. Copy the key (shown only once).</p>
-            </div>
-
-            <div style="background: #ffffff; border: 1px solid #e2e8f0; border-top: 4px solid #0098FF; padding: 24px; border-radius: 10px;">
-                <div style="font-size: 12px; font-weight: 700; color: #0098FF; letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 10px;">Step 2</div>
-                <h3 style="margin: 0 0 10px 0; color: #0A1128; font-size: 17px; font-weight: 700;">Expose your models</h3>
-                <p style="margin: 0; color: #4a5568; font-size: 14px;">Open <em>MCP Server</em> app → <em>Model Access</em>. Toggle Read / Write / Create / Delete per model. Optional JSON field allow-list.</p>
-            </div>
-
-            <div style="background: #ffffff; border: 1px solid #e2e8f0; border-top: 4px solid #FF940D; padding: 24px; border-radius: 10px;">
-                <div style="font-size: 12px; font-weight: 700; color: #FF940D; letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 10px;">Step 3</div>
-                <h3 style="margin: 0 0 10px 0; color: #0A1128; font-size: 17px; font-weight: 700;">Connect AI client</h3>
-                <p style="margin: 0; color: #4a5568; font-size: 14px;">Use one of the snippets below. Claude Code, Cursor, Claude Desktop, Copilot — all supported.</p>
-            </div>
-
+        <div style="margin-bottom: 12px; padding: 18px 20px; background: #FFF4E6; border-left: 4px solid #FF940D; border-radius: 6px;">
+            <strong style="color: #0A1128;">Step 1 — Create an API key</strong><br/>
+            <span style="color: #4a5568; font-size: 15px;"><em>My Profile → Account Security → New API Key → Scope: <code style="background: #fff; padding: 1px 5px; border-radius: 3px;">mcp</code></em>. Copy the key (shown only once).</span>
+        </div>
+        <div style="margin-bottom: 12px; padding: 18px 20px; background: #E6F4FF; border-left: 4px solid #0098FF; border-radius: 6px;">
+            <strong style="color: #0A1128;">Step 2 — Expose your models</strong><br/>
+            <span style="color: #4a5568; font-size: 15px;">Open <em>MCP Server</em> app → <em>Model Access</em>. Toggle Read / Write / Create / Delete per model. Optional JSON field allow-list.</span>
+        </div>
+        <div style="padding: 18px 20px; background: #FFF4E6; border-left: 4px solid #FF940D; border-radius: 6px;">
+            <strong style="color: #0A1128;">Step 3 — Connect your AI client</strong><br/>
+            <span style="color: #4a5568; font-size: 15px;">Use one of the snippets below.</span>
         </div>
     </div>
 
     <!-- CLIENT CONFIGS -->
-    <div style="margin-bottom: 80px;">
-        <h2 style="font-size: 36px; font-weight: 800; color: #0A1128; margin: 0 0 32px 0; letter-spacing: -0.02em;">
-            <span style="color: #FF940D;">Client configuration.</span>
-        </h2>
+    <div style="margin-bottom: 52px;">
+        <h2 style="font-size: 30px; font-weight: 800; color: #0A1128; margin: 0 0 24px 0; border-bottom: 3px solid #FF940D; padding-bottom: 10px;">Client configuration</h2>
 
-        <h3 style="color: #0A1128; font-size: 20px; font-weight: 700; margin: 32px 0 12px 0;">Claude Code <span style="color: #0098FF; font-weight: 500; font-size: 15px;">(native HTTP)</span></h3>
-        <pre style="background: #0A1128; color: #e2e8f0; padding: 20px 24px; border-radius: 10px; overflow-x: auto; border-left: 4px solid #FF940D; font-size: 14px; line-height: 1.6; margin: 0;">claude mcp add --transport http odoo https://odoo.example.com/mcp \
+        <h3 style="color: #0A1128; font-size: 18px; font-weight: 700; margin: 28px 0 10px 0;">Claude Code <span style="color: #718096; font-weight: 400; font-size: 14px;">(native HTTP)</span></h3>
+        <pre style="background: #0A1128; color: #e2e8f0; padding: 18px 20px; border-radius: 8px; overflow-x: auto; border-left: 4px solid #FF940D; font-size: 13px; line-height: 1.7; margin: 0;">claude mcp add --transport http odoo https://odoo.example.com/mcp \
   --header "Authorization: Bearer $ODOO_MCP_KEY"</pre>
 
-        <h3 style="color: #0A1128; font-size: 20px; font-weight: 700; margin: 32px 0 12px 0;">Cursor <span style="color: #0098FF; font-weight: 500; font-size: 15px;">(native HTTP)</span></h3>
-        <p style="color: #4a5568; margin: 0 0 12px 0;">Add to <code style="background: #f1f5f9; padding: 2px 6px; border-radius: 4px;">~/.cursor/mcp.json</code>:</p>
-        <pre style="background: #0A1128; color: #e2e8f0; padding: 20px 24px; border-radius: 10px; overflow-x: auto; border-left: 4px solid #FF940D; font-size: 14px; line-height: 1.6; margin: 0;">{
+        <h3 style="color: #0A1128; font-size: 18px; font-weight: 700; margin: 28px 0 10px 0;">Cursor <span style="color: #718096; font-weight: 400; font-size: 14px;">(native HTTP — add to ~/.cursor/mcp.json)</span></h3>
+        <pre style="background: #0A1128; color: #e2e8f0; padding: 18px 20px; border-radius: 8px; overflow-x: auto; border-left: 4px solid #FF940D; font-size: 13px; line-height: 1.7; margin: 0;">{
   "mcpServers": {
     "odoo": {
       "url": "https://odoo.example.com/mcp",
@@ -286,9 +235,8 @@
   }
 }</pre>
 
-        <h3 style="color: #0A1128; font-size: 20px; font-weight: 700; margin: 32px 0 12px 0;">Claude Desktop <span style="color: #0098FF; font-weight: 500; font-size: 15px;">(stdio bridge)</span></h3>
-        <p style="color: #4a5568; margin: 0 0 12px 0;">Add to <code style="background: #f1f5f9; padding: 2px 6px; border-radius: 4px;">claude_desktop_config.json</code>:</p>
-        <pre style="background: #0A1128; color: #e2e8f0; padding: 20px 24px; border-radius: 10px; overflow-x: auto; border-left: 4px solid #FF940D; font-size: 14px; line-height: 1.6; margin: 0;">{
+        <h3 style="color: #0A1128; font-size: 18px; font-weight: 700; margin: 28px 0 10px 0;">Claude Desktop <span style="color: #718096; font-weight: 400; font-size: 14px;">(stdio bridge — add to claude_desktop_config.json)</span></h3>
+        <pre style="background: #0A1128; color: #e2e8f0; padding: 18px 20px; border-radius: 8px; overflow-x: auto; border-left: 4px solid #FF940D; font-size: 13px; line-height: 1.7; margin: 0;">{
   "mcpServers": {
     "odoo": {
       "command": "python3",
@@ -300,10 +248,10 @@
     }
   }
 }</pre>
-        <p style="color: #718096; font-size: 14px; margin-top: 10px;">Bundled bridge uses Python's standard library — no <code style="background: #f1f5f9; padding: 1px 5px; border-radius: 3px;">pip install</code> required.</p>
+        <p style="color: #718096; font-size: 14px; margin: 10px 0 0 0;">Bundled bridge uses Python stdlib only — no <code style="background: #f1f5f9; padding: 1px 5px; border-radius: 3px;">pip install</code> required.</p>
 
-        <h3 style="color: #0A1128; font-size: 20px; font-weight: 700; margin: 32px 0 12px 0;">Multi-database Odoo <span style="color: #0098FF; font-weight: 500; font-size: 15px;">(OCA dbfilter_from_header)</span></h3>
-        <pre style="background: #0A1128; color: #e2e8f0; padding: 20px 24px; border-radius: 10px; overflow-x: auto; border-left: 4px solid #FF940D; font-size: 14px; line-height: 1.6; margin: 0;">{
+        <h3 style="color: #0A1128; font-size: 18px; font-weight: 700; margin: 28px 0 10px 0;">Multi-database <span style="color: #718096; font-weight: 400; font-size: 14px;">(OCA dbfilter_from_header)</span></h3>
+        <pre style="background: #0A1128; color: #e2e8f0; padding: 18px 20px; border-radius: 8px; overflow-x: auto; border-left: 4px solid #FF940D; font-size: 13px; line-height: 1.7; margin: 0;">{
   "mcpServers": {
     "odoo-tenant-a": {
       "command": "python3",
@@ -319,67 +267,62 @@
     </div>
 
     <!-- SECURITY -->
-    <div style="margin-bottom: 80px;">
-        <h2 style="font-size: 36px; font-weight: 800; color: #0A1128; margin: 0 0 32px 0; letter-spacing: -0.02em;">
-            <span style="color: #FF940D;">Security model.</span>
-        </h2>
+    <div style="margin-bottom: 52px;">
+        <h2 style="font-size: 30px; font-weight: 800; color: #0A1128; margin: 0 0 24px 0; border-bottom: 3px solid #FF940D; padding-bottom: 10px;">Security model</h2>
 
-        <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px;">
-            <div style="padding: 20px; background: #fafbfc; border-radius: 8px; border-left: 3px solid #FF940D;"><strong style="color: #0A1128;">API key only.</strong> <span style="color: #4a5568;">/mcp accepts nothing else — no password, no cookies, no OAuth.</span></div>
-            <div style="padding: 20px; background: #fafbfc; border-radius: 8px; border-left: 3px solid #0098FF;"><strong style="color: #0A1128;">Scope-pinned.</strong> <span style="color: #4a5568;">Keys must carry scope <code style="background: #fff; padding: 1px 5px; border-radius: 3px;">mcp</code>; other-scope keys can't authenticate.</span></div>
-            <div style="padding: 20px; background: #fafbfc; border-radius: 8px; border-left: 3px solid #FF940D;"><strong style="color: #0A1128;">Runs as key's owner.</strong> <span style="color: #4a5568;">Record rules, group memberships, <code style="background: #fff; padding: 1px 5px; border-radius: 3px;">check_access_*</code> all fire as in web client.</span></div>
-            <div style="padding: 20px; background: #fafbfc; border-radius: 8px; border-left: 3px solid #0098FF;"><strong style="color: #0A1128;">Per-model gate.</strong> <span style="color: #4a5568;">A model must be explicitly exposed via <code style="background: #fff; padding: 1px 5px; border-radius: 3px;">ow.mcp.model.access</code>.</span></div>
-            <div style="padding: 20px; background: #fafbfc; border-radius: 8px; border-left: 3px solid #FF940D;"><strong style="color: #0A1128;">Field allow-list.</strong> <span style="color: #4a5568;">Optional JSON list restricts which fields a client may read or write.</span></div>
-            <div style="padding: 20px; background: #fafbfc; border-radius: 8px; border-left: 3px solid #0098FF;"><strong style="color: #0A1128;">Hardcoded blocklist.</strong> <span style="color: #4a5568;">Most <code style="background: #fff; padding: 1px 5px; border-radius: 3px;">ir.*</code>, all <code style="background: #fff; padding: 1px 5px; border-radius: 3px;">res.users.*</code>, <code style="background: #fff; padding: 1px 5px; border-radius: 3px;">auth_*</code>, <code style="background: #fff; padding: 1px 5px; border-radius: 3px;">mail.mail</code>, <code style="background: #fff; padding: 1px 5px; border-radius: 3px;">bus.*</code> — never exposed.</span></div>
-            <div style="padding: 20px; background: #fafbfc; border-radius: 8px; border-left: 3px solid #FF940D;"><strong style="color: #0A1128;">YOLO double-gated.</strong> <span style="color: #4a5568;">Silently downgrades unless server runs with <code style="background: #fff; padding: 1px 5px; border-radius: 3px;">--dev=*</code> + <code style="background: #fff; padding: 1px 5px; border-radius: 3px;">OW_MCP_ALLOW_YOLO=1</code>. Red banner warns when on.</span></div>
-            <div style="padding: 20px; background: #fafbfc; border-radius: 8px; border-left: 3px solid #0098FF;"><strong style="color: #0A1128;">Domain-traversal whitelist.</strong> <span style="color: #4a5568;">Search domains walked hop-by-hop, rejected on forbidden field, blocklisted-model traversal, or unexposed-model traversal.</span></div>
-            <div style="padding: 20px; background: #fafbfc; border-radius: 8px; border-left: 3px solid #FF940D;"><strong style="color: #0A1128;">Nested-write guard.</strong> <span style="color: #4a5568;">Create/update payloads cannot embed x2many <code style="background: #fff; padding: 1px 5px; border-radius: 3px;">(0,…)/(1,…)/(2,…)</code> opcodes. Each related model goes through its own MCP call.</span></div>
-            <div style="padding: 20px; background: #fafbfc; border-radius: 8px; border-left: 3px solid #0098FF;"><strong style="color: #0A1128;">Sanitized errors.</strong> <span style="color: #4a5568;">Only Odoo user-facing exceptions echoed verbatim. Other errors return generic message + UUID trace id; SQL/PII details stay in server log.</span></div>
-            <div style="padding: 20px; background: #fafbfc; border-radius: 8px; border-left: 3px solid #FF940D;"><strong style="color: #0A1128;">Audit log.</strong> <span style="color: #4a5568;">Optional per-call log with redaction of secret-key substrings, configurable retention.</span></div>
-            <div style="padding: 20px; background: #fafbfc; border-radius: 8px; border-left: 3px solid #0098FF;"><strong style="color: #0A1128;">Rate limit + throttle.</strong> <span style="color: #4a5568;">Sliding 60-second windows per API key (request count) and per IP (failed auth). Per Odoo worker.</span></div>
-            <div style="padding: 20px; background: #fafbfc; border-radius: 8px; border-left: 3px solid #FF940D;"><strong style="color: #0A1128;">HTTPS / IP allow-list / body cap / CORS.</strong> <span style="color: #4a5568;">Opt-in via <em>MCP Server → Configuration</em>. CORS off by default.</span></div>
-            <div style="padding: 20px; background: #fafbfc; border-radius: 8px; border-left: 3px solid #0098FF;"><strong style="color: #0A1128;">Multi-company isolation.</strong> <span style="color: #4a5568;"><code style="background: #fff; padding: 1px 5px; border-radius: 3px;">company_id</code> validated against allowed companies. Response cache keys on group + company so revoked access can't replay.</span></div>
+        <div style="border: 1px solid #e2e8f0; border-radius: 10px; overflow: hidden;">
+            <div style="padding: 14px 18px; border-left: 4px solid #FF940D; border-bottom: 1px solid #edf2f7; background: #fff;"><strong style="color: #0A1128;">API key only.</strong> <span style="color: #4a5568;">/mcp accepts nothing else — no password, no session cookies, no OAuth.</span></div>
+            <div style="padding: 14px 18px; border-left: 4px solid #0098FF; border-bottom: 1px solid #edf2f7; background: #fafbfc;"><strong style="color: #0A1128;">Scope-pinned.</strong> <span style="color: #4a5568;">Keys must carry scope <code style="background: #fff; padding: 1px 5px; border-radius: 3px; font-size: 0.88em;">mcp</code>; other-scope keys can't authenticate here.</span></div>
+            <div style="padding: 14px 18px; border-left: 4px solid #FF940D; border-bottom: 1px solid #edf2f7; background: #fff;"><strong style="color: #0A1128;">Runs as the key's owner.</strong> <span style="color: #4a5568;">Record rules, groups, <code style="background: #f1f5f9; padding: 1px 5px; border-radius: 3px; font-size: 0.88em;">check_access_rights</code> and <code style="background: #f1f5f9; padding: 1px 5px; border-radius: 3px; font-size: 0.88em;">check_access_rule</code> all fire as in the web client.</span></div>
+            <div style="padding: 14px 18px; border-left: 4px solid #0098FF; border-bottom: 1px solid #edf2f7; background: #fafbfc;"><strong style="color: #0A1128;">Per-model gate.</strong> <span style="color: #4a5568;">A model must be explicitly exposed via <code style="background: #fff; padding: 1px 5px; border-radius: 3px; font-size: 0.88em;">ow.mcp.model.access</code>.</span></div>
+            <div style="padding: 14px 18px; border-left: 4px solid #FF940D; border-bottom: 1px solid #edf2f7; background: #fff;"><strong style="color: #0A1128;">Field allow-list.</strong> <span style="color: #4a5568;">Optional JSON list restricts which fields a client may read or write.</span></div>
+            <div style="padding: 14px 18px; border-left: 4px solid #0098FF; border-bottom: 1px solid #edf2f7; background: #fafbfc;"><strong style="color: #0A1128;">Hardcoded blocklist.</strong> <span style="color: #4a5568;">Most <code style="background: #fff; padding: 1px 5px; border-radius: 3px; font-size: 0.88em;">ir.*</code>, all <code style="background: #fff; padding: 1px 5px; border-radius: 3px; font-size: 0.88em;">res.users.*</code>, <code style="background: #fff; padding: 1px 5px; border-radius: 3px; font-size: 0.88em;">auth_*</code>, <code style="background: #fff; padding: 1px 5px; border-radius: 3px; font-size: 0.88em;">mail.mail</code>, <code style="background: #fff; padding: 1px 5px; border-radius: 3px; font-size: 0.88em;">bus.*</code> — never exposed.</span></div>
+            <div style="padding: 14px 18px; border-left: 4px solid #FF940D; border-bottom: 1px solid #edf2f7; background: #fff;"><strong style="color: #0A1128;">YOLO double-gated.</strong> <span style="color: #4a5568;">Silently downgrades unless server runs with <code style="background: #f1f5f9; padding: 1px 5px; border-radius: 3px; font-size: 0.88em;">--dev=*</code> + env var <code style="background: #f1f5f9; padding: 1px 5px; border-radius: 3px; font-size: 0.88em;">OW_MCP_ALLOW_YOLO=1</code>. Red banner warns when on.</span></div>
+            <div style="padding: 14px 18px; border-left: 4px solid #0098FF; border-bottom: 1px solid #edf2f7; background: #fafbfc;"><strong style="color: #0A1128;">Domain-traversal whitelist.</strong> <span style="color: #4a5568;">Search domains walked hop-by-hop, rejected on forbidden field or blocklisted-model traversal — closes count-oracle pivots.</span></div>
+            <div style="padding: 14px 18px; border-left: 4px solid #FF940D; border-bottom: 1px solid #edf2f7; background: #fff;"><strong style="color: #0A1128;">Nested-write guard.</strong> <span style="color: #4a5568;">Create/update payloads cannot embed x2many <code style="background: #f1f5f9; padding: 1px 5px; border-radius: 3px; font-size: 0.88em;">(0,…)/(1,…)/(2,…)</code> opcodes. Each related model through its own MCP call.</span></div>
+            <div style="padding: 14px 18px; border-left: 4px solid #0098FF; border-bottom: 1px solid #edf2f7; background: #fafbfc;"><strong style="color: #0A1128;">Sanitized errors.</strong> <span style="color: #4a5568;">Only Odoo user-facing exceptions echoed verbatim; everything else returns generic message + UUID trace id. SQL/PII details stay server-side.</span></div>
+            <div style="padding: 14px 18px; border-left: 4px solid #FF940D; border-bottom: 1px solid #edf2f7; background: #fff;"><strong style="color: #0A1128;">Audit log.</strong> <span style="color: #4a5568;">Optional per-call log with redaction of secret-key substrings, configurable retention.</span></div>
+            <div style="padding: 14px 18px; border-left: 4px solid #0098FF; border-bottom: 1px solid #edf2f7; background: #fafbfc;"><strong style="color: #0A1128;">Rate limit + auth-failure throttle.</strong> <span style="color: #4a5568;">Sliding 60-second windows per API key (request count) and per IP (failed auth). Per Odoo worker.</span></div>
+            <div style="padding: 14px 18px; border-left: 4px solid #FF940D; border-bottom: 1px solid #edf2f7; background: #fff;"><strong style="color: #0A1128;">HTTPS / IP allow-list / body-size cap / CORS.</strong> <span style="color: #4a5568;">Opt-in via <em>MCP Server → Configuration</em>. CORS disabled by default.</span></div>
+            <div style="padding: 14px 18px; border-left: 4px solid #0098FF; background: #fafbfc;"><strong style="color: #0A1128;">Multi-company isolation.</strong> <span style="color: #4a5568;"><code style="background: #fff; padding: 1px 5px; border-radius: 3px; font-size: 0.88em;">company_id</code> validated against allowed companies. Response cache keys on group + company — revoked access can't replay.</span></div>
         </div>
     </div>
 
     <!-- FAQ -->
-    <div style="margin-bottom: 80px;">
-        <h2 style="font-size: 36px; font-weight: 800; color: #0A1128; margin: 0 0 32px 0; letter-spacing: -0.02em;">
-            <span style="color: #FF940D;">FAQ.</span>
-        </h2>
+    <div style="margin-bottom: 52px;">
+        <h2 style="font-size: 30px; font-weight: 800; color: #0A1128; margin: 0 0 24px 0; border-bottom: 3px solid #FF940D; padding-bottom: 10px;">FAQ</h2>
 
-        <details style="margin: 12px 0; padding: 18px 22px; background: #fafbfc; border: 1px solid #e2e8f0; border-radius: 10px;">
+        <details style="margin-bottom: 10px; padding: 16px 20px; background: #fafbfc; border: 1px solid #e2e8f0; border-radius: 8px;">
             <summary style="cursor: pointer; font-weight: 700; color: #0A1128; font-size: 16px;">Do I need to install anything on the client machine?</summary>
-            <p style="margin: 12px 0 0 0; color: #4a5568;">For <strong>Claude Code</strong> and <strong>Cursor</strong>: nothing. They speak HTTP MCP natively. For <strong>Claude Desktop</strong> (stdio only): copy <code style="background: #fff; padding: 1px 6px; border-radius: 4px;">ow_mcp_stdio.py</code> to client machine. Python 3 only — no pip.</p>
+            <p style="margin: 12px 0 0 0; color: #4a5568; font-size: 15px;">For <strong>Claude Code</strong> and <strong>Cursor</strong>: nothing. They speak HTTP MCP natively. For <strong>Claude Desktop</strong>: copy <code style="background: #fff; padding: 1px 6px; border-radius: 4px;">ow_mcp_stdio.py</code> to client machine. Python 3 only — no pip.</p>
         </details>
 
-        <details style="margin: 12px 0; padding: 18px 22px; background: #fafbfc; border: 1px solid #e2e8f0; border-radius: 10px;">
+        <details style="margin-bottom: 10px; padding: 16px 20px; background: #fafbfc; border: 1px solid #e2e8f0; border-radius: 8px;">
             <summary style="cursor: pointer; font-weight: 700; color: #0A1128; font-size: 16px;">Does this replace XML-RPC / JSON-RPC Odoo endpoints?</summary>
-            <p style="margin: 12px 0 0 0; color: #4a5568;">No. <code style="background: #fff; padding: 1px 6px; border-radius: 4px;">/mcp</code> is additive; lives alongside <code style="background: #fff; padding: 1px 6px; border-radius: 4px;">/xmlrpc/2/*</code> and <code style="background: #fff; padding: 1px 6px; border-radius: 4px;">/jsonrpc</code>. Existing integrations unchanged.</p>
+            <p style="margin: 12px 0 0 0; color: #4a5568; font-size: 15px;">No. <code style="background: #fff; padding: 1px 6px; border-radius: 4px;">/mcp</code> is additive — lives alongside <code style="background: #fff; padding: 1px 6px; border-radius: 4px;">/xmlrpc/2/*</code> and <code style="background: #fff; padding: 1px 6px; border-radius: 4px;">/jsonrpc</code>. Existing integrations unchanged.</p>
         </details>
 
-        <details style="margin: 12px 0; padding: 18px 22px; background: #fafbfc; border: 1px solid #e2e8f0; border-radius: 10px;">
+        <details style="margin-bottom: 10px; padding: 16px 20px; background: #fafbfc; border: 1px solid #e2e8f0; border-radius: 8px;">
             <summary style="cursor: pointer; font-weight: 700; color: #0A1128; font-size: 16px;">How does it differ from MCP bridges that proxy to REST?</summary>
-            <p style="margin: 12px 0 0 0; color: #4a5568;">Bridge-style modules run a second Python process that translates MCP to Odoo's REST/XML-RPC. This addon serves MCP <em>inside</em> Odoo: fewer moving parts, one auth surface, native record-rule enforcement, no translator lag.</p>
+            <p style="margin: 12px 0 0 0; color: #4a5568; font-size: 15px;">Bridge-style modules run a second Python process translating MCP to Odoo REST/XML-RPC. This addon serves MCP <em>inside</em> Odoo: fewer moving parts, one auth surface, native record-rule enforcement, no translator lag.</p>
         </details>
 
-        <details style="margin: 12px 0; padding: 18px 22px; background: #fafbfc; border: 1px solid #e2e8f0; border-radius: 10px;">
+        <details style="margin-bottom: 10px; padding: 16px 20px; background: #fafbfc; border: 1px solid #e2e8f0; border-radius: 8px;">
             <summary style="cursor: pointer; font-weight: 700; color: #0A1128; font-size: 16px;">Can Claude delete production data?</summary>
-            <p style="margin: 12px 0 0 0; color: #4a5568;">Only if you enable <code style="background: #fff; padding: 1px 6px; border-radius: 4px;">allow_delete</code> on a specific model via Model Access. Default is read-only. Even then, the user behind the API key needs Odoo-level delete rights.</p>
+            <p style="margin: 12px 0 0 0; color: #4a5568; font-size: 15px;">Only if you enable <code style="background: #fff; padding: 1px 6px; border-radius: 4px;">allow_delete</code> on a specific model via Model Access. Default is read-only. Even then the user behind the API key needs Odoo-level delete rights.</p>
         </details>
 
-        <details style="margin: 12px 0; padding: 18px 22px; background: #fafbfc; border: 1px solid #e2e8f0; border-radius: 10px;">
+        <details style="padding: 16px 20px; background: #fafbfc; border: 1px solid #e2e8f0; border-radius: 8px;">
             <summary style="cursor: pointer; font-weight: 700; color: #0A1128; font-size: 16px;">HTTPS in production?</summary>
-            <p style="margin: 12px 0 0 0; color: #4a5568;">Always. API keys travel in <code style="background: #fff; padding: 1px 6px; border-radius: 4px;">Authorization</code> header — TLS only. Use your existing reverse proxy (nginx / Caddy / traefik).</p>
+            <p style="margin: 12px 0 0 0; color: #4a5568; font-size: 15px;">Always. API keys travel in the <code style="background: #fff; padding: 1px 6px; border-radius: 4px;">Authorization</code> header — TLS only. Use your existing reverse proxy (nginx / Caddy / traefik).</p>
         </details>
     </div>
 
-    <!-- FOOTER CTA -->
-    <div style="position: relative; margin-top: 64px; padding: 56px 48px; background: linear-gradient(135deg, #0A1128 0%, #0098FF 100%); border-radius: 18px; text-align: center; color: #fff; box-shadow: 0 16px 40px rgba(10, 17, 40, 0.22);">
-        <img src="https://download.openworx.nl/logo.png" alt="Openworx" style="max-width: 170px; height: auto; margin-bottom: 20px; filter: brightness(0) invert(1);"/>
-        <h2 style="font-size: 30px; font-weight: 800; margin: 0 0 12px 0; letter-spacing: -0.01em; color: #fff;">Built by <span style="color: #FF940D;">Openworx.</span></h2>
-        <p style="font-size: 17px; margin: 0 0 24px 0; opacity: 0.92;">Odoo specialists. Hosting, maintenance, custom development.</p>
-        <a href="https://www.openworx.nl" style="display: inline-block; background: #FF940D; color: #fff; padding: 14px 28px; border-radius: 8px; font-weight: 700; text-decoration: none; font-size: 15px;">openworx.nl →</a>
+    <!-- FOOTER -->
+    <div style="text-align: center; padding: 40px 24px; background: #0A1128; border-radius: 12px;">
+        <img src="https://download.openworx.nl/logo.png" alt="Openworx" style="max-width: 160px; height: auto; margin-bottom: 14px; filter: brightness(0) invert(1);"/>
+        <p style="margin: 8px 0 4px 0; color: #fff; font-size: 16px; font-weight: 600;">Built by <span style="color: #FF940D;">Openworx</span> — Odoo specialists.</p>
+        <p style="margin: 0;"><a href="https://www.openworx.nl" style="color: #0098FF; text-decoration: none; font-size: 15px;">openworx.nl</a></p>
     </div>
 
 </section>
