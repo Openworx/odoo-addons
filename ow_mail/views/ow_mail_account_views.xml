@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_ow_mail_account_tree" model="ir.ui.view">
+        <field name="name">ow.mail.account.tree</field>
+        <field name="model">ow.mail.account</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="sequence" widget="handle"/>
+                <field name="name"/>
+                <field name="email"/>
+                <field name="imap_host"/>
+                <field name="state" widget="badge"
+                       decoration-success="state == 'confirmed'"
+                       decoration-danger="state == 'error'"/>
+                <field name="last_sync"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_ow_mail_account_form" model="ir.ui.view">
+        <field name="name">ow.mail.account.form</field>
+        <field name="model">ow.mail.account</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <button name="action_sync" type="object"
+                            string="Manual Sync" class="btn-primary"/>
+                    <button name="action_fetch_folders" type="object" string="Fetch Folders"/>
+                    <button name="action_test_incoming" type="object" string="Test Incoming Server"/>
+                    <button name="action_test_outgoing" type="object" string="Test Outgoing Server"/>
+                    <field name="state" widget="statusbar" statusbar_visible="draft,confirmed"/>
+                </header>
+                <sheet>
+                    <div class="oe_title">
+                        <label for="name" string="Account Name"/>
+                        <h1><field name="name" placeholder="e.g. Work"/></h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="email" string="Email Address"/>
+                            <field name="from_name_mode"/>
+                            <field name="from_name_custom"
+                                   invisible="from_name_mode != 'custom'"
+                                   required="from_name_mode == 'custom'"/>
+                            <field name="user_id" readonly="1" groups="base.group_no_one"/>
+                            <field name="color" widget="color_picker"/>
+                            <field name="active"/>
+                        </group>
+                        <group>
+                            <field name="imap_host" string="Incoming Mail Server"/>
+                            <field name="smtp_host" string="Outgoing SMTP Server"/>
+                            <field name="last_sync"/>
+                            <field name="error_message" readonly="1"
+                                   invisible="state != 'error'"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Folders" name="folders">
+                            <group string="Special Folders">
+                                <group>
+                                    <field name="inbox_folder_id"/>
+                                    <field name="sent_folder_id"/>
+                                    <field name="drafts_folder_id"/>
+                                </group>
+                                <group>
+                                    <field name="archive_folder_id"/>
+                                    <field name="spam_folder_id"/>
+                                    <field name="trash_folder_id"/>
+                                </group>
+                            </group>
+                            <widget name="ow_folders_tree" invisible="not id"/>
+                        </page>
+                        <page string="Signature" name="signature">
+                            <group>
+                                <field name="signature_enabled"/>
+                                <field name="signature_placement"
+                                       invisible="not signature_enabled"/>
+                            </group>
+                            <field name="signature_html" widget="html"
+                                   options="{'style-inline': true}"
+                                   invisible="not signature_enabled"/>
+                        </page>
+                        <page string="Notifications" name="notifications">
+                            <group>
+                                <field name="notify_new_mail"/>
+                            </group>
+                        </page>
+                        <page string="Incoming Server" name="incoming">
+                            <group>
+                                <field name="imap_host"/>
+                                <field name="imap_port"/>
+                                <field name="imap_ssl"/>
+                                <field name="imap_login"/>
+                                <field name="imap_password" password="True"
+                                       placeholder="(stored encrypted)"/>
+                            </group>
+                        </page>
+                        <page string="Outgoing Server" name="outgoing">
+                            <group>
+                                <field name="smtp_host"/>
+                                <field name="smtp_port"/>
+                                <field name="smtp_encryption"/>
+                                <field name="smtp_same_as_imap"/>
+                                <field name="smtp_login" invisible="smtp_same_as_imap"
+                                       placeholder="Leave empty to use IMAP login"/>
+                                <field name="smtp_password" password="True"
+                                       invisible="smtp_same_as_imap"
+                                       placeholder="(stored encrypted)"/>
+                            </group>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_ow_mail_account" model="ir.actions.act_window">
+        <field name="name">Mail Accounts</field>
+        <field name="res_model">ow.mail.account</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+    <!-- Connect wizard -->
+    <record id="view_ow_mail_connect_wizard_form" model="ir.ui.view">
+        <field name="name">ow.mail.connect.wizard.form</field>
+        <field name="model">ow.mail.connect.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Connect Mailbox">
+                <sheet>
+                    <group>
+                        <field name="name"/>
+                        <field name="email"/>
+                        <field name="password" password="True"/>
+                    </group>
+                    <group string="IMAP">
+                        <field name="imap_host"/>
+                        <field name="imap_port"/>
+                        <field name="imap_ssl"/>
+                    </group>
+                    <group string="SMTP">
+                        <field name="smtp_host"/>
+                        <field name="smtp_port"/>
+                        <field name="smtp_encryption"/>
+                    </group>
+                </sheet>
+                <footer>
+                    <button name="action_connect" string="Connect" type="object" class="btn-primary"/>
+                    <button string="Cancel" class="btn-secondary" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+    <record id="action_ow_mail_connect_wizard" model="ir.actions.act_window">
+        <field name="name">Connect to Mailbox</field>
+        <field name="res_model">ow.mail.connect.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record>
+</odoo>

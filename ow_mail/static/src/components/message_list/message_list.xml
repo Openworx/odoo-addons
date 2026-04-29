@@ -1,0 +1,308 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+
+<t t-name="ow_mail.MessageList">
+    <section class="o-ow-list d-flex flex-column border-end">
+        <div class="o-ow-list-toolbar px-3 pt-2 pb-2 border-bottom">
+            <div class="o-ow-search-row position-relative">
+                <i class="fa fa-search position-absolute top-50 start-0 translate-middle-y ms-3 text-muted"/>
+                <input type="text"
+                       class="form-control rounded-pill ps-5 o-ow-search-input"
+                       style="padding-right:4.5rem;"
+                       placeholder="Search — from: subject: has:attachment before:YYYY-MM-DD …"
+                       t-model="local.search"
+                       t-on-keydown="onSearchKey"
+                       t-on-input="onSearchInput"/>
+                <div class="position-absolute top-50 end-0 translate-middle-y me-2 d-flex align-items-center">
+                    <button t-if="local.search"
+                            class="btn btn-sm btn-link text-muted p-0 me-1"
+                            t-on-click="onClearSearch" title="Clear">
+                        <i class="fa fa-times"/>
+                    </button>
+                    <div class="dropdown d-inline-block" t-if="!local.search">
+                        <button class="btn btn-sm btn-link text-muted p-0" data-bs-toggle="dropdown"
+                                title="Search operators" aria-expanded="false">
+                            <i class="fa fa-question-circle"/>
+                        </button>
+                        <ul class="dropdown-menu dropdown-menu-end p-2 small" style="min-width:280px;">
+                            <li class="fw-bold small text-muted mb-1">Search operators</li>
+                            <li><code>from:</code>, <code>to:</code>, <code>cc:</code> — address substring</li>
+                            <li><code>subject:</code>, <code>body:</code> — text in field</li>
+                            <li><code>label:</code> — messages with a tag</li>
+                            <li><code>is:unread</code>, <code>is:read</code>, <code>is:starred</code></li>
+                            <li><code>has:attachment</code></li>
+                            <li><code>before:YYYY-MM-DD</code>, <code>since:YYYY-MM-DD</code>, <code>on:YYYY-MM-DD</code></li>
+                            <li><code>older_than:7d</code>, <code>newer_than:30d</code></li>
+                            <li class="text-muted mt-1">Use quotes for phrases: <code>subject:"weekly report"</code></li>
+                        </ul>
+                    </div>
+                    <div class="dropdown d-inline-block ms-1">
+                        <button class="btn btn-sm btn-link text-muted p-0" data-bs-toggle="dropdown"
+                                aria-expanded="false"
+                                t-att-title="activeFilterLabel()">
+                            <i class="fa fa-filter"/>
+                        </button>
+                        <ul class="dropdown-menu dropdown-menu-end p-1" style="min-width:220px;">
+                            <t t-foreach="filters" t-as="f" t-key="f.id">
+                                <li>
+                                    <button class="dropdown-item d-flex align-items-center gap-2"
+                                            t-on-click="() => this.onFilter(f.id)">
+                                        <i class="fa fa-check" style="width:1em;"
+                                           t-att-style="isFilterActive(f.id) ? 'width:1em;' : 'width:1em;visibility:hidden;'"/>
+                                        <i class="fa" t-att-class="f.icon" style="width:1em;"/>
+                                        <span t-esc="f.label"/>
+                                    </button>
+                                </li>
+                            </t>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="o-ow-list-header px-3 py-2 border-bottom d-flex align-items-center">
+            <input type="checkbox" class="form-check-input me-2 mt-0"
+                   t-att-checked="allChecked"
+                   t-on-change="onToggleAll"
+                   title="Select all"/>
+            <strong>Messages</strong>
+            <span class="text-muted small ms-2" t-esc="state.totalMessages"/>
+            <span t-if="state.loading" class="spinner-border spinner-border-sm ms-2"/>
+            <div class="ms-auto d-flex align-items-center gap-1">
+                <button class="btn btn-sm p-0 me-1"
+                        t-att-class="state.threadView ? 'btn-link text-primary' : 'btn-link text-muted'"
+                        t-on-click="onToggleThreadView"
+                        title="Toggle conversation view">
+                    <i class="fa fa-comments-o"/>
+                </button>
+                <select class="form-select form-select-sm border-0 text-muted"
+                        style="width:auto;font-size:0.8rem;"
+                        t-on-change="onSortSelect">
+                    <t t-foreach="sortOptions" t-as="s" t-key="s.id">
+                        <option t-att-value="s.id" t-att-selected="state.sortBy === s.id" t-esc="s.label"/>
+                    </t>
+                </select>
+                <button class="btn btn-sm btn-link text-muted p-0" t-on-click="onToggleSortOrder"
+                        title="Toggle sort order">
+                    <i class="fa" t-att-class="state.sortOrder === 'asc' ? 'fa-sort-amount-asc' : 'fa-sort-amount-desc'"/>
+                </button>
+            </div>
+        </div>
+        <div t-if="checkedCount" class="o-ow-bulk-bar px-3 py-2 border-bottom d-flex align-items-center gap-2 flex-wrap">
+            <span class="fw-semibold small"><t t-esc="checkedCount"/> selected</span>
+            <button class="btn btn-sm btn-outline-danger" t-on-click="onBulkDelete" title="Delete">
+                <i class="fa fa-trash"/>
+            </button>
+            <button class="btn btn-sm btn-outline-secondary" t-on-click="onBulkMarkRead" title="Mark read">
+                <i class="fa fa-envelope-open-o"/>
+            </button>
+            <button class="btn btn-sm btn-outline-secondary" t-on-click="onBulkMarkUnread" title="Mark unread">
+                <i class="fa fa-envelope"/>
+            </button>
+            <button class="btn btn-sm btn-outline-warning" t-on-click="onBulkToggleFlag" title="Star">
+                <i class="fa fa-star"/>
+            </button>
+            <button class="btn btn-sm btn-outline-secondary" t-on-click="onBulkForward" title="Forward">
+                <i class="fa fa-share"/>
+            </button>
+            <select class="form-select form-select-sm" style="width:auto;" t-on-change="onBulkMove">
+                <option value="">Move to…</option>
+                <t t-foreach="moveTargetFolders" t-as="f" t-key="f.id">
+                    <option t-att-value="f.id" t-esc="f.name"/>
+                </t>
+            </select>
+            <button class="btn btn-sm btn-link text-muted" t-on-click="clearChecked" title="Clear selection">
+                <i class="fa fa-times"/>
+            </button>
+        </div>
+        <div class="o-ow-list-body flex-grow-1 overflow-auto">
+            <t t-if="!state.messages.length">
+                <div class="text-muted text-center p-5">No messages</div>
+            </t>
+
+            <!-- Thread-grouped view -->
+            <t t-elif="state.threadView">
+                <t t-foreach="state.threads" t-as="thread" t-key="thread.threadId">
+                    <div class="o-ow-list-item o-ow-thread-header px-3 py-2 border-bottom d-flex"
+                         t-att-class="{'o-ow-unread': thread.has_unread}"
+                         t-on-click="() => this.onToggleThread(thread)">
+                        <input type="checkbox" class="form-check-input me-2 mt-0 o-ow-msg-check flex-shrink-0"
+                               t-att-checked="isChecked(thread.messages[thread.messages.length - 1])"
+                               t-on-click="(ev) => this.onToggleCheck(ev, thread.messages[thread.messages.length - 1])"/>
+                        <i t-if="thread.messages.length > 1" class="fa me-2 o-ow-thread-toggle mt-1"
+                           t-att-class="isThreadExpanded(thread.threadId) ? 'fa-chevron-down' : 'fa-chevron-right'"/>
+                        <AvatarInitials name="thread.from_name" email="thread.from_email"/>
+                        <div class="flex-grow-1 ms-2 overflow-hidden">
+                            <div class="d-flex">
+                                <div class="flex-grow-1 text-truncate"
+                                     t-att-class="{'fw-bold': thread.has_unread}">
+                                    <t t-esc="thread.from_name"/>
+                                </div>
+                                <small class="text-muted ms-2" t-esc="formatDate(thread.latestDate)"/>
+                            </div>
+                            <div class="text-truncate"
+                                 t-att-class="{'fw-semibold': thread.has_unread}" t-esc="thread.subject"/>
+                        </div>
+                        <div class="ms-1 d-flex flex-column align-items-end position-relative">
+                            <div class="d-flex align-items-center gap-1">
+                                <span t-if="thread.messages.length > 1"
+                                      class="o-ow-thread-count" t-esc="thread.messages.length"/>
+                                <button class="btn btn-sm btn-link p-0 o-ow-star"
+                                        t-on-click="(ev) => this.onToggleFlag(ev, thread.messages[thread.messages.length - 1])"
+                                        title="Star">
+                                    <i class="fa" t-att-class="thread.has_flagged ? 'fa-star text-warning' : 'fa-star-o text-muted'"/>
+                                </button>
+                            </div>
+                            <i t-if="thread.has_attachments" class="fa fa-paperclip text-muted small"/>
+                        </div>
+                        <div class="o-ow-hover-actions d-flex align-items-center gap-1">
+                            <button class="btn btn-sm o-ow-hover-btn"
+                                    title="Reply"
+                                    t-on-click="(ev) => this.onQuickReply(ev, thread.messages[thread.messages.length - 1])">
+                                <i class="fa fa-reply"/>
+                            </button>
+                            <button class="btn btn-sm o-ow-hover-btn"
+                                    title="Forward"
+                                    t-on-click="(ev) => this.onQuickForward(ev, thread.messages[thread.messages.length - 1])">
+                                <i class="fa fa-share"/>
+                            </button>
+                            <button class="btn btn-sm o-ow-hover-btn o-ow-delete"
+                                    title="Delete"
+                                    t-on-click="(ev) => this.onDelete(ev, thread.messages[thread.messages.length - 1])">
+                                <i class="fa fa-trash"/>
+                            </button>
+                        </div>
+                    </div>
+                    <t t-if="isThreadExpanded(thread.threadId)">
+                        <t t-foreach="thread.messages" t-as="m" t-key="keyOf(m)">
+                            <div class="o-ow-list-item o-ow-thread-child px-3 py-2 border-bottom d-flex"
+                                 t-att-class="{'active': isSelected(m), 'o-ow-unread': !m.flags_seen}"
+                                 t-on-click="() => this.onSelectThreadMessage(m)">
+                                <input type="checkbox" class="form-check-input me-2 mt-0 o-ow-msg-check flex-shrink-0"
+                                       t-att-checked="isChecked(m)"
+                                       t-on-click="(ev) => this.onToggleCheck(ev, m)"/>
+                                <div style="width:10px;"/>
+                                <AvatarInitials name="m.from_name" email="m.from_email"/>
+                                <div class="flex-grow-1 ms-2 overflow-hidden">
+                                    <div class="d-flex">
+                                        <div class="flex-grow-1 text-truncate"
+                                             t-att-class="{'fw-bold': !m.flags_seen}">
+                                            <t t-esc="m.from_name"/>
+                                        </div>
+                                        <small class="text-muted ms-2" t-esc="formatDate(m.date)"/>
+                                    </div>
+                                    <div class="text-muted small text-truncate" t-esc="m.subject"/>
+                                </div>
+                                <div class="ms-1 d-flex flex-column align-items-end position-relative">
+                                    <button class="btn btn-sm btn-link p-0 o-ow-star"
+                                            t-on-click="(ev) => this.onToggleFlag(ev, m)"
+                                            title="Star">
+                                        <i class="fa" t-att-class="m.flags_flagged ? 'fa-star text-warning' : 'fa-star-o text-muted'"/>
+                                    </button>
+                                    <i t-if="m.has_attachments" class="fa fa-paperclip text-muted small"/>
+                                </div>
+                                <div class="o-ow-hover-actions d-flex align-items-center gap-1">
+                                    <button class="btn btn-sm o-ow-hover-btn"
+                                            title="Reply"
+                                            t-on-click="(ev) => this.onQuickReply(ev, m)">
+                                        <i class="fa fa-reply"/>
+                                    </button>
+                                    <button class="btn btn-sm o-ow-hover-btn"
+                                            title="Forward"
+                                            t-on-click="(ev) => this.onQuickForward(ev, m)">
+                                        <i class="fa fa-share"/>
+                                    </button>
+                                    <button class="btn btn-sm o-ow-hover-btn o-ow-delete"
+                                            title="Delete"
+                                            t-on-click="(ev) => this.onDelete(ev, m)">
+                                        <i class="fa fa-trash"/>
+                                    </button>
+                                </div>
+                            </div>
+                        </t>
+                    </t>
+                </t>
+            </t>
+
+            <!-- Flat view (default) -->
+            <t t-else="">
+                <t t-foreach="state.messages" t-as="m" t-key="keyOf(m)">
+                    <div class="o-ow-list-item px-3 py-2 border-bottom d-flex"
+                         draggable="true"
+                         t-att-class="{'active': isSelected(m), 'o-ow-unread': !m.flags_seen}"
+                         t-on-click="() => this.onSelect(m)"
+                         t-on-dblclick="() => this.onDblClick(m)"
+                         t-on-dragstart="(ev) => this.onDragStart(ev, m)"
+                         t-on-dragend="onDragEnd">
+                        <input type="checkbox" class="form-check-input me-2 mt-0 o-ow-msg-check flex-shrink-0"
+                               t-att-checked="isChecked(m)"
+                               t-on-click="(ev) => this.onToggleCheck(ev, m)"/>
+                        <AvatarInitials name="m.from_name" email="m.from_email"/>
+                        <div class="flex-grow-1 ms-2 overflow-hidden">
+                            <div class="d-flex">
+                                <div class="flex-grow-1 text-truncate"
+                                     t-att-class="{'fw-bold': !m.flags_seen}">
+                                    <t t-esc="m.from_name"/>
+                                </div>
+                                <small class="text-muted ms-2" t-esc="formatDate(m.date)"/>
+                            </div>
+                            <div class="text-truncate"
+                                 t-att-class="{'fw-semibold': !m.flags_seen}" t-esc="m.subject"/>
+                            <div class="text-muted small text-truncate" t-esc="m.preview"/>
+                        </div>
+                        <div class="ms-1 d-flex flex-column align-items-end position-relative">
+                            <button class="btn btn-sm btn-link p-0 o-ow-star"
+                                    t-on-click="(ev) => this.onToggleFlag(ev, m)"
+                                    title="Star">
+                                <i class="fa" t-att-class="m.flags_flagged ? 'fa-star text-warning' : 'fa-star-o text-muted'"/>
+                            </button>
+                            <i t-if="m.has_attachments" class="fa fa-paperclip text-muted small"/>
+                        </div>
+                        <div class="o-ow-hover-actions d-flex align-items-center gap-1">
+                            <button class="btn btn-sm o-ow-hover-btn"
+                                    title="Reply"
+                                    t-on-click="(ev) => this.onQuickReply(ev, m)">
+                                <i class="fa fa-reply"/>
+                            </button>
+                            <button class="btn btn-sm o-ow-hover-btn"
+                                    title="Forward"
+                                    t-on-click="(ev) => this.onQuickForward(ev, m)">
+                                <i class="fa fa-share"/>
+                            </button>
+                            <button class="btn btn-sm o-ow-hover-btn o-ow-delete"
+                                    title="Delete"
+                                    t-on-click="(ev) => this.onDelete(ev, m)">
+                                <i class="fa fa-trash"/>
+                            </button>
+                        </div>
+                    </div>
+                </t>
+            </t>
+        </div>
+        <div t-if="state.totalMessages" class="o-ow-pager border-top px-3 py-2 d-flex align-items-center justify-content-center gap-2">
+            <button class="btn btn-sm btn-outline-secondary border-0" t-att-disabled="state.page === 1" t-on-click="onFirstPage" title="First">
+                <i class="fa fa-angle-double-left"/>
+            </button>
+            <button class="btn btn-sm btn-outline-secondary border-0" t-att-disabled="state.page === 1" t-on-click="onPrevPage" title="Previous">
+                <i class="fa fa-angle-left"/>
+            </button>
+            <span class="text-muted small">
+                Message <t t-esc="rangeStart"/> to <t t-esc="rangeEnd"/> of <t t-esc="state.totalMessages"/>
+            </span>
+            <select class="form-select form-select-sm text-center"
+                    style="width: auto;"
+                    t-on-change="onPageSelect">
+                <t t-foreach="pageList" t-as="p" t-key="p">
+                    <option t-att-value="p" t-att-selected="p === state.page" t-esc="p"/>
+                </t>
+            </select>
+            <button class="btn btn-sm btn-outline-secondary border-0" t-att-disabled="state.page === totalPages" t-on-click="onNextPage" title="Next">
+                <i class="fa fa-angle-right"/>
+            </button>
+            <button class="btn btn-sm btn-outline-secondary border-0" t-att-disabled="state.page === totalPages" t-on-click="onLastPage" title="Last">
+                <i class="fa fa-angle-double-right"/>
+            </button>
+        </div>
+    </section>
+</t>
+
+</templates>

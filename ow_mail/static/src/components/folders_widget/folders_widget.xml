@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+
+<t t-name="ow_mail.FoldersWidget">
+    <div class="o-ow-folders-widget d-flex flex-column border rounded mt-3">
+        <div class="o-ow-folders-toolbar d-flex align-items-center gap-2 p-2 border-bottom">
+            <div class="position-relative flex-grow-1">
+                <i class="fa fa-search position-absolute top-50 start-0 translate-middle-y ms-2 text-muted"/>
+                <input type="text" class="form-control form-control-sm ps-4"
+                       placeholder="Search…" t-model="ui.search"/>
+            </div>
+            <button class="btn btn-sm btn-light" t-on-click="onNew" title="New folder">
+                <i class="fa fa-plus"/> <span>New</span>
+            </button>
+            <button class="btn btn-sm btn-light"
+                    t-att-disabled="!selectedFolder or selectedFolder.kind !== 'custom'"
+                    t-on-click="onRename" title="Rename selected folder">
+                <i class="fa fa-pencil"/> <span>Rename</span>
+            </button>
+            <button class="btn btn-sm btn-light"
+                    t-att-disabled="!selectedFolder or selectedFolder.kind !== 'custom'"
+                    t-on-click="onDelete" title="Delete selected folder">
+                <i class="fa fa-trash"/> <span>Delete</span>
+            </button>
+            <button class="btn btn-sm btn-light"
+                    t-att-disabled="!selectedFolder"
+                    t-on-click="onEmpty" title="Empty selected folder">
+                <i class="fa fa-eraser"/> <span>Empty</span>
+            </button>
+        </div>
+        <div class="o-ow-folder-tree"
+             t-att-class="{'o-ow-drop-target': ui.dropTargetId === '__root__'}"
+             t-on-dragover="onDragOverRoot"
+             t-on-drop="onDropRoot">
+            <t t-if="!account">
+                <div class="text-muted text-center p-4">
+                    <i class="fa fa-folder-open-o fa-3x mb-2 d-block text-secondary opacity-25"/>
+                    Save the account and run a sync to load its folder tree.
+                </div>
+            </t>
+            <t t-else="">
+                <t t-foreach="flatTree" t-as="row" t-key="row.node.id">
+                    <div class="o-ow-folder-row d-flex align-items-center"
+                         t-att-class="{'active': ui.selectedFolderId === row.node.id, 'o-ow-drop-target': ui.dropTargetId === row.node.id}"
+                         t-att-style="'padding-left: ' + (12 + row.depth * 18) + 'px;'"
+                         t-att-draggable="row.node.kind === 'custom' ? 'true' : 'false'"
+                         t-on-click="() => this.onSelectFolder(row.node)"
+                         t-on-dragstart="(ev) => this.onDragStart(ev, row.node)"
+                         t-on-dragover="(ev) => this.onDragOver(ev, row.node)"
+                         t-on-dragleave="(ev) => this.onDragLeave(ev, row.node)"
+                         t-on-drop="(ev) => this.onDrop(ev, row.node)">
+                        <i class="fa me-2" t-att-class="iconForKind(row.node.kind)"/>
+                        <span class="flex-grow-1 text-truncate" t-esc="row.node.name"/>
+                        <span t-if="row.node.unread_count" class="badge bg-secondary me-2"
+                              t-esc="row.node.unread_count"/>
+                        <div class="form-check form-switch m-0 me-2" t-on-click.stop="">
+                            <input class="form-check-input" type="checkbox"
+                                   t-att-checked="row.node.subscribed"
+                                   t-on-change="(ev) => this.onToggleSubscribe(ev, row.node)"/>
+                        </div>
+                    </div>
+                </t>
+            </t>
+        </div>
+    </div>
+</t>
+
+</templates>

@@ -1,0 +1,192 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+
+<t t-name="ow_mail.ComposeWindow">
+    <div class="o-ow-compose card shadow"
+         t-att-class="{'o-ow-compose-min': props.win.minimized, 'o-ow-compose-modal': props.win.expanded}">
+        <!-- Backdrop for modal mode -->
+        <div t-if="props.win.expanded" class="o-ow-compose-backdrop" t-on-click="toggleExpand"/>
+
+        <div class="o-ow-compose-inner card d-flex flex-column position-relative"
+             t-att-class="{'shadow-lg': props.win.expanded}"
+             t-on-dragenter="onDragEnter"
+             t-on-dragover="onDragOver"
+             t-on-dragleave="onDragLeave"
+             t-on-drop="onDrop">
+            <div t-if="local.dragActive" class="o-ow-dropzone">
+                <div class="o-ow-dropzone-inner">
+                    <i class="fa fa-cloud-upload fa-3x mb-2"/>
+                    <div>Drop files to attach</div>
+                </div>
+            </div>
+            <!-- Header -->
+            <div class="o-ow-compose-header card-header d-flex align-items-center py-1 px-3">
+                <strong class="flex-grow-1 text-truncate">New Message</strong>
+                <button class="btn btn-sm btn-link p-0 me-2 text-muted" t-on-click="toggleMin" title="Minimize">
+                    <i class="fa fa-minus"/>
+                </button>
+                <button class="btn btn-sm btn-link p-0 me-2 text-muted" t-on-click="toggleExpand"
+                        t-att-title="props.win.expanded ? 'Restore' : 'Full screen'">
+                    <i class="fa" t-att-class="props.win.expanded ? 'fa-compress' : 'fa-expand'"/>
+                </button>
+                <button class="btn btn-sm btn-link p-0 text-muted" t-on-click="onClose" title="Close">
+                    <i class="fa fa-times"/>
+                </button>
+            </div>
+
+            <div class="card-body p-0 d-flex flex-column" t-if="!props.win.minimized">
+                <!-- Address fields -->
+                <div class="o-ow-compose-fields px-3 pt-2">
+                    <div class="mb-1">
+                        <select class="form-select form-select-sm" t-model.number="props.win.accountId">
+                            <t t-foreach="state.accounts" t-as="a" t-key="a.id">
+                                <option t-att-value="a.id" t-esc="a.email"/>
+                            </t>
+                        </select>
+                    </div>
+                    <div class="mb-1">
+                        <RecipientInput placeholder="'To'" value="props.win.to"
+                                        onUpdate="(v) => this.onUpdateTo(v)"/>
+                    </div>
+                    <div class="mb-1">
+                        <RecipientInput placeholder="'Cc'" value="props.win.cc"
+                                        onUpdate="(v) => this.onUpdateCc(v)"/>
+                    </div>
+                    <div class="mb-1">
+                        <RecipientInput placeholder="'Bcc'" value="props.win.bcc"
+                                        onUpdate="(v) => this.onUpdateBcc(v)"/>
+                    </div>
+                    <input class="form-control form-control-sm mb-1" placeholder="Subject" t-model="props.win.subject"/>
+                </div>
+
+                <!-- Toolbar -->
+                <div class="o-ow-compose-toolbar d-flex align-items-center gap-1 px-3 py-1 border-top border-bottom">
+                    <select class="form-select form-select-sm" style="width:auto;"
+                            t-on-change="onFormatBlock">
+                        <option value="p">Paragraph</option>
+                        <option value="h1">Heading 1</option>
+                        <option value="h2">Heading 2</option>
+                        <option value="h3">Heading 3</option>
+                        <option value="blockquote">Quote</option>
+                        <option value="pre">Code</option>
+                    </select>
+                    <div class="vr mx-1"/>
+                    <button class="btn btn-sm btn-light" t-on-click="() => this.exec('bold')" title="Bold"><b>B</b></button>
+                    <button class="btn btn-sm btn-light" t-on-click="() => this.exec('italic')" title="Italic"><i>I</i></button>
+                    <button class="btn btn-sm btn-light" t-on-click="() => this.exec('underline')" title="Underline"><u>U</u></button>
+                    <button class="btn btn-sm btn-light" t-on-click="() => this.exec('strikeThrough')" title="Strikethrough"><s>S</s></button>
+                    <div class="vr mx-1"/>
+                    <label class="btn btn-sm btn-light mb-0" title="Text color">
+                        <i class="fa fa-font"/>
+                        <input type="color" class="d-none" t-on-input="onTextColor"/>
+                    </label>
+                    <label class="btn btn-sm btn-light mb-0" title="Highlight color">
+                        <i class="fa fa-paint-brush"/>
+                        <input type="color" value="#ffff00" class="d-none" t-on-input="onHighlight"/>
+                    </label>
+                    <div class="vr mx-1"/>
+                    <select class="form-select form-select-sm" style="width:auto;"
+                            t-on-change="onFontSize">
+                        <option value="">Size</option>
+                        <option value="1">8</option>
+                        <option value="2">10</option>
+                        <option value="3">12</option>
+                        <option value="4">14</option>
+                        <option value="5">18</option>
+                        <option value="6">24</option>
+                        <option value="7">36</option>
+                    </select>
+                    <div class="vr mx-1"/>
+                    <button class="btn btn-sm btn-light" t-on-click="() => this.exec('insertUnorderedList')" title="Bullet list">
+                        <i class="fa fa-list-ul"/>
+                    </button>
+                    <button class="btn btn-sm btn-light" t-on-click="() => this.exec('insertOrderedList')" title="Numbered list">
+                        <i class="fa fa-list-ol"/>
+                    </button>
+                    <div class="vr mx-1"/>
+                    <button class="btn btn-sm btn-light" t-on-click="() => this.exec('outdent')" title="Decrease indent">
+                        <i class="fa fa-outdent"/>
+                    </button>
+                    <button class="btn btn-sm btn-light" t-on-click="() => this.exec('indent')" title="Increase indent">
+                        <i class="fa fa-indent"/>
+                    </button>
+                    <div class="vr mx-1"/>
+                    <button class="btn btn-sm btn-light" t-on-click="() => this.exec('justifyLeft')" title="Align left">
+                        <i class="fa fa-align-left"/>
+                    </button>
+                    <button class="btn btn-sm btn-light" t-on-click="() => this.exec('justifyCenter')" title="Align center">
+                        <i class="fa fa-align-center"/>
+                    </button>
+                    <button class="btn btn-sm btn-light" t-on-click="() => this.exec('justifyRight')" title="Align right">
+                        <i class="fa fa-align-right"/>
+                    </button>
+                    <div class="vr mx-1"/>
+                    <button class="btn btn-sm btn-light" t-on-click="insertLink" title="Insert link">
+                        <i class="fa fa-link"/>
+                    </button>
+                    <button class="btn btn-sm btn-light" t-on-click="() => this.exec('unlink')" title="Remove link">
+                        <i class="fa fa-chain-broken"/>
+                    </button>
+                    <label class="btn btn-sm btn-light mb-0" title="Insert image"
+                           t-on-mousedown="onImageMousedown">
+                        <i class="fa fa-picture-o"/>
+                        <input type="file" accept="image/*" class="d-none" t-on-change="onInsertImage"/>
+                    </label>
+                    <button class="btn btn-sm btn-light" t-on-click="() => this.exec('insertHorizontalRule')" title="Horizontal rule">
+                        <i class="fa fa-minus"/>
+                    </button>
+                    <div class="vr mx-1"/>
+                    <button class="btn btn-sm btn-light" t-on-click="() => this.exec('undo')" title="Undo">
+                        <i class="fa fa-undo"/>
+                    </button>
+                    <button class="btn btn-sm btn-light" t-on-click="() => this.exec('redo')" title="Redo">
+                        <i class="fa fa-repeat"/>
+                    </button>
+                    <div class="vr mx-1"/>
+                    <button class="btn btn-sm btn-light" t-on-click="() => this.exec('removeFormat')" title="Clear formatting">
+                        <i class="fa fa-eraser"/>
+                    </button>
+                </div>
+
+                <!-- Body -->
+                <div class="o-ow-compose-body flex-grow-1 overflow-auto px-3 py-2"
+                     contenteditable="true" t-ref="body" t-on-input="onBodyInput"/>
+
+                <!-- Attachments -->
+                <div class="o-ow-compose-attachments px-3 pb-1" t-if="props.win.attachments.length">
+                    <t t-foreach="props.win.attachments" t-as="a" t-key="a.id">
+                        <div class="o-ow-att-item d-flex align-items-center px-2 py-1 mb-1 rounded">
+                            <span class="flex-grow-1 text-truncate small fw-semibold" t-esc="a.name"/>
+                            <button class="btn btn-sm btn-link p-0 ms-2 text-muted"
+                                    t-on-click="() => this.removeAttachment(a.id)"
+                                    title="Remove attachment">
+                                <i class="fa fa-times"/>
+                            </button>
+                        </div>
+                    </t>
+                </div>
+            </div>
+
+            <!-- Footer -->
+            <div class="card-footer d-flex align-items-center px-3 py-2" t-if="!props.win.minimized">
+                <label class="btn btn-sm btn-light mb-0 me-1" title="Attach file">
+                    <i class="fa fa-paperclip"/>
+                    <input type="file" multiple="multiple" class="d-none" t-on-change="onAttach"/>
+                </label>
+                <button class="btn btn-sm btn-light me-1" t-on-click="onInsertSignature"
+                        title="Insert signature">
+                    <i class="fa fa-id-card-o"/>
+                </button>
+                <div class="flex-grow-1"/>
+                <button class="btn btn-sm btn-outline-secondary me-2" t-on-click="onDraft">
+                    <i class="fa fa-floppy-o me-1"/> Draft
+                </button>
+                <button class="btn btn-sm btn-primary" t-on-click="onSend">
+                    <i class="fa fa-paper-plane me-1"/> Send
+                </button>
+            </div>
+        </div>
+    </div>
+</t>
+
+</templates>

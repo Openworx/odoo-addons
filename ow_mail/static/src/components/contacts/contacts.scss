@@ -1,0 +1,37 @@
+.o-ow-contacts {
+    background: #fff;
+}
+
+.o-ow-contact-list {
+    width: 320px;
+    min-width: 260px;
+    max-width: 360px;
+    background: #fafafa;
+}
+
+.o-ow-contact-row {
+    cursor: pointer;
+    transition: background-color 0.1s ease;
+
+    &:hover {
+        background: #f0f0f0;
+    }
+
+    &.active {
+        background: #e7f1ff;
+    }
+}
+
+.o-ow-contact-detail {
+    background: #fff;
+}
+
+@media (max-width: 767.98px) {
+    .o-ow-contact-list {
+        width: 100%;
+        min-width: 0;
+        max-width: none;
+        flex: 1 1 auto;
+        border-right: 0;
+    }
+}

@@ -1,0 +1,1620 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# 	* ow_mail
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 18.0-20260324\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-04-20 14:35+0000\n"
+"PO-Revision-Date: 2026-04-20 14:35+0000\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
+
+#. module: ow_mail
+#: model_terms:ir.ui.view,arch_db:ow_mail.view_ow_mail_account_form
+msgid "(stored encrypted)"
+msgstr ""
+
+#. module: ow_mail
+#. odoo-javascript
+#: code:addons/ow_mail/static/src/components/message_viewer/message_viewer.xml:0
+msgid ".ics"
+msgstr ""
+
+#. module: ow_mail
+#: model_terms:ir.ui.view,arch_db:ow_mail.view_partner_form_ow_mail
+msgid "<span class=\"o_stat_text\">Mail</span>"
+msgstr ""
+
+#. module: ow_mail
+#: model:ir.model.fields,field_description:ow_mail.field_ow_mail_compose__account_id
+#: model:ir.model.fields,field_description:ow_mail.field_ow_mail_folder__account_id
+msgid "Account"
+msgstr ""
+
+#. module: ow_mail
+#: model_terms:ir.ui.view,arch_db:ow_mail.view_ow_mail_account_form
+msgid "Account Name"
+msgstr ""
+
+#. module: ow_mail
+#: model:ir.model.fields,field_description:ow_mail.field_ow_mail_account__active
+msgid "Active"
+msgstr ""
+
+#. module: ow_mail
+#. odoo-javascript
+#: code:addons/ow_mail/static/src/components/message_viewer/message_viewer.xml:0
+msgid "Add to Calendar"
+msgstr ""
+
+#. module: ow_mail
+#. odoo-javascript
+#: code:addons/ow_mail/static/src/components/compose_window/compose_window.xml:0
+msgid "Align center"
+msgstr ""
+
+#. module: ow_mail
+#. odoo-javascript
+#: code:addons/ow_mail/static/src/components/compose_window/compose_window.xml:0
+msgid "Align left"
+msgstr ""
+
+#. module: ow_mail
+#. odoo-javascript
+#: code:addons/ow_mail/static/src/components/compose_window/compose_window.xml:0
+msgid "Align right"
+msgstr ""
+
+#. module: ow_mail
+#. odoo-javascript
+#: code:addons/ow_mail/static/src/components/sidebar/sidebar.xml:0
+msgid "All Mailboxes"
+msgstr ""
+
+#. module: ow_mail
+#: model:ir.model.constraint,message:ow_mail.constraint_ow_mail_trusted_sender_user_email_uniq
+msgid "Already trusted."
+msgstr ""
+
+#. module: ow_mail
+#: model:ir.model.fields.selection,name:ow_mail.selection__ow_mail_folder__kind__archive
+msgid "Archive"
+msgstr ""
+
+#. module: ow_mail
+#: model:ir.model.fields,field_description:ow_mail.field_ow_mail_account__archive_folder_id
+msgid "Archive Folder"
+msgstr ""
+
+#. module: ow_mail
+#. odoo-javascript
+#: code:addons/ow_mail/static/src/components/compose_window/compose_window.xml:0
+msgid "Attach file"
+msgstr ""
+
+#. module: ow_mail
+#. odoo-javascript
+#: code:addons/ow_mail/static/src/components/message_viewer/message_viewer.xml:0
+#: model:ir.model.fields,field_description:ow_mail.field_ow_mail_compose__attachment_ids
+msgid "Attachments"
+msgstr ""
+
+#. module: ow_mail
+#. odoo-javascript
+#: code:addons/ow_mail/static/src/components/mailclient/mailclient.xml:0
+msgid "Back"
+msgstr ""
+
+#. module: ow_mail
+#: model:ir.model.fields,field_description:ow_mail.field_ow_mail_compose__body_html
+msgid "Body Html"
+msgstr ""
+
+#. module: ow_mail
+#. odoo-javascript
+#: code:addons/ow_mail/static/src/components/compose_window/compose_window.xml:0
+msgid "Bold"
+msgstr ""
+
+#. module: ow_mail
+#. odoo-javascript
+#: code:addons/ow_mail/static/src/components/compose_window/compose_window.xml:0
+msgid "Bullet list"
+msgstr ""
+
+#. module: ow_mail
+#. odoo-javascript
+#: code:addons/ow_mail/static/src/components/contacts/contacts.xml:0
+#: model_terms:ir.ui.view,arch_db:ow_mail.view_ow_mail_connect_wizard_form
+msgid "Cancel"
+msgstr ""
+
+#. module: ow_mail
+#. odoo-python
+#: code:addons/ow_mail/models/ow_mail_account.py:0
+msgid "Cannot move folder into itself or its own subfolder"
+msgstr ""
+
+#. module: ow_mail
+#. odoo-python
+#: code:addons/ow_mail/models/ow_mail_account.py:0
+msgid "Cannot select %s"
+msgstr ""
+
+#. module: ow_mail
+#: model:ir.model.fields,field_description:ow_mail.field_ow_mail_compose__cc
+msgid "Cc"
+msgstr ""
+
+#. module: ow_mail
+#. odoo-javascript
+#: code:addons/ow_mail/static/src/components/message_list/message_list.xml:0
+msgid "Clear"
+msgstr ""
+
+#. module: ow_mail
+#. odoo-javascript
+#: code:addons/ow_mail/static/src/components/compose_window/compose_window.xml:0
+msgid "Clear formatting"
+msgstr ""
+
+#. module: ow_mail
+#. odoo-javascript
+#: code:addons/ow_mail/static/src/components/message_list/message_list.xml:0
+msgid "Clear selection"
+msgstr ""
+
+#. module: ow_mail
+#. odoo-javascript
+#: code:addons/ow_mail/static/src/components/compose_window/compose_window.xml:0
+#: code:addons/ow_mail/static/src/components/message_source/message_source.xml:0
+msgid "Close"
+msgstr ""
+
+#. module: ow_mail
+#. odoo-javascript
+#: code:addons/ow_mail/static/src/components/compose_window/compose_window.xml:0
+msgid "Code"
+msgstr ""
+
+#. module: ow_mail
+#: model:ir.model.fields,field_description:ow_mail.field_ow_mail_account__color
+#: model:ir.model.fields,field_description:ow_mail.field_ow_mail_tag__color
+msgid "Color"
+msgstr ""
+
+#. module: ow_mail
+#. odoo-javascript
+#: code:addons/ow_mail/static/src/components/contacts/contacts.xml:0
+#: model:ir.model.fields,field_description:ow_mail.field_ow_mail_contact__company
+msgid "Company"
+msgstr ""
+
+#. module: ow_mail
+#. odoo-javascript
+#: code:addons/ow_mail/static/src/components/contacts/contacts.xml:0
+#: code:addons/ow_mail/static/src/components/sidebar/sidebar.xml:0
+msgid "Compose"
+msgstr ""
+
+#. module: ow_mail
+#: model:ir.ui.menu,name:ow_mail.menu_ow_mail_config
+msgid "Configuration"
+msgstr ""
+
+#. module: ow_mail
+#: model:ir.model.fields.selection,name:ow_mail.selection__ow_mail_account__state__confirmed
+msgid "Confirmed"
+msgstr ""
+
+#. module: ow_mail
+#: model_terms:ir.ui.view,arch_db:ow_mail.view_ow_mail_connect_wizard_form
+msgid "Connect"
+msgstr ""
+
+#. module: ow_mail
+#: model_terms:ir.ui.view,arch_db:ow_mail.view_ow_mail_connect_wizard_form
+msgid "Connect Mailbox"
+msgstr ""
+
+#. module: ow_mail
+#: model:ir.actions.act_window,name:ow_mail.action_ow_mail_connect_wizard
+msgid "Connect to Mailbox"
+msgstr ""
+
+#. module: ow_mail
+#. odoo-python
+#: code:addons/ow_mail/models/ow_mail_account.py:0
+msgid "Connection OK"
+msgstr ""
+
+#. module: ow_mail
+#. odoo-python
+#: code:addons/ow_mail/models/ow_mail_account.py:0
+msgid "Connection failed: %s"
+msgstr ""
+
+#. module: ow_mail
+#: model:ir.model,name:ow_mail.model_res_partner
+msgid "Contact"
+msgstr ""
+
+#. module: ow_mail
+#. odoo-javascript
+#: code:addons/ow_mail/static/src/components/sidebar/sidebar.xml:0
+#: model:ir.actions.act_window,name:ow_mail.action_ow_mail_contact
+msgid "Contacts"
+msgstr ""
+
+#. module: ow_mail
+#: model:ir.model.fields,field_description:ow_mail.field_ow_mail_account__create_uid
+#: model:ir.model.fields,field_description:ow_mail.field_ow_mail_compose__create_uid
+#: model:ir.model.fields,field_description:ow_mail.field_ow_mail_connect_wizard__create_uid
+#: model:ir.model.fields,field_description:ow_mail.field_ow_mail_contact__create_uid
+#: model:ir.model.fields,field_description:ow_mail.field_ow_mail_folder__create_uid
+#: model:ir.model.fields,field_description:ow_mail.field_ow_mail_tag__create_uid
+#: model:ir.model.fields,field_description:ow_mail.field_ow_mail_trusted_sender__create_uid
+msgid "Created by"
+msgstr ""
+
+#. module: ow_mail
+#: model:ir.model.fields,field_description:ow_mail.field_ow_mail_account__create_date
+#: model:ir.model.fields,field_description:ow_mail.field_ow_mail_compose__create_date
+#: model:ir.model.fields,field_description:ow_mail.field_ow_mail_connect_wizard__create_date
+#: model:ir.model.fields,field_description:ow_mail.field_ow_mail_contact__create_date
+#: model:ir.model.fields,field_description:ow_mail.field_ow_mail_folder__create_date
+#: model:ir.model.fields,field_description:ow_mail.field_ow_mail_tag__create_date
+#: model:ir.model.fields,field_description:ow_mail.field_ow_mail_trusted_sender__create_date
+msgid "Created on"
+msgstr ""
+
+#. module: ow_mail
+#: model:ir.model.fields.selection,name:ow_mail.selection__ow_mail_account__from_name_mode__custom
+#: model:ir.model.fields.selection,name:ow_mail.selection__ow_mail_folder__kind__custom
+msgid "Custom"
+msgstr ""
+
+#. module: ow_mail
+#: model:ir.model.fields,field_description:ow_mail.field_ow_mail_account__from_name_custom
+msgid "Custom sender name"
+msgstr ""
+
+#. module: ow_mail
+#. odoo-javascript
+#: code:addons/ow_mail/static/src/components/compose_window/compose_window.xml:0
+msgid "Decrease indent"
+msgstr ""
+
+#. module: ow_mail
+#. odoo-javascript
+#: code:addons/ow_mail/static/src/components/contacts/contacts.xml:0
+#: code:addons/ow_mail/static/src/components/folders_widget/folders_widget.xml:0
+#: code:addons/ow_mail/static/src/components/message_list/message_list.xml:0
+#: code:addons/ow_mail/static/src/components/message_viewer/message_viewer.xml:0
+msgid "Delete"
+msgstr ""
+
+#. module: ow_mail
+#. odoo-javascript
+#: code:addons/ow_mail/static/src/components/folders_widget/folders_widget.xml:0
+msgid "Delete selected folder"
+msgstr ""
+
+#. module: ow_mail
+#: model:ir.model.fields,field_description:ow_mail.field_ow_mail_account__display_name
+#: model:ir.model.fields,field_description:ow_mail.field_ow_mail_compose__display_name
+#: model:ir.model.fields,field_description:ow_mail.field_ow_mail_connect_wizard__display_name
+#: model:ir.model.fields,field_description:ow_mail.field_ow_mail_contact__display_name
+#: model:ir.model.fields,field_description:ow_mail.field_ow_mail_folder__display_name
+#: model:ir.model.fields,field_description:ow_mail.field_ow_mail_tag__display_name
+#: model:ir.model.fields,field_description:ow_mail.field_ow_mail_trusted_sender__display_name
+msgid "Display Name"
+msgstr ""
+
+#. module: ow_mail
+#. odoo-javascript
+#: code:addons/ow_mail/static/src/components/message_viewer/message_viewer.xml:0
+msgid "Download"
+msgstr ""
+
+#. module: ow_mail
+#. odoo-javascript
+#: code:addons/ow_mail/static/src/components/message_viewer/message_viewer.xml:0
+msgid "Download .ics"
+msgstr ""
+
+#. module: ow_mail
+#. odoo-javascript
+#: code:addons/ow_mail/static/src/components/compose_window/compose_window.xml:0
+#: model:ir.model.fields.selection,name:ow_mail.selection__ow_mail_account__state__draft
+msgid "Draft"
+msgstr ""
+
+#. module: ow_mail
+#: model:ir.model.fields.selection,name:ow_mail.selection__ow_mail_folder__kind__drafts
+msgid "Drafts"
+msgstr ""
+
+#. module: ow_mail
+#: model:ir.model.fields,field_description:ow_mail.field_ow_mail_account__drafts_folder_id
+msgid "Drafts Folder"
+msgstr ""
+
+#. module: ow_mail
+#. odoo-javascript
+#: code:addons/ow_mail/static/src/components/compose_window/compose_window.xml:0
+msgid "Drop files to attach"
+msgstr ""
+
+#. module: ow_mail
+#. odoo-javascript
+#: code:addons/ow_mail/static/src/components/contacts/contacts.xml:0
+#: code:addons/ow_mail/static/src/components/message_viewer/message_viewer.xml:0
+msgid "Edit"
+msgstr ""
+
+#. module: ow_mail
+#. odoo-javascript
+#: code:addons/ow_mail/static/src/components/message_viewer/message_viewer.xml:0
+msgid "Edit draft"
+msgstr ""
+
+#. module: ow_mail
+#. odoo-javascript
+#: code:addons/ow_mail/static/src/components/contacts/contacts.xml:0
+#: model:ir.model.fields,field_description:ow_mail.field_ow_mail_account__email
+#: model:ir.model.fields,field_description:ow_mail.field_ow_mail_connect_wizard__email
+#: model:ir.model.fields,field_description:ow_mail.field_ow_mail_contact__email
+#: model:ir.model.fields,field_description:ow_mail.field_ow_mail_trusted_sender__email
+msgid "Email"
+msgstr ""
+
+#. module: ow_mail
+#: model_terms:ir.ui.view,arch_db:ow_mail.view_ow_mail_account_form
+msgid "Email Address"
+msgstr ""
+
+#. module: ow_mail
+#. odoo-javascript
+#: code:addons/ow_mail/static/src/components/folders_widget/folders_widget.xml:0
+msgid "Empty"
+msgstr ""
+
+#. module: ow_mail
+#. odoo-javascript
+#: code:addons/ow_mail/static/src/components/folders_widget/folders_widget.xml:0
+msgid "Empty selected folder"
+msgstr ""
+
+#. module: ow_mail
+#: model:ir.model.fields.selection,name:ow_mail.selection__ow_mail_account__state__error
+msgid "Error"
+msgstr ""
+
+#. module: ow_mail
+#: model:ir.model.fields,field_description:ow_mail.field_ow_mail_account__error_message
+msgid "Error Message"
+msgstr ""
+
+#. module: ow_mail
+#: model_terms:ir.ui.view,arch_db:ow_mail.view_ow_mail_account_form
+msgid "Fetch Folders"
+msgstr ""
+
+#. module: ow_mail
+#. odoo-python
+#: code:addons/ow_mail/models/ow_mail_account.py:0
+msgid "Fetch folders failed: %s"
+msgstr ""
+
+#. module: ow_mail
+#. odoo-javascript
+#: code:addons/ow_mail/static/src/components/message_list/message_list.xml:0
+msgid "First"
+msgstr ""
+
+#. module: ow_mail
+#: model:ir.model.fields,field_description:ow_mail.field_ow_mail_account__folder_ids
+msgid "Folder"
+msgstr ""
+
+#. module: ow_mail
+#. odoo-python
+#: code:addons/ow_mail/models/ow_mail_account.py:0
+msgid "Folder name is required"
+msgstr ""
+
+#. module: ow_mail
+#: model:ir.model.constraint,message:ow_mail.constraint_ow_mail_folder_account_path_uniq
+msgid "Folder path must be unique per account."
+msgstr ""
+
+#. module: ow_mail
+#: model_terms:ir.ui.view,arch_db:ow_mail.view_ow_mail_account_form
+msgid "Folders"
+msgstr ""
+
+#. module: ow_mail
+#. odoo-python
+#: code:addons/ow_mail/models/ow_mail_account.py:0
+msgid "Folders fetched"
+msgstr ""
+
+#. module: ow_mail
+#. odoo-javascript
+#: code:addons/ow_mail/static/src/components/message_list/message_list.xml:0
+#: code:addons/ow_mail/static/src/components/message_viewer/message_viewer.xml:0
+msgid "Forward"
+msgstr ""
+
+#. module: ow_mail
+#. odoo-javascript
+#: code:addons/ow_mail/static/src/components/compose_window/recipient_input.xml:0
+msgid "From Odoo Contacts"
+msgstr ""
+
+#. module: ow_mail
+#: model:ir.model.fields,field_description:ow_mail.field_ow_mail_folder__full_path
+msgid "Full Path"
+msgstr ""
+
+#. module: ow_mail
+#: model:ir.model.fields,help:ow_mail.field_ow_mail_trusted_sender__email
+msgid "Full email address or bare domain to trust."
+msgstr ""
+
+#. module: ow_mail
+#. odoo-javascript
+#: code:addons/ow_mail/static/src/components/compose_window/compose_window.xml:0
+msgid "Heading 1"
+msgstr ""
+
+#. module: ow_mail
+#. odoo-javascript
+#: code:addons/ow_mail/static/src/components/compose_window/compose_window.xml:0
+msgid "Heading 2"
+msgstr ""
+
+#. module: ow_mail
+#. odoo-javascript
+#: code:addons/ow_mail/static/src/components/compose_window/compose_window.xml:0
+msgid "Heading 3"
+msgstr ""
+
+#. module: ow_mail
+#: model:ir.model.fields,help:ow_mail.field_ow_mail_folder__last_seen_uid
+msgid "Highest UID seen — used for new-mail detection"
+msgstr ""
+
+#. module: ow_mail
+#. odoo-javascript
+#: code:addons/ow_mail/static/src/components/compose_window/compose_window.xml:0
+msgid "Highlight color"
+msgstr ""
+
+#. module: ow_mail
+#. odoo-javascript
+#: code:addons/ow_mail/static/src/components/compose_window/compose_window.xml:0
+msgid "Horizontal rule"
+msgstr ""
+
+#. module: ow_mail
+#: model:ir.model.fields,field_description:ow_mail.field_ow_mail_account__id
+#: model:ir.model.fields,field_description:ow_mail.field_ow_mail_compose__id
+#: model:ir.model.fields,field_description:ow_mail.field_ow_mail_connect_wizard__id
+#: model:ir.model.fields,field_description:ow_mail.field_ow_mail_contact__id
+#: model:ir.model.fields,field_description:ow_mail.field_ow_mail_folder__id
+#: model:ir.model.fields,field_description:ow_mail.field_ow_mail_tag__id
+#: model:ir.model.fields,field_description:ow_mail.field_ow_mail_trusted_sender__id
+msgid "ID"
+msgstr ""
+
+#. module: ow_mail
+#: model_terms:ir.ui.view,arch_db:ow_mail.view_ow_mail_connect_wizard_form
+msgid "IMAP"
+msgstr ""
+
+#. module: ow_mail
+#. odoo-python
+#: code:addons/ow_mail/models/ow_mail_account.py:0
+msgid "IMAP %s failed: %s"
+msgstr ""
+
+#. module: ow_mail
+#. odoo-python
+#: code:addons/ow_mail/models/ow_mail_account.py:0
+msgid "IMAP CREATE failed: %s"
+msgstr ""
+
+#. module: ow_mail
+#. odoo-python
+#: code:addons/ow_mail/models/ow_mail_account.py:0
+msgid "IMAP DELETE failed: %s"
+msgstr ""
+
+#. module: ow_mail
+#. odoo-python
+#: code:addons/ow_mail/models/ow_mail_account.py:0
+msgid "IMAP RENAME failed: %s"
+msgstr ""
+
+#. module: ow_mail
+#: model:ir.model.fields,help:ow_mail.field_ow_mail_tag__imap_keyword
+msgid "IMAP keyword flag used for this tag."
+msgstr ""
+
+#. module: ow_mail
+#: model:ir.model.fields,field_description:ow_mail.field_ow_mail_account__imap_host
+#: model:ir.model.fields,field_description:ow_mail.field_ow_mail_connect_wizard__imap_host
+msgid "Imap Host"
+msgstr ""
+
+#. module: ow_mail
+#: model:ir.model.fields,field_description:ow_mail.field_ow_mail_tag__imap_keyword
+msgid "Imap Keyword"
+msgstr ""
+
+#. module: ow_mail
+#: model:ir.model.fields,field_description:ow_mail.field_ow_mail_account__imap_login
+msgid "Imap Login"
+msgstr ""
+
+#. module: ow_mail
+#: model:ir.model.fields,field_description:ow_mail.field_ow_mail_account__imap_password
+msgid "Imap Password"
+msgstr ""
+
+#. module: ow_mail
+#: model:ir.model.fields,field_description:ow_mail.field_ow_mail_account__imap_password_enc
+msgid "Imap Password Enc"
+msgstr ""
+
+#. module: ow_mail
+#: model:ir.model.fields,field_description:ow_mail.field_ow_mail_account__imap_port
+#: model:ir.model.fields,field_description:ow_mail.field_ow_mail_connect_wizard__imap_port
+msgid "Imap Port"
+msgstr ""
+
+#. module: ow_mail
+#: model:ir.model.fields,field_description:ow_mail.field_ow_mail_account__imap_ssl
+#: model:ir.model.fields,field_description:ow_mail.field_ow_mail_connect_wizard__imap_ssl
+msgid "Imap Ssl"
+msgstr ""
+
+#. module: ow_mail
+#: model:ir.model.fields,field_description:ow_mail.field_ow_mail_compose__in_reply_to
+msgid "In Reply To"
+msgstr ""
+
+#. module: ow_mail
+#: model:ir.model.fields.selection,name:ow_mail.selection__ow_mail_folder__kind__inbox
+msgid "Inbox"
+msgstr ""
+
+#. module: ow_mail
+#: model:ir.model.fields,field_description:ow_mail.field_ow_mail_account__inbox_folder_id
+msgid "Inbox Folder"
+msgstr ""
+
+#. module: ow_mail
+#. odoo-python
+#: code:addons/ow_mail/models/ow_mail_account.py:0
+msgid "Incoming (IMAP) connection failed: %s"
+msgstr ""
+
+#. module: ow_mail
+#: model_terms:ir.ui.view,arch_db:ow_mail.view_ow_mail_account_form
+msgid "Incoming Mail Server"
+msgstr ""
+
+#. module: ow_mail
+#: model_terms:ir.ui.view,arch_db:ow_mail.view_ow_mail_account_form
+msgid "Incoming Server"
+msgstr ""
+
+#. module: ow_mail
+#. odoo-python
+#: code:addons/ow_mail/models/ow_mail_account.py:0
+msgid "Incoming server OK"
+msgstr ""
+
+#. module: ow_mail
+#. odoo-javascript
+#: code:addons/ow_mail/static/src/components/compose_window/compose_window.xml:0
+msgid "Increase indent"
+msgstr ""
+
+#. module: ow_mail
+#. odoo-javascript
+#: code:addons/ow_mail/static/src/components/compose_window/compose_window.xml:0
+msgid "Insert image"
+msgstr ""
+
+#. module: ow_mail
+#. odoo-javascript
+#: code:addons/ow_mail/static/src/components/compose_window/compose_window.xml:0
+msgid "Insert link"
+msgstr ""
+
+#. module: ow_mail
+#. odoo-javascript
+#: code:addons/ow_mail/static/src/components/compose_window/compose_window.xml:0
+msgid "Insert signature"
+msgstr ""
+
+#. module: ow_mail
+#. odoo-javascript
+#: code:addons/ow_mail/static/src/components/compose_window/compose_window.xml:0
+msgid "Italic"
+msgstr ""
+
+#. module: ow_mail
+#: model:ir.model.fields,field_description:ow_mail.field_ow_mail_folder__kind
+msgid "Kind"
+msgstr ""
+
+#. module: ow_mail
+#. odoo-javascript
+#: code:addons/ow_mail/static/src/components/message_list/message_list.xml:0
+msgid "Last"
+msgstr ""
+
+#. module: ow_mail
+#: model:ir.model.fields,field_description:ow_mail.field_ow_mail_folder__last_seen_uid
+msgid "Last Seen Uid"
+msgstr ""
+
+#. module: ow_mail
+#: model:ir.model.fields,field_description:ow_mail.field_ow_mail_account__last_sync
+msgid "Last Sync"
+msgstr ""
+
+#. module: ow_mail
+#: model:ir.model.fields,field_description:ow_mail.field_ow_mail_account__write_uid
+#: model:ir.model.fields,field_description:ow_mail.field_ow_mail_compose__write_uid
+#: model:ir.model.fields,field_description:ow_mail.field_ow_mail_connect_wizard__write_uid
+#: model:ir.model.fields,field_description:ow_mail.field_ow_mail_contact__write_uid
+#: model:ir.model.fields,field_description:ow_mail.field_ow_mail_folder__write_uid
+#: model:ir.model.fields,field_description:ow_mail.field_ow_mail_tag__write_uid
+#: model:ir.model.fields,field_description:ow_mail.field_ow_mail_trusted_sender__write_uid
+msgid "Last Updated by"
+msgstr ""
+
+#. module: ow_mail
+#: model:ir.model.fields,field_description:ow_mail.field_ow_mail_account__write_date
+#: model:ir.model.fields,field_description:ow_mail.field_ow_mail_compose__write_date
+#: model:ir.model.fields,field_description:ow_mail.field_ow_mail_connect_wizard__write_date
+#: model:ir.model.fields,field_description:ow_mail.field_ow_mail_contact__write_date
+#: model:ir.model.fields,field_description:ow_mail.field_ow_mail_folder__write_date
+#: model:ir.model.fields,field_description:ow_mail.field_ow_mail_tag__write_date
+#: model:ir.model.fields,field_description:ow_mail.field_ow_mail_trusted_sender__write_date
+msgid "Last Updated on"
+msgstr ""
+
+#. module: ow_mail
+#: model:ir.model.fields,field_description:ow_mail.field_ow_mail_contact__last_used
+msgid "Last Used"
+msgstr ""
+
+#. module: ow_mail
+#. odoo-javascript
+#: code:addons/ow_mail/static/src/components/contacts/contacts.xml:0
+msgid "Last used"
+msgstr ""
+
+#. module: ow_mail
+#: model_terms:ir.ui.view,arch_db:ow_mail.view_ow_mail_account_form
+msgid "Leave empty to use IMAP login"
+msgstr ""
+
+#. module: ow_mail
+#. odoo-javascript
+#: code:addons/ow_mail/static/src/components/contacts/contacts.xml:0
+#: code:addons/ow_mail/static/src/components/message_source/message_source.xml:0
+msgid "Loading…"
+msgstr ""
+
+#. module: ow_mail
+#: model:ir.model.fields,field_description:ow_mail.field_ow_mail_account__smtp_login
+msgid "Login"
+msgstr ""
+
+#. module: ow_mail
+#: model:ir.model.fields,field_description:ow_mail.field_ow_mail_account__smtp_same_as_imap
+msgid "Login same as incoming"
+msgstr ""
+
+#. module: ow_mail
+#: model:ir.ui.menu,name:ow_mail.menu_ow_mail_mailclient
+msgid "Mail"
+msgstr ""
+
+#. module: ow_mail
+#: model:ir.actions.act_window,name:ow_mail.action_ow_mail_account
+msgid "Mail Accounts"
+msgstr ""
+
+#. module: ow_mail
+#. odoo-python
+#: code:addons/ow_mail/models/res_partner.py:0
+msgid "Mail with %s"
+msgstr ""
+
+#. module: ow_mail
+#: model_terms:ir.ui.view,arch_db:ow_mail.view_ow_mail_account_form
+msgid "Manual Sync"
+msgstr ""
+
+#. module: ow_mail
+#. odoo-javascript
+#: code:addons/ow_mail/static/src/components/message_list/message_list.xml:0
+msgid "Mark read"
+msgstr ""
+
+#. module: ow_mail
+#. odoo-javascript
+#: code:addons/ow_mail/static/src/components/message_list/message_list.xml:0
+msgid "Mark unread"
+msgstr ""
+
+#. module: ow_mail
+#. odoo-javascript
+#: code:addons/ow_mail/static/src/components/mailclient/mailclient.xml:0
+msgid "Menu"
+msgstr ""
+
+#. module: ow_mail
+#. odoo-javascript
+#: code:addons/ow_mail/static/src/components/message_list/message_list.xml:0
+msgid "Message"
+msgstr ""
+
+#. module: ow_mail
+#. odoo-javascript
+#: code:addons/ow_mail/static/src/components/message_list/message_list.xml:0
+msgid "Messages"
+msgstr ""
+
+#. module: ow_mail
+#. odoo-javascript
+#: code:addons/ow_mail/static/src/components/compose_window/compose_window.xml:0
+msgid "Minimize"
+msgstr ""
+
+#. module: ow_mail
+#. odoo-javascript
+#: code:addons/ow_mail/static/src/components/message_list/message_list.xml:0
+#: code:addons/ow_mail/static/src/components/message_viewer/message_viewer.xml:0
+msgid "Move to…"
+msgstr ""
+
+#. module: ow_mail
+#. odoo-javascript
+#: code:addons/ow_mail/static/src/components/contacts/contacts.xml:0
+#: model:ir.model.fields,field_description:ow_mail.field_ow_mail_account__name
+#: model:ir.model.fields,field_description:ow_mail.field_ow_mail_connect_wizard__name
+#: model:ir.model.fields,field_description:ow_mail.field_ow_mail_contact__name
+#: model:ir.model.fields,field_description:ow_mail.field_ow_mail_folder__name
+#: model:ir.model.fields,field_description:ow_mail.field_ow_mail_tag__name
+msgid "Name"
+msgstr ""
+
+#. module: ow_mail
+#. odoo-javascript
+#: code:addons/ow_mail/static/src/components/folders_widget/folders_widget.xml:0
+msgid "New"
+msgstr ""
+
+#. module: ow_mail
+#. odoo-javascript
+#: code:addons/ow_mail/static/src/components/compose_window/compose_window.xml:0
+msgid "New Message"
+msgstr ""
+
+#. module: ow_mail
+#. odoo-javascript
+#: code:addons/ow_mail/static/src/components/contacts/contacts.xml:0
+msgid "New contact"
+msgstr ""
+
+#. module: ow_mail
+#. odoo-javascript
+#: code:addons/ow_mail/static/src/components/folders_widget/folders_widget.xml:0
+msgid "New folder"
+msgstr ""
+
+#. module: ow_mail
+#. odoo-javascript
+#: code:addons/ow_mail/static/src/components/message_list/message_list.xml:0
+msgid "Next"
+msgstr ""
+
+#. module: ow_mail
+#. odoo-javascript
+#: code:addons/ow_mail/static/src/components/contacts/contacts.xml:0
+msgid "No contacts yet."
+msgstr ""
+
+#. module: ow_mail
+#. odoo-javascript
+#: code:addons/ow_mail/static/src/components/message_list/message_list.xml:0
+msgid "No messages"
+msgstr ""
+
+#. module: ow_mail
+#. odoo-python
+#: code:addons/ow_mail/models/ow_mail_account.py:0
+msgid "No valid recipient address. Please fill in To, Cc, or Bcc."
+msgstr ""
+
+#. module: ow_mail
+#: model:ir.model.fields.selection,name:ow_mail.selection__ow_mail_account__smtp_encryption__none
+#: model:ir.model.fields.selection,name:ow_mail.selection__ow_mail_connect_wizard__smtp_encryption__none
+msgid "None"
+msgstr ""
+
+#. module: ow_mail
+#. odoo-javascript
+#: code:addons/ow_mail/static/src/components/contacts/contacts.xml:0
+#: model:ir.model.fields,field_description:ow_mail.field_ow_mail_contact__note
+#: model:ir.model.fields,field_description:ow_mail.field_ow_mail_trusted_sender__note
+msgid "Note"
+msgstr ""
+
+#. module: ow_mail
+#: model_terms:ir.ui.view,arch_db:ow_mail.view_ow_mail_contact_form
+msgid "Notes"
+msgstr ""
+
+#. module: ow_mail
+#: model_terms:ir.ui.view,arch_db:ow_mail.view_ow_mail_account_form
+msgid "Notifications"
+msgstr ""
+
+#. module: ow_mail
+#: model:ir.model.fields,field_description:ow_mail.field_ow_mail_account__notify_new_mail
+msgid "Notify on new mail"
+msgstr ""
+
+#. module: ow_mail
+#. odoo-javascript
+#: code:addons/ow_mail/static/src/components/compose_window/compose_window.xml:0
+msgid "Numbered list"
+msgstr ""
+
+#. module: ow_mail
+#. odoo-python
+#: code:addons/ow_mail/models/ow_mail_account.py:0
+#: model:ir.actions.client,name:ow_mail.action_ow_mail_mailclient
+#: model:ir.ui.menu,name:ow_mail.menu_ow_mail_root
+msgid "OW Mail"
+msgstr ""
+
+#. module: ow_mail
+#: model:ir.model,name:ow_mail.model_ow_mail_account
+msgid "OW Mail Account"
+msgstr ""
+
+#. module: ow_mail
+#: model:ir.model,name:ow_mail.model_ow_mail_compose
+msgid "OW Mail Compose"
+msgstr ""
+
+#. module: ow_mail
+#: model:ir.model,name:ow_mail.model_ow_mail_connect_wizard
+msgid "OW Mail Connect Wizard"
+msgstr ""
+
+#. module: ow_mail
+#: model:ir.model,name:ow_mail.model_ow_mail_contact
+msgid "OW Mail Contact"
+msgstr ""
+
+#. module: ow_mail
+#: model:ir.model,name:ow_mail.model_ow_mail_crypto
+msgid "OW Mail Crypto Helper"
+msgstr ""
+
+#. module: ow_mail
+#: model:ir.model,name:ow_mail.model_ow_mail_folder
+msgid "OW Mail Folder"
+msgstr ""
+
+#. module: ow_mail
+#: model:ir.model,name:ow_mail.model_ow_mail_tag
+msgid "OW Mail Tag"
+msgstr ""
+
+#. module: ow_mail
+#: model:ir.model,name:ow_mail.model_ow_mail_trusted_sender
+msgid "OW Mail Trusted Sender"
+msgstr ""
+
+#. module: ow_mail
+#: model:ir.actions.server,name:ow_mail.ir_cron_ow_mail_counts_ir_actions_server
+msgid "OW Mail: refresh folder counts"
+msgstr ""
+
+#. module: ow_mail
+#. odoo-javascript
+#: code:addons/ow_mail/static/src/components/compose_window/recipient_input.xml:0
+msgid "Odoo"
+msgstr ""
+
+#. module: ow_mail
+#: model:ir.model.fields.selection,name:ow_mail.selection__ow_mail_account__from_name_mode__user
+msgid "Odoo user name"
+msgstr ""
+
+#. module: ow_mail
+#. odoo-javascript
+#: code:addons/ow_mail/static/src/components/message_viewer/message_viewer.xml:0
+msgid "Open"
+msgstr ""
+
+#. module: ow_mail
+#. odoo-javascript
+#: code:addons/ow_mail/static/src/components/message_viewer/message_viewer.xml:0
+msgid "Open contact"
+msgstr ""
+
+#. module: ow_mail
+#. odoo-javascript
+#: code:addons/ow_mail/static/src/components/message_source/message_source.xml:0
+msgid "Open in new tab"
+msgstr ""
+
+#. module: ow_mail
+#. odoo-python
+#: code:addons/ow_mail/models/ow_mail_account.py:0
+msgid "Outgoing (SMTP) connection failed: %s"
+msgstr ""
+
+#. module: ow_mail
+#: model_terms:ir.ui.view,arch_db:ow_mail.view_ow_mail_account_form
+msgid "Outgoing SMTP Server"
+msgstr ""
+
+#. module: ow_mail
+#: model_terms:ir.ui.view,arch_db:ow_mail.view_ow_mail_account_form
+msgid "Outgoing Server"
+msgstr ""
+
+#. module: ow_mail
+#. odoo-python
+#: code:addons/ow_mail/models/ow_mail_account.py:0
+msgid "Outgoing server OK"
+msgstr ""
+
+#. module: ow_mail
+#. odoo-javascript
+#: code:addons/ow_mail/static/src/components/compose_window/compose_window.xml:0
+msgid "Paragraph"
+msgstr ""
+
+#. module: ow_mail
+#: model:ir.model.fields,field_description:ow_mail.field_ow_mail_folder__parent_id
+msgid "Parent"
+msgstr ""
+
+#. module: ow_mail
+#: model:ir.model.fields,field_description:ow_mail.field_ow_mail_contact__partner_id
+msgid "Partner"
+msgstr ""
+
+#. module: ow_mail
+#: model:ir.model.fields,field_description:ow_mail.field_ow_mail_connect_wizard__password
+msgid "Password"
+msgstr ""
+
+#. module: ow_mail
+#. odoo-javascript
+#: code:addons/ow_mail/static/src/components/contacts/contacts.xml:0
+#: model:ir.model.fields,field_description:ow_mail.field_ow_mail_contact__phone
+msgid "Phone"
+msgstr ""
+
+#. module: ow_mail
+#. odoo-python
+#: code:addons/ow_mail/wizards/ow_mail_connect_wizard.py:0
+msgid "Please fill in IMAP and SMTP hosts."
+msgstr ""
+
+#. module: ow_mail
+#. odoo-javascript
+#: code:addons/ow_mail/static/src/components/message_list/message_list.xml:0
+msgid "Previous"
+msgstr ""
+
+#. module: ow_mail
+#. odoo-javascript
+#: code:addons/ow_mail/static/src/components/message_viewer/message_viewer.xml:0
+msgid "Print"
+msgstr ""
+
+#. module: ow_mail
+#. odoo-javascript
+#: code:addons/ow_mail/static/src/components/compose_window/compose_window.xml:0
+msgid "Quote"
+msgstr ""
+
+#. module: ow_mail
+#. odoo-javascript
+#: code:addons/ow_mail/static/src/components/compose_window/compose_window.xml:0
+msgid "Redo"
+msgstr ""
+
+#. module: ow_mail
+#: model:ir.model.fields,field_description:ow_mail.field_ow_mail_compose__references
+msgid "References"
+msgstr ""
+
+#. module: ow_mail
+#. odoo-javascript
+#: code:addons/ow_mail/static/src/components/safe_mode_banner/safe_mode_banner.xml:0
+msgid ""
+"Remote content in this message has been blocked to protect your privacy."
+msgstr ""
+
+#. module: ow_mail
+#. odoo-javascript
+#: code:addons/ow_mail/static/src/components/compose_window/compose_window.xml:0
+msgid "Remove attachment"
+msgstr ""
+
+#. module: ow_mail
+#. odoo-javascript
+#: code:addons/ow_mail/static/src/components/compose_window/compose_window.xml:0
+msgid "Remove link"
+msgstr ""
+
+#. module: ow_mail
+#. odoo-javascript
+#: code:addons/ow_mail/static/src/components/folders_widget/folders_widget.xml:0
+msgid "Rename"
+msgstr ""
+
+#. module: ow_mail
+#. odoo-javascript
+#: code:addons/ow_mail/static/src/components/folders_widget/folders_widget.xml:0
+msgid "Rename selected folder"
+msgstr ""
+
+#. module: ow_mail
+#. odoo-javascript
+#: code:addons/ow_mail/static/src/components/message_list/message_list.xml:0
+#: code:addons/ow_mail/static/src/components/message_viewer/message_viewer.xml:0
+msgid "Reply"
+msgstr ""
+
+#. module: ow_mail
+#. odoo-javascript
+#: code:addons/ow_mail/static/src/components/message_viewer/message_viewer.xml:0
+msgid "Reply all"
+msgstr ""
+
+#. module: ow_mail
+#: model_terms:ir.ui.view,arch_db:ow_mail.view_ow_mail_connect_wizard_form
+msgid "SMTP"
+msgstr ""
+
+#. module: ow_mail
+#: model:ir.model.fields.selection,name:ow_mail.selection__ow_mail_account__smtp_encryption__ssl
+#: model:ir.model.fields.selection,name:ow_mail.selection__ow_mail_connect_wizard__smtp_encryption__ssl
+msgid "SSL/TLS"
+msgstr ""
+
+#. module: ow_mail
+#: model:ir.model.fields.selection,name:ow_mail.selection__ow_mail_account__smtp_encryption__starttls
+#: model:ir.model.fields.selection,name:ow_mail.selection__ow_mail_connect_wizard__smtp_encryption__starttls
+msgid "STARTTLS"
+msgstr ""
+
+#. module: ow_mail
+#. odoo-javascript
+#: code:addons/ow_mail/static/src/components/safe_mode_banner/safe_mode_banner.xml:0
+msgid "Safe Mode."
+msgstr ""
+
+#. module: ow_mail
+#. odoo-javascript
+#: code:addons/ow_mail/static/src/components/contacts/contacts.xml:0
+msgid "Save"
+msgstr ""
+
+#. module: ow_mail
+#. odoo-javascript
+#: code:addons/ow_mail/static/src/components/message_viewer/message_viewer.xml:0
+msgid "Save as Odoo contact"
+msgstr ""
+
+#. module: ow_mail
+#. odoo-javascript
+#: code:addons/ow_mail/static/src/components/message_viewer/message_viewer.xml:0
+msgid "Save sender"
+msgstr ""
+
+#. module: ow_mail
+#. odoo-javascript
+#: code:addons/ow_mail/static/src/components/folders_widget/folders_widget.xml:0
+msgid "Save the account and run a sync to load its folder tree."
+msgstr ""
+
+#. module: ow_mail
+#. odoo-javascript
+#: code:addons/ow_mail/static/src/components/message_viewer/message_viewer.xml:0
+msgid "Save to personal contacts"
+msgstr ""
+
+#. module: ow_mail
+#. odoo-javascript
+#: code:addons/ow_mail/static/src/components/contacts/contacts.xml:0
+msgid "Search contacts…"
+msgstr ""
+
+#. module: ow_mail
+#. odoo-javascript
+#: code:addons/ow_mail/static/src/components/message_list/message_list.xml:0
+msgid "Search operators"
+msgstr ""
+
+#. module: ow_mail
+#. odoo-javascript
+#: code:addons/ow_mail/static/src/components/message_list/message_list.xml:0
+msgid "Search — from: subject: has:attachment before:YYYY-MM-DD …"
+msgstr ""
+
+#. module: ow_mail
+#. odoo-javascript
+#: code:addons/ow_mail/static/src/components/folders_widget/folders_widget.xml:0
+msgid "Search…"
+msgstr ""
+
+#. module: ow_mail
+#. odoo-javascript
+#: code:addons/ow_mail/static/src/components/contacts/contacts.xml:0
+msgid "Select a contact or add a new one."
+msgstr ""
+
+#. module: ow_mail
+#. odoo-javascript
+#: code:addons/ow_mail/static/src/components/message_viewer/message_viewer.xml:0
+msgid "Select a message to read"
+msgstr ""
+
+#. module: ow_mail
+#. odoo-javascript
+#: code:addons/ow_mail/static/src/components/message_list/message_list.xml:0
+msgid "Select all"
+msgstr ""
+
+#. module: ow_mail
+#. odoo-javascript
+#: code:addons/ow_mail/static/src/components/compose_window/compose_window.xml:0
+msgid "Send"
+msgstr ""
+
+#. module: ow_mail
+#: model:ir.model.fields,field_description:ow_mail.field_ow_mail_account__from_name_mode
+msgid "Sender name"
+msgstr ""
+
+#. module: ow_mail
+#: model:ir.model.fields.selection,name:ow_mail.selection__ow_mail_folder__kind__sent
+msgid "Sent"
+msgstr ""
+
+#. module: ow_mail
+#: model:ir.model.fields,field_description:ow_mail.field_ow_mail_account__sent_folder_id
+msgid "Sent Folder"
+msgstr ""
+
+#. module: ow_mail
+#: model:ir.model.fields,field_description:ow_mail.field_ow_mail_account__sequence
+#: model:ir.model.fields,field_description:ow_mail.field_ow_mail_tag__sequence
+msgid "Sequence"
+msgstr ""
+
+#. module: ow_mail
+#. odoo-javascript
+#: code:addons/ow_mail/static/src/components/safe_mode_banner/safe_mode_banner.xml:0
+msgid "Show Once"
+msgstr ""
+
+#. module: ow_mail
+#: model_terms:ir.ui.view,arch_db:ow_mail.view_ow_mail_account_form
+msgid "Signature"
+msgstr ""
+
+#. module: ow_mail
+#: model:ir.model.fields,field_description:ow_mail.field_ow_mail_account__signature_html
+msgid "Signature Html"
+msgstr ""
+
+#. module: ow_mail
+#: model:ir.model.fields,field_description:ow_mail.field_ow_mail_account__signature_enabled
+msgid "Include signature"
+msgstr ""
+
+#. module: ow_mail
+#: model:ir.model.fields,help:ow_mail.field_ow_mail_account__signature_enabled
+msgid "If unchecked, no signature is inserted in new compose, reply or forward."
+msgstr ""
+
+#. module: ow_mail
+#: model:ir.model.fields,field_description:ow_mail.field_ow_mail_account__signature_placement
+msgid "Signature placement"
+msgstr ""
+
+#. module: ow_mail
+#: model:ir.model.fields,help:ow_mail.field_ow_mail_account__signature_placement
+msgid "Where the signature is inserted in replies and forwards relative to the quoted original."
+msgstr ""
+
+#. module: ow_mail
+#: model:ir.model.fields.selection,name:ow_mail.selection__ow_mail_account__signature_placement__above
+msgid "Above quoted message"
+msgstr ""
+
+#. module: ow_mail
+#: model:ir.model.fields.selection,name:ow_mail.selection__ow_mail_account__signature_placement__below
+msgid "Below quoted message"
+msgstr ""
+
+#. module: ow_mail
+#. odoo-javascript
+#: code:addons/ow_mail/static/src/components/compose_window/compose_window.xml:0
+msgid "Size"
+msgstr ""
+
+#. module: ow_mail
+#: model:ir.model.fields,field_description:ow_mail.field_ow_mail_account__smtp_encryption
+#: model:ir.model.fields,field_description:ow_mail.field_ow_mail_connect_wizard__smtp_encryption
+msgid "Smtp Encryption"
+msgstr ""
+
+#. module: ow_mail
+#: model:ir.model.fields,field_description:ow_mail.field_ow_mail_account__smtp_host
+#: model:ir.model.fields,field_description:ow_mail.field_ow_mail_connect_wizard__smtp_host
+msgid "Smtp Host"
+msgstr ""
+
+#. module: ow_mail
+#: model:ir.model.fields,field_description:ow_mail.field_ow_mail_account__smtp_password
+msgid "Smtp Password"
+msgstr ""
+
+#. module: ow_mail
+#: model:ir.model.fields,field_description:ow_mail.field_ow_mail_account__smtp_password_enc
+msgid "Smtp Password Enc"
+msgstr ""
+
+#. module: ow_mail
+#: model:ir.model.fields,field_description:ow_mail.field_ow_mail_account__smtp_port
+#: model:ir.model.fields,field_description:ow_mail.field_ow_mail_connect_wizard__smtp_port
+msgid "Smtp Port"
+msgstr ""
+
+#. module: ow_mail
+#: model:ir.model.fields.selection,name:ow_mail.selection__ow_mail_folder__kind__spam
+msgid "Spam"
+msgstr ""
+
+#. module: ow_mail
+#: model:ir.model.fields,field_description:ow_mail.field_ow_mail_account__spam_folder_id
+msgid "Spam Folder"
+msgstr ""
+
+#. module: ow_mail
+#: model_terms:ir.ui.view,arch_db:ow_mail.view_ow_mail_account_form
+msgid "Special Folders"
+msgstr ""
+
+#. module: ow_mail
+#. odoo-javascript
+#: code:addons/ow_mail/static/src/components/message_list/message_list.xml:0
+msgid "Star"
+msgstr ""
+
+#. module: ow_mail
+#: model:ir.model.fields,field_description:ow_mail.field_ow_mail_account__state
+msgid "State"
+msgstr ""
+
+#. module: ow_mail
+#. odoo-javascript
+#: code:addons/ow_mail/static/src/components/compose_window/compose_window.xml:0
+msgid "Strikethrough"
+msgstr ""
+
+#. module: ow_mail
+#. odoo-javascript
+#: code:addons/ow_mail/static/src/components/compose_window/compose_window.xml:0
+#: model:ir.model.fields,field_description:ow_mail.field_ow_mail_compose__subject
+msgid "Subject"
+msgstr ""
+
+#. module: ow_mail
+#: model:ir.model.fields,field_description:ow_mail.field_ow_mail_folder__subscribed
+msgid "Subscribed"
+msgstr ""
+
+#. module: ow_mail
+#. odoo-javascript
+#: code:addons/ow_mail/static/src/components/sidebar/sidebar.xml:0
+msgid "Sync this mailbox"
+msgstr ""
+
+#. module: ow_mail
+#: model:ir.model.constraint,message:ow_mail.constraint_ow_mail_tag_user_name_uniq
+msgid "Tag name must be unique per user."
+msgstr ""
+
+#. module: ow_mail
+#: model:ir.actions.act_window,name:ow_mail.action_ow_mail_tag
+msgid "Tags"
+msgstr ""
+
+#. module: ow_mail
+#: model_terms:ir.ui.view,arch_db:ow_mail.view_ow_mail_account_form
+msgid "Test Incoming Server"
+msgstr ""
+
+#. module: ow_mail
+#: model_terms:ir.ui.view,arch_db:ow_mail.view_ow_mail_account_form
+msgid "Test Outgoing Server"
+msgstr ""
+
+#. module: ow_mail
+#. odoo-javascript
+#: code:addons/ow_mail/static/src/components/compose_window/compose_window.xml:0
+msgid "Text color"
+msgstr ""
+
+#. module: ow_mail
+#: model:ir.model.constraint,message:ow_mail.constraint_ow_mail_contact_user_email_uniq
+msgid "This email is already in your contacts."
+msgstr ""
+
+#. module: ow_mail
+#. odoo-javascript
+#: code:addons/ow_mail/static/src/components/message_viewer/message_viewer.xml:0
+msgid "This is a draft message."
+msgstr ""
+
+#. module: ow_mail
+#: model:ir.model.fields,field_description:ow_mail.field_ow_mail_compose__to
+msgid "To"
+msgstr ""
+
+#. module: ow_mail
+#. odoo-javascript
+#: code:addons/ow_mail/static/src/components/message_viewer/message_viewer.xml:0
+msgid "To:"
+msgstr ""
+
+#. module: ow_mail
+#. odoo-javascript
+#: code:addons/ow_mail/static/src/components/message_list/message_list.xml:0
+msgid "Toggle conversation view"
+msgstr ""
+
+#. module: ow_mail
+#. odoo-javascript
+#: code:addons/ow_mail/static/src/components/message_list/message_list.xml:0
+msgid "Toggle sort order"
+msgstr ""
+
+#. module: ow_mail
+#: model:ir.model.fields,field_description:ow_mail.field_ow_mail_folder__total_count
+msgid "Total Count"
+msgstr ""
+
+#. module: ow_mail
+#: model:ir.model.fields.selection,name:ow_mail.selection__ow_mail_folder__kind__trash
+msgid "Trash"
+msgstr ""
+
+#. module: ow_mail
+#: model:ir.model.fields,field_description:ow_mail.field_ow_mail_account__trash_folder_id
+msgid "Trash Folder"
+msgstr ""
+
+#. module: ow_mail
+#. odoo-javascript
+#: code:addons/ow_mail/static/src/components/safe_mode_banner/safe_mode_banner.xml:0
+msgid "Trust Sender"
+msgstr ""
+
+#. module: ow_mail
+#. odoo-javascript
+#: code:addons/ow_mail/static/src/components/compose_window/compose_window.xml:0
+msgid "Underline"
+msgstr ""
+
+#. module: ow_mail
+#. odoo-javascript
+#: code:addons/ow_mail/static/src/components/compose_window/compose_window.xml:0
+msgid "Undo"
+msgstr ""
+
+#. module: ow_mail
+#: model:ir.model.fields,field_description:ow_mail.field_ow_mail_folder__unread_count
+msgid "Unread Count"
+msgstr ""
+
+#. module: ow_mail
+#. odoo-javascript
+#: code:addons/ow_mail/static/src/components/message_list/message_list.xml:0
+msgid "Use quotes for phrases:"
+msgstr ""
+
+#. module: ow_mail
+#: model:ir.model.fields,field_description:ow_mail.field_ow_mail_account__user_id
+#: model:ir.model.fields,field_description:ow_mail.field_ow_mail_contact__user_id
+#: model:ir.model.fields,field_description:ow_mail.field_ow_mail_folder__user_id
+#: model:ir.model.fields,field_description:ow_mail.field_ow_mail_tag__user_id
+#: model:ir.model.fields,field_description:ow_mail.field_ow_mail_trusted_sender__user_id
+msgid "User"
+msgstr ""
+
+#. module: ow_mail
+#. odoo-javascript
+#: code:addons/ow_mail/static/src/components/message_viewer/message_viewer.xml:0
+msgid "View original"
+msgstr ""
+
+#. module: ow_mail
+#. odoo-javascript
+#: code:addons/ow_mail/static/src/components/message_list/message_list.xml:0
+msgid "before:YYYY-MM-DD"
+msgstr ""
+
+#. module: ow_mail
+#. odoo-javascript
+#: code:addons/ow_mail/static/src/components/message_list/message_list.xml:0
+msgid "body:"
+msgstr ""
+
+#. module: ow_mail
+#. odoo-javascript
+#: code:addons/ow_mail/static/src/components/message_list/message_list.xml:0
+msgid "cc:"
+msgstr ""
+
+#. module: ow_mail
+#: model_terms:ir.ui.view,arch_db:ow_mail.view_ow_mail_account_form
+msgid "e.g. Work"
+msgstr ""
+
+#. module: ow_mail
+#. odoo-javascript
+#: code:addons/ow_mail/static/src/components/message_list/message_list.xml:0
+msgid "from:"
+msgstr ""
+
+#. module: ow_mail
+#. odoo-javascript
+#: code:addons/ow_mail/static/src/components/message_list/message_list.xml:0
+msgid "has:attachment"
+msgstr ""
+
+#. module: ow_mail
+#. odoo-javascript
+#: code:addons/ow_mail/static/src/components/message_list/message_list.xml:0
+msgid "is:read"
+msgstr ""
+
+#. module: ow_mail
+#. odoo-javascript
+#: code:addons/ow_mail/static/src/components/message_list/message_list.xml:0
+msgid "is:starred"
+msgstr ""
+
+#. module: ow_mail
+#. odoo-javascript
+#: code:addons/ow_mail/static/src/components/message_list/message_list.xml:0
+msgid "is:unread"
+msgstr ""
+
+#. module: ow_mail
+#. odoo-javascript
+#: code:addons/ow_mail/static/src/components/message_list/message_list.xml:0
+msgid "label:"
+msgstr ""
+
+#. module: ow_mail
+#. odoo-javascript
+#: code:addons/ow_mail/static/src/components/message_viewer/message_viewer.xml:0
+msgid "messages"
+msgstr ""
+
+#. module: ow_mail
+#. odoo-javascript
+#: code:addons/ow_mail/static/src/components/message_list/message_list.xml:0
+msgid "newer_than:30d"
+msgstr ""
+
+#. module: ow_mail
+#. odoo-javascript
+#: code:addons/ow_mail/static/src/components/message_list/message_list.xml:0
+msgid "of"
+msgstr ""
+
+#. module: ow_mail
+#. odoo-javascript
+#: code:addons/ow_mail/static/src/components/message_list/message_list.xml:0
+msgid "older_than:7d"
+msgstr ""
+
+#. module: ow_mail
+#. odoo-javascript
+#: code:addons/ow_mail/static/src/components/message_list/message_list.xml:0
+msgid "on:YYYY-MM-DD"
+msgstr ""
+
+#. module: ow_mail
+#. odoo-javascript
+#: code:addons/ow_mail/static/src/components/message_list/message_list.xml:0
+msgid "selected"
+msgstr ""
+
+#. module: ow_mail
+#. odoo-javascript
+#: code:addons/ow_mail/static/src/components/message_list/message_list.xml:0
+msgid "since:YYYY-MM-DD"
+msgstr ""
+
+#. module: ow_mail
+#. odoo-javascript
+#: code:addons/ow_mail/static/src/components/message_list/message_list.xml:0
+msgid "subject:"
+msgstr ""
+
+#. module: ow_mail
+#. odoo-javascript
+#: code:addons/ow_mail/static/src/components/message_list/message_list.xml:0
+msgid "subject:\"weekly report\""
+msgstr ""
+
+#. module: ow_mail
+#. odoo-javascript
+#: code:addons/ow_mail/static/src/components/message_list/message_list.xml:0
+msgid "to"
+msgstr ""
+
+#. module: ow_mail
+#. odoo-javascript
+#: code:addons/ow_mail/static/src/components/message_list/message_list.xml:0
+msgid "to:"
+msgstr ""
+
+#. module: ow_mail
+#. odoo-javascript
+#: code:addons/ow_mail/static/src/components/message_viewer/message_viewer.xml:0
+msgid "· Cc:"
+msgstr ""
+
+#. module: ow_mail
+#. odoo-javascript
+#: code:addons/ow_mail/static/src/components/message_list/message_list.xml:0
+msgid "— address substring"
+msgstr ""
+
+#. module: ow_mail
+#. odoo-javascript
+#: code:addons/ow_mail/static/src/components/message_list/message_list.xml:0
+msgid "— messages with a tag"
+msgstr ""
+
+#. module: ow_mail
+#. odoo-javascript
+#: code:addons/ow_mail/static/src/components/message_list/message_list.xml:0
+msgid "— text in field"
+msgstr ""

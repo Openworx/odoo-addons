@@ -1,0 +1,242 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+
+<t t-name="ow_mail.MessageViewer">
+    <section class="o-ow-viewer flex-grow-1 d-flex flex-column">
+        <t t-if="!state.selectedMessage">
+            <div class="d-flex flex-grow-1 justify-content-center align-items-center text-muted">
+                <div class="text-center">
+                    <i class="fa fa-envelope-o fa-3x mb-3"/>
+                    <div>Select a message to read</div>
+                </div>
+            </div>
+        </t>
+        <t t-else="">
+            <div class="o-ow-viewer-toolbar border-bottom px-3 py-2 d-flex gap-2 flex-wrap">
+                <button class="btn btn-sm btn-primary" t-on-click="() => this.onReply(false)">
+                    <i class="fa fa-reply"/> Reply
+                </button>
+                <button class="btn btn-sm btn-light" t-on-click="() => this.onReply(true)">
+                    <i class="fa fa-reply-all"/> Reply all
+                </button>
+                <button class="btn btn-sm btn-light" t-on-click="onForward">
+                    <i class="fa fa-mail-forward"/> Forward
+                </button>
+                <div class="border-start mx-1"/>
+                <button class="btn btn-sm btn-light" t-on-click="onToggleRead"
+                        t-att-title="state.selectedMessage.flags.seen ? 'Mark unread' : 'Mark read'">
+                    <i class="fa" t-att-class="state.selectedMessage.flags.seen ? 'fa-envelope' : 'fa-envelope-open-o'"/>
+                </button>
+                <button class="btn btn-sm btn-light" t-on-click="onToggleFlag"
+                        t-att-title="state.selectedMessage.flags.flagged ? 'Remove star' : 'Star'">
+                    <i class="fa" t-att-class="state.selectedMessage.flags.flagged ? 'fa-star text-warning' : 'fa-star-o'"/>
+                </button>
+                <select class="form-select form-select-sm" style="width:auto;" t-on-change="onMove">
+                    <option value="">Move to…</option>
+                    <t t-foreach="moveTargetFolders" t-as="f" t-key="f.id">
+                        <option t-att-value="f.id" t-esc="f.name"/>
+                    </t>
+                </select>
+                <div class="flex-grow-1"/>
+                <button class="btn btn-sm btn-light" t-on-click="onPrint" title="Print">
+                    <i class="fa fa-print"/>
+                </button>
+                <button class="btn btn-sm btn-light" t-on-click="onViewSource" title="View original">
+                    <i class="fa fa-code"/>
+                </button>
+                <button class="btn btn-sm btn-light"
+                        t-if="state.selectedMessage.partner_id"
+                        t-on-click="onOpenContact" title="Open contact">
+                    <i class="fa fa-user"/>
+                </button>
+                <div class="dropdown">
+                    <button class="btn btn-sm btn-success dropdown-toggle" data-bs-toggle="dropdown"
+                            aria-expanded="false" title="Save sender">
+                        <i class="fa fa-user-plus"/>
+                    </button>
+                    <ul class="dropdown-menu dropdown-menu-end">
+                        <li>
+                            <button class="dropdown-item" t-on-click="onSaveContact">
+                                <i class="fa fa-address-card-o me-2"/> Save to personal contacts
+                            </button>
+                        </li>
+                        <li>
+                            <button class="dropdown-item" t-on-click="onSavePartner">
+                                <i class="fa fa-users me-2"/> Save as Odoo contact
+                            </button>
+                        </li>
+                    </ul>
+                </div>
+                <button class="btn btn-sm btn-danger" t-on-click="onDelete" title="Delete">
+                    <i class="fa fa-trash"/>
+                </button>
+            </div>
+            <!-- Conversation thread view -->
+            <t t-if="isThreadView">
+                <div class="o-ow-thread-subject px-3 py-2 border-bottom d-flex align-items-center">
+                    <h5 class="mb-0 flex-grow-1" t-esc="threadSubject"/>
+                    <span class="badge bg-secondary ms-2"><t t-esc="state.threadMessages.length"/> messages</span>
+                </div>
+                <div class="o-ow-thread-body flex-grow-1 overflow-auto">
+                    <t t-foreach="state.threadMessages" t-as="tm" t-key="tm.folder_id + ':' + tm.uid">
+                        <div class="o-ow-thread-message border-bottom">
+                            <div class="o-ow-thread-msg-header px-3 py-2 d-flex align-items-center"
+                                 t-att-class="{'o-ow-thread-msg-collapsed': !isThreadMsgExpanded(tm)}"
+                                 t-on-click="() => this.toggleThreadMsg(tm)">
+                                <AvatarInitials name="tm.from_name" email="tm.from_email"/>
+                                <div class="ms-2 flex-grow-1 overflow-hidden">
+                                    <div class="d-flex align-items-center">
+                                        <strong class="text-truncate" t-esc="tm.from_name"/>
+                                        <small class="text-muted ms-1" t-if="!isThreadMsgExpanded(tm)">
+                                            — <t t-esc="tm.to"/>
+                                        </small>
+                                    </div>
+                                    <t t-if="isThreadMsgExpanded(tm)">
+                                        <div class="small text-muted">
+                                            To: <t t-esc="tm.to"/>
+                                            <t t-if="tm.cc"> · Cc: <t t-esc="tm.cc"/></t>
+                                        </div>
+                                    </t>
+                                </div>
+                                <small class="text-muted ms-2 flex-shrink-0" t-esc="formatThreadDate(tm.date)"/>
+                                <i class="fa ms-2 text-muted"
+                                   t-att-class="isThreadMsgExpanded(tm) ? 'fa-chevron-up' : 'fa-chevron-down'"/>
+                            </div>
+                            <t t-if="isThreadMsgExpanded(tm)">
+                                <div class="o-ow-thread-msg-body px-3">
+                                    <iframe t-att-data-thread-iframe="tm.folder_id + ':' + tm.uid"
+                                            class="w-100" sandbox="allow-same-origin"
+                                            style="border:0;min-height:100px;"/>
+                                </div>
+                                <div class="o-ow-viewer-attachments px-3 pb-3" t-if="tm.attachments and tm.attachments.length">
+                                    <div class="small text-muted mb-1">Attachments</div>
+                                    <div class="d-flex flex-wrap gap-2">
+                                        <t t-foreach="tm.attachments" t-as="a" t-key="a.section">
+                                            <div class="o-ow-att card p-2 d-flex flex-row align-items-center">
+                                                <i class="fa fa-2x me-2"
+                                                   t-att-class="a.mimetype &amp;&amp; a.mimetype.startsWith('image/') ? 'fa-image' : a.mimetype === 'application/pdf' ? 'fa-file-pdf-o' : 'fa-file-o'"/>
+                                                <div class="me-2">
+                                                    <div class="small fw-bold text-truncate" style="max-width:180px;" t-esc="a.name"/>
+                                                    <div class="text-muted small"><t t-esc="a.mimetype"/></div>
+                                                </div>
+                                                <a class="btn btn-sm btn-light" t-att-href="a.url" target="_blank" title="Open">
+                                                    <i class="fa fa-external-link"/>
+                                                </a>
+                                                <a class="btn btn-sm btn-light" t-att-href="a.url + '?download=1'" title="Download">
+                                                    <i class="fa fa-download"/>
+                                                </a>
+                                            </div>
+                                        </t>
+                                    </div>
+                                </div>
+                            </t>
+                        </div>
+                    </t>
+                </div>
+            </t>
+
+            <!-- Single message view -->
+            <t t-else="">
+                <div class="o-ow-viewer-head px-3 py-2">
+                    <h4 class="mb-2 d-flex align-items-center">
+                        <span t-esc="state.selectedMessage.subject"/>
+                        <button t-if="isDraft" class="btn btn-sm btn-link ms-2 p-0" t-on-click="onEditDraft"
+                                title="Edit draft">
+                            <i class="fa fa-pencil-square-o text-info"/>
+                        </button>
+                    </h4>
+                    <t t-if="isDraft">
+                        <div class="alert alert-info py-2 px-3 d-flex align-items-center mb-2">
+                            <i class="fa fa-info-circle me-2"/>
+                            <span>This is a draft message.</span>
+                            <button class="btn btn-sm btn-info ms-2" t-on-click="onEditDraft">Edit</button>
+                        </div>
+                    </t>
+                    <div class="d-flex align-items-center">
+                        <AvatarInitials name="state.selectedMessage.from_name"
+                                        email="state.selectedMessage.from_email"/>
+                        <div class="ms-2 flex-grow-1">
+                            <div>
+                                <strong t-esc="state.selectedMessage.from_name"/>
+                                <span class="text-muted ms-1">&lt;<t t-esc="state.selectedMessage.from_email"/>&gt;</span>
+                            </div>
+                            <div class="small text-muted">
+                                To: <t t-esc="state.selectedMessage.to"/>
+                                <t t-if="state.selectedMessage.cc">
+                                    · Cc: <t t-esc="state.selectedMessage.cc"/>
+                                </t>
+                            </div>
+                        </div>
+                        <small class="text-muted" t-esc="state.selectedMessage.date"/>
+                    </div>
+                </div>
+                <t t-if="state.selectedMessage.has_remote_content and !local.showRemote">
+                    <SafeModeBanner onShowOnce="() => this.onShowOnce()"
+                                    onTrustSender="() => this.onTrustSender()"/>
+                </t>
+                <t t-if="state.selectedMessage.invite">
+                    <div class="o-ow-invite mx-3 my-2 p-3 border rounded">
+                        <div class="d-flex align-items-start">
+                            <i class="fa fa-calendar-o fa-2x me-3 text-primary"/>
+                            <div class="flex-grow-1">
+                                <div class="fw-bold mb-1">
+                                    <t t-esc="state.selectedMessage.invite.summary or 'Invitation'"/>
+                                </div>
+                                <div class="small text-muted" t-if="formatInviteWhen()">
+                                    <i class="fa fa-clock-o me-1"/>
+                                    <t t-esc="formatInviteWhen()"/>
+                                </div>
+                                <div class="small text-muted" t-if="state.selectedMessage.invite.location">
+                                    <i class="fa fa-map-marker me-1"/>
+                                    <t t-esc="state.selectedMessage.invite.location"/>
+                                </div>
+                                <div class="small text-muted" t-if="state.selectedMessage.invite.organizer_email">
+                                    <i class="fa fa-user me-1"/>
+                                    <t t-esc="state.selectedMessage.invite.organizer_name or state.selectedMessage.invite.organizer_email"/>
+                                    <span class="ms-1">&lt;<t t-esc="state.selectedMessage.invite.organizer_email"/>&gt;</span>
+                                </div>
+                            </div>
+                            <div class="d-flex flex-column gap-1">
+                                <button class="btn btn-sm btn-primary" t-on-click="onAddToCalendar">
+                                    <i class="fa fa-calendar-plus-o me-1"/> Add to Calendar
+                                </button>
+                                <a class="btn btn-sm btn-light" t-att-href="inviteIcsUrl()"
+                                   t-if="inviteIcsUrl()" title="Download .ics">
+                                    <i class="fa fa-download me-1"/> .ics
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </t>
+                <div class="o-ow-viewer-body flex-grow-1">
+                    <iframe t-ref="iframe" class="w-100 h-100" sandbox="allow-same-origin"
+                            style="border:0;"/>
+                </div>
+                <div class="o-ow-viewer-attachments border-top p-2"
+                     t-if="state.selectedMessage.attachments.length">
+                    <div class="small text-muted mb-1">Attachments</div>
+                    <div class="d-flex flex-wrap gap-2">
+                        <t t-foreach="state.selectedMessage.attachments" t-as="a" t-key="a.section">
+                            <div class="o-ow-att card p-2 d-flex flex-row align-items-center">
+                                <i class="fa fa-2x me-2"
+                                   t-att-class="a.mimetype &amp;&amp; a.mimetype.startsWith('image/') ? 'fa-image' : a.mimetype === 'application/pdf' ? 'fa-file-pdf-o' : 'fa-file-o'"/>
+                                <div class="me-2">
+                                    <div class="small fw-bold text-truncate" style="max-width:180px;" t-esc="a.name"/>
+                                    <div class="text-muted small"><t t-esc="a.mimetype"/></div>
+                                </div>
+                                <a class="btn btn-sm btn-light" t-att-href="a.url" target="_blank" title="Open">
+                                    <i class="fa fa-external-link"/>
+                                </a>
+                                <a class="btn btn-sm btn-light" t-att-href="a.url + '?download=1'" title="Download">
+                                    <i class="fa fa-download"/>
+                                </a>
+                            </div>
+                        </t>
+                    </div>
+                </div>
+            </t>
+        </t>
+    </section>
+</t>
+
+</templates>

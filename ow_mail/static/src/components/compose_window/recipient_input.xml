@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+
+<t t-name="ow_mail.RecipientInput">
+    <div class="o-ow-recipient-wrap position-relative">
+        <input class="form-control form-control-sm"
+               t-att-placeholder="props.placeholder"
+               t-att-value="props.value"
+               t-ref="input"
+               t-on-input="onInput"
+               t-on-focus="onFocus"
+               t-on-blur="onBlur"
+               t-on-keydown="onKeyDown"/>
+        <div t-if="local.open &amp;&amp; local.suggestions.length"
+             class="o-ow-suggest dropdown-menu show w-100">
+            <t t-foreach="local.suggestions" t-as="s" t-key="s.source + ':' + s.id">
+                <button type="button"
+                        class="dropdown-item d-flex align-items-center gap-2 small"
+                        t-att-class="{'active': s_index === local.highlight}"
+                        t-on-mousedown.prevent="() => this.pick(s)">
+                    <span class="flex-grow-1 text-truncate">
+                        <strong t-esc="s.name || s.email"/>
+                        <span t-if="s.name &amp;&amp; s.name !== s.email" class="text-muted">
+                            <t t-esc="' &lt;' + s.email + '&gt;'"/>
+                        </span>
+                        <span t-if="s.company" class="text-muted">
+                            <t t-esc="' · ' + s.company"/>
+                        </span>
+                    </span>
+                    <span t-if="s.source === 'partner'"
+                          class="badge rounded-pill text-bg-light"
+                          title="From Odoo Contacts">Odoo</span>
+                </button>
+            </t>
+        </div>
+    </div>
+</t>
+
+</templates>

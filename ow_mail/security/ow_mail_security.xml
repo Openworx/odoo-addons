@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+        <record id="rule_ow_mail_account_user" model="ir.rule">
+            <field name="name">OW Mail account: own only</field>
+            <field name="model_id" ref="model_ow_mail_account"/>
+            <field name="domain_force">[('user_id','=',user.id)]</field>
+            <field name="groups" eval="[(4, ref('base.group_user'))]"/>
+        </record>
+        <record id="rule_ow_mail_folder_user" model="ir.rule">
+            <field name="name">OW Mail folder: own only</field>
+            <field name="model_id" ref="model_ow_mail_folder"/>
+            <field name="domain_force">[('account_id.user_id','=',user.id)]</field>
+            <field name="groups" eval="[(4, ref('base.group_user'))]"/>
+        </record>
+        <record id="rule_ow_mail_tag_user" model="ir.rule">
+            <field name="name">OW Mail tag: own only</field>
+            <field name="model_id" ref="model_ow_mail_tag"/>
+            <field name="domain_force">[('user_id','=',user.id)]</field>
+            <field name="groups" eval="[(4, ref('base.group_user'))]"/>
+        </record>
+        <record id="rule_ow_mail_contact_user" model="ir.rule">
+            <field name="name">OW Mail contact: own only</field>
+            <field name="model_id" ref="model_ow_mail_contact"/>
+            <field name="domain_force">[('user_id','=',user.id)]</field>
+            <field name="groups" eval="[(4, ref('base.group_user'))]"/>
+        </record>
+        <record id="rule_ow_mail_trusted_sender_user" model="ir.rule">
+            <field name="name">OW Mail trusted sender: own only</field>
+            <field name="model_id" ref="model_ow_mail_trusted_sender"/>
+            <field name="domain_force">[('user_id','=',user.id)]</field>
+            <field name="groups" eval="[(4, ref('base.group_user'))]"/>
+        </record>
+    </data>
+</odoo>

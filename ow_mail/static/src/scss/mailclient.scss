@@ -1,0 +1,504 @@
+.o-ow-mail {
+    background: #f6f7f9;
+    min-height: 0;
+
+    .o-ow-topbar {
+        background: #fff;
+        .o-ow-brand { font-size: 1.1rem; }
+    }
+
+    .o-ow-body { min-height: 0; }
+
+    .o-ow-sidebar {
+        width: 220px;
+        min-width: 200px;
+        flex: 0 0 220px;
+        background: #fafafa;
+        transition: flex-basis 0.15s ease, width 0.15s ease;
+        .o-ow-folder {
+            cursor: pointer;
+            border-radius: 6px;
+            margin: 1px 4px;
+            &:hover { background: #eef; }
+            &.active { background: #dce8ff; font-weight: 600; }
+            &.o-ow-drop-target {
+                outline: 2px dashed #0d6efd;
+                background: #e8f0ff;
+            }
+        }
+        .o-ow-all-mailboxes.active { background: #dce8ff; }
+
+        .o-ow-account-dot {
+            display: inline-block;
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            flex: 0 0 auto;
+        }
+        .o-ow-count {
+            display: inline-block;
+            flex: 0 0 auto;
+            background: #e9ecef;
+            color: #1f2937;
+            font-size: 0.72rem;
+            font-weight: 600;
+            font-variant-numeric: tabular-nums;
+            line-height: 1;
+            padding: 3px 7px;
+            border-radius: 10px;
+            white-space: nowrap;
+        }
+
+        &.o-ow-sidebar-collapsed {
+            width: 56px;
+            min-width: 56px;
+            flex: 0 0 56px;
+
+            .o-ow-all-mailboxes,
+            .o-ow-contacts-btn {
+                text-align: center !important;
+                padding-left: 0;
+                padding-right: 0;
+                i { margin: 0 !important; }
+            }
+            .o-ow-compose-btn > span,
+            .o-ow-all-mailboxes > *:not(i),
+            .o-ow-contacts-btn > *:not(i),
+            .o-ow-account-header > strong,
+            .o-ow-account-header > .o-ow-count,
+            .o-ow-account-header > .o-ow-account-sync,
+            .o-ow-folder > span,
+            .o-ow-folder .badge,
+            .o-ow-tags > .text-muted {
+                display: none !important;
+            }
+            .o-ow-account-header {
+                justify-content: center;
+                padding: 4px 0 !important;
+            }
+            .o-ow-account-header .o-ow-account-dot {
+                width: 14px;
+                height: 14px;
+            }
+            .o-ow-folder {
+                justify-content: center;
+                padding-left: 0.25rem !important;
+                padding-right: 0.25rem !important;
+                i { margin: 0 !important; font-size: 1.1rem; }
+            }
+            .o-ow-tags {
+                display: flex;
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+        }
+    }
+
+    .o-ow-list {
+        flex: 0 0 520px;
+        min-width: 480px;
+        background: #fff;
+    }
+
+    .o-ow-list-toolbar {
+        position: relative;
+        z-index: 3;
+    }
+
+    .o-ow-list-header {
+        position: relative;
+        z-index: 2;
+    }
+    .o-ow-bulk-bar {
+        background: #eef3ff;
+        position: relative;
+        z-index: 2;
+    }
+    .o-ow-msg-check {
+        cursor: pointer;
+        align-self: center;
+    }
+    .o-ow-list-item {
+        cursor: pointer;
+        position: relative;
+        &.o-ow-dragging { opacity: 0.5; }
+        &:hover { background: #f2f5ff; }
+        &.active { background: #e3edff; }
+        &.o-ow-unread { background: #fcfcff; border-left: 3px solid #0d6efd; }
+
+        .o-ow-hover-actions {
+            position: absolute;
+            right: 28px;
+            top: 26px;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.12s ease;
+            background: transparent;
+            z-index: 1;
+        }
+        &:hover .o-ow-hover-actions {
+            opacity: 1;
+            pointer-events: auto;
+        }
+        .o-ow-hover-btn {
+            width: 24px;
+            height: 24px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            border: 0;
+            padding: 0;
+            background: transparent;
+            color: #6b7280;
+            border-radius: 5px;
+            box-shadow: none;
+            transition: background 0.12s ease, color 0.12s ease;
+
+            i { font-size: 12px; }
+
+            &:hover {
+                background: rgba(0, 0, 0, 0.06);
+                color: #1f2937;
+            }
+
+            &.o-ow-delete:hover {
+                background: rgba(220, 38, 38, 0.08);
+                color: #b91c1c;
+            }
+        }
+    }
+
+    .o-ow-avatar {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 36px; height: 36px;
+        border-radius: 50%;
+        color: #fff; font-weight: 600;
+        font-size: 0.85rem;
+        flex-shrink: 0;
+    }
+
+    .o-ow-viewer {
+        background: #fff;
+        min-width: 0;
+        flex: 1 1 auto;
+    }
+    .o-ow-invite {
+        background: #f5f9ff;
+        border-color: #c6dcff !important;
+        border-left: 4px solid #0d6efd !important;
+    }
+    .o-ow-viewer-body { min-height: 0; }
+
+    /* Thread list grouping */
+    .o-ow-thread-header {
+        cursor: pointer;
+        &:hover { background: #f2f5ff; }
+    }
+    .o-ow-thread-toggle {
+        width: 14px;
+        text-align: center;
+        font-size: 0.75rem;
+        flex-shrink: 0;
+    }
+    .o-ow-thread-count {
+        background: #6c757d;
+        color: #fff;
+        border-radius: 10px;
+        font-size: 0.7rem;
+        padding: 1px 6px;
+        flex-shrink: 0;
+    }
+    .o-ow-thread-child {
+        border-left: 3px solid #dee2e6;
+        background: #fafbfc;
+        cursor: pointer;
+        &:hover { background: #f0f3ff; }
+        &.active { background: #e3edff; }
+    }
+
+    /* Conversation viewer */
+    .o-ow-thread-subject {
+        background: #fafbfc;
+    }
+    .o-ow-thread-message {
+        .o-ow-thread-msg-header {
+            cursor: pointer;
+            &:hover { background: #f8f9fb; }
+            &.o-ow-thread-msg-collapsed {
+                background: #fafbfc;
+            }
+        }
+        .o-ow-thread-msg-body {
+            padding-bottom: 8px;
+        }
+    }
+
+    .o-ow-compose-stack {
+        position: fixed;
+        right: 20px;
+        bottom: 0;
+        display: flex;
+        gap: 10px;
+        z-index: 1050;
+    }
+    .o-ow-compose {
+        width: 480px;
+        max-width: 92vw;
+        height: 520px;
+        display: flex;
+        flex-direction: column;
+
+        .o-ow-compose-inner {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+        }
+        &.o-ow-compose-min {
+            height: auto;
+            .o-ow-compose-inner { height: auto; }
+        }
+        .o-ow-compose-header {
+            cursor: pointer;
+            background: #fff;
+        }
+        .o-ow-compose-body {
+            min-height: 180px;
+            outline: none;
+            font-size: 0.92rem;
+            line-height: 1.5;
+        }
+        .o-ow-compose-toolbar {
+            background: #fafbfc;
+            flex-wrap: wrap;
+            .btn { font-size: 0.8rem; padding: 2px 6px; }
+            select { font-size: 0.8rem; padding: 2px 4px; }
+        }
+        .card-body { flex: 1 1 auto; overflow-y: auto; min-height: 0; }
+
+        .o-ow-att-item {
+            background: #fef3cd;
+            border-left: 3px solid #ffc107;
+            &:nth-child(even) {
+                background: #fff3cd;
+            }
+        }
+
+        .o-ow-dropzone {
+            position: absolute;
+            inset: 0;
+            z-index: 5;
+            pointer-events: none;
+            background: rgba(13, 110, 253, 0.08);
+            border: 2px dashed #0d6efd;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #0d6efd;
+            font-weight: 600;
+            .o-ow-dropzone-inner {
+                text-align: center;
+            }
+        }
+
+        /* Modal / expanded mode */
+        &.o-ow-compose-modal {
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            width: 100%; max-width: 100%; height: 100%;
+            z-index: 1060;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: transparent;
+
+            .o-ow-compose-backdrop {
+                position: absolute;
+                top: 0; left: 0; right: 0; bottom: 0;
+                background: rgba(0,0,0,0.4);
+            }
+            .o-ow-compose-inner {
+                position: relative;
+                z-index: 1;
+                width: 720px;
+                max-width: 90vw;
+                height: 85vh;
+                border-radius: 8px;
+                overflow: hidden;
+            }
+        }
+    }
+}
+
+/* ---- Responsive ---- */
+
+/* Tablet (768–991px): shrink list; sidebar auto-collapses via template. */
+@media (max-width: 991.98px) and (min-width: 768px) {
+    .o-ow-mail .o-ow-list {
+        flex: 0 0 42%;
+        min-width: 320px;
+    }
+}
+
+/* Mobile (<768px): single-pane stacking, sidebar drawer, full-screen compose. */
+@media (max-width: 767.98px) {
+    .o-ow-topbar-mobile {
+        background: #fff;
+    }
+
+    .o-ow-mail {
+        .o-ow-sidebar {
+            position: fixed;
+            top: 0; left: 0; bottom: 0;
+            width: 280px;
+            min-width: 280px;
+            flex: 0 0 280px;
+            z-index: 1060;
+            transform: translateX(-100%);
+            transition: transform 0.2s ease;
+            box-shadow: 2px 0 8px rgba(0, 0, 0, 0.15);
+
+            /* Override desktop-collapsed narrow styles; drawer is full-size */
+            &.o-ow-sidebar-collapsed {
+                width: 280px;
+                min-width: 280px;
+                flex: 0 0 280px;
+
+                .o-ow-compose-btn > span,
+                .o-ow-all-mailboxes > *:not(i),
+                .o-ow-contacts-btn > *:not(i),
+                .o-ow-account-header > strong,
+                .o-ow-account-header > .o-ow-count,
+                .o-ow-account-header > .o-ow-account-sync,
+                .o-ow-folder > span,
+                .o-ow-folder .badge,
+                .o-ow-tags > .text-muted {
+                    display: inherit !important;
+                }
+                .o-ow-account-header {
+                    justify-content: flex-start;
+                    padding: 0.25rem 0.5rem !important;
+                }
+                .o-ow-folder {
+                    justify-content: flex-start;
+                    padding-left: 0.75rem !important;
+                    padding-right: 0.75rem !important;
+                    i { margin-right: 0.5rem !important; font-size: inherit; }
+                }
+                .o-ow-all-mailboxes,
+                .o-ow-contacts-btn {
+                    text-align: start !important;
+                    padding-left: 0.75rem;
+                    padding-right: 0.75rem;
+                    i { margin-right: 0.5rem !important; }
+                }
+            }
+        }
+        &.o-ow-sidebar-overlay-open .o-ow-sidebar {
+            transform: translateX(0);
+        }
+
+        .o-ow-list {
+            flex: 1 1 auto;
+            min-width: 0;
+        }
+        .o-ow-viewer {
+            display: none !important;
+        }
+        &.o-ow-mobile-viewer {
+            .o-ow-list { display: none !important; }
+            .o-ow-viewer { display: flex !important; }
+        }
+
+        .o-ow-contacts {
+            .o-ow-contact-detail { display: none !important; }
+        }
+        &.o-ow-mobile-contacts-detail .o-ow-contacts {
+            .o-ow-contact-list { display: none !important; }
+            .o-ow-contact-detail { display: block !important; flex: 1 1 auto; }
+        }
+
+        .o-ow-pager {
+            flex-wrap: wrap;
+        }
+    }
+
+    .o-ow-sidebar-backdrop {
+        position: fixed;
+        inset: 0;
+        background: rgba(0, 0, 0, 0.35);
+        z-index: 1059;
+    }
+
+    .o-ow-compose-stack {
+        right: 0 !important;
+        bottom: 0 !important;
+        left: 0 !important;
+        padding: 0;
+        gap: 0;
+    }
+    .o-ow-compose {
+        width: 100vw;
+        max-width: 100vw;
+        height: 100vh;
+        border-radius: 0;
+
+        .o-ow-compose-inner { border-radius: 0; }
+
+        &.o-ow-compose-min {
+            width: 100vw;
+            height: auto;
+        }
+    }
+
+    .o-ow-recipient-wrap .o-ow-suggest {
+        max-height: 50vh;
+    }
+}
+
+.o-ow-folders-widget {
+    background: #fff;
+
+    .o-ow-folders-toolbar {
+        background: #fafbfc;
+    }
+
+    .o-ow-folder-tree {
+        padding: 6px 0;
+        max-height: 420px;
+        overflow-y: auto;
+        &.o-ow-drop-target {
+            background: #f0f4ff;
+        }
+    }
+
+    .o-ow-folder-row {
+        cursor: pointer;
+        padding: 6px 12px;
+        user-select: none;
+        &:hover { background: #f2f5ff; }
+        &.active { background: #dce8ff; }
+        &.o-ow-drop-target { outline: 2px dashed #0d6efd; background: #e8f0ff; }
+    }
+
+    .o-ow-folder-row .form-switch .form-check-input {
+        width: 2.3em; height: 1.2em; cursor: pointer;
+    }
+}
+
+.o-ow-source-pre {
+    font-family: ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
+    font-size: 0.8rem;
+    line-height: 1.45;
+    background: #f8f9fa;
+    border: 1px solid #e5e7eb;
+    border-radius: 4px;
+    padding: 10px 12px;
+    max-height: 65vh;
+    overflow: auto;
+    white-space: pre-wrap;
+    word-break: break-word;
+}

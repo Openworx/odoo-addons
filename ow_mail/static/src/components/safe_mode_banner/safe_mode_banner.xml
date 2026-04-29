@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+
+<t t-name="ow_mail.SafeModeBanner">
+    <div class="alert alert-warning d-flex align-items-center m-2 py-2">
+        <i class="fa fa-shield me-2"/>
+        <div class="flex-grow-1">
+            <strong>Safe Mode.</strong>
+            Remote content in this message has been blocked to protect your privacy.
+        </div>
+        <button class="btn btn-sm btn-outline-dark me-1" t-on-click="props.onShowOnce">Show Once</button>
+        <button class="btn btn-sm btn-warning" t-on-click="props.onTrustSender">Trust Sender</button>
+    </div>
+</t>
+
+</templates>

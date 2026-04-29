@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="action_ow_mail_mailclient" model="ir.actions.client">
+        <field name="name">OW Mail</field>
+        <field name="tag">ow_mail.mailclient</field>
+    </record>
+
+    <menuitem id="menu_ow_mail_root" name="OW Mail"
+              web_icon="ow_mail,static/description/menu_icon.png"
+              sequence="10"/>
+
+    <menuitem id="menu_ow_mail_mailclient" name="Mail"
+              parent="menu_ow_mail_root"
+              action="action_ow_mail_mailclient"
+              sequence="1"/>
+
+    <menuitem id="menu_ow_mail_config" name="Configuration"
+              parent="menu_ow_mail_root"
+              action="action_ow_mail_account"
+              sequence="90"/>
+</odoo>

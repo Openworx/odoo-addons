@@ -1,0 +1,17 @@
+.o-ow-recipient-wrap {
+    .o-ow-suggest {
+        max-height: 240px;
+        overflow-y: auto;
+        z-index: 1080;
+
+        .dropdown-item {
+            cursor: pointer;
+            white-space: normal;
+
+            &.active {
+                background-color: #e7f1ff;
+                color: inherit;
+            }
+        }
+    }
+}

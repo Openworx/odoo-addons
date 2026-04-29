@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+
+<t t-name="ow_mail.Mailclient">
+    <div class="o-ow-mail d-flex flex-column h-100"
+         t-att-class="{
+            'o-ow-sidebar-collapsed': ui.sidebarCollapsed,
+            'o-ow-vp-tablet': state.viewport === 'tablet',
+            'o-ow-vp-mobile': state.viewport === 'mobile',
+            'o-ow-mobile-viewer': state.viewport === 'mobile' &amp;&amp; !!state.selectedMessage &amp;&amp; state.view === 'mail',
+            'o-ow-mobile-contacts-detail': state.viewport === 'mobile' &amp;&amp; state.contactsDetailOpen &amp;&amp; state.view === 'contacts',
+            'o-ow-sidebar-overlay-open': state.sidebarOverlayOpen,
+         }">
+        <div class="o-ow-topbar-mobile d-flex align-items-center gap-2 px-2 py-1 border-bottom"
+             t-if="state.viewport === 'mobile'">
+            <t t-if="isMobileDetail">
+                <button class="btn btn-sm btn-light" t-on-click="onBack" title="Back">
+                    <i class="fa fa-arrow-left"/>
+                </button>
+            </t>
+            <t t-else="">
+                <button class="btn btn-sm btn-light" t-on-click="openSidebar" title="Menu">
+                    <i class="fa fa-bars"/>
+                </button>
+            </t>
+            <strong class="ms-2 text-truncate flex-grow-1" t-esc="mobileTitle"/>
+        </div>
+        <div class="o-ow-body flex-grow-1 d-flex overflow-hidden">
+            <div t-if="state.viewport === 'mobile' &amp;&amp; state.sidebarOverlayOpen"
+                 class="o-ow-sidebar-backdrop" t-on-click="closeSidebar"/>
+            <Sidebar collapsed="ui.sidebarCollapsed"
+                     toggleSidebar="() => this.toggleSidebar()"/>
+            <t t-if="state.view === 'contacts'">
+                <Contacts/>
+            </t>
+            <t t-else="">
+                <MessageList/>
+                <MessageViewer/>
+            </t>
+        </div>
+        <div class="o-ow-compose-stack">
+            <t t-foreach="state.composeWindows" t-as="win" t-key="win.id">
+                <ComposeWindow win="win"/>
+            </t>
+        </div>
+    </div>
+</t>
+
+</templates>

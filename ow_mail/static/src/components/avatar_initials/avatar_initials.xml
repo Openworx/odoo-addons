@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+
+<t t-name="ow_mail.AvatarInitials">
+    <span class="o-ow-avatar" t-att-style="'background:' + color">
+        <t t-esc="initials"/>
+    </span>
+</t>
+
+</templates>

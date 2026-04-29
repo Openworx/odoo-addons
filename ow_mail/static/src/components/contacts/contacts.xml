@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+
+<t t-name="ow_mail.Contacts">
+    <div class="o-ow-contacts d-flex flex-grow-1 overflow-hidden">
+        <div class="o-ow-contact-list d-flex flex-column border-end">
+            <div class="p-2 border-bottom d-flex gap-2 align-items-center">
+                <input type="text"
+                       class="form-control form-control-sm"
+                       placeholder="Search contacts…"
+                       t-att-value="local.search"
+                       t-on-input="onSearchInput"/>
+                <button class="btn btn-sm btn-primary"
+                        title="New contact"
+                        t-on-click="onNew">
+                    <i class="fa fa-plus"/>
+                </button>
+            </div>
+            <div class="flex-grow-1 overflow-auto">
+                <t t-if="state.contactsLoading">
+                    <div class="text-center text-muted p-3">
+                        <i class="fa fa-spinner fa-spin"/> Loading…
+                    </div>
+                </t>
+                <t t-elif="!state.contacts.length">
+                    <div class="text-center text-muted p-3">
+                        No contacts yet.
+                    </div>
+                </t>
+                <t t-else="">
+                    <t t-foreach="state.contacts" t-as="c" t-key="c.id">
+                        <div class="o-ow-contact-row d-flex flex-column px-3 py-2 border-bottom"
+                             t-att-class="{'active': state.selectedContactId === c.id}"
+                             t-on-click="() => this.onSelect(c)">
+                            <div class="d-flex align-items-center">
+                                <strong class="flex-grow-1 text-truncate" t-esc="c.name || c.email"/>
+                            </div>
+                            <small class="text-muted text-truncate" t-esc="c.email"/>
+                            <small t-if="c.company" class="text-muted text-truncate" t-esc="c.company"/>
+                        </div>
+                    </t>
+                </t>
+            </div>
+        </div>
+
+        <div class="o-ow-contact-detail flex-grow-1 overflow-auto">
+            <t t-if="local.editing">
+                <div class="p-4">
+                    <h4 t-esc="local.editing === 'new' ? 'New contact' : 'Edit contact'"/>
+                    <div class="mb-2">
+                        <label class="form-label small mb-1">Name</label>
+                        <input type="text" class="form-control form-control-sm"
+                               t-model="local.draft.name"/>
+                    </div>
+                    <div class="mb-2">
+                        <label class="form-label small mb-1">Email</label>
+                        <input type="email" class="form-control form-control-sm"
+                               t-model="local.draft.email"/>
+                    </div>
+                    <div class="mb-2">
+                        <label class="form-label small mb-1">Company</label>
+                        <input type="text" class="form-control form-control-sm"
+                               t-model="local.draft.company"/>
+                    </div>
+                    <div class="mb-2">
+                        <label class="form-label small mb-1">Phone</label>
+                        <input type="text" class="form-control form-control-sm"
+                               t-model="local.draft.phone"/>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label small mb-1">Note</label>
+                        <textarea class="form-control form-control-sm" rows="3"
+                                  t-model="local.draft.note"/>
+                    </div>
+                    <div class="d-flex gap-2">
+                        <button class="btn btn-sm btn-primary" t-on-click="onSave">
+                            <i class="fa fa-save me-1"/> Save
+                        </button>
+                        <button class="btn btn-sm btn-light" t-on-click="onCancelEdit">
+                            Cancel
+                        </button>
+                    </div>
+                </div>
+            </t>
+            <t t-elif="selected">
+                <div class="p-4">
+                    <div class="d-flex align-items-center mb-3 gap-2">
+                        <h4 class="flex-grow-1 mb-0" t-esc="selected.name || selected.email"/>
+                        <button class="btn btn-sm btn-primary" t-on-click="onCompose"
+                                title="Compose">
+                            <i class="fa fa-pencil me-1"/> Compose
+                        </button>
+                        <button class="btn btn-sm btn-light" t-on-click="onEdit"
+                                title="Edit">
+                            <i class="fa fa-pencil"/>
+                        </button>
+                        <button class="btn btn-sm btn-light text-danger" t-on-click="onDelete"
+                                title="Delete">
+                            <i class="fa fa-trash"/>
+                        </button>
+                    </div>
+                    <dl class="row">
+                        <dt class="col-sm-3 text-muted">Email</dt>
+                        <dd class="col-sm-9" t-esc="selected.email"/>
+                        <t t-if="selected.company">
+                            <dt class="col-sm-3 text-muted">Company</dt>
+                            <dd class="col-sm-9" t-esc="selected.company"/>
+                        </t>
+                        <t t-if="selected.phone">
+                            <dt class="col-sm-3 text-muted">Phone</dt>
+                            <dd class="col-sm-9" t-esc="selected.phone"/>
+                        </t>
+                        <t t-if="selected.last_used">
+                            <dt class="col-sm-3 text-muted">Last used</dt>
+                            <dd class="col-sm-9" t-esc="selected.last_used"/>
+                        </t>
+                        <t t-if="selected.note">
+                            <dt class="col-sm-3 text-muted">Note</dt>
+                            <dd class="col-sm-9" style="white-space: pre-wrap;" t-esc="selected.note"/>
+                        </t>
+                    </dl>
+                </div>
+            </t>
+            <t t-else="">
+                <div class="text-center text-muted p-5">
+                    Select a contact or add a new one.
+                </div>
+            </t>
+        </div>
+    </div>
+</t>
+
+</templates>
