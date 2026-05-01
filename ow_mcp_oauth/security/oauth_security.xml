@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!--
+        OAuth admin and user records are gated by the existing MCP groups
+        from ow_mcp_server (group_mcp_admin / group_mcp_user). No new
+        group is introduced; admins of the MCP server are admins of the
+        OAuth machinery too.
+    -->
+</odoo>

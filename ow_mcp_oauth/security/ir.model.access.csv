@@ -1,0 +1,9 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_oauth_config_admin,ow.mcp.oauth.config.admin,model_ow_mcp_oauth_config,ow_mcp_server.group_mcp_admin,1,1,1,0
+access_oauth_client_admin,ow.mcp.oauth.client.admin,model_ow_mcp_oauth_client,ow_mcp_server.group_mcp_admin,1,1,1,1
+access_oauth_authcode_admin,ow.mcp.oauth.authorization_code.admin,model_ow_mcp_oauth_authorization_code,ow_mcp_server.group_mcp_admin,1,1,1,1
+access_oauth_access_token_admin,ow.mcp.oauth.access_token.admin,model_ow_mcp_oauth_access_token,ow_mcp_server.group_mcp_admin,1,1,1,1
+access_oauth_refresh_token_admin,ow.mcp.oauth.refresh_token.admin,model_ow_mcp_oauth_refresh_token,ow_mcp_server.group_mcp_admin,1,1,1,1
+access_oauth_consent_admin,ow.mcp.oauth.consent.admin,model_ow_mcp_oauth_consent,ow_mcp_server.group_mcp_admin,1,1,1,1
+access_oauth_event_admin,ow.mcp.oauth.event.admin,model_ow_mcp_oauth_event,ow_mcp_server.group_mcp_admin,1,0,0,1
+access_oauth_dcr_attempt_admin,ow.mcp.oauth.dcr_attempt.admin,model_ow_mcp_oauth_dcr_attempt,ow_mcp_server.group_mcp_admin,1,0,0,1
