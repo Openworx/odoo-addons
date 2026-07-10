@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="res_config_settings_view_form" model="ir.ui.view">
+        <field name="name">res.config.settings.view.form.inherit.security.txt</field>
+        <field name="model">res.config.settings</field>
+        <field name="priority" eval="60"/>
+        <field name="inherit_id" ref="base_setup.res_config_settings_view_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//form" position="inside">
+                <app string="Security.txt" name="ow_security_txt"
+                     logo="/ow_security_txt/static/description/icon.png">
+                    <block title="security.txt (RFC 9116)" name="ow_security_txt_block">
+                        <setting string="Contact"
+                                 help="One contact per line: email, https:// URL or tel: number. The file is only served when at least one contact is set.">
+                            <field name="ow_security_txt_contact"
+                                   placeholder="security@example.com"/>
+                        </setting>
+                        <setting string="Expires After (Months)"
+                                 help="The Expires field is recomputed on every request as now plus this many months.">
+                            <field name="ow_security_txt_expires_months" class="o_light_label"/>
+                        </setting>
+                    </block>
+                    <block title="Optional Fields" name="ow_security_txt_optional_block">
+                        <setting string="Encryption" help="URL of your PGP key.">
+                            <field name="ow_security_txt_encryption"
+                                   placeholder="https://example.com/pgp-key.txt"/>
+                        </setting>
+                        <setting string="Acknowledgments" help="URL of the page where security researchers are recognized.">
+                            <field name="ow_security_txt_acknowledgments"
+                                   placeholder="https://example.com/hall-of-fame"/>
+                        </setting>
+                        <setting string="Preferred Languages" help="Comma-separated language tags.">
+                            <field name="ow_security_txt_preferred_languages" placeholder="en, nl"/>
+                        </setting>
+                        <setting string="Canonical URL" help="Canonical URI of this security.txt file.">
+                            <field name="ow_security_txt_canonical"
+                                   placeholder="https://example.com/.well-known/security.txt"/>
+                        </setting>
+                        <setting string="Policy" help="URL of your vulnerability disclosure policy.">
+                            <field name="ow_security_txt_policy"
+                                   placeholder="https://example.com/security-policy"/>
+                        </setting>
+                        <setting string="Hiring" help="URL of your security-related job openings.">
+                            <field name="ow_security_txt_hiring"
+                                   placeholder="https://example.com/jobs"/>
+                        </setting>
+                        <setting string="CSAF" help="URL of your CSAF provider-metadata.json.">
+                            <field name="ow_security_txt_csaf"
+                                   placeholder="https://example.com/.well-known/csaf/provider-metadata.json"/>
+                        </setting>
+                    </block>
+                </app>
+            </xpath>
+        </field>
+    </record>
+</odoo>
