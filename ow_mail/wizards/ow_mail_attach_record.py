@@ -122,6 +122,10 @@ class OwMailAttachRecord(models.TransientModel):
             'ow_mail_uid': self.uid,
             'ow_mail_folder_id': self.folder_id,
         })
+        # Flush explicitly: as of Odoo 19 a later search() on these fields no
+        # longer flushes this pending write, so the duplicate check above would
+        # not see it within the same transaction.
+        message.flush_recordset(['ow_mail_uid', 'ow_mail_folder_id'])
 
         # Add followers
         partner_emails = [self.from_email]
