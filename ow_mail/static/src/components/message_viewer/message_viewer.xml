@@ -38,6 +38,13 @@
                     </t>
                 </select>
                 <div class="flex-grow-1"/>
+                <button class="btn btn-sm btn-light" t-on-click="onCreateRecord" title="Create Record">
+                    <i class="fa fa-plus-square-o"/>
+                </button>
+                <button class="btn btn-sm btn-light" t-on-click="onAttach" title="Attach to record">
+                    <i class="fa fa-chain"/>
+                </button>
+                <div class="border-start mx-1"/>
                 <button class="btn btn-sm btn-light" t-on-click="onPrint" title="Print">
                     <i class="fa fa-print"/>
                 </button>
@@ -67,6 +74,9 @@
                         </li>
                     </ul>
                 </div>
+                <button class="btn btn-sm btn-light" t-on-click="onArchive" title="Archive">
+                    <i class="fa fa-archive"/>
+                </button>
                 <button class="btn btn-sm btn-danger" t-on-click="onDelete" title="Delete">
                     <i class="fa fa-trash"/>
                 </button>
@@ -105,7 +115,7 @@
                             <t t-if="isThreadMsgExpanded(tm)">
                                 <div class="o-ow-thread-msg-body px-3">
                                     <iframe t-att-data-thread-iframe="tm.folder_id + ':' + tm.uid"
-                                            class="w-100" sandbox="allow-same-origin"
+                                            class="w-100" sandbox="allow-same-origin allow-modals"
                                             style="border:0;min-height:100px;"/>
                                 </div>
                                 <div class="o-ow-viewer-attachments px-3 pb-3" t-if="tm.attachments and tm.attachments.length">
@@ -209,8 +219,8 @@
                     </div>
                 </t>
                 <div class="o-ow-viewer-body flex-grow-1">
-                    <iframe t-ref="iframe" class="w-100 h-100" sandbox="allow-same-origin"
-                            style="border:0;"/>
+                    <iframe t-ref="iframe" class="w-100 h-100" sandbox="allow-same-origin allow-modals"
+                                style="border:0;"/>
                 </div>
                 <div class="o-ow-viewer-attachments border-top p-2"
                      t-if="state.selectedMessage.attachments.length">

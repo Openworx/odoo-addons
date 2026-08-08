@@ -569,15 +569,24 @@ export class ComposeWindow extends Component {
      */
     onInsertSignature() {
         const acc = this.state.accounts.find(
-            (a) => a.id === parseInt(this.props.win.accountId, 10)
+            (a) => a.id === Number(this.props.win.accountId)
         );
-        if (!acc || !acc.signature_html) return;
-        if (!this.bodyRef.el) return;
-        this.bodyRef.el.focus();
+        if (!acc || !acc.signature_html) {
+            return;
+        }
+        if (!this.bodyRef.el) {
+            return;
+        }
+
         // Move cursor to end
+        this.bodyRef.el.focus();
         const sel = window.getSelection();
-        sel.selectAllChildren(this.bodyRef.el);
-        sel.collapseToEnd();
+        if (sel) {
+            try {
+                sel.selectAllChildren(this.bodyRef.el);
+                sel.collapseToEnd();
+            } catch (e) {}
+        }
         this.exec("insertHTML", "<br/><br/>" + acc.signature_html);
     }
 }

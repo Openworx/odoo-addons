@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="ow_mail_attach_record_view_form" model="ir.ui.view">
+        <field name="name">ow.mail.attach.record.form</field>
+        <field name="model">ow.mail.attach.record</field>
+        <field name="arch" type="xml">
+            <form string="Attach Mail to Record">
+                <group>
+                    <field name="subject"/>
+                    <field name="from_name"/>
+                    <field name="from_email"/>
+                    <field name="date"/>
+                    <field name="has_attachments" invisible="1"/>
+                    <field name="include_attachments" invisible="not has_attachments"/>
+                </group>
+                <group string="Target Record">
+                    <field name="record_ref" options="{'no_create': True, 'no_open': True}"/>
+                    <field name="res_model_id" invisible="1"/>
+                    <field name="res_id" invisible="1"/>
+                </group>
+                <field name="body_html" invisible="1"/>
+                <field name="folder_id" invisible="1"/>
+                <field name="uid" invisible="1"/>
+                <footer>
+                    <button string="Confirm" name="action_confirm" type="object" class="btn-primary"/>
+                    <button string="Cancel" class="btn-secondary" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+</odoo>

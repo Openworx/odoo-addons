@@ -586,25 +586,193 @@ export class MessageViewer extends Component {
     }
 
     /**
+     * Open the "Create Record" wizard for the currently displayed message.
+     */
+    async onCreateRecord() {
+        const msg = this.state.selectedMessage;
+        if (!msg) return;
+
+        this.action.doAction({
+            type: "ir.actions.act_window",
+            res_model: "ow.mail.create.record",
+            views: [[false, "form"]],
+            target: "new",
+            context: {
+                default_folder_id: msg.folder_id,
+                default_uid: msg.uid,
+                default_subject: msg.subject,
+                default_from_name: msg.from_name,
+                default_from_email: msg.from_email,
+                default_date: msg.date,
+                default_body_html: msg.html,
+            },
+        });
+    }
+
+    /**
+     * Open the "Attach to Record" wizard for the currently displayed message.
+     */
+    async onAttach() {
+        const msg = this.state.selectedMessage;
+        if (!msg) return;
+
+        this.action.doAction({
+            type: "ir.actions.act_window",
+            res_model: "ow.mail.attach.record",
+            views: [[false, "form"]],
+            target: "new",
+            context: {
+                default_folder_id: msg.folder_id,
+                default_uid: msg.uid,
+                default_subject: msg.subject,
+                default_from_name: msg.from_name,
+                default_from_email: msg.from_email,
+                default_date: msg.date,
+                default_body_html: msg.html,
+                default_has_attachments: msg.attachments && msg.attachments.length > 0,
+            },
+        });
+    }
+
+    /**
      * Print the message by triggering the iframe's print dialog.
      *
-     * Focuses the iframe's `contentWindow` first so the browser print dialog
-     * targets only the message content rather than the full Odoo shell.  If
-     * accessing `contentWindow` throws (cross-origin restriction in some edge
-     * cases), falls back to `window.print()` which prints the whole page.
+     * In thread view, delegates to `_printThreadView` which assembles all
+     * expanded thread messages into a dedicated print window. For a single
+     * message, focuses the iframe's `contentWindow` first so the browser
+     * print dialog targets only the message content rather than the full
+     * Odoo shell. If accessing `contentWindow` throws (cross-origin
+     * restriction in some edge cases), falls back to `window.print()`.
      *
      * The iframe document includes a hidden `.ow-print-header` block (injected
      * by `renderBody`) that becomes visible only in `@media print`, providing
      * From / To / Subject / Date context in the printed output.
      */
     onPrint() {
-        if (!this.iframeRef.el) return;
+        if (this.isThreadView) {
+            this._printThreadView();
+            return;
+        }
+
+        const iframe = this.iframeRef.el;
+        if (!iframe) {
+            window.print();
+            return;
+        }
+
         try {
-            this.iframeRef.el.contentWindow.focus();
-            this.iframeRef.el.contentWindow.print();
+            iframe.contentWindow.focus();
+            iframe.contentWindow.print();
         } catch (e) {
             window.print();
         }
+    }
+
+    /**
+     * Print all expanded messages of the current thread.
+     *
+     * Collects the rendered bodies from the per-message thread iframes and
+     * writes them, with a From/To/Cc/Date header per message, into a new
+     * window that is then printed. Falls back to `window.print()` when a
+     * popup cannot be opened.
+     */
+    _printThreadView() {
+        const printWindow = window.open("", "_blank");
+        if (!printWindow) {
+            window.print();
+            return;
+        }
+
+        const messages = [];
+        for (const tm of this.state.threadMessages || []) {
+            const key = `${tm.folder_id}:${tm.uid}`;
+            if (!this.local.expandedThread[key]) continue;
+
+            const iframe = document.querySelector(`[data-thread-iframe="${key}"]`);
+            let bodyHtml = "";
+
+            try {
+                bodyHtml = iframe?.contentDocument?.body?.innerHTML || "";
+            } catch (e) {
+                // Iframe not readable (edge-case cross-origin); print an empty body.
+            }
+
+            messages.push(`
+                <section class="ow-print-thread-message">
+                    <h2>${this._escapeHtml(tm.subject || this.threadSubject || "")}</h2>
+                    <div class="ow-print-meta">
+                        <div><strong>From:</strong> ${this._escapeHtml(tm.from_name || "")} &lt;${this._escapeHtml(tm.from_email || "")}&gt;</div>
+                        ${tm.to ? `<div><strong>To:</strong> ${this._escapeHtml(tm.to)}</div>` : ""}
+                        ${tm.cc ? `<div><strong>Cc:</strong> ${this._escapeHtml(tm.cc)}</div>` : ""}
+                        ${tm.date ? `<div><strong>Date:</strong> ${this._escapeHtml(this.formatThreadDate(tm.date))}</div>` : ""}
+                    </div>
+                    <div class="ow-print-body">
+                        ${bodyHtml}
+                    </div>
+                </section>
+            `);
+        }
+
+        if (!messages.length) {
+            printWindow.close();
+            return;
+        }
+
+        printWindow.document.open();
+        printWindow.document.write(`<!doctype html>
+            <html>
+                <head>
+                    <meta charset="utf-8"/>
+                    <title>${this._escapeHtml(this.threadSubject || "Print message")}</title>
+                    <style>
+                        body {
+                            font-family: system-ui, sans-serif;
+                            color: #222;
+                            padding: 24px;
+                        }
+                        img {
+                            max-width: 100%;
+                        }
+                        a {
+                            color: #0d6efd;
+                        }
+                        .ow-print-thread-message {
+                            margin-bottom: 32px;
+                            padding-bottom: 24px;
+                            border-bottom: 1px solid #ccc;
+                            break-inside: avoid;
+                        }
+                        .ow-print-thread-message h2 {
+                            margin: 0 0 8px 0;
+                            font-size: 18px;
+                        }
+                        .ow-print-meta {
+                            margin-bottom: 16px;
+                            font-size: 12px;
+                            color: #333;
+                        }
+                    </style>
+                </head>
+                <body>
+                    ${messages.join("")}
+                </body>
+            </html>`);
+        printWindow.document.close();
+
+        printWindow.focus();
+        printWindow.print();
+    }
+
+    /**
+     * Escape a value for safe interpolation into the print window's HTML.
+     *
+     * @param {*} value
+     * @returns {string}
+     */
+    _escapeHtml(value) {
+        return String(value || "").replace(/[&<>"]/g, (c) =>
+            ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c])
+        );
     }
 
     /**
@@ -764,7 +932,16 @@ export class MessageViewer extends Component {
         const acc = this._findAccount();
         if (!acc) return [];
         const m = this.state.selectedMessage;
-        return acc.folders.filter((f) => !m || f.id !== m.folder_id);
+        return acc.folders.filter((f) => f.subscribed && (!m || f.id !== m.folder_id));
+    }
+
+    /**
+     * Move the selected message to the Archive folder.
+     */
+    async onArchive() {
+        const m = this.state.selectedMessage;
+        if (!m) return;
+        await this.mail.archiveSelected();
     }
 
     /**

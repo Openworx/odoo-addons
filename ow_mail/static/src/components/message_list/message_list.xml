@@ -89,6 +89,9 @@
         </div>
         <div t-if="checkedCount" class="o-ow-bulk-bar px-3 py-2 border-bottom d-flex align-items-center gap-2 flex-wrap">
             <span class="fw-semibold small"><t t-esc="checkedCount"/> selected</span>
+            <button class="btn btn-sm btn-outline-secondary" t-on-click="onBulkArchive" title="Archive">
+                <i class="fa fa-archive"/>
+            </button>
             <button class="btn btn-sm btn-outline-danger" t-on-click="onBulkDelete" title="Delete">
                 <i class="fa fa-trash"/>
             </button>
@@ -165,6 +168,11 @@
                                     t-on-click="(ev) => this.onQuickForward(ev, thread.messages[thread.messages.length - 1])">
                                 <i class="fa fa-share"/>
                             </button>
+                            <button class="btn btn-sm o-ow-hover-btn"
+                                    title="Archive"
+                                    t-on-click="(ev) => this.onArchive(ev, thread.messages[thread.messages.length - 1])">
+                                <i class="fa fa-archive"/>
+                            </button>
                             <button class="btn btn-sm o-ow-hover-btn o-ow-delete"
                                     title="Delete"
                                     t-on-click="(ev) => this.onDelete(ev, thread.messages[thread.messages.length - 1])">
@@ -210,6 +218,11 @@
                                             title="Forward"
                                             t-on-click="(ev) => this.onQuickForward(ev, m)">
                                         <i class="fa fa-share"/>
+                                    </button>
+                                    <button class="btn btn-sm o-ow-hover-btn"
+                                            title="Archive"
+                                            t-on-click="(ev) => this.onArchive(ev, m)">
+                                        <i class="fa fa-archive"/>
                                     </button>
                                     <button class="btn btn-sm o-ow-hover-btn o-ow-delete"
                                             title="Delete"
@@ -267,6 +280,11 @@
                                     title="Forward"
                                     t-on-click="(ev) => this.onQuickForward(ev, m)">
                                 <i class="fa fa-share"/>
+                            </button>
+                            <button class="btn btn-sm o-ow-hover-btn"
+                                    title="Archive"
+                                    t-on-click="(ev) => this.onArchive(ev, m)">
+                                <i class="fa fa-archive"/>
                             </button>
                             <button class="btn btn-sm o-ow-hover-btn o-ow-delete"
                                     title="Delete"

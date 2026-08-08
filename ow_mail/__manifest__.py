@@ -1,6 +1,6 @@
 {
     "name": "OW Mail",
-    "version": "18.0.1.6.0",
+    "version": "18.0.1.7.0",
     "summary": "Mail client for Odoo backend (IMAP/SMTP, multi-account, tags, safe mode)",
     "description": """
 OW Mail — personal mail client inside Odoo.
@@ -13,6 +13,7 @@ Features:
 * Tags (with optional IMAP keyword round-trip)
 * Safe Mode: remote-content blocking with per-sender trust
 * Floating compose window
+* Add a thread to a record in Odoo (like contact, task, etc.)
 """,
     "author": "Openworx",
     "website": "https://www.openworx.nl",
@@ -30,6 +31,8 @@ Features:
         "views/ow_mail_tag_views.xml",
         "views/ow_mail_contact_views.xml",
         "views/res_partner_views.xml",
+        "views/ow_mail_attach_record_views.xml",
+        "views/ow_mail_create_record_views.xml",
         "views/ow_mail_menus.xml",
     ],
     "assets": {

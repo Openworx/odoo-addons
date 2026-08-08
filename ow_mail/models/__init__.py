@@ -7,3 +7,5 @@ from . import ow_mail_tag
 from . import ow_mail_contact
 from . import ow_mail_trusted_sender
 from . import res_partner
+from . import mail_message
+from . import mail_thread

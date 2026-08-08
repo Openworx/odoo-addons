@@ -241,21 +241,23 @@ export class Sidebar extends Component {
     folderTree(account) {
         const visible = account.folders.filter((f) => f.subscribed !== false);
         const byId = new Map(visible.map((f) => [f.id, f]));
+        const emitted = new Set();
         const childrenOf = (parentId) => visible
-            .filter((f) => f.parent_id === parentId)
+            .filter((f) => f.parent_id === parentId && !emitted.has(f.id))
             .sort((a, b) => a.name.localeCompare(b.name));
         const out = [];
         const walk = (node, depth, kind) => {
+            if (emitted.has(node.id)) return;
+            emitted.add(node.id);
             out.push({ ...node, depth, kind: kind || node.kind });
             for (const c of childrenOf(node.id)) walk(c, depth + 1, null);
         };
         const specials = this.specialFolders(account);
-        const specialIds = new Set(specials.map((f) => f.id));
         for (const sp of specials) walk(sp, 0, sp.kind);
         // Custom roots: no parent, or parent not visible AND not a special
         // we already rendered (otherwise they'd appear twice).
         const customRoots = visible
-            .filter((f) => !specialIds.has(f.id) &&
+            .filter((f) => !emitted.has(f.id) &&
                 (!f.parent_id || !byId.has(f.parent_id)))
             .sort((a, b) => a.name.localeCompare(b.name));
         for (const r of customRoots) walk(r, 0, null);

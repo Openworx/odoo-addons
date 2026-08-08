@@ -73,12 +73,15 @@
                         <page string="Signature" name="signature">
                             <group>
                                 <field name="signature_enabled"/>
+                                <field name="signature_odoo"
+                                       invisible="not signature_enabled"/>
                                 <field name="signature_placement"
                                        invisible="not signature_enabled"/>
                             </group>
                             <field name="signature_html" widget="html"
                                    options="{'style-inline': true}"
-                                   invisible="not signature_enabled"/>
+                                   invisible="not signature_enabled"
+                                   readonly="signature_odoo"/>
                         </page>
                         <page string="Notifications" name="notifications">
                             <group>

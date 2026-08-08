@@ -7,8 +7,9 @@ import html as _stdlib_html
 import imaplib
 import logging
 import re
+import pytz
 from contextlib import contextmanager
-from datetime import timezone
+from datetime import datetime, timezone
 from email.header import decode_header, make_header
 from email.utils import getaddresses, parseaddr, parsedate_to_datetime
 
@@ -213,13 +214,14 @@ def _ics_unfold(text):
     return out
 
 
-def _ics_parse_dt(value, params):
+def _ics_parse_dt(value, params, default_tz=None):
     """Parse an RFC 5545 DTSTART/DTEND value into an ISO 8601 string, or None.
 
     ICS date/time values come in three forms: bare date (``YYYYMMDD``), local
     date-time (``YYYYMMDDTHHmmss``), and UTC date-time (``YYYYMMDDTHHmmssZ``).
-    A ``TZID`` parameter names a timezone for local date-times, but since we
-    only need a JS-friendly ISO string for display we preserve it as-is.
+    A ``TZID`` parameter names a timezone for local date-times. If a
+    ``default_tz`` is provided, it is used for local date-times without a
+    ``TZID`` (floating time). All date-times are converted to UTC.
     Returns ``None`` or the raw value string on parse failure rather than
     raising, so a malformed calendar part does not abort rendering the rest
     of the message.
@@ -233,13 +235,31 @@ def _ics_parse_dt(value, params):
             return f"{v[0:4]}-{v[4:6]}-{v[6:8]}"
     # 20260418T140000 or 20260418T140000Z
     m = re.match(r"^(\d{4})(\d{2})(\d{2})T(\d{2})(\d{2})(\d{2})(Z)?$", v)
-    if m:
-        y, mo, d, hh, mm, ss, z = m.groups()
-        iso = f"{y}-{mo}-{d}T{hh}:{mm}:{ss}"
-        if z:
-            iso += "+00:00"
-        return iso
-    return v
+    if not m:
+        return v
+
+    y, mo, d, hh, mm, ss, z = m.groups()
+    dt = datetime(int(y), int(mo), int(d), int(hh), int(mm), int(ss))
+
+    tz_name = params.get("TZID")
+    if z:
+        dt = pytz.utc.localize(dt)
+    elif tz_name:
+        try:
+            dt = pytz.timezone(tz_name).localize(dt).astimezone(pytz.utc)
+        except Exception:
+            if default_tz:
+                try:
+                    dt = pytz.timezone(default_tz).localize(dt).astimezone(pytz.utc)
+                except Exception:
+                    pass
+    elif default_tz:
+        try:
+            dt = pytz.timezone(default_tz).localize(dt).astimezone(pytz.utc)
+        except Exception:
+            pass
+
+    return dt.isoformat()
 
 
 def _ics_unescape(value):
@@ -270,7 +290,7 @@ def _ics_split_property(line):
     return name, params, value
 
 
-def extract_invite(msg):
+def extract_invite(msg, default_tz=None):
     """Parse the first text/calendar part into a compact invite dict.
 
     Returns None if the message has no calendar part.
@@ -317,9 +337,9 @@ def extract_invite(msg):
             if name == "SUMMARY":
                 invite["summary"] = _ics_unescape(value)
             elif name == "DTSTART":
-                invite["dtstart_iso"] = _ics_parse_dt(value, params)
+                invite["dtstart_iso"] = _ics_parse_dt(value, params, default_tz=default_tz)
             elif name == "DTEND":
-                invite["dtend_iso"] = _ics_parse_dt(value, params)
+                invite["dtend_iso"] = _ics_parse_dt(value, params, default_tz=default_tz)
             elif name == "LOCATION":
                 invite["location"] = _ics_unescape(value)
             elif name == "DESCRIPTION":

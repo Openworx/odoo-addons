@@ -217,6 +217,18 @@ export class MessageList extends Component {
     }
 
     /**
+     * Archive a single message.
+     *
+     * @async
+     * @param {MouseEvent} ev
+     * @param {{ folder_id: number, uid: number }} m
+     */
+    async onArchive(ev, m) {
+        ev.stopPropagation();
+        await this.mail.archiveMessages(m.folder_id, [m.uid]);
+    }
+
+    /**
      * Deletes a single message: moves it to Trash, or expunges it permanently
      * when already in the Trash folder.
      *
@@ -500,6 +512,20 @@ export class MessageList extends Component {
     }
 
     /**
+     * Archive all checked messages, dispatching one IMAP action per source folder.
+     * Clears the selection when done.
+     *
+     * @async
+     */
+    async onBulkArchive() {
+        const byFolder = this._checkedUidsByFolder();
+        for (const [folderId, uids] of Object.entries(byFolder)) {
+            await this.mail.archiveMessages(parseInt(folderId, 10), uids);
+        }
+        this.clearChecked();
+    }
+
+    /**
      * Deletes all checked messages, dispatching one IMAP action per source folder.
      * Clears the selection when done.
      *
@@ -607,7 +633,7 @@ export class MessageList extends Component {
     get moveTargetFolders() {
         const acc = this.state.accounts.find((a) => a.id === this.state.selection.accountId);
         if (!acc) return [];
-        return acc.folders.filter((f) => f.id !== this.state.selection.folderId);
+        return acc.folders.filter((f) => f.subscribed && f.id !== this.state.selection.folderId);
     }
 
     /* ---- pagination ---- */

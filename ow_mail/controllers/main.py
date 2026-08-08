@@ -598,7 +598,7 @@ class OwMailController(http.Controller):
         if not raw:
             return _imap_err("Message not found")
         msg = email.message_from_bytes(raw)
-        invite = imap_utils.extract_invite(msg)
+        invite = imap_utils.extract_invite(msg, default_tz=request.env.user.tz)
         if not invite:
             return _imap_err("No calendar invite found")
 
@@ -673,7 +673,7 @@ class OwMailController(http.Controller):
         sanitized, has_remote = imap_utils.sanitize_and_detect(html)
         sanitized = _rewrite_inline(sanitized, folder.id, uid, inline)
         trusted = _is_sender_trusted(folder.account_id.user_id.id, env["from_email"])
-        invite = imap_utils.extract_invite(msg)
+        invite = imap_utils.extract_invite(msg, default_tz=request.env.user.tz)
 
         partner = request.env["res.partner"].search(
             [("email_normalized", "=", env["from_email"])], limit=1
@@ -887,6 +887,54 @@ class OwMailController(http.Controller):
                               folder_id, uid, section)
             return request.not_found()
         return request.not_found()
+
+    @http.route("/ow_mail/attachment/prepare", type="json", auth="user")
+    def attachment_prepare(self, folder_id, uid):
+        """Copy all attachments from an IMAP message to Odoo ir.attachment.
+
+        Used when forwarding a message or editing a draft to pre-populate
+        the compose window with the original attachments.
+        """
+        folder = _get_folder(folder_id)
+        if not folder:
+            return _imap_err("Folder not found")
+
+        out = []
+        try:
+            with imap_utils.imap_session(folder.account_id, folder.full_path, readonly=True) as conn:
+                _flags, raw = imap_utils.fetch_full(conn, uid)
+                if not raw:
+                    return _imap_err("Message not found")
+
+                msg = email.message_from_bytes(raw)
+                for part, _section, kind in imap_utils.walk_parts(msg):
+                    if kind == "attachment":
+                        payload = part.get_payload(decode=True)
+                        if not payload:
+                            continue
+                        filename = imap_utils.decode_header_value(part.get_filename()) or "attachment"
+                        raw_mime = (part.get_content_type() or "application/octet-stream").split(";", 1)[0].strip().lower()
+                        served_mime = ("application/octet-stream"
+                                       if raw_mime in self._UPLOAD_RELABEL else raw_mime)
+
+                        att = request.env["ir.attachment"].create({
+                            "name": filename,
+                            "raw": payload,
+                            "mimetype": served_mime,
+                            "res_model": "ow.mail.compose",
+                            "res_id": 0,
+                        })
+                        out.append({
+                            "id": att.id,
+                            "name": att.name,
+                            "size": len(payload),
+                            "mimetype": att.mimetype,
+                        })
+        except Exception as e:
+            _logger.exception("Failed to prepare attachments for folder=%s uid=%s", folder_id, uid)
+            return _imap_err(str(e))
+
+        return out
 
     @http.route("/ow_mail/send", type="json", auth="user")
     def send(self, account_id, to, cc=None, bcc=None, subject="", body_html="",

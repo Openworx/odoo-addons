@@ -2,6 +2,7 @@
 
 import { registry } from "@web/core/registry";
 import { rpc } from "@web/core/network/rpc";
+import { _t } from "@web/core/l10n/translation";
 import { reactive } from "@odoo/owl";
 
 /**
@@ -500,9 +501,10 @@ export const owMailService = {
          * inlines the sanitized HTML body. Does not pre-fill `To` — the user must
          * supply the recipient.
          *
+         * @async
          * @param {object} m - Full message object (`state.selectedMessage`).
          */
-        function openForward(m) {
+        async function openForward(m) {
             if (!m) return;
             const acc = _accountForFolder(m.folder_id);
             const from = _escHtml(m.from_name || "");
@@ -514,10 +516,23 @@ export const owMailService = {
                 `<p>From: ${from} &lt;${fromEmail}&gt;<br/>` +
                 `Date: ${date}<br/>Subject: ${subj}<br/>To: ${to}</p>` +
                 `<blockquote>${m.html || ""}</blockquote>`;
+
+            let attachments = [];
+            if (m.attachments && m.attachments.length) {
+                const res = await rpc("/ow_mail/attachment/prepare", {
+                    folder_id: m.folder_id,
+                    uid: m.uid,
+                });
+                if (res && !res.error) {
+                    attachments = res;
+                }
+            }
+
             openCompose({
                 accountId: acc ? acc.id : null,
                 subject: /^fwd:/i.test(m.subject || "") ? m.subject : `Fwd: ${m.subject || ""}`,
                 body: _bodyWithQuote(acc, fwdBlock),
+                attachments,
             });
         }
 
@@ -534,15 +549,29 @@ export const owMailService = {
         async function archiveSelected() {
             const m = state.selectedMessage;
             if (!m) return;
-            const acc = _accountForFolder(m.folder_id);
-            const archiveId = acc && acc.special && acc.special.archive;
-            if (!archiveId || archiveId === m.folder_id) {
-                notification.add("No archive folder configured", { type: "warning" });
-                return;
-            }
-            await runAction(m.folder_id, [m.uid], "move", { folder_id: archiveId });
+            await archiveMessages(m.folder_id, [m.uid]);
             state.selectedMessage = null;
             state.selectedKey = null;
+        }
+
+        /**
+         * Move one or more messages to their respective account's Archive folder.
+         *
+         * @async
+         * @param {number} folderId - Source folder ID.
+         * @param {number[]} uids - Array of message UIDs.
+         */
+        async function archiveMessages(folderId, uids) {
+            const acc = _accountForFolder(folderId);
+            const archiveId = acc && acc.special && acc.special.archive;
+            if (!archiveId) {
+                notification.add(_t("No archive folder configured"), { type: "warning" });
+                return;
+            }
+            if (archiveId === folderId) {
+                return;
+            }
+            await runAction(folderId, uids, "move", { folder_id: archiveId });
         }
 
         /**
@@ -840,6 +869,18 @@ export const owMailService = {
             const acc = state.accounts.find((a) =>
                 a.folders.some((f) => f.id === folderId)
             ) || state.accounts[0];
+
+            let attachments = [];
+            if (data.attachments && data.attachments.length) {
+                const res = await rpc("/ow_mail/attachment/prepare", {
+                    folder_id: folderId,
+                    uid: uid,
+                });
+                if (res && !res.error) {
+                    attachments = res;
+                }
+            }
+
             openCompose({
                 accountId: acc ? acc.id : null,
                 to: data.to || "",
@@ -848,6 +889,7 @@ export const owMailService = {
                 body: data.html || data.text || "",
                 in_reply_to: data.in_reply_to || null,
                 references: data.references || null,
+                attachments,
                 draftFolderId: folderId,
                 draftUid: uid,
             });
@@ -916,6 +958,7 @@ export const owMailService = {
          * @param {string} [init.references] - Space-separated Reference ids.
          * @param {number} [init.draftFolderId] - Folder id of the draft being edited.
          * @param {number} [init.draftUid] - UID of the draft being edited.
+         * @param {object[]} [init.attachments] - Array of {id, name, size, mimetype} objects.
          */
         function openCompose(init = {}) {
             const id = Date.now() + Math.random();
@@ -930,7 +973,7 @@ export const owMailService = {
                 body: init.body || defaultBody(accountId),
                 in_reply_to: init.in_reply_to || null,
                 references: init.references || null,
-                attachments: [],
+                attachments: init.attachments || [],
                 minimized: false,
                 expanded: false,
                 draftFolderId: init.draftFolderId || null,
@@ -1349,7 +1392,7 @@ export const owMailService = {
         return {
             state, bootstrap, refreshList, selectFolder, selectTag, setFilter, setSearch, searchAll, setSort,
             toggleThreadView, loadThread, goToPage,
-            openMessage, editDraft, sync, runAction, openCompose, closeCompose, sendCompose, saveDraft,
+            openMessage, editDraft, sync, runAction, archiveMessages, openCompose, closeCompose, sendCompose, saveDraft,
             moveSelection, openReply, openForward,
             archiveSelected, deleteSelected, toggleStarSelected, toggleReadSelected,
             focusSearch, goAllMailboxes, goInbox, addInviteToCalendar,

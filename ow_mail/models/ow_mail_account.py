@@ -93,10 +93,17 @@ class OwMailAccount(models.Model):
         default="user", required=True, string="Sender name")
     from_name_custom = fields.Char(string="Custom sender name")
 
-    signature_html = fields.Html(string="Signature", sanitize=True)
+    signature_html = fields.Html(
+        string="Signature", sanitize=True,
+        compute="_compute_signature_html", inverse="_inverse_signature_html", store=True)
+
     signature_enabled = fields.Boolean(
         string="Include signature", default=True,
         help="If unchecked, no signature is inserted in new compose, reply or forward.")
+    signature_odoo = fields.Boolean(
+        string="Use Odoo user signature", default=True,
+        help="If checked, the Odoo signature is used.")
+
     signature_placement = fields.Selection(
         [("below", "Below quoted message"),
          ("above", "Above quoted message")],
@@ -128,6 +135,25 @@ class OwMailAccount(models.Model):
         string="SMTP Password",
         inverse="_inverse_smtp_password",
         compute="_compute_blank_password", store=False)
+
+    @api.depends("signature_odoo", "user_id.signature")
+    def _compute_signature_html(self):
+        for rec in self:
+            if rec.signature_odoo:
+                rec.signature_html = rec.user_id.signature
+            elif not rec.signature_html:
+                rec.signature_html = False
+
+    def _inverse_signature_html(self):
+        for rec in self:
+            if rec.signature_odoo:
+                # If we are in "Odoo signature" mode, we don't allow manual override
+                # to persist in signature_html if it's different from Odoo signature.
+                # Actually, Odoo's inverse on a computed field usually means
+                # we store the value. If signature_odoo is True, we just
+                # re-compute it to be safe, but typically the UI should be readonly.
+                continue
+            # When not in Odoo mode, the value is just stored in the DB (standard behavior)
 
     def _compute_blank_password(self):
         """Always return empty so plain-text credentials are never exposed via ORM reads or JSON-RPC.
