@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<odoo noupdate="1">
-    <!--
-        Idempotently ensure the singleton row exists. get_singleton() also
-        generates the RSA keypair on first read.
-    -->
-    <function model="ow.mcp.oauth.config" name="get_singleton"/>
-</odoo>

@@ -1,5 +1,0 @@
-id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
-access_mcp_config_admin,ow.mcp.config.admin,model_ow_mcp_config,group_mcp_admin,1,1,1,1
-access_mcp_access_admin,ow.mcp.model.access.admin,model_ow_mcp_model_access,group_mcp_admin,1,1,1,1
-access_mcp_access_user,ow.mcp.model.access.user,model_ow_mcp_model_access,group_mcp_user,1,0,0,0
-access_mcp_audit_log_admin,ow.mcp.audit.log.admin,model_ow_mcp_audit_log,group_mcp_admin,1,0,0,1
