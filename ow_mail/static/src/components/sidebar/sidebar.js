@@ -1,7 +1,10 @@
 /** @odoo-module **/
 
-import { Component, useState } from "@odoo/owl";
+import { Component, useRef, useState } from "@odoo/owl";
 import { useService } from "@web/core/utils/hooks";
+import { _t } from "@web/core/l10n/translation";
+import { ConfirmationDialog } from "@web/core/confirmation_dialog/confirmation_dialog";
+import { owColor, OW_PALETTE, OW_COLOR_FALLBACK } from "../../utils/colors";
 
 /** MIME type used to identify drag-drop payloads originating from MessageList. */
 const DND_MIME = "application/x-ow-mail";
@@ -62,9 +65,11 @@ export class Sidebar extends Component {
      */
     setup() {
         this.mail = useService("ow_mail");
+        this.dialog = useService("dialog");
         this.state = useState(this.mail.state);
         this.dnd = useState({ targetId: null });
-        this.ui = useState({ syncingAccountId: null });
+        this.ui = useState({ syncingAccountId: null, newTagName: "", colorPickerTagId: null });
+        this.newTagInput = useRef("newTagInput");
     }
 
     /**
@@ -195,12 +200,97 @@ export class Sidebar extends Component {
 
     /**
      * Filter the message list to all messages carrying the given tag keyword.
+     * Clicking the already-active tag clears the filter again (toggle).
      * @param {number} tagId
      */
     onTag(tagId) {
         this.mail.setView("mail");
-        this.mail.selectTag(tagId);
+        this.mail.selectTag(this.state.selection.tagId === tagId ? null : tagId);
         this._closeMobileDrawer();
+    }
+
+    /**
+     * Inline style for a tag's colored dot in the sidebar tag list.
+     * @param {{ color: number }} tag
+     * @returns {string}
+     */
+    tagDotStyle(tag) {
+        return `background: ${owColor(tag.color)};`;
+    }
+
+    /**
+     * The full color palette as `{index, color}` swatch entries for the
+     * tag color picker. Index 0 renders as neutral gray ("no color").
+     * @returns {Array<{index: number, color: string}>}
+     */
+    get palette() {
+        return OW_PALETTE.map((c, index) => ({ index, color: c || OW_COLOR_FALLBACK }));
+    }
+
+    /**
+     * Toggle the color picker popover for a tag (opened by clicking its dot).
+     * @param {{ id: number }} tag
+     */
+    onTagDot(tag) {
+        this.ui.colorPickerTagId = this.ui.colorPickerTagId === tag.id ? null : tag.id;
+    }
+
+    /** Close the tag color picker popover. */
+    closeColorPicker() {
+        this.ui.colorPickerTagId = null;
+    }
+
+    /** Swallow clicks inside the picker so the row's filter toggle doesn't fire. */
+    onPickerClick() {}
+
+    /**
+     * Persist a new palette color for a tag and close the picker.
+     * @async
+     * @param {{ id: number }} tag
+     * @param {number} colorIndex
+     */
+    async onPickColor(tag, colorIndex) {
+        this.ui.colorPickerTagId = null;
+        await this.mail.setTagColor(tag.id, colorIndex);
+    }
+
+    /** Create a tag from the "New tag…" input and clear the field. */
+    async onCreateTag() {
+        const name = this.ui.newTagName;
+        this.ui.newTagName = "";
+        // Clear the DOM value directly as well — the t-model patch alone
+        // leaves the typed text in the focused input.
+        if (this.newTagInput.el) {
+            this.newTagInput.el.value = "";
+        }
+        await this.mail.createTag(name);
+    }
+
+    /**
+     * Submit the new-tag input on Enter.
+     * @param {KeyboardEvent} ev
+     */
+    onNewTagKey(ev) {
+        if (ev.key === "Enter") {
+            this.onCreateTag();
+        }
+    }
+
+    /**
+     * Delete a tag definition after an explicit confirmation dialog. The
+     * IMAP keywords remain on the server; only the local label/color
+     * mapping disappears.
+     * @param {{ id: number, name: string }} tag
+     */
+    onDeleteTag(tag) {
+        this.dialog.add(ConfirmationDialog, {
+            title: _t("Delete tag"),
+            body: _t('Delete the tag "%s"? Messages keep the label on the mail server, but it will no longer be shown or filterable.', tag.name),
+            confirmLabel: _t("Delete"),
+            cancelLabel: _t("Cancel"),
+            confirm: () => this.mail.deleteTag(tag.id),
+            cancel: () => {},
+        });
     }
 
     /**

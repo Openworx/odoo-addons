@@ -2,6 +2,7 @@
 
 import { Component, onPatched, useEffect, useRef, useState } from "@odoo/owl";
 import { useService } from "@web/core/utils/hooks";
+import { owColor } from "../../utils/colors";
 import { SafeModeBanner } from "../safe_mode_banner/safe_mode_banner";
 import { AvatarInitials } from "../avatar_initials/avatar_initials";
 import { MessageSourceDialog } from "../message_source/message_source";
@@ -864,6 +865,57 @@ export class MessageViewer extends Component {
         const m = this.state.selectedMessage;
         if (!m) return;
         this.mail.editDraft(m.folder_id, m.uid);
+    }
+
+    /**
+     * Whether the open message currently carries the given tag.
+     * @param {number} tagId
+     * @returns {boolean}
+     */
+    messageHasTag(tagId) {
+        const m = this.state.selectedMessage;
+        return Boolean(m && (m.tag_ids || []).includes(tagId));
+    }
+
+    /**
+     * Inline style for a pill in the viewer tag strip: filled with the tag
+     * color when active, neutral outline otherwise.
+     * @param {{ id: number, color: number }} tag
+     * @returns {string}
+     */
+    tagToggleStyle(tag) {
+        const c = owColor(tag.color);
+        if (this.messageHasTag(tag.id)) {
+            return `background: ${c}; border-color: ${c}; color: #fff;`;
+        }
+        return "";
+    }
+
+    /**
+     * Inline style for the colored dot inside an inactive tag pill.
+     * @param {{ color: number }} tag
+     * @returns {string}
+     */
+    tagDotStyle(tag) {
+        return `background: ${owColor(tag.color)};`;
+    }
+
+    /**
+     * Toggle a tag on the open message. Sends the complete new tag id set
+     * to the `set_tags` action (server diffs IMAP keywords).
+     * @async
+     * @param {{ id: number }} tag
+     */
+    async onToggleTag(tag) {
+        const m = this.state.selectedMessage;
+        if (!m) return;
+        const ids = new Set(m.tag_ids || []);
+        if (ids.has(tag.id)) {
+            ids.delete(tag.id);
+        } else {
+            ids.add(tag.id);
+        }
+        await this.mail.setMessageTags(m, [...ids]);
     }
 
     /**

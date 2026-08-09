@@ -162,6 +162,21 @@
                             <button class="btn btn-sm btn-info ms-2" t-on-click="onEditDraft">Edit</button>
                         </div>
                     </t>
+                    <div t-if="state.tags.length and !isDraft"
+                         class="d-flex align-items-center flex-wrap gap-1 mb-2 o-ow-viewer-tags">
+                        <span class="small text-muted me-1">Tags:</span>
+                        <t t-foreach="state.tags" t-as="tag" t-key="tag.id">
+                            <button class="badge rounded-pill o-ow-tag-toggle"
+                                    t-att-class="{'o-ow-tag-on': messageHasTag(tag.id)}"
+                                    t-att-style="tagToggleStyle(tag)"
+                                    t-att-title="messageHasTag(tag.id) ? 'Remove tag' : 'Add tag'"
+                                    t-on-click="() => this.onToggleTag(tag)">
+                                <span t-if="!messageHasTag(tag.id)" class="o-ow-tag-dot me-1"
+                                      t-att-style="tagDotStyle(tag)"/>
+                                <t t-esc="tag.name"/>
+                            </button>
+                        </t>
+                    </div>
                     <div class="d-flex align-items-center">
                         <AvatarInitials name="state.selectedMessage.from_name"
                                         email="state.selectedMessage.from_email"/>
@@ -169,6 +184,9 @@
                             <div>
                                 <strong t-esc="state.selectedMessage.from_name"/>
                                 <span class="text-muted ms-1">&lt;<t t-esc="state.selectedMessage.from_email"/>&gt;</span>
+                                <span t-if="state.selectedMessage.partner_id"
+                                      class="badge rounded-pill o-ow-customer-badge ms-2"
+                                      title="Sender is an Odoo contact">Customer</span>
                             </div>
                             <div class="small text-muted">
                                 To: <t t-esc="state.selectedMessage.to"/>
