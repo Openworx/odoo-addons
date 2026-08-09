@@ -1,6 +1,6 @@
 {
     "name": "OW Mail",
-    "version": "18.0.1.7.0",
+    "version": "18.0.1.8.0",
     "summary": "Mail client for Odoo backend (IMAP/SMTP, multi-account, tags, safe mode)",
     "description": """
 OW Mail — personal mail client inside Odoo.

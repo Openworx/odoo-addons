@@ -56,6 +56,50 @@
                     </t>
                 </div>
             </t>
+
+            <div class="o-ow-tags mt-2 pb-2">
+                <div class="px-2 py-1 text-muted small text-uppercase fw-semibold">Tags</div>
+                <t t-foreach="state.tags" t-as="tag" t-key="tag.id">
+                    <div class="o-ow-tag-row d-flex align-items-center py-1 px-2 position-relative"
+                         t-att-class="{'active': state.selection.tagId === tag.id}"
+                         t-att-title="'Filter by ' + tag.name"
+                         t-on-click="() => this.onTag(tag.id)">
+                        <span class="o-ow-tag-dot me-2 flex-shrink-0" role="button"
+                              title="Change color"
+                              t-att-style="tagDotStyle(tag)"
+                              t-on-click.stop="() => this.onTagDot(tag)"/>
+                        <span class="flex-grow-1 text-truncate" t-esc="tag.name"/>
+                        <button class="btn btn-sm btn-link p-0 text-muted o-ow-tag-delete"
+                                title="Delete tag"
+                                t-on-click.stop="() => this.onDeleteTag(tag)">
+                            <i class="fa fa-trash-o"/>
+                        </button>
+                        <t t-if="ui.colorPickerTagId === tag.id">
+                            <div class="o-ow-color-overlay" t-on-click.stop="closeColorPicker"/>
+                            <div class="o-ow-color-picker shadow-sm" t-on-click.stop="onPickerClick">
+                                <t t-foreach="palette" t-as="p" t-key="p.index">
+                                    <span class="o-ow-color-swatch" role="button"
+                                          t-att-class="{'active': (tag.color || 0) === p.index}"
+                                          t-att-title="p.index === 0 ? 'No color' : ''"
+                                          t-att-style="'background:' + p.color + ';'"
+                                          t-on-click.stop="() => this.onPickColor(tag, p.index)"/>
+                                </t>
+                            </div>
+                        </t>
+                    </div>
+                </t>
+                <div class="d-flex align-items-center gap-1 px-2 py-1 o-ow-tag-new">
+                    <input type="text" class="form-control form-control-sm"
+                           placeholder="New tag…"
+                           t-ref="newTagInput"
+                           t-model="ui.newTagName"
+                           t-on-keydown="onNewTagKey"/>
+                    <button class="btn btn-sm btn-dark flex-shrink-0" title="Add tag"
+                            t-on-click="onCreateTag">
+                        <i class="fa fa-plus"/>
+                    </button>
+                </div>
+            </div>
         </div>
 
         <div class="border-top px-2 py-2 mt-auto">

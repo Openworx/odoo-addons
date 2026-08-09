@@ -199,6 +199,14 @@
                                         <small class="text-muted ms-2" t-esc="formatDate(m.date)"/>
                                     </div>
                                     <div class="text-muted small text-truncate" t-esc="m.subject"/>
+                                    <div t-if="hasChips(m)" class="mt-1 d-flex flex-wrap gap-1 o-ow-chip-row">
+                                        <t t-foreach="tagsOf(m)" t-as="tag" t-key="tag.id">
+                                            <span class="badge rounded-pill o-ow-tag-chip"
+                                                  t-att-style="tagChipStyle(tag)" t-esc="tag.name"/>
+                                        </t>
+                                        <span t-if="m.partner_id" class="badge rounded-pill o-ow-customer-badge"
+                                              title="Sender is an Odoo contact">Customer</span>
+                                    </div>
                                 </div>
                                 <div class="ms-1 d-flex flex-column align-items-end position-relative">
                                     <button class="btn btn-sm btn-link p-0 o-ow-star"
@@ -261,6 +269,14 @@
                             <div class="text-truncate"
                                  t-att-class="{'fw-semibold': !m.flags_seen}" t-esc="m.subject"/>
                             <div class="text-muted small text-truncate" t-esc="m.preview"/>
+                            <div t-if="hasChips(m)" class="mt-1 d-flex flex-wrap gap-1 o-ow-chip-row">
+                                <t t-foreach="tagsOf(m)" t-as="tag" t-key="tag.id">
+                                    <span class="badge rounded-pill o-ow-tag-chip"
+                                          t-att-style="tagChipStyle(tag)" t-esc="tag.name"/>
+                                </t>
+                                <span t-if="m.partner_id" class="badge rounded-pill o-ow-customer-badge"
+                                      title="Sender is an Odoo contact">Customer</span>
+                            </div>
                         </div>
                         <div class="ms-1 d-flex flex-column align-items-end position-relative">
                             <button class="btn btn-sm btn-link p-0 o-ow-star"

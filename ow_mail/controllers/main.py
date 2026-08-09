@@ -172,6 +172,28 @@ def _envelope_to_dict(e, folder):
     }
 
 
+def _annotate_known_partners(msgs):
+    """Stamp each envelope wire dict with ``partner_id`` when the sender
+    address matches a ``res.partner`` (one batched query per page, matching
+    on ``email_normalized`` like the single-message endpoint). The frontend
+    renders a "Customer" badge for messages whose sender is a known contact;
+    no match → ``partner_id`` is False.
+    """
+    emails = {(m.get("from_email") or "").strip().lower() for m in msgs}
+    emails.discard("")
+    if not emails:
+        return msgs
+    partners = request.env["res.partner"].search_read(
+        [("email_normalized", "in", list(emails))],
+        ["id", "email_normalized"],
+    )
+    by_email = {p["email_normalized"]: p["id"] for p in partners}
+    for m in msgs:
+        m["partner_id"] = by_email.get(
+            (m.get("from_email") or "").strip().lower(), False)
+    return msgs
+
+
 def _tag_keyword_lookup(name):
     """Resolve a label name to its IMAP keyword string, or None.
 
@@ -469,8 +491,8 @@ class OwMailController(http.Controller):
                         filtered.sort(key=lambda e: uid_order.get(e["uid"], 0))
                         total = len(filtered)
                         page_envs = filtered[int(offset): int(offset) + int(limit)]
-                        return {"total": total, "messages": [
-                            _envelope_to_dict(e, folder) for e in page_envs]}
+                        return {"total": total, "messages": _annotate_known_partners([
+                            _envelope_to_dict(e, folder) for e in page_envs])}
                 if post_filters:
                     # Post-filters need every envelope to decide; fetch
                     # all UIDs returned by IMAP first, then page. Cap so
@@ -482,8 +504,8 @@ class OwMailController(http.Controller):
                     filtered.sort(key=lambda e: uid_order.get(e["uid"], 0))
                     total = len(filtered)
                     page_envs = filtered[int(offset): int(offset) + int(limit)]
-                    return {"total": total, "messages": [
-                        _envelope_to_dict(e, folder) for e in page_envs]}
+                    return {"total": total, "messages": _annotate_known_partners([
+                        _envelope_to_dict(e, folder) for e in page_envs])}
                 total = len(uids)
                 page = uids[int(offset): int(offset) + int(limit)]
                 envs = imap_utils.fetch_envelopes(conn, page)
@@ -498,7 +520,7 @@ class OwMailController(http.Controller):
             if not e:
                 continue
             out.append(_envelope_to_dict(e, folder))
-        return {"total": total, "messages": out}
+        return {"total": total, "messages": _annotate_known_partners(out)}
 
     def _messages_all_folders(self, criteria, filter, search, tag_keyword,
                               post_filters, dsl_active,
@@ -547,7 +569,7 @@ class OwMailController(http.Controller):
                     "size": "size"}.get(sort_by, "date")
         all_msgs.sort(key=lambda m: m.get(sort_key) or "", reverse=reverse)
         total = len(all_msgs)
-        page = all_msgs[offset: offset + limit]
+        page = _annotate_known_partners(all_msgs[offset: offset + limit])
         return {"total": total, "messages": page}
 
     @http.route("/ow_mail/message/source/<int:folder_id>/<int:uid>",
@@ -681,7 +703,13 @@ class OwMailController(http.Controller):
             [("email", "=ilike", env["from_email"])], limit=1
         )
 
-        keywords = [f for f in (flags_str or "").split() if f and not f.startswith("\\")]
+        # flags_str is the raw FETCH response line (e.g. ``1 (UID 1 FLAGS
+        # (\Seen OwTag_X) BODY[] {n}``) — extract the FLAGS group before
+        # splitting, otherwise surrounding tokens pollute the keyword list
+        # and custom tags never resolve.
+        flags_m = re.search(r"FLAGS \(([^)]*)\)", flags_str or "")
+        keywords = [f for f in (flags_m.group(1).split() if flags_m else [])
+                    if f and not f.startswith("\\")]
         return {
             "folder_id": folder.id,
             "uid": int(uid),
@@ -1095,10 +1123,15 @@ class OwMailController(http.Controller):
                         if not isinstance(part, (bytes, bytearray)):
                             continue
                         line = part.decode(errors="replace")
-                        m = re.search(r"UID (\d+).*?FLAGS \(([^)]*)\)", line)
-                        if m:
-                            kw = [f for f in m.group(2).split() if f and not f.startswith("\\")]
-                            per_uid[int(m.group(1))] = kw
+                        # UID and FLAGS order differs per server (Dovecot:
+                        # "UID n FLAGS (...)", GreenMail: "FLAGS (...) UID n")
+                        # — match them independently so removal works on both.
+                        m_uid = re.search(r"UID (\d+)", line)
+                        m_flags = re.search(r"FLAGS \(([^)]*)\)", line)
+                        if m_uid and m_flags:
+                            kw = [f for f in m_flags.group(1).split()
+                                  if f and not f.startswith("\\")]
+                            per_uid[int(m_uid.group(1))] = kw
                     target_kws = [t.imap_keyword for t in tags if t.imap_keyword]
                     all_ow_kws = [t.imap_keyword for t in
                                    request.env["ow.mail.tag"].search([]) if t.imap_keyword]

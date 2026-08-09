@@ -208,6 +208,20 @@ class OwMailAccount(models.Model):
         return self.env["ow.mail.crypto"].decrypt(
             self.sudo().smtp_password_enc, strict=True)
 
+    @api.model_create_multi
+    def create(self, vals_list):
+        """Seed the default tag set for each account owner on first account.
+
+        Users get their working label set (see ``ow.mail.tag.DEFAULT_TAGS``)
+        the moment they connect their first mailbox; users who already have
+        tags are left untouched.
+        """
+        accounts = super().create(vals_list)
+        Tag = self.env["ow.mail.tag"]
+        for user in accounts.mapped("user_id"):
+            Tag._ensure_default_tags(user)
+        return accounts
+
     # ---------------- IMAP/SMTP connect ----------------
 
     def _imap_connect(self):

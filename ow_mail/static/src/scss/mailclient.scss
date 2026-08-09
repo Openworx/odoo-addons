@@ -489,6 +489,83 @@
     }
 }
 
+// ---- Tags: sidebar list, list-row chips, viewer toggle strip ----
+.o-ow-mail {
+    .o-ow-tag-dot {
+        display: inline-block;
+        width: 10px;
+        height: 10px;
+        border-radius: 50%;
+    }
+
+    .o-ow-tag-row {
+        cursor: pointer;
+        border-radius: 6px;
+        margin: 1px 4px;
+        user-select: none;
+        &:hover { background: #eef; }
+        &.active { background: #dce8ff; font-weight: 600; }
+        .o-ow-tag-delete { visibility: hidden; }
+        &:hover .o-ow-tag-delete { visibility: visible; }
+    }
+
+    .o-ow-color-overlay {
+        position: fixed;
+        inset: 0;
+        z-index: 1050;
+    }
+
+    .o-ow-color-picker {
+        position: absolute;
+        top: 100%;
+        left: 8px;
+        z-index: 1051;
+        background: #fff;
+        border: 1px solid #dee2e6;
+        border-radius: 8px;
+        padding: 6px;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 6px;
+        width: 108px;
+    }
+
+    .o-ow-color-swatch {
+        width: 18px;
+        height: 18px;
+        border-radius: 50%;
+        cursor: pointer;
+        border: 2px solid transparent;
+        &:hover { transform: scale(1.15); }
+        &.active { border-color: #212529; }
+    }
+
+    .o-ow-chip-row .badge {
+        font-size: 0.68rem;
+        font-weight: 500;
+        padding: 0.25em 0.65em;
+    }
+
+    .o-ow-customer-badge {
+        background: #e7f1ec;
+        color: #1d7a4f;
+        border: 1px solid #bcd9c9;
+        font-weight: 500;
+    }
+
+    .o-ow-viewer-tags .o-ow-tag-toggle {
+        display: inline-flex;
+        align-items: center;
+        background: #fff;
+        border: 1px solid #ced4da;
+        color: #495057;
+        font-size: 0.72rem;
+        font-weight: 500;
+        cursor: pointer;
+        &:hover { border-color: #8b8f94; }
+    }
+}
+
 .o-ow-source-pre {
     font-family: ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
     font-size: 0.8rem;

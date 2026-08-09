@@ -10,6 +10,13 @@ from odoo.exceptions import ValidationError
 # range and matches the OwTag_<slug> shape emitted by _slug() below.
 _KEYWORD_RX = re.compile(r"^[A-Za-z0-9_-]{1,64}$")
 
+# Default tag set seeded per user on first account creation:
+# (display name, palette color index).
+DEFAULT_TAGS = [
+    ("Urgent", 1),       # red
+    ("Follow-up", 10),   # green
+]
+
 
 def _slug(name):
     """Convert a display name to an IMAP-safe atom fragment.
@@ -65,6 +72,24 @@ class OwMailTag(models.Model):
                 raise ValidationError(_(
                     "IMAP keyword %r must match [A-Za-z0-9_-] (1–64 chars)."
                 ) % kw)
+
+    @api.model
+    def _ensure_default_tags(self, user):
+        """Seed ``DEFAULT_TAGS`` for *user* if they have no tags yet.
+
+        Called when a user's first mail account is created, so every user
+        starts with the same basic label set. Runs as sudo with an explicit
+        ``user_id`` because an admin may create the account on behalf of
+        another user. Users who later delete these tags are not re-seeded —
+        the guard is "has no tags", checked only at account creation.
+        """
+        Tag = self.sudo()
+        if Tag.search_count([("user_id", "=", user.id)]):
+            return
+        Tag.create([
+            {"name": name, "color": color, "user_id": user.id}
+            for name, color in DEFAULT_TAGS
+        ])
 
     @api.model_create_multi
     def create(self, vals_list):

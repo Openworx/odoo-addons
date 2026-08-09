@@ -132,8 +132,8 @@ function buildThreads(messages) {
  *   (e.g. new mail detected by the IMAP cron).
  */
 export const owMailService = {
-    dependencies: ["notification", "bus_service"],
-    async start(env, { notification, bus_service }) {
+    dependencies: ["notification", "bus_service", "orm"],
+    async start(env, { notification, bus_service, orm }) {
         const PAGE_SIZE = 50;
         const LS_SORT_BY = "ow_mail.sortBy";
         const LS_SORT_ORDER = "ow_mail.sortOrder";
@@ -314,6 +314,106 @@ export const owMailService = {
             state.selectedKey = null;
             state.selectedMessage = null;
             await refreshList();
+        }
+
+        /**
+         * Re-fetch the tag list from the server into `state.tags`, using the
+         * same `{id, name, color, keyword}` shape as `/ow_mail/bootstrap`.
+         * Called after tag create/delete so every component sees the change.
+         *
+         * @async
+         */
+        async function reloadTags() {
+            const rows = await orm.searchRead(
+                "ow.mail.tag", [], ["name", "color", "imap_keyword"]);
+            state.tags = rows.map((r) => ({
+                id: r.id, name: r.name, color: r.color, keyword: r.imap_keyword,
+            }));
+        }
+
+        /**
+         * Create a new tag owned by the current user. The IMAP keyword is
+         * derived server-side (`OwTag_<slug>`); the palette color cycles by
+         * tag count so consecutive tags get distinct colors.
+         *
+         * @async
+         * @param {string} name - Display label; blank input is ignored.
+         */
+        async function createTag(name) {
+            const label = (name || "").trim();
+            if (!label) return;
+            const color = (state.tags.length % 11) + 1;
+            try {
+                await orm.create("ow.mail.tag", [{ name: label, color }]);
+            } catch (e) {
+                notification.add(_t("Could not create tag: %s", e.message || e),
+                    { type: "danger" });
+                return;
+            }
+            await reloadTags();
+        }
+
+        /**
+         * Delete a tag definition. Messages keep their IMAP keyword on the
+         * server, but without a matching `ow.mail.tag` it no longer resolves
+         * to a chip. Clears the active tag filter when it pointed at the
+         * deleted tag.
+         *
+         * @async
+         * @param {number} tagId
+         */
+        async function deleteTag(tagId) {
+            try {
+                await orm.unlink("ow.mail.tag", [tagId]);
+            } catch (e) {
+                notification.add(_t("Could not delete tag: %s", e.message || e),
+                    { type: "danger" });
+                return;
+            }
+            await reloadTags();
+            if (state.selection.tagId === tagId) {
+                state.selection.tagId = null;
+                await refreshList();
+            }
+        }
+
+        /**
+         * Change a tag's palette color. Chips, dots and toggle pills pick
+         * the new color up automatically because they all resolve colors
+         * through `state.tags`.
+         *
+         * @async
+         * @param {number} tagId
+         * @param {number} color - Palette index (0 = none/gray).
+         */
+        async function setTagColor(tagId, color) {
+            try {
+                await orm.write("ow.mail.tag", [tagId], { color });
+            } catch (e) {
+                notification.add(_t("Could not update tag: %s", e.message || e),
+                    { type: "danger" });
+                return;
+            }
+            await reloadTags();
+        }
+
+        /**
+         * Replace the tag set of a single message (viewer toggle strip).
+         * Issues the `set_tags` IMAP keyword diff via `runAction` and updates
+         * the open message optimistically so the strip responds instantly.
+         *
+         * @async
+         * @param {{folder_id: number, uid: number}} message
+         * @param {number[]} tagIds - Complete new tag id set for the message.
+         */
+        async function setMessageTags(message, tagIds) {
+            if (state.selectedMessage &&
+                    state.selectedMessage.folder_id === message.folder_id &&
+                    state.selectedMessage.uid === message.uid) {
+                state.selectedMessage.tag_ids = tagIds;
+            }
+            await runAction(message.folder_id, [message.uid], "set_tags",
+                { tag_ids: tagIds });
         }
 
         /**
@@ -1391,6 +1491,7 @@ export const owMailService = {
 
         return {
             state, bootstrap, refreshList, selectFolder, selectTag, setFilter, setSearch, searchAll, setSort,
+            createTag, deleteTag, setTagColor, setMessageTags,
             toggleThreadView, loadThread, goToPage,
             openMessage, editDraft, sync, runAction, archiveMessages, openCompose, closeCompose, sendCompose, saveDraft,
             moveSelection, openReply, openForward,

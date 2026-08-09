@@ -4,6 +4,7 @@ import { Component, useState } from "@odoo/owl";
 import { useService } from "@web/core/utils/hooks";
 import { _t } from "@web/core/l10n/translation";
 import { AvatarInitials } from "../avatar_initials/avatar_initials";
+import { owColor } from "../../utils/colors";
 
 /**
  * Message list pane — displays a paginated, filterable, sortable list of
@@ -101,6 +102,39 @@ export class MessageList extends Component {
      */
     keyOf(m) {
         return `${m.folder_id}:${m.uid}`;
+    }
+
+    /**
+     * Resolve a message's `tag_ids` to tag objects from the service state.
+     * Unknown ids (deleted tags whose keyword is still on the server) are
+     * silently dropped.
+     * @param {{ tag_ids: number[] }} m
+     * @returns {Array<{id: number, name: string, color: number}>}
+     */
+    tagsOf(m) {
+        if (!m.tag_ids || !m.tag_ids.length) {
+            return [];
+        }
+        const byId = new Map(this.state.tags.map((t) => [t.id, t]));
+        return m.tag_ids.map((id) => byId.get(id)).filter(Boolean);
+    }
+
+    /**
+     * Inline style for a tag chip: solid palette color with white text.
+     * @param {{ color: number }} tag
+     * @returns {string}
+     */
+    tagChipStyle(tag) {
+        return `background: ${owColor(tag.color)}; color: #fff;`;
+    }
+
+    /**
+     * Whether a row needs its chips line (any tag or the Customer badge).
+     * @param {{ tag_ids: number[], partner_id: number|false }} m
+     * @returns {boolean}
+     */
+    hasChips(m) {
+        return Boolean(m.partner_id || (m.tag_ids && m.tag_ids.length));
     }
 
     /**
