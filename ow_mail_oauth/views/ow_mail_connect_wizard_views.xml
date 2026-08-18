@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_ow_mail_connect_wizard_form_oauth" model="ir.ui.view">
+        <field name="name">ow.mail.connect.wizard.form.oauth</field>
+        <field name="model">ow.mail.connect.wizard</field>
+        <field name="inherit_id" ref="ow_mail.view_ow_mail_connect_wizard_form"/>
+        <field name="arch" type="xml">
+            <field name="name" position="before">
+                <field name="provider" widget="radio" options="{'horizontal': true}"/>
+            </field>
+            <field name="password" position="attributes">
+                <attribute name="invisible">provider != 'other'</attribute>
+                <attribute name="required">provider == 'other'</attribute>
+            </field>
+            <xpath expr="//field[@name='imap_host']/.." position="attributes">
+                <attribute name="invisible">provider != 'other'</attribute>
+            </xpath>
+            <xpath expr="//field[@name='smtp_host']/.." position="attributes">
+                <attribute name="invisible">provider != 'other'</attribute>
+            </xpath>
+        </field>
+    </record>
+</odoo>
