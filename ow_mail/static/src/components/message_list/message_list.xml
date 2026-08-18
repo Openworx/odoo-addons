@@ -2,7 +2,8 @@
 <templates xml:space="preserve">
 
 <t t-name="ow_mail.MessageList">
-    <section class="o-ow-list d-flex flex-column border-end">
+    <section class="o-ow-list d-flex flex-column border-end"
+             role="region" aria-label="Message list">
         <div class="o-ow-list-toolbar px-3 pt-2 pb-2 border-bottom">
             <div class="o-ow-search-row position-relative">
                 <i class="fa fa-search position-absolute top-50 start-0 translate-middle-y ms-3 text-muted"/>
@@ -87,25 +88,50 @@
                 </button>
             </div>
         </div>
-        <div t-if="checkedCount" class="o-ow-bulk-bar px-3 py-2 border-bottom d-flex align-items-center gap-2 flex-wrap">
+        <div t-if="checkedCount" class="o-ow-bulk-bar px-3 py-2 border-bottom d-flex align-items-center gap-2 flex-wrap"
+             role="toolbar" aria-label="Bulk actions">
             <span class="fw-semibold small"><t t-esc="checkedCount"/> selected</span>
-            <button class="btn btn-sm btn-outline-secondary" t-on-click="onBulkArchive" title="Archive">
-                <i class="fa fa-archive"/>
+            <button class="btn btn-sm btn-outline-secondary" t-on-click="onBulkArchive" title="Archive" aria-label="Archive">
+                <i class="fa fa-archive" aria-hidden="true"/>
             </button>
-            <button class="btn btn-sm btn-outline-danger" t-on-click="onBulkDelete" title="Delete">
-                <i class="fa fa-trash"/>
+            <button class="btn btn-sm btn-outline-danger" t-on-click="onBulkDelete" title="Delete" aria-label="Delete">
+                <i class="fa fa-trash" aria-hidden="true"/>
             </button>
-            <button class="btn btn-sm btn-outline-secondary" t-on-click="onBulkMarkRead" title="Mark read">
-                <i class="fa fa-envelope-open-o"/>
+            <button class="btn btn-sm btn-outline-secondary" t-on-click="onBulkMarkRead" title="Mark read" aria-label="Mark read">
+                <i class="fa fa-envelope-open-o" aria-hidden="true"/>
             </button>
-            <button class="btn btn-sm btn-outline-secondary" t-on-click="onBulkMarkUnread" title="Mark unread">
-                <i class="fa fa-envelope"/>
+            <button class="btn btn-sm btn-outline-secondary" t-on-click="onBulkMarkUnread" title="Mark unread" aria-label="Mark unread">
+                <i class="fa fa-envelope" aria-hidden="true"/>
             </button>
-            <button class="btn btn-sm btn-outline-warning" t-on-click="onBulkToggleFlag" title="Star">
-                <i class="fa fa-star"/>
+            <button class="btn btn-sm btn-outline-warning" t-on-click="onBulkToggleFlag" title="Star" aria-label="Star">
+                <i class="fa fa-star" aria-hidden="true"/>
             </button>
-            <button class="btn btn-sm btn-outline-secondary" t-on-click="onBulkForward" title="Forward">
-                <i class="fa fa-share"/>
+            <div class="dropdown" t-if="state.tags.length">
+                <button class="btn btn-sm btn-outline-secondary" data-bs-toggle="dropdown"
+                        aria-expanded="false" title="Label" aria-label="Label">
+                    <i class="fa fa-tag" aria-hidden="true"/>
+                </button>
+                <ul class="dropdown-menu p-1" style="min-width:210px;">
+                    <li class="px-2 py-1 small text-muted">Click to add · × to remove</li>
+                    <t t-foreach="state.tags" t-as="tag" t-key="tag.id">
+                        <li class="d-flex align-items-center">
+                            <button class="dropdown-item d-flex align-items-center gap-2 flex-grow-1"
+                                    t-on-click="() => this.onBulkTag(tag.id, 'add')">
+                                <span class="o-ow-tag-dot flex-shrink-0" t-att-style="tagDotStyle(tag)"/>
+                                <span class="text-truncate" t-esc="tag.name"/>
+                            </button>
+                            <button class="btn btn-sm btn-link text-muted p-0 mx-2 flex-shrink-0"
+                                    t-att-title="'Remove ' + tag.name"
+                                    t-att-aria-label="'Remove ' + tag.name"
+                                    t-on-click="() => this.onBulkTag(tag.id, 'remove')">
+                                <i class="fa fa-times" aria-hidden="true"/>
+                            </button>
+                        </li>
+                    </t>
+                </ul>
+            </div>
+            <button class="btn btn-sm btn-outline-secondary" t-on-click="onBulkForward" title="Forward" aria-label="Forward">
+                <i class="fa fa-share" aria-hidden="true"/>
             </button>
             <select class="form-select form-select-sm" style="width:auto;" t-on-change="onBulkMove">
                 <option value="">Move to…</option>
@@ -117,7 +143,8 @@
                 <i class="fa fa-times"/>
             </button>
         </div>
-        <div class="o-ow-list-body flex-grow-1 overflow-auto">
+        <div class="o-ow-list-body flex-grow-1 overflow-auto"
+             role="listbox" aria-label="Messages">
             <t t-if="!state.messages.length">
                 <div class="text-muted text-center p-5">No messages</div>
             </t>
@@ -248,13 +275,17 @@
             <t t-else="">
                 <t t-foreach="state.messages" t-as="m" t-key="keyOf(m)">
                     <div class="o-ow-list-item px-3 py-2 border-bottom d-flex"
-                         draggable="true"
+                         draggable="true" role="option" tabindex="-1"
+                         t-att-aria-selected="isSelected(m) ? 'true' : 'false'"
+                         t-att-aria-label="(m.flags_seen ? '' : 'Unread. ') + (m.from_name || m.from_email) + ': ' + m.subject"
                          t-att-class="{'active': isSelected(m), 'o-ow-unread': !m.flags_seen}"
                          t-on-click="() => this.onSelect(m)"
                          t-on-dblclick="() => this.onDblClick(m)"
+                         t-on-keydown="(ev) => this.onRowKey(ev, m)"
                          t-on-dragstart="(ev) => this.onDragStart(ev, m)"
                          t-on-dragend="onDragEnd">
                         <input type="checkbox" class="form-check-input me-2 mt-0 o-ow-msg-check flex-shrink-0"
+                               aria-label="Select message"
                                t-att-checked="isChecked(m)"
                                t-on-click="(ev) => this.onToggleCheck(ev, m)"/>
                         <AvatarInitials name="m.from_name" email="m.from_email"/>

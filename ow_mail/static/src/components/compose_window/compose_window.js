@@ -1,8 +1,12 @@
 /** @odoo-module **/
 
-import { Component, useState, useRef, onMounted } from "@odoo/owl";
+import { Component, useState, useRef, onMounted, onWillDestroy } from "@odoo/owl";
 import { useService } from "@web/core/utils/hooks";
+import { _t } from "@web/core/l10n/translation";
 import { RecipientInput } from "./recipient_input";
+
+/** Milliseconds between silent draft autosaves of a dirty compose window. */
+const AUTOSAVE_INTERVAL_MS = 30000;
 
 /**
  * Tags stripped entirely from user-composed HTML before sending.
@@ -122,21 +126,21 @@ export class ComposeWindow extends Component {
      *
      * @param {string} v - New recipient string (comma-separated RFC 5322 addresses).
      */
-    onUpdateTo(v) { this.props.win.to = v; }
+    onUpdateTo(v) { this.props.win.to = v; this.markDirty(); }
 
     /**
      * Update the "CC" recipient string from a `RecipientInput` update event.
      *
      * @param {string} v - New recipient string (comma-separated RFC 5322 addresses).
      */
-    onUpdateCc(v) { this.props.win.cc = v; }
+    onUpdateCc(v) { this.props.win.cc = v; this.markDirty(); }
 
     /**
      * Update the "BCC" recipient string from a `RecipientInput` update event.
      *
      * @param {string} v - New recipient string (comma-separated RFC 5322 addresses).
      */
-    onUpdateBcc(v) { this.props.win.bcc = v; }
+    onUpdateBcc(v) { this.props.win.bcc = v; this.markDirty(); }
 
     /**
      * OWL lifecycle setup hook.
@@ -162,6 +166,37 @@ export class ComposeWindow extends Component {
                 this.bodyRef.el.innerHTML = _sanitizeComposeHtml(this.props.win.body);
             }
         });
+        // Silent periodic autosave — the service skips pristine/empty/busy
+        // windows, so an idle ticker is cheap.
+        this._autosaveTimer = setInterval(
+            () => this.mail.autosaveDraft(this.props.win),
+            AUTOSAVE_INTERVAL_MS);
+        onWillDestroy(() => clearInterval(this._autosaveTimer));
+    }
+
+    /** Flag the window as having unsaved changes (drives autosave + guards). */
+    markDirty() {
+        this.props.win.dirty = true;
+    }
+
+    /**
+     * Footer status line: last autosave time or an unsaved-changes hint.
+     * @returns {string}
+     */
+    get saveStatus() {
+        const win = this.props.win;
+        if (win.saving) {
+            return _t("Saving…");
+        }
+        if (win.dirty) {
+            return _t("Unsaved changes");
+        }
+        if (win.lastSavedAt) {
+            const time = new Date(win.lastSavedAt).toLocaleTimeString(
+                [], { hour: "2-digit", minute: "2-digit" });
+            return _t("Draft saved at %s", time);
+        }
+        return "";
     }
 
     /**
@@ -214,6 +249,7 @@ export class ComposeWindow extends Component {
     onBodyInput() {
         if (!this.bodyRef.el) return;
         this.props.win.body = this.bodyRef.el.innerHTML;
+        this.markDirty();
     }
 
     /**
@@ -246,13 +282,27 @@ export class ComposeWindow extends Component {
     }
 
     /**
-     * Close this compose window silently.
+     * Close this compose window.
      *
-     * Delegates to `mail.closeCompose`. No unsaved-changes prompt is shown;
-     * any in-progress body content is discarded.
+     * With unsaved changes the user is asked whether to save a draft first;
+     * declining keeps any earlier autosaved copy (safer than deleting it)
+     * but discards the changes made since.
+     *
+     * @async
      */
-    onClose() {
-        this.mail.closeCompose(this.props.win.id);
+    async onClose() {
+        const win = this.props.win;
+        if (win.dirty) {
+            this.onBodyInput();
+            if (window.confirm(_t("Save this draft before closing?"))) {
+                const ok = await this.mail.saveDraft(win);
+                if (!ok) {
+                    return; // save failed — keep the window open
+                }
+                return;      // saveDraft already closed the window
+            }
+        }
+        this.mail.closeCompose(win.id);
     }
 
     /**
@@ -338,6 +388,7 @@ export class ComposeWindow extends Component {
                 continue;
             }
             this.props.win.attachments.push(data);
+            this.markDirty();
         }
     }
 
@@ -418,6 +469,7 @@ export class ComposeWindow extends Component {
      */
     removeAttachment(id) {
         this.props.win.attachments = this.props.win.attachments.filter((a) => a.id !== id);
+        this.markDirty();
     }
 
     /**

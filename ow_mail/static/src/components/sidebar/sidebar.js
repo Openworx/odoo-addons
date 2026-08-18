@@ -4,6 +4,8 @@ import { Component, useRef, useState } from "@odoo/owl";
 import { useService } from "@web/core/utils/hooks";
 import { _t } from "@web/core/l10n/translation";
 import { ConfirmationDialog } from "@web/core/confirmation_dialog/confirmation_dialog";
+import { SettingsDialog } from "../settings_dialog/settings_dialog";
+import { ShortcutsDialog } from "../shortcuts_dialog/shortcuts_dialog";
 import { owColor, OW_PALETTE, OW_COLOR_FALLBACK } from "../../utils/colors";
 
 /** MIME type used to identify drag-drop payloads originating from MessageList. */
@@ -68,8 +70,28 @@ export class Sidebar extends Component {
         this.dialog = useService("dialog");
         this.state = useState(this.mail.state);
         this.dnd = useState({ targetId: null });
-        this.ui = useState({ syncingAccountId: null, newTagName: "", colorPickerTagId: null });
+        this.ui = useState({
+            syncingAccountId: null, newTagName: "", colorPickerTagId: null,
+            renameTagId: null, renameValue: "",
+        });
         this.newTagInput = useRef("newTagInput");
+    }
+
+    /**
+     * Activate a virtual smart folder ("starred" | "unread") and switch to
+     * the mail view.
+     * @param {"starred"|"unread"} kind
+     */
+    onSmart(kind) {
+        this.mail.selectSmart(kind);
+        this._closeMobileDrawer();
+    }
+
+    /** Open the in-client settings dialog (gear in the sidebar footer). */
+    onOpenSettings() {
+        this.dialog.add(SettingsDialog, {
+            openShortcuts: () => this.dialog.add(ShortcutsDialog, {}),
+        });
     }
 
     /**
@@ -278,19 +300,52 @@ export class Sidebar extends Component {
 
     /**
      * Delete a tag definition after an explicit confirmation dialog. The
-     * IMAP keywords remain on the server; only the local label/color
-     * mapping disappears.
+     * server-side ``unlink`` also removes the IMAP keyword from tagged
+     * messages (best-effort).
      * @param {{ id: number, name: string }} tag
      */
     onDeleteTag(tag) {
         this.dialog.add(ConfirmationDialog, {
             title: _t("Delete tag"),
-            body: _t('Delete the tag "%s"? Messages keep the label on the mail server, but it will no longer be shown or filterable.', tag.name),
+            body: _t('Delete the tag "%s"? The label is also removed from tagged messages on the mail server.', tag.name),
             confirmLabel: _t("Delete"),
             cancelLabel: _t("Cancel"),
             confirm: () => this.mail.deleteTag(tag.id),
             cancel: () => {},
         });
+    }
+
+    /**
+     * Switch a tag row to inline-rename mode (pencil button).
+     * @param {{ id: number, name: string }} tag
+     */
+    onStartRenameTag(tag) {
+        this.ui.renameTagId = tag.id;
+        this.ui.renameValue = tag.name;
+    }
+
+    /** Commit the inline rename; empty input just cancels. */
+    async onCommitRenameTag(tag) {
+        const name = (this.ui.renameValue || "").trim();
+        this.ui.renameTagId = null;
+        this.ui.renameValue = "";
+        if (name && name !== tag.name) {
+            await this.mail.renameTag(tag.id, name);
+        }
+    }
+
+    /**
+     * Keyboard handling for the inline rename input.
+     * @param {KeyboardEvent} ev
+     * @param {{ id: number, name: string }} tag
+     */
+    onRenameTagKey(ev, tag) {
+        if (ev.key === "Enter") {
+            this.onCommitRenameTag(tag);
+        } else if (ev.key === "Escape") {
+            this.ui.renameTagId = null;
+            this.ui.renameValue = "";
+        }
     }
 
     /**

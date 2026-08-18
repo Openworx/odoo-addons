@@ -2,7 +2,8 @@
 <templates xml:space="preserve">
 
 <t t-name="ow_mail.MessageViewer">
-    <section class="o-ow-viewer flex-grow-1 d-flex flex-column">
+    <section class="o-ow-viewer flex-grow-1 d-flex flex-column"
+             role="region" aria-label="Message">
         <t t-if="!state.selectedMessage">
             <div class="d-flex flex-grow-1 justify-content-center align-items-center text-muted">
                 <div class="text-center">
@@ -12,7 +13,8 @@
             </div>
         </t>
         <t t-else="">
-            <div class="o-ow-viewer-toolbar border-bottom px-3 py-2 d-flex gap-2 flex-wrap">
+            <div class="o-ow-viewer-toolbar border-bottom px-3 py-2 d-flex gap-2 flex-wrap"
+                 role="toolbar" aria-label="Message actions">
                 <button class="btn btn-sm btn-primary" t-on-click="() => this.onReply(false)">
                     <i class="fa fa-reply"/> Reply
                 </button>
@@ -148,7 +150,7 @@
             <!-- Single message view -->
             <t t-else="">
                 <div class="o-ow-viewer-head px-3 py-2">
-                    <h4 class="mb-2 d-flex align-items-center">
+                    <h4 class="mb-2 d-flex align-items-center" tabindex="-1" t-ref="subjectHeading">
                         <span t-esc="state.selectedMessage.subject"/>
                         <button t-if="isDraft" class="btn btn-sm btn-link ms-2 p-0" t-on-click="onEditDraft"
                                 title="Edit draft">

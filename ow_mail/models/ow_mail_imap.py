@@ -638,6 +638,146 @@ def fetch_envelopes(conn, uids):
     return results
 
 
+# ---------------- List-view preview snippets ----------------
+
+_PREVIEW_FETCH_BYTES = 2048   # partial-fetch size per message body part
+_PREVIEW_MAX_LEN = 140        # characters kept in the snippet
+
+_SNIPPET_DROP_BLOCK_RX = re.compile(
+    r"<(script|style|head|title)[^>]*>.*?</\1\s*>", re.I | re.S)
+_SNIPPET_TAG_RX = re.compile(r"<[^>]*>?")
+
+
+def snippet_from_bytes(payload, ctype, cte, charset, max_len=_PREVIEW_MAX_LEN):
+    """Turn a *partial* raw MIME part payload into a short plain-text snippet.
+
+    The payload comes from a truncated ``BODY.PEEK[n]<0.N>`` fetch, so the
+    transfer decoding must tolerate mid-stream truncation: base64 is cut back
+    to a multiple of 4 chars, quoted-printable and charset decoding both use
+    ``errors="replace"``. HTML parts are tag-stripped. Never raises — a
+    malformed part yields ``""``.
+    """
+    if not payload:
+        return ""
+    try:
+        cte = (cte or "").strip().lower()
+        if cte == "base64":
+            import base64
+            compact = re.sub(rb"\s+", b"", payload)
+            compact = compact[: len(compact) // 4 * 4]
+            try:
+                payload = base64.b64decode(compact)
+            except Exception:
+                return ""
+        elif cte == "quoted-printable":
+            import quopri
+            # Drop a truncated trailing escape ("=" or "=X") before decoding.
+            payload = re.sub(rb"=[0-9A-Fa-f]?$", b"", payload)
+            payload = quopri.decodestring(payload)
+        for cs in (charset or "utf-8", "utf-8", "latin-1"):
+            try:
+                text = payload.decode(cs, "replace")
+                break
+            except LookupError:
+                continue
+        else:
+            return ""
+        base = (ctype or "").split(";", 1)[0].strip().lower()
+        if base == "text/html":
+            text = _SNIPPET_DROP_BLOCK_RX.sub(" ", text)
+            text = _SNIPPET_TAG_RX.sub(" ", text)
+            text = _stdlib_html.unescape(text)
+        elif base and not base.startswith("text/"):
+            return ""
+        text = re.sub(r"\s+", " ", text).strip()
+        return text[:max_len]
+    except Exception:
+        return ""
+
+
+def _parse_part_mime(mime_bytes):
+    """Parse a ``BODY[n.MIME]`` header block into ``(ctype, charset, cte)``."""
+    try:
+        hdr = email.message_from_bytes(mime_bytes or b"")
+        return (
+            hdr.get_content_type(),
+            hdr.get_content_charset(),
+            hdr.get("Content-Transfer-Encoding", ""),
+        )
+    except Exception:
+        return "text/plain", None, ""
+
+
+def _parse_preview_fetch(data):
+    """Group a multi-literal FETCH response into ``{uid: {section: bytes}}``.
+
+    A FETCH requesting two body sections returns *two* ``(meta, literal)``
+    tuples per message in imaplib's response list, with the UID present only
+    in the first tuple's metadata on most servers. Item order differs between
+    Dovecot and GreenMail (same caveat as ``set_tags`` in the controller), so
+    UID and section are matched independently per tuple.
+    """
+    out = {}
+    cur_uid = None
+    for item in data or []:
+        if not isinstance(item, tuple) or len(item) != 2:
+            continue
+        meta = item[0].decode(errors="replace") if isinstance(item[0], bytes) else str(item[0])
+        m_uid = re.search(r"UID (\d+)", meta)
+        if m_uid:
+            cur_uid = int(m_uid.group(1))
+        m_sec = re.search(r"BODY\[([0-9.]+(?:\.MIME)?)\]", meta, re.I)
+        if cur_uid is None or not m_sec:
+            continue
+        out.setdefault(cur_uid, {})[m_sec.group(1).upper()] = item[1] or b""
+    return out
+
+
+def fetch_previews(conn, uids, max_len=_PREVIEW_MAX_LEN):
+    """Return ``{uid: snippet}`` for the given UIDs using bounded partial fetches.
+
+    One batched ``UID FETCH`` grabs part ``1`` (the text/plain alternative of
+    a multipart/alternative message, or the single body part) plus its MIME
+    headers, truncated at ``_PREVIEW_FETCH_BYTES``. Messages whose part 1 is
+    itself multipart (multipart/mixed wrapping an alternative) get one second
+    batched fetch for part ``1.1``. Cost: at most 2 round-trips per page and
+    ~2 KB per message. Fully best-effort — any failure yields ``{}`` or a
+    missing uid, never an exception.
+    """
+    if not uids:
+        return {}
+    previews = {}
+    try:
+        def _fetch_round(round_uids, section):
+            uid_set = ",".join(str(u) for u in round_uids)
+            typ, data = conn.uid(
+                "FETCH", uid_set,
+                f"(UID BODY.PEEK[{section}.MIME] "
+                f"BODY.PEEK[{section}]<0.{_PREVIEW_FETCH_BYTES}>)")
+            if typ != "OK":
+                return {}
+            return _parse_preview_fetch(data)
+
+        nested = []
+        for uid, parts in _fetch_round(uids, "1").items():
+            ctype, charset, cte = _parse_part_mime(parts.get("1.MIME"))
+            if ctype.startswith("multipart/"):
+                nested.append(uid)
+                continue
+            previews[uid] = snippet_from_bytes(
+                parts.get("1", b""), ctype, cte, charset, max_len)
+        if nested:
+            for uid, parts in _fetch_round(nested, "1.1").items():
+                ctype, charset, cte = _parse_part_mime(parts.get("1.1.MIME"))
+                if ctype.startswith("multipart/"):
+                    continue
+                previews[uid] = snippet_from_bytes(
+                    parts.get("1.1", b""), ctype, cte, charset, max_len)
+    except Exception as e:
+        _logger.debug("ow_mail preview fetch failed: %s", e)
+    return previews
+
+
 def status_counts(conn, folder_path):
     """Return (messages, unseen) via IMAP STATUS."""
     typ, data = conn.status(imap_mbox_quote(folder_path), "(MESSAGES UNSEEN)")

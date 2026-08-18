@@ -167,3 +167,14 @@ class TestMessagesRoute(HttpCase):
         res = self._search("Lunch")
         subjects = self._subjects(res)
         self.assertIn("Lunch tomorrow?", subjects)
+
+    def test_preview_snippets_populated(self):
+        # helpers._build_message stores the subject as the text/plain
+        # alternative, so the preview of each fixture equals its subject.
+        res = self._search(None)
+        by_subject = {m["subject"]: m for m in res.get("messages", [])}
+        self.assertIn("Lunch tomorrow?", by_subject)
+        self.assertEqual(by_subject["Lunch tomorrow?"]["preview"],
+                         "Lunch tomorrow?")
+        self.assertEqual(by_subject["Weekly report — Q2"]["preview"],
+                         "Weekly report — Q2")

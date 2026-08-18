@@ -4,6 +4,7 @@ access_ow_mail_folder_user,ow.mail.folder.user,model_ow_mail_folder,base.group_u
 access_ow_mail_tag_user,ow.mail.tag.user,model_ow_mail_tag,base.group_user,1,1,1,1
 access_ow_mail_contact_user,ow.mail.contact.user,model_ow_mail_contact,base.group_user,1,1,1,1
 access_ow_mail_trusted_sender_user,ow.mail.trusted.sender.user,model_ow_mail_trusted_sender,base.group_user,1,1,1,1
+access_ow_mail_preferences_user,ow.mail.preferences.user,model_ow_mail_preferences,base.group_user,1,1,1,1
 access_ow_mail_compose,ow.mail.compose.user,model_ow_mail_compose,base.group_user,1,1,1,1
 access_ow_mail_connect_wizard,ow.mail.connect.wizard.user,model_ow_mail_connect_wizard,base.group_user,1,1,1,1
 access_ow_mail_attach_record,ow.mail.attach.record.user,model_ow_mail_attach_record,base.group_user,1,1,1,1

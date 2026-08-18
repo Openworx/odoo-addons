@@ -3,23 +3,36 @@
 
 <t t-name="ow_mail.Sidebar">
     <aside class="o-ow-sidebar d-flex flex-column border-end"
+           role="navigation" aria-label="Mailboxes"
            t-att-class="{'o-ow-sidebar-collapsed': props.collapsed || state.viewport === 'tablet'}">
         <button class="o-ow-compose-btn btn btn-dark rounded-pill d-flex align-items-center justify-content-center gap-2 mx-2 mt-2 mb-1 py-2"
                 t-on-click="onCompose">
-            <i class="fa fa-pencil"/>
+            <i class="fa fa-pencil" aria-hidden="true"/>
             <span>Compose</span>
         </button>
         <button class="o-ow-all-mailboxes btn btn-light text-start mx-2 mt-1"
                 title="All Mailboxes"
-                t-att-class="{'active': state.view === 'mail' &amp;&amp; !state.selection.accountId &amp;&amp; !state.selection.tagId}"
+                t-att-class="{'active': state.view === 'mail' &amp;&amp; !state.selection.accountId &amp;&amp; !state.selection.tagId &amp;&amp; !state.selection.smart}"
                 t-on-click="onAllMailboxes">
-            <i class="fa fa-inbox me-2"/><span>All Mailboxes</span>
+            <i class="fa fa-inbox me-2" aria-hidden="true"/><span>All Mailboxes</span>
+        </button>
+        <button class="o-ow-all-mailboxes o-ow-smart-starred btn btn-light text-start mx-2 mt-1"
+                title="Starred — all accounts"
+                t-att-class="{'active': state.view === 'mail' &amp;&amp; state.selection.smart === 'starred'}"
+                t-on-click="() => this.onSmart('starred')">
+            <i class="fa fa-star-o me-2" aria-hidden="true"/><span>Starred</span>
+        </button>
+        <button class="o-ow-all-mailboxes o-ow-smart-unread btn btn-light text-start mx-2 mt-1"
+                title="Unread — all accounts"
+                t-att-class="{'active': state.view === 'mail' &amp;&amp; state.selection.smart === 'unread'}"
+                t-on-click="() => this.onSmart('unread')">
+            <i class="fa fa-envelope me-2" aria-hidden="true"/><span>Unread</span>
         </button>
         <button class="o-ow-contacts-btn btn btn-light text-start mx-2 mt-1 mb-2"
                 title="Contacts"
                 t-att-class="{'active': state.view === 'contacts'}"
                 t-on-click="onContacts">
-            <i class="fa fa-address-book-o me-2"/><span>Contacts</span>
+            <i class="fa fa-address-book-o me-2" aria-hidden="true"/><span>Contacts</span>
         </button>
 
 <div class="o-ow-accounts flex-grow-1 overflow-auto px-1">
@@ -66,13 +79,31 @@
                          t-on-click="() => this.onTag(tag.id)">
                         <span class="o-ow-tag-dot me-2 flex-shrink-0" role="button"
                               title="Change color"
+                              t-att-aria-label="'Change color of ' + tag.name"
                               t-att-style="tagDotStyle(tag)"
                               t-on-click.stop="() => this.onTagDot(tag)"/>
-                        <span class="flex-grow-1 text-truncate" t-esc="tag.name"/>
+                        <t t-if="ui.renameTagId === tag.id">
+                            <input type="text" class="form-control form-control-sm flex-grow-1"
+                                   t-model="ui.renameValue"
+                                   t-att-aria-label="'Rename tag ' + tag.name"
+                                   t-on-click.stop="onPickerClick"
+                                   t-on-keydown.stop="(ev) => this.onRenameTagKey(ev, tag)"
+                                   t-on-blur="() => this.onCommitRenameTag(tag)"/>
+                        </t>
+                        <t t-else="">
+                            <span class="flex-grow-1 text-truncate" t-esc="tag.name"/>
+                        </t>
+                        <button class="btn btn-sm btn-link p-0 text-muted o-ow-tag-delete me-1"
+                                title="Rename tag"
+                                t-att-aria-label="'Rename tag ' + tag.name"
+                                t-on-click.stop="() => this.onStartRenameTag(tag)">
+                            <i class="fa fa-pencil" aria-hidden="true"/>
+                        </button>
                         <button class="btn btn-sm btn-link p-0 text-muted o-ow-tag-delete"
                                 title="Delete tag"
+                                t-att-aria-label="'Delete tag ' + tag.name"
                                 t-on-click.stop="() => this.onDeleteTag(tag)">
-                            <i class="fa fa-trash-o"/>
+                            <i class="fa fa-trash-o" aria-hidden="true"/>
                         </button>
                         <t t-if="ui.colorPickerTagId === tag.id">
                             <div class="o-ow-color-overlay" t-on-click.stop="closeColorPicker"/>
@@ -102,10 +133,15 @@
             </div>
         </div>
 
-        <div class="border-top px-2 py-2 mt-auto">
-            <button class="btn btn-sm btn-light w-100" t-on-click="() => props.toggleSidebar()"
-                    t-att-title="props.collapsed ? 'Show sidebar' : 'Hide sidebar'">
-                <i class="fa" t-att-class="props.collapsed ? 'fa-angle-double-right' : 'fa-angle-double-left'"/>
+        <div class="border-top px-2 py-2 mt-auto d-flex gap-1">
+            <button class="btn btn-sm btn-light flex-grow-1" t-on-click="onOpenSettings"
+                    title="Mail settings" aria-label="Mail settings">
+                <i class="fa fa-cog" aria-hidden="true"/>
+            </button>
+            <button class="btn btn-sm btn-light flex-grow-1" t-on-click="() => props.toggleSidebar()"
+                    t-att-title="props.collapsed ? 'Show sidebar' : 'Hide sidebar'"
+                    t-att-aria-label="props.collapsed ? 'Show sidebar' : 'Hide sidebar'">
+                <i class="fa" aria-hidden="true" t-att-class="props.collapsed ? 'fa-angle-double-right' : 'fa-angle-double-left'"/>
             </button>
         </div>
     </aside>
