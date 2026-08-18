@@ -12,6 +12,7 @@
         <img src="https://download.openworx.nl/logo.png" alt="Openworx" style="max-width: 150px; height: auto; margin-bottom: 26px; filter: brightness(0) invert(1);"/>
         <div>
             <span style="display: inline-block; background: rgba(255,148,13,0.15); color: #FFB65C; font-size: 12px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; padding: 7px 18px; border-radius: 999px; margin-bottom: 22px; border: 1px solid rgba(255,148,13,0.35);">Companion module for OW Mail</span>
+            <span style="display: inline-block; background: rgba(0,152,255,0.18); color: #7cc4ff; font-size: 12px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; padding: 7px 18px; border-radius: 999px; margin-bottom: 22px; margin-left: 8px; border: 1px solid rgba(0,152,255,0.4);">Beta</span>
         </div>
         <h1 style="font-size: 42px; line-height: 1.1; margin: 0 0 18px 0; font-weight: 800; letter-spacing: -0.02em; color: #ffffff;">
             <span style="color: #FF940D;">OW Mail OAuth.</span><br/>Gmail &amp; Microsoft 365, done right.
@@ -93,10 +94,15 @@
             <span style="position: absolute; left: 16px; top: 18px; width: 32px; height: 32px; background: #FF940D; color: #fff; border-radius: 50%; text-align: center; line-height: 32px; font-weight: 800; font-size: 14px;">3</span>
             Every user: <strong style="color: #0A1128;">OW Mail → Connect Mailbox</strong> → pick your provider → sign in on the consent screen. Done.
         </div>
-        <p style="margin: 0; color: #718096; font-size: 14px;">
+        <p style="margin: 0 0 8px 0; color: #718096; font-size: 14px;">
             Requires OW Mail and an Odoo instance reachable over HTTPS. Google marks the Gmail scope
             as <em>restricted</em>: use "Internal" for your own Workspace domain, or complete Google's
             verification for public production use.
+        </p>
+        <p style="margin: 0; color: #718096; font-size: 14px;">
+            <strong style="color: #0A1128;">Beta status:</strong> the module is fully unit-tested, but the
+            end-to-end OAuth flow depends on your provider app registration — feedback from real-world
+            Gmail / Microsoft&nbsp;365 tenants is welcome.
         </p>
     </div>
 

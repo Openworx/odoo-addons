@@ -1,4 +1,8 @@
-# OW Mail OAuth (Gmail / Microsoft 365)
+# OW Mail OAuth (Gmail / Microsoft 365) — beta
+
+> **Beta status.** The module is fully unit-tested, but the end-to-end
+> OAuth flow depends on your provider app registration (Google Cloud /
+> Azure). Feedback from real-world tenants is welcome.
 
 Bridge module that adds OAuth2 authentication (XOAUTH2) to OW Mail
 accounts, on top of Odoo's standard `google_gmail` and `microsoft_outlook`
