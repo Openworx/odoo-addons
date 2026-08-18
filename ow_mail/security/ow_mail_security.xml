@@ -25,6 +25,12 @@
             <field name="domain_force">[('user_id','=',user.id)]</field>
             <field name="groups" eval="[(4, ref('base.group_user'))]"/>
         </record>
+        <record id="rule_ow_mail_preferences_user" model="ir.rule">
+            <field name="name">OW Mail preferences: own only</field>
+            <field name="model_id" ref="model_ow_mail_preferences"/>
+            <field name="domain_force">[('user_id','=',user.id)]</field>
+            <field name="groups" eval="[(4, ref('base.group_user'))]"/>
+        </record>
         <record id="rule_ow_mail_trusted_sender_user" model="ir.rule">
             <field name="name">OW Mail trusted sender: own only</field>
             <field name="model_id" ref="model_ow_mail_trusted_sender"/>

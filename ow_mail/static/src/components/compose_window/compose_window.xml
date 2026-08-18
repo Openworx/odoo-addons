@@ -56,7 +56,8 @@
                         <RecipientInput placeholder="'Bcc'" value="props.win.bcc"
                                         onUpdate="(v) => this.onUpdateBcc(v)"/>
                     </div>
-                    <input class="form-control form-control-sm mb-1" placeholder="Subject" t-model="props.win.subject"/>
+                    <input class="form-control form-control-sm mb-1" placeholder="Subject"
+                           t-model="props.win.subject" t-on-input="markDirty"/>
                 </div>
 
                 <!-- Toolbar -->
@@ -177,7 +178,9 @@
                         title="Insert signature">
                     <i class="fa fa-id-card-o"/>
                 </button>
-                <div class="flex-grow-1"/>
+                <div class="flex-grow-1 text-center">
+                    <small class="text-muted o-ow-save-status" t-esc="saveStatus"/>
+                </div>
                 <button class="btn btn-sm btn-outline-secondary me-2" t-on-click="onDraft">
                     <i class="fa fa-floppy-o me-1"/> Draft
                 </button>

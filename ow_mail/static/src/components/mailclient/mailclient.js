@@ -8,6 +8,7 @@ import { MessageList } from "../message_list/message_list";
 import { MessageViewer } from "../message_viewer/message_viewer";
 import { ComposeWindow } from "../compose_window/compose_window";
 import { Contacts } from "../contacts/contacts";
+import { ShortcutsDialog } from "../shortcuts_dialog/shortcuts_dialog";
 import { registerMailHotkeys } from "./hotkeys";
 
 /** `localStorage` key used to persist the sidebar collapsed state across page loads. */
@@ -38,6 +39,8 @@ export class Mailclient extends Component {
      */
     setup() {
         this.mail = useService("ow_mail");
+        this.dialog = useService("dialog");
+        this.action = useService("action");
         this.state = useState(this.mail.state);
         this.ui = useState({ sidebarCollapsed: localStorage.getItem(LS_KEY) === "1" });
         registerMailHotkeys(this);
@@ -48,6 +51,37 @@ export class Mailclient extends Component {
                 await this.mail.searchAll(search);
             }
         });
+    }
+
+    /**
+     * Whether the onboarding empty-state should be shown instead of the
+     * list/viewer panes: bootstrap finished and the user has no usable
+     * account yet (none at all, or none past the draft/error state).
+     * @returns {boolean}
+     */
+    get needsOnboarding() {
+        if (!this.state.bootstrapped || this.state.view !== "mail") {
+            return false;
+        }
+        return !this.state.accounts.some(
+            (a) => a.state === "confirmed" && a.folders.length);
+    }
+
+    /** First account-level error message, for the onboarding panel. */
+    get onboardingError() {
+        const broken = this.state.accounts.find(
+            (a) => a.state === "error" && a.error_message);
+        return broken ? broken.error_message : "";
+    }
+
+    /** Launch the Connect Mailbox wizard; it returns to the client on success. */
+    onConnectMailbox() {
+        this.action.doAction("ow_mail.action_ow_mail_connect_wizard");
+    }
+
+    /** Open the keyboard-shortcut cheatsheet dialog (hotkey `?`). */
+    openShortcutsDialog() {
+        this.dialog.add(ShortcutsDialog, {});
     }
 
     /**

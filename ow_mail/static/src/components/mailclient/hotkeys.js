@@ -70,14 +70,20 @@ export function registerMailHotkeys(component) {
     useHotkey("s", () => { if (hasSelection()) mail.toggleStarSelected(); });
     useHotkey("u", () => { if (hasSelection()) mail.toggleReadSelected(); });
 
-    // "/" is not in Odoo's hotkey whitelist, use a raw keydown listener.
+    // "/" and "?" are not in Odoo's hotkey whitelist (and "?" is a shifted
+    // key on most layouts), so both use a raw keydown listener.
     useEffect(
         () => {
             const handler = (ev) => {
-                if (ev.key !== "/" || ev.ctrlKey || ev.metaKey || ev.altKey) return;
+                if (ev.ctrlKey || ev.metaKey || ev.altKey) return;
                 if (isEditableTarget(ev.target)) return;
-                ev.preventDefault();
-                mail.focusSearch();
+                if (ev.key === "/") {
+                    ev.preventDefault();
+                    mail.focusSearch();
+                } else if (ev.key === "?") {
+                    ev.preventDefault();
+                    component.openShortcutsDialog();
+                }
             };
             document.addEventListener("keydown", handler);
             return () => document.removeEventListener("keydown", handler);

@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+
+<t t-name="ow_mail.SettingsDialog">
+    <Dialog title="title" size="'md'">
+        <div class="o-ow-settings">
+            <div class="mb-3">
+                <label class="form-label fw-semibold" for="ow-settings-mark-read">Mark as read</label>
+                <select id="ow-settings-mark-read" class="form-select"
+                        t-model="local.mark_read_delay">
+                    <t t-foreach="delayOptions" t-as="opt" t-key="opt.value">
+                        <option t-att-value="opt.value" t-esc="opt.label"/>
+                    </t>
+                </select>
+                <div class="form-text">
+                    When an opened message is marked as read.
+                </div>
+            </div>
+            <div class="form-check mb-3">
+                <input class="form-check-input" type="checkbox" id="ow-settings-thread-default"
+                       t-model="local.thread_view_default"/>
+                <label class="form-check-label" for="ow-settings-thread-default">
+                    Conversation view by default
+                </label>
+            </div>
+            <hr/>
+            <div class="d-flex flex-column gap-2">
+                <button class="btn btn-light text-start" t-on-click="onOpenAccount"
+                        t-att-disabled="!state.accounts.length">
+                    <i class="fa fa-id-card-o me-2"/>Signature &amp; account settings…
+                </button>
+                <button class="btn btn-light text-start" t-on-click="onShowShortcuts">
+                    <i class="fa fa-keyboard-o me-2"/>Keyboard shortcuts…
+                </button>
+            </div>
+        </div>
+        <t t-set-slot="footer">
+            <button class="btn btn-primary" t-on-click="onSave">Save</button>
+            <button class="btn btn-secondary" t-on-click="() => this.props.close()">Discard</button>
+        </t>
+    </Dialog>
+</t>
+
+</templates>

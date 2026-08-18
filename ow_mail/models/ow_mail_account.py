@@ -922,12 +922,20 @@ class OwMailAccount(models.Model):
             else {"ok": True}
 
     def save_draft(self, to="", cc="", bcc="", subject="", body_html="", attachment_ids=None,
-                   in_reply_to=None, references=None):
+                   in_reply_to=None, references=None, replace_uid=None):
         """IMAP-APPEND the composed message to the Drafts folder with the \\Draft flag.
 
         No SMTP delivery occurs. The message is built via ``_build_outgoing``
         so it has the correct MIME structure and headers if the user later
         moves the draft to an external client.
+
+        Returns the UID of the appended draft, resolved from the UIDPLUS
+        ``APPENDUID`` response code when available and from a Message-ID
+        search otherwise (``_build_outgoing`` always stamps a fresh
+        Message-ID). ``None`` when neither works. When ``replace_uid`` is
+        given, that older draft is expunged after a successful APPEND
+        (best-effort — a failed cleanup never fails the save) so autosave
+        keeps a single copy per compose window.
         """
         self.ensure_one()
         atts = []
@@ -940,10 +948,75 @@ class OwMailAccount(models.Model):
             })
         msg = self._build_outgoing(to, cc, subject, body_html, attachments=atts,
                                    in_reply_to=in_reply_to, references=references, bcc=bcc)
+        drafts_mbox = _mbox(self.drafts_folder_id.full_path)
         imap = self._imap_connect()
         try:
-            imap.append(_mbox(self.drafts_folder_id.full_path), "(\\Draft)",
-                        imaplib.Time2Internaldate(datetime.now(timezone.utc)), msg.as_bytes())
+            typ, data = imap.append(
+                drafts_mbox, "(\\Draft)",
+                imaplib.Time2Internaldate(datetime.now(timezone.utc)), msg.as_bytes())
+            if typ != "OK":
+                raise UserError(_("IMAP APPEND to Drafts failed: %s")
+                                % (data or [b""])[0].decode("utf-8", "replace"))
+            new_uid = self._parse_appenduid(data)
+            if new_uid is None:
+                # UIDPLUS not supported/reported — find the copy we just
+                # appended via its unique Message-ID.
+                message_id = (msg["Message-ID"] or "").strip().strip("<>")
+                if message_id:
+                    try:
+                        typ2, _sel = imap.select(drafts_mbox)
+                        if typ2 == "OK":
+                            typ3, d3 = imap.uid(
+                                "SEARCH", None,
+                                f'HEADER Message-ID "{message_id}"')
+                            if typ3 == "OK" and d3 and d3[0]:
+                                found = [int(x) for x in d3[0].split() if x.isdigit()]
+                                if found:
+                                    new_uid = max(found)
+                    except Exception:
+                        new_uid = None
+            if replace_uid and replace_uid != new_uid:
+                # Best-effort cleanup of the superseded autosave copy.
+                try:
+                    typ2, _sel = imap.select(drafts_mbox)
+                    if typ2 == "OK":
+                        imap.uid("STORE", str(int(replace_uid)),
+                                 "+FLAGS", r"(\Deleted)")
+                        imap.expunge()
+                except Exception as e:
+                    _logger.info("draft replace cleanup failed (%s uid %s): %s",
+                                 self.email, replace_uid, e)
+        finally:
+            imap.logout()
+        return new_uid
+
+    @staticmethod
+    def _parse_appenduid(data):
+        """Extract the new UID from a UIDPLUS ``[APPENDUID uidvalidity uid]`` response."""
+        try:
+            for item in data or []:
+                if not item:
+                    continue
+                blob = item if isinstance(item, (bytes, bytearray)) else str(item).encode()
+                m = re.search(rb"APPENDUID (\d+) (\d+)", blob)
+                if m:
+                    return int(m.group(2))
+        except Exception:
+            pass
+        return None
+
+    def discard_draft(self, uid):
+        """Expunge one message from the Drafts folder (used after send/autosave replace)."""
+        self.ensure_one()
+        if not self.drafts_folder_id:
+            return False
+        imap = self._imap_connect()
+        try:
+            typ, _sel = imap.select(_mbox(self.drafts_folder_id.full_path))
+            if typ != "OK":
+                return False
+            imap.uid("STORE", str(int(uid)), "+FLAGS", r"(\Deleted)")
+            imap.expunge()
         finally:
             imap.logout()
         return True

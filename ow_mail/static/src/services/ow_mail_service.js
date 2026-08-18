@@ -132,8 +132,8 @@ function buildThreads(messages) {
  *   (e.g. new mail detected by the IMAP cron).
  */
 export const owMailService = {
-    dependencies: ["notification", "bus_service", "orm"],
-    async start(env, { notification, bus_service, orm }) {
+    dependencies: ["notification", "bus_service", "orm", "title"],
+    async start(env, { notification, bus_service, orm, title }) {
         const PAGE_SIZE = 50;
         const LS_SORT_BY = "ow_mail.sortBy";
         const LS_SORT_ORDER = "ow_mail.sortOrder";
@@ -164,7 +164,12 @@ export const owMailService = {
         const state = reactive({
             accounts: [],
             tags: [],
-            selection: { accountId: null, folderId: null, tagId: null, filter: "all", search: "" },
+            bootstrapped: false,
+            prefs: { mark_read_delay: 0, thread_view_default: false },
+            // selection.smart: "starred" | "unread" | null — virtual
+            // cross-account smart folders (implemented as the existing
+            // all-mailboxes view + FLAGGED/UNSEEN filter).
+            selection: { accountId: null, folderId: null, tagId: null, filter: "all", search: "", smart: null },
             messages: [],
             totalMessages: 0,
             page: 1,
@@ -223,13 +228,37 @@ export const owMailService = {
             const data = await rpc("/ow_mail/bootstrap");
             state.accounts = data.accounts;
             state.tags = data.tags;
-            if (!state.selection.folderId && data.accounts.length) {
+            if (data.prefs) {
+                Object.assign(state.prefs, data.prefs);
+                // The server-side default only applies while the user has no
+                // device-level override in localStorage.
+                if (_lsGet(LS_THREAD_VIEW, null) === null) {
+                    state.threadView = !!data.prefs.thread_view_default;
+                }
+            }
+            if (!state.selection.folderId && !state.selection.smart && data.accounts.length) {
                 const first = data.accounts[0];
                 state.selection.accountId = first.id;
                 state.selection.folderId =
                     first.special.inbox || (first.folders[0] && first.folders[0].id);
             }
+            state.bootstrapped = true;
+            updateTitleBadge();
             await refreshList();
+        }
+
+        /**
+         * Reflect the total unread count (all accounts, Trash/Spam excluded
+         * server-side) in the browser tab title via Odoo's title service.
+         * Kept current by `bootstrap()` (bus refresh cron) and the local
+         * mark-seen bookkeeping.
+         */
+        function updateTitleBadge() {
+            const total = state.accounts.reduce(
+                (sum, a) => sum + (a.unread_count || 0), 0);
+            try {
+                title.setParts({ ow_unread: total ? `(${total})` : null });
+            } catch {}
         }
 
         /**
@@ -291,9 +320,38 @@ export const owMailService = {
          * @param {number|null} folderId
          */
         async function selectFolder(accountId, folderId) {
+            _cancelMarkReadTimer();
             state.selection.accountId = accountId;
             state.selection.folderId = folderId;
             state.selection.tagId = null;
+            state.selection.smart = null;
+            state.selection.filter = "all";
+            state.page = 1;
+            state.selectedKey = null;
+            state.selectedMessage = null;
+            await refreshList();
+        }
+
+        /**
+         * Activate one of the virtual cross-account smart folders.
+         *
+         * `"starred"` and `"unread"` reuse the All Mailboxes machinery
+         * (`folderId = null`) with the corresponding FLAGGED/UNSEEN filter,
+         * so no dedicated backend route is needed. Scope matches All
+         * Mailboxes: Inbox + Sent of every confirmed account.
+         *
+         * @async
+         * @param {"starred"|"unread"} kind
+         */
+        async function selectSmart(kind) {
+            _cancelMarkReadTimer();
+            state.view = "mail";
+            state.selection.smart = kind;
+            state.selection.accountId = null;
+            state.selection.folderId = null;
+            state.selection.tagId = null;
+            state.selection.search = "";
+            state.selection.filter = kind === "starred" ? "starred" : "unread";
             state.page = 1;
             state.selectedKey = null;
             state.selectedMessage = null;
@@ -309,7 +367,9 @@ export const owMailService = {
          * @param {number} tagId - DB id of the `ow.mail.tag` record.
          */
         async function selectTag(tagId) {
+            _cancelMarkReadTimer();
             state.selection.tagId = tagId;
+            state.selection.smart = null;
             state.page = 1;
             state.selectedKey = null;
             state.selectedMessage = null;
@@ -428,6 +488,7 @@ export const owMailService = {
          */
         async function setFilter(filter) {
             state.selection.filter = filter;
+            state.selection.smart = null;
             state.page = 1;
             await refreshList();
         }
@@ -462,6 +523,7 @@ export const owMailService = {
             state.selection.accountId = null;
             state.selection.folderId = null;
             state.selection.tagId = null;
+            state.selection.smart = null;
             state.selection.filter = "all";
             state.selection.search = query || "";
             state.page = 1;
@@ -819,6 +881,42 @@ export const owMailService = {
         // already opened a different message, so the stale response is discarded.
         let _msgSeq = 0;
 
+        // Pending "mark read after N seconds" timer — at most one, for the
+        // currently open message. Cancelled on every navigation.
+        let _markReadTimer = null;
+
+        function _cancelMarkReadTimer() {
+            if (_markReadTimer) {
+                clearTimeout(_markReadTimer);
+                _markReadTimer = null;
+            }
+        }
+
+        /**
+         * Local bookkeeping after a message became read: flip the envelope's
+         * `flags_seen`, decrement the folder + account unread counters, and
+         * refresh the tab-title badge. No server round-trip.
+         *
+         * @param {number} folderId
+         * @param {number} uid
+         */
+        function _markSeenLocally(folderId, uid) {
+            const m = state.messages.find(
+                (x) => x.folder_id === folderId && x.uid === uid);
+            if (m && !m.flags_seen) {
+                m.flags_seen = true;
+                for (const acc of state.accounts) {
+                    const folder = acc.folders.find((f) => f.id === folderId);
+                    if (folder) {
+                        if (folder.unread_count > 0) folder.unread_count--;
+                        if (acc.unread_count > 0) acc.unread_count--;
+                        break;
+                    }
+                }
+            }
+            updateTitleBadge();
+        }
+
         /**
          * Fetch related messages for the open message's conversation and store them
          * in `state.threadMessages`.
@@ -915,10 +1013,17 @@ export const owMailService = {
          */
         async function openMessage(folderId, uid) {
             const mySeq = ++_msgSeq;
+            _cancelMarkReadTimer();
             state.selectedKey = `${folderId}:${uid}`;
             state.selectedMessage = null;
             state.threadMessages = [];
-            const data = await rpc("/ow_mail/message", { folder_id: folderId, uid });
+            // mark_read_delay: 0 = mark read on open (server side-effect),
+            // N>0 = peek now and mark read after N seconds of reading,
+            // -1 = peek and never auto-mark (manual only).
+            const delay = state.prefs.mark_read_delay || 0;
+            const peek = delay !== 0;
+            const data = await rpc("/ow_mail/message",
+                { folder_id: folderId, uid, peek });
             if (mySeq !== _msgSeq) return;          // user clicked another mail
             if (data.error) {
                 notification.add("Could not load message: " + data.error, { type: "danger" });
@@ -926,18 +1031,25 @@ export const owMailService = {
                 return;
             }
             state.selectedMessage = data;
-            const m = state.messages.find((x) => x.folder_id === folderId && x.uid === uid);
-            if (m && !m.flags_seen) {
-                m.flags_seen = true;
-                // Decrement unread count in sidebar (folder + account)
-                for (const acc of state.accounts) {
-                    const folder = acc.folders.find((f) => f.id === folderId);
-                    if (folder) {
-                        if (folder.unread_count > 0) folder.unread_count--;
-                        if (acc.unread_count > 0) acc.unread_count--;
-                        break;
-                    }
-                }
+            if (!peek) {
+                _markSeenLocally(folderId, uid);
+            } else if (!data.flags.seen && delay > 0) {
+                _markReadTimer = setTimeout(async () => {
+                    _markReadTimer = null;
+                    try {
+                        const res = await rpc("/ow_mail/message/action", {
+                            folder_id: folderId, uids: [uid],
+                            action: "mark_read", payload: {},
+                        });
+                        if (res && !res.error) {
+                            const sel = state.selectedMessage;
+                            if (sel && sel.folder_id === folderId && sel.uid === uid) {
+                                sel.flags.seen = true;
+                            }
+                            _markSeenLocally(folderId, uid);
+                        }
+                    } catch {}
+                }, delay * 1000);
             }
             // Auto-load thread if message is part of a conversation
             if (data.references || data.in_reply_to) {
@@ -1078,7 +1190,84 @@ export const owMailService = {
                 expanded: false,
                 draftFolderId: init.draftFolderId || null,
                 draftUid: init.draftUid || null,
+                // Autosave bookkeeping — editing an existing draft seeds the
+                // replace target so the first autosave supersedes it.
+                autosavedUid: init.draftUid || null,
+                dirty: false,
+                saving: false,
+                lastSavedAt: null,
             });
+        }
+
+        /**
+         * True when a compose window has no meaningful content — used to skip
+         * pointless autosaves of untouched windows.
+         *
+         * @param {object} win
+         * @returns {boolean}
+         */
+        function _composeIsEmpty(win) {
+            const text = (win.body || "").replace(/<[^>]*>/g, "")
+                .replace(/&nbsp;/g, " ").trim();
+            return !win.to && !win.cc && !win.bcc && !(win.subject || "").trim()
+                && !text && !(win.attachments || []).length;
+        }
+
+        /**
+         * Silent periodic draft save for an open compose window.
+         *
+         * Unlike `saveDraft`, this neither closes the window nor shows a
+         * notification. Each save passes the previous autosave's UID as
+         * `replace_uid` so the Drafts folder holds exactly one copy per
+         * window. The `saving` mutex prevents overlapping saves (which could
+         * orphan a copy); a tick that finds a save in flight simply skips —
+         * the window stays dirty and the next tick retries.
+         *
+         * @async
+         * @param {object} win - Compose window from `state.composeWindows`.
+         */
+        async function autosaveDraft(win) {
+            if (!win.dirty || win.saving || !win.accountId || _composeIsEmpty(win)) {
+                return;
+            }
+            win.saving = true;
+            try {
+                const res = await rpc("/ow_mail/draft", {
+                    account_id: win.accountId,
+                    to: win.to, cc: win.cc, bcc: win.bcc,
+                    subject: win.subject,
+                    body_html: win.body,
+                    attachment_ids: win.attachments.map((a) => a.id),
+                    in_reply_to: win.in_reply_to,
+                    references: win.references,
+                    replace_uid: win.autosavedUid,
+                });
+                if (res && !res.error) {
+                    win.autosavedUid = res.uid || null;
+                    win.dirty = false;
+                    win.lastSavedAt = Date.now();
+                    if (res.folder_id && state.selection.folderId === res.folder_id) {
+                        await refreshList();
+                    }
+                }
+            } finally {
+                win.saving = false;
+            }
+        }
+
+        /**
+         * Best-effort removal of a window's autosaved draft copy (after send).
+         *
+         * @async
+         * @param {object} win
+         */
+        async function discardAutosavedDraft(win) {
+            if (!win.autosavedUid || !win.accountId) return;
+            try {
+                await rpc("/ow_mail/draft/discard", {
+                    account_id: win.accountId, uid: win.autosavedUid });
+            } catch {}
+            win.autosavedUid = null;
         }
 
         /**
@@ -1138,6 +1327,8 @@ export const owMailService = {
                 notification.add("Message sent", { type: "success" });
             }
             touchRecipients([win.to, win.cc, win.bcc]);
+            win.dirty = false;
+            await discardAutosavedDraft(win);
             closeCompose(win.id);
             await refreshList();
         }
@@ -1163,14 +1354,19 @@ export const owMailService = {
                 attachment_ids: win.attachments.map((a) => a.id),
                 in_reply_to: win.in_reply_to,
                 references: win.references,
+                // A manual save supersedes any autosaved copy of this window.
+                replace_uid: win.autosavedUid,
             });
             if (res.error) {
                 notification.add("Draft save failed: " + res.error, { type: "danger" });
-                return;
+                return false;
             }
+            win.autosavedUid = res.uid || null;
+            win.dirty = false;
             notification.add("Draft saved", { type: "success" });
             closeCompose(win.id);
             await refreshList();
+            return true;
         }
 
         /**
@@ -1457,9 +1653,51 @@ export const owMailService = {
          * opening a new one (e.g. folder switch while a message is open).
          */
         function clearSelection() {
+            _cancelMarkReadTimer();
             state.selectedKey = null;
             state.selectedMessage = null;
             state.threadMessages = [];
+        }
+
+        /**
+         * Persist client preferences and update local state.
+         *
+         * @async
+         * @param {{mark_read_delay?: number, thread_view_default?: boolean}} vals
+         */
+        async function savePrefs(vals) {
+            const res = await rpc("/ow_mail/prefs/save", { vals });
+            if (res && res.error) {
+                notification.add(_t("Could not save settings: %s", res.error),
+                    { type: "danger" });
+                return false;
+            }
+            if (res && res.prefs) {
+                Object.assign(state.prefs, res.prefs);
+            }
+            return true;
+        }
+
+        /**
+         * Rename a tag. The model's `write` regenerates the IMAP keyword and
+         * migrates the flag on the server, so `reloadTags` picks up both the
+         * new name and the new keyword.
+         *
+         * @async
+         * @param {number} tagId
+         * @param {string} newName
+         */
+        async function renameTag(tagId, newName) {
+            const label = (newName || "").trim();
+            if (!label) return;
+            try {
+                await orm.write("ow.mail.tag", [tagId], { name: label });
+            } catch (e) {
+                notification.add(_t("Could not rename tag: %s", e.message || e),
+                    { type: "danger" });
+                return;
+            }
+            await reloadTags();
         }
 
         // --- New-mail bus notifications ---
@@ -1488,12 +1726,24 @@ export const owMailService = {
         if (typeof Notification !== "undefined" && Notification.permission === "default") {
             Notification.requestPermission();
         }
+        // Warn before the page unloads while a compose window has unsaved
+        // changes — the floating composer has no other recovery path.
+        if (typeof window !== "undefined") {
+            window.addEventListener("beforeunload", (ev) => {
+                if (state.composeWindows.some((w) => w.dirty)) {
+                    ev.preventDefault();
+                    ev.returnValue = "";
+                }
+            });
+        }
 
         return {
-            state, bootstrap, refreshList, selectFolder, selectTag, setFilter, setSearch, searchAll, setSort,
-            createTag, deleteTag, setTagColor, setMessageTags,
+            state, bootstrap, refreshList, selectFolder, selectTag, selectSmart,
+            setFilter, setSearch, searchAll, setSort,
+            createTag, deleteTag, renameTag, setTagColor, setMessageTags,
             toggleThreadView, loadThread, goToPage,
             openMessage, editDraft, sync, runAction, archiveMessages, openCompose, closeCompose, sendCompose, saveDraft,
+            autosaveDraft, discardAutosavedDraft, savePrefs,
             moveSelection, openReply, openForward,
             archiveSelected, deleteSelected, toggleStarSelected, toggleReadSelected,
             focusSearch, goAllMailboxes, goInbox, addInviteToCalendar,

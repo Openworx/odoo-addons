@@ -161,6 +161,20 @@ export class MessageList extends Component {
     }
 
     /**
+     * Keyboard activation of a focused list row (Enter/Space) so the list
+     * is operable without a mouse.
+     *
+     * @param {KeyboardEvent} ev
+     * @param {{ folder_id: number, uid: number }} m
+     */
+    onRowKey(ev, m) {
+        if (ev.key === "Enter" || ev.key === " ") {
+            ev.preventDefault();
+            this.onSelect(m);
+        }
+    }
+
+    /**
      * Opens a draft in the compose window on double-click.
      * Only active when `isDraftsFolder` is true; no-ops otherwise.
      *
@@ -632,6 +646,34 @@ export class MessageList extends Component {
         for (const [srcId, uids] of Object.entries(byFolder)) {
             if (parseInt(srcId, 10) === folderId) continue;
             await this.mail.runAction(parseInt(srcId, 10), uids, "move", { folder_id: folderId });
+        }
+        this.clearChecked();
+    }
+
+    /**
+     * Inline style for a tag's colored dot in the bulk Label dropdown.
+     * @param {{ color: number }} tag
+     * @returns {string}
+     */
+    tagDotStyle(tag) {
+        return `background: ${owColor(tag.color)};`;
+    }
+
+    /**
+     * Add or remove one tag on all checked messages, dispatching one IMAP
+     * action per source folder (single `+/-FLAGS` on the uid set server-side).
+     * Clears the selection when done.
+     *
+     * @async
+     * @param {number} tagId
+     * @param {"add"|"remove"} mode
+     */
+    async onBulkTag(tagId, mode) {
+        const byFolder = this._checkedUidsByFolder();
+        const action = mode === "remove" ? "remove_tag" : "add_tag";
+        for (const [folderId, uids] of Object.entries(byFolder)) {
+            await this.mail.runAction(parseInt(folderId, 10), uids, action,
+                { tag_id: tagId });
         }
         this.clearChecked();
     }

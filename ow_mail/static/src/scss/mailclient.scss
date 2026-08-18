@@ -566,6 +566,23 @@
     }
 }
 
+// ---- Accessibility: visible keyboard-focus ring on all interactive parts ----
+.o-ow-mail {
+    :focus-visible {
+        outline: 2px solid #0d6efd;
+        outline-offset: 1px;
+        border-radius: 4px;
+    }
+
+    .o-ow-onboarding {
+        background: #fff;
+    }
+
+    .o-ow-save-status {
+        font-size: 0.72rem;
+    }
+}
+
 .o-ow-source-pre {
     font-family: ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
     font-size: 0.8rem;

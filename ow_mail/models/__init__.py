@@ -5,6 +5,7 @@ from . import ow_mail_account
 from . import ow_mail_folder
 from . import ow_mail_tag
 from . import ow_mail_contact
+from . import ow_mail_preferences
 from . import ow_mail_trusted_sender
 from . import res_partner
 from . import mail_message

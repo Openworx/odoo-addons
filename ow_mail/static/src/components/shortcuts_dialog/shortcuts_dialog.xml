@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+
+<t t-name="ow_mail.ShortcutsDialog">
+    <Dialog title="title" size="'md'">
+        <div class="o-ow-shortcuts row">
+            <t t-foreach="groups" t-as="group" t-key="group.label">
+                <div class="col-sm-6">
+                    <div class="text-muted small text-uppercase fw-semibold mb-2"
+                         t-esc="group.label"/>
+                    <table class="table table-sm table-borderless mb-3">
+                        <tbody>
+                            <t t-foreach="group.rows" t-as="row" t-key="row.keys">
+                                <tr>
+                                    <td style="width:35%;"><kbd t-esc="row.keys"/></td>
+                                    <td t-esc="row.label"/>
+                                </tr>
+                            </t>
+                        </tbody>
+                    </table>
+                </div>
+            </t>
+        </div>
+        <t t-set-slot="footer">
+            <button class="btn btn-primary" t-on-click="() => this.props.close()">Close</button>
+        </t>
+    </Dialog>
+</t>
+
+</templates>

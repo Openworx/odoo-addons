@@ -16,6 +16,25 @@
 
     <menuitem id="menu_ow_mail_config" name="Configuration"
               parent="menu_ow_mail_root"
-              action="action_ow_mail_account"
               sequence="90"/>
+
+    <menuitem id="menu_ow_mail_accounts" name="Accounts"
+              parent="menu_ow_mail_config"
+              action="action_ow_mail_account"
+              sequence="10"/>
+
+    <menuitem id="menu_ow_mail_connect" name="Connect Mailbox"
+              parent="menu_ow_mail_config"
+              action="action_ow_mail_connect_wizard"
+              sequence="20"/>
+
+    <menuitem id="menu_ow_mail_tags" name="Tags"
+              parent="menu_ow_mail_config"
+              action="action_ow_mail_tag"
+              sequence="30"/>
+
+    <menuitem id="menu_ow_mail_contacts" name="Contacts"
+              parent="menu_ow_mail_config"
+              action="action_ow_mail_contact"
+              sequence="40"/>
 </odoo>

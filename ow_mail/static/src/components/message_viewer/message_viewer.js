@@ -229,6 +229,19 @@ export class MessageViewer extends Component {
             () => [this.state.selectedMessage, this.local.showRemote]
         );
 
+        // Accessibility: move focus to the subject heading when a message
+        // opens so screen readers announce it and keyboard users land in
+        // the viewer pane. Global j/k hotkeys keep working from there.
+        this.subjectRef = useRef("subjectHeading");
+        useEffect(
+            (msg) => {
+                if (msg && this.subjectRef.el) {
+                    this.subjectRef.el.focus({ preventScroll: false });
+                }
+            },
+            () => [this.state.selectedMessage]
+        );
+
         // When threadMessages changes, reset the expand-state to just the
         // latest message of the new thread. Without the reset, switching
         // from thread A to thread B would keep A's expanded keys in state —

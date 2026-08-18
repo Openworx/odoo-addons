@@ -158,7 +158,7 @@ def _envelope_to_dict(e, folder):
         "subject": e["subject"],
         "from_name": e["from_name"],
         "from_email": e["from_email"],
-        "preview": "",
+        "preview": e.get("preview", ""),
         "date": e["date"],
         "message_id": e.get("message_id", ""),
         "in_reply_to": e.get("in_reply_to", ""),
@@ -334,6 +334,21 @@ def _is_sender_trusted(user_id, from_email):
     ]))
 
 
+def _stamp_previews(conn, envs):
+    """Best-effort: attach a ``preview`` snippet to each envelope dict.
+
+    Must be called inside the open IMAP session of the folder the envelopes
+    came from. Only ever runs on a single page (≤ ``_MAX_LIMIT`` messages),
+    never on the full fallback set. Missing snippets stay ``""``.
+    """
+    if not envs:
+        return envs
+    previews = imap_utils.fetch_previews(conn, [e["uid"] for e in envs])
+    for e in envs:
+        e["preview"] = previews.get(e["uid"], "")
+    return envs
+
+
 def _tag_ids_from_keywords(keywords):
     """Map IMAP custom keywords back to local ``ow.mail.tag`` IDs.
 
@@ -408,7 +423,28 @@ class OwMailController(http.Controller):
             } for a in accounts],
             "tags": [{"id": t.id, "name": t.name, "color": t.color,
                       "keyword": t.imap_keyword} for t in tags],
+            "prefs": request.env["ow.mail.preferences"]._get_for_user()._to_wire(),
         }
+
+    @http.route("/ow_mail/prefs/save", type="json", auth="user")
+    def prefs_save(self, vals):
+        """Persist client preferences for the current user.
+
+        Only whitelisted keys are accepted (mass-assignment guard, mirroring
+        ``contacts_update``); values are type-coerced before the write.
+        """
+        allowed = {"mark_read_delay": int, "thread_view_default": bool}
+        clean = {}
+        for key, coerce in allowed.items():
+            if key in (vals or {}):
+                try:
+                    clean[key] = coerce(vals[key])
+                except (TypeError, ValueError):
+                    return _imap_err(f"Invalid value for {key}")
+        prefs = request.env["ow.mail.preferences"]._get_for_user()
+        if clean:
+            prefs.write(clean)
+        return {"ok": True, "prefs": prefs._to_wire()}
 
     @http.route("/ow_mail/sync", type="json", auth="user")
     def sync(self, account_id=None):
@@ -491,6 +527,7 @@ class OwMailController(http.Controller):
                         filtered.sort(key=lambda e: uid_order.get(e["uid"], 0))
                         total = len(filtered)
                         page_envs = filtered[int(offset): int(offset) + int(limit)]
+                        _stamp_previews(conn, page_envs)
                         return {"total": total, "messages": _annotate_known_partners([
                             _envelope_to_dict(e, folder) for e in page_envs])}
                 if post_filters:
@@ -504,11 +541,13 @@ class OwMailController(http.Controller):
                     filtered.sort(key=lambda e: uid_order.get(e["uid"], 0))
                     total = len(filtered)
                     page_envs = filtered[int(offset): int(offset) + int(limit)]
+                    _stamp_previews(conn, page_envs)
                     return {"total": total, "messages": _annotate_known_partners([
                         _envelope_to_dict(e, folder) for e in page_envs])}
                 total = len(uids)
                 page = uids[int(offset): int(offset) + int(limit)]
                 envs = imap_utils.fetch_envelopes(conn, page)
+                _stamp_previews(conn, envs)
         except Exception as e:
             _logger.warning("messages fetch failed: %s", e)
             return _imap_err(e)
@@ -570,7 +609,34 @@ class OwMailController(http.Controller):
         all_msgs.sort(key=lambda m: m.get(sort_key) or "", reverse=reverse)
         total = len(all_msgs)
         page = _annotate_known_partners(all_msgs[offset: offset + limit])
+        self._stamp_previews_multi_folder(page)
         return {"total": total, "messages": page}
+
+    def _stamp_previews_multi_folder(self, page_msgs):
+        """Fetch preview snippets for one already-paged multi-folder message list.
+
+        Previews are fetched *after* paging so the cost stays bounded at one
+        short read-only session per distinct folder on the page (≤ 2 folders
+        per account), each issuing 1–2 batched partial fetches. Any session
+        failure leaves those previews empty.
+        """
+        by_folder = {}
+        for m in page_msgs:
+            by_folder.setdefault(m["folder_id"], []).append(m)
+        for folder_id, msgs in by_folder.items():
+            folder = _get_folder(folder_id)
+            if not folder:
+                continue
+            try:
+                with imap_utils.imap_session(
+                        folder.account_id, folder.full_path, readonly=True) as conn:
+                    previews = imap_utils.fetch_previews(
+                        conn, [m["uid"] for m in msgs])
+                for m in msgs:
+                    m["preview"] = previews.get(m["uid"], "")
+            except Exception as e:
+                _logger.debug("all-mailboxes preview fetch failed for %s: %s",
+                              folder.full_path, e)
 
     @http.route("/ow_mail/message/source/<int:folder_id>/<int:uid>",
                 type="http", auth="user")
@@ -657,15 +723,19 @@ class OwMailController(http.Controller):
         }
 
     @http.route("/ow_mail/message", type="json", auth="user")
-    def message(self, folder_id, uid):
+    def message(self, folder_id, uid, peek=False):
         """Fetch and render a full message for the MessageViewer.
 
         Performs a single ``UID FETCH RFC822``, then: parses headers + MIME
         tree, sanitizes the HTML body (``sanitize_and_detect``), rewrites
         ``cid:`` references to ``/ow_mail/inline`` URLs, and checks the sender
         against the trust list. Sets ``\\Seen`` as a side-effect when the
-        message was previously unseen — this is intentional; the flag is set
-        only here, not in ``inline`` or ``attachment`` fetches.
+        message was previously unseen — unless ``peek`` is truthy, in which
+        case the session is read-only and the read-state is left untouched
+        (used by the "mark read after N seconds" preference; the client marks
+        the message read later via ``message_action``). The returned
+        ``flags.seen`` always reflects the actual server state so the client
+        knows whether a delayed mark-read is needed.
 
         ``has_remote_content`` is True only when remote URLs were detected
         *and* the sender is not trusted, so trusted senders always load images
@@ -674,13 +744,17 @@ class OwMailController(http.Controller):
         folder = _get_folder(folder_id)
         if not folder:
             return _imap_err("Folder not found")
+        peek = bool(peek)
+        was_seen = True
         try:
-            with imap_utils.imap_session(folder.account_id, folder.full_path) as conn:
+            with imap_utils.imap_session(folder.account_id, folder.full_path,
+                                         readonly=peek) as conn:
                 flags_str, raw = imap_utils.fetch_full(conn, uid)
                 if raw is None:
                     return _imap_err("Message not found")
-                # Mark seen
-                if flags_str and "\\Seen" not in flags_str:
+                was_seen = bool(flags_str and "\\Seen" in flags_str)
+                # Mark seen (historic default behaviour, skipped when peeking)
+                if not peek and not was_seen and flags_str:
                     try:
                         conn.uid("STORE", str(uid), "+FLAGS", "(\\Seen)")
                     except Exception:
@@ -739,7 +813,7 @@ class OwMailController(http.Controller):
             "folder_kind": folder.kind,
             "invite": invite,
             "flags": {
-                "seen": True,
+                "seen": True if not peek else was_seen,
                 "flagged": "\\Flagged" in (flags_str or ""),
                 "answered": "\\Answered" in (flags_str or ""),
             },
@@ -994,11 +1068,17 @@ class OwMailController(http.Controller):
 
     @http.route("/ow_mail/draft", type="json", auth="user")
     def save_draft(self, account_id, to="", cc="", bcc="", subject="", body_html="",
-                   attachment_ids=None, in_reply_to=None, references=None):
+                   attachment_ids=None, in_reply_to=None, references=None,
+                   replace_uid=None):
         """APPEND a draft message to the account's Drafts folder via IMAP.
 
         No DB record is created; the draft lives exclusively on the IMAP
         server and is visible in the Drafts folder like any other message.
+        ``replace_uid`` names a previous autosave of the same compose window;
+        it is expunged (best-effort) after the new APPEND succeeds so
+        repeated autosaves keep exactly one copy. Returns the new draft UID
+        (or ``None`` when the server reports no APPENDUID and the Message-ID
+        fallback search fails) so the client can chain the next replace.
         Returns an error if no Drafts folder is configured for the account.
         """
         acc = _get_account(account_id)
@@ -1007,10 +1087,36 @@ class OwMailController(http.Controller):
         if not acc.drafts_folder_id:
             return _imap_err("No Drafts folder configured")
         try:
-            acc.save_draft(to=to, cc=cc, bcc=bcc, subject=subject, body_html=body_html,
-                           attachment_ids=attachment_ids or [],
-                           in_reply_to=in_reply_to, references=references)
+            replace_uid = int(replace_uid) if replace_uid else None
+        except (TypeError, ValueError):
+            replace_uid = None
+        try:
+            new_uid = acc.save_draft(
+                to=to, cc=cc, bcc=bcc, subject=subject, body_html=body_html,
+                attachment_ids=attachment_ids or [],
+                in_reply_to=in_reply_to, references=references,
+                replace_uid=replace_uid)
         except Exception as e:
+            return _imap_err(str(e))
+        return {"ok": True, "uid": new_uid,
+                "folder_id": acc.drafts_folder_id.id}
+
+    @http.route("/ow_mail/draft/discard", type="json", auth="user")
+    def discard_draft(self, account_id, uid):
+        """Expunge one draft from the account's Drafts folder (best-effort).
+
+        Called after a successful send to remove the autosaved copy. Only
+        ever targets the account's own Drafts folder — the caller cannot
+        name an arbitrary folder.
+        """
+        acc = _get_account(account_id)
+        if not acc:
+            return _imap_err("Invalid account")
+        try:
+            acc.discard_draft(int(uid))
+        except Exception as e:
+            _logger.info("draft discard failed for account %s uid %s: %s",
+                         acc.id, uid, e)
             return _imap_err(str(e))
         return {"ok": True}
 
@@ -1028,6 +1134,8 @@ class OwMailController(http.Controller):
           falls back to COPY + \\Deleted + EXPUNGE on servers without MOVE.
         * ``delete`` — moves to Trash if configured; otherwise hard-deletes
           with ``\\Deleted`` + EXPUNGE.
+        * ``add_tag`` / ``remove_tag`` — single ``UID STORE +/-FLAGS`` of one
+          tag's IMAP keyword on the whole uid set (bulk-bar tagging).
         * ``trust_sender`` — adds ``payload.emails`` to ``ow.mail.trusted.sender``
           for the current user (safe-mode allow-list, no IMAP side-effect).
         * ``set_tags`` — diffs the requested ``payload.tag_ids`` against
@@ -1103,6 +1211,18 @@ class OwMailController(http.Controller):
                     else:
                         conn.uid("STORE", uid_set, "+FLAGS", "(\\Deleted)")
                         conn.expunge()
+                elif action in ("add_tag", "remove_tag"):
+                    # Bulk tagging: single +/-FLAGS on the whole uid set — no
+                    # per-uid FETCH needed (unlike set_tags, which diffs the
+                    # complete keyword set of one message).
+                    tag = request.env["ow.mail.tag"].browse(
+                        int(payload.get("tag_id") or 0)).exists()
+                    if not tag or tag.user_id.id != request.env.user.id:
+                        return _imap_err("Tag not found")
+                    if not tag.imap_keyword:
+                        return _imap_err("Tag has no IMAP keyword")
+                    op = "+FLAGS" if action == "add_tag" else "-FLAGS"
+                    conn.uid("STORE", uid_set, op, f"({tag.imap_keyword})")
                 elif action == "trust_sender":
                     uid = request.env.user.id
                     TS = _trusted_sender_scope(uid)
