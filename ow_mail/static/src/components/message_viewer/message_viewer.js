@@ -113,6 +113,10 @@ function stripRemote(html) {
         let didBlock = false;
         // URL-bearing attrs in the HTML namespace
         for (const attr of URL_ATTRS) {
+            // A hyperlink only fetches when the user clicks it — that is
+            // navigation, not remote *content*. Blocking it (like Gmail
+            // never does) made every link in safe mode dead.
+            if (attr === "href" && tag === "a") continue;
             const val = el.getAttribute(attr);
             if (val && REMOTE_SCHEME_RX.test(val)) {
                 el.setAttribute(attr, BLANK_PIXEL);
@@ -365,12 +369,13 @@ export class MessageViewer extends Component {
                 <style>body{font-family:system-ui,sans-serif;padding:12px;color:#222;}img{max-width:100%;}a{color:#0d6efd;}</style>
                 </head><body>${html}</body></html>`;
             el.setAttribute("srcdoc", doc);
-            // Auto-size iframe after load
+            // Auto-size iframe after load + link hygiene
             el.onload = () => {
                 try {
                     const h = el.contentDocument.body.scrollHeight;
                     el.style.height = Math.min(Math.max(h + 20, 100), 600) + "px";
                 } catch {}
+                this._prepareIframeLinks(el);
             };
         }
     }
@@ -445,7 +450,53 @@ export class MessageViewer extends Component {
                 }
             </style>
             </head><body>${header}${html}</body></html>`;
+        iframe.onload = () => this._prepareIframeLinks(iframe);
         iframe.setAttribute("srcdoc", doc);
+    }
+
+    /**
+     * Post-process links inside a rendered message iframe.
+     *
+     * The sandbox blocks same-frame navigation, so every external link gets
+     * `target="_blank"` (backed by ``allow-popups`` +
+     * ``allow-popups-to-escape-sandbox`` on the iframe) plus
+     * ``rel="noopener noreferrer"`` so the opened page cannot reach back
+     * into the Odoo origin via `window.opener`. `mailto:` links are
+     * intercepted and open OW Mail's own composer instead of the OS mail
+     * handler. Same-origin access is guaranteed by ``allow-same-origin``.
+     *
+     * @param {HTMLIFrameElement} iframeEl
+     */
+    _prepareIframeLinks(iframeEl) {
+        try {
+            const idoc = iframeEl.contentDocument;
+            if (!idoc) return;
+            for (const a of idoc.querySelectorAll("a[href]")) {
+                const href = a.getAttribute("href") || "";
+                if (/^mailto:/i.test(href)) {
+                    a.removeAttribute("target");
+                    a.addEventListener("click", (ev) => {
+                        ev.preventDefault();
+                        const raw = href.slice(7);
+                        const [addr, query] = raw.split("?");
+                        let subject = "";
+                        try {
+                            subject = new URLSearchParams(query || "")
+                                .get("subject") || "";
+                        } catch {}
+                        this.mail.openCompose({
+                            to: decodeURIComponent(addr || ""),
+                            subject,
+                        });
+                    });
+                    continue;
+                }
+                a.setAttribute("target", "_blank");
+                a.setAttribute("rel", "noopener noreferrer");
+            }
+        } catch {
+            // cross-origin or torn-down frame — nothing to fix
+        }
     }
 
     /**
