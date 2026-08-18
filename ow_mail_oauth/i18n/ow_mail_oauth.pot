@@ -1,0 +1,214 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# 	* ow_mail_oauth
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 18.0-20260810\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-08-18 11:18+0000\n"
+"PO-Revision-Date: 2026-08-18 11:18+0000\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
+
+#. module: ow_mail_oauth
+#: model:ir.model.fields,field_description:ow_mail_oauth.field_ow_mail_account__google_gmail_access_token
+msgid "Access Token"
+msgstr ""
+
+#. module: ow_mail_oauth
+#: model:ir.model.fields,field_description:ow_mail_oauth.field_ow_mail_account__google_gmail_access_token_expiration
+msgid "Access Token Expiration Timestamp"
+msgstr ""
+
+#. module: ow_mail_oauth
+#. odoo-python
+#: code:addons/ow_mail_oauth/models/ow_mail_account.py:0
+msgid "An error occurred when fetching the OAuth token. %s"
+msgstr ""
+
+#. module: ow_mail_oauth
+#: model:ir.model.fields,field_description:ow_mail_oauth.field_ow_mail_account__auth_type
+msgid "Authentication"
+msgstr ""
+
+#. module: ow_mail_oauth
+#: model:ir.model.fields,field_description:ow_mail_oauth.field_ow_mail_account__microsoft_outlook_uri
+msgid "Authentication URI"
+msgstr ""
+
+#. module: ow_mail_oauth
+#: model:ir.model.fields,field_description:ow_mail_oauth.field_ow_mail_account__google_gmail_authorization_code
+msgid "Authorization Code"
+msgstr ""
+
+#. module: ow_mail_oauth
+#: model_terms:ir.ui.view,arch_db:ow_mail_oauth.view_ow_mail_account_form_oauth
+msgid "Connect with Google"
+msgstr ""
+
+#. module: ow_mail_oauth
+#: model_terms:ir.ui.view,arch_db:ow_mail_oauth.view_ow_mail_account_form_oauth
+msgid "Connect with Microsoft"
+msgstr ""
+
+#. module: ow_mail_oauth
+#: model_terms:ir.ui.view,arch_db:ow_mail_oauth.view_ow_mail_account_form_oauth
+msgid "Connected"
+msgstr ""
+
+#. module: ow_mail_oauth
+#: model_terms:ir.ui.view,arch_db:ow_mail_oauth.view_ow_mail_account_form_oauth
+msgid ""
+"For OAuth accounts this is the mailbox\n"
+"address used in the XOAUTH2 handshake; it normally equals the email\n"
+"address."
+msgstr ""
+
+#. module: ow_mail_oauth
+#: model:ir.model.fields.selection,name:ow_mail_oauth.selection__ow_mail_connect_wizard__provider__gmail
+msgid "Gmail"
+msgstr ""
+
+#. module: ow_mail_oauth
+#: model:ir.model.fields.selection,name:ow_mail_oauth.selection__ow_mail_account__auth_type__gmail
+msgid "Gmail (OAuth)"
+msgstr ""
+
+#. module: ow_mail_oauth
+#. odoo-python
+#: code:addons/ow_mail_oauth/models/ow_mail_account.py:0
+msgid ""
+"Gmail OAuth is not configured. Ask your administrator to set the Gmail "
+"credentials in the general settings."
+msgstr ""
+
+#. module: ow_mail_oauth
+#: model:ir.model.fields,field_description:ow_mail_oauth.field_ow_mail_account__is_microsoft_outlook_configured
+msgid "Is Outlook Credential Configured"
+msgstr ""
+
+#. module: ow_mail_oauth
+#: model:ir.model.fields.selection,name:ow_mail_oauth.selection__ow_mail_account__auth_type__outlook
+msgid "Microsoft 365 (OAuth)"
+msgstr ""
+
+#. module: ow_mail_oauth
+#: model:ir.model.fields.selection,name:ow_mail_oauth.selection__ow_mail_connect_wizard__provider__outlook
+msgid "Microsoft 365 / Outlook"
+msgstr ""
+
+#. module: ow_mail_oauth
+#. odoo-python
+#: code:addons/ow_mail_oauth/models/ow_mail_account.py:0
+msgid ""
+"Microsoft 365 OAuth is not configured. Ask your administrator to set the "
+"Outlook credentials in the general settings."
+msgstr ""
+
+#. module: ow_mail_oauth
+#: model:ir.model.fields,field_description:ow_mail_oauth.field_ow_mail_account__oauth_connected
+msgid "OAuth Connected"
+msgstr ""
+
+#. module: ow_mail_oauth
+#: model:ir.model,name:ow_mail_oauth.model_ow_mail_account
+msgid "OW Mail Account"
+msgstr ""
+
+#. module: ow_mail_oauth
+#: model:ir.model,name:ow_mail_oauth.model_ow_mail_connect_wizard
+msgid "OW Mail Connect Wizard"
+msgstr ""
+
+#. module: ow_mail_oauth
+#. odoo-python
+#: code:addons/ow_mail_oauth/models/ow_mail_account.py:0
+msgid "Only the account owner can connect this mailbox."
+msgstr ""
+
+#. module: ow_mail_oauth
+#: model:ir.model.fields.selection,name:ow_mail_oauth.selection__ow_mail_connect_wizard__provider__other
+msgid "Other (IMAP/SMTP)"
+msgstr ""
+
+#. module: ow_mail_oauth
+#: model:ir.model.fields,field_description:ow_mail_oauth.field_ow_mail_account__microsoft_outlook_access_token
+msgid "Outlook Access Token"
+msgstr ""
+
+#. module: ow_mail_oauth
+#: model:ir.model.fields,field_description:ow_mail_oauth.field_ow_mail_account__microsoft_outlook_access_token_expiration
+msgid "Outlook Access Token Expiration Timestamp"
+msgstr ""
+
+#. module: ow_mail_oauth
+#: model:ir.model.fields,field_description:ow_mail_oauth.field_ow_mail_account__microsoft_outlook_refresh_token
+msgid "Outlook Refresh Token"
+msgstr ""
+
+#. module: ow_mail_oauth
+#: model:ir.model.fields,field_description:ow_mail_oauth.field_ow_mail_connect_wizard__password
+#: model:ir.model.fields.selection,name:ow_mail_oauth.selection__ow_mail_account__auth_type__password
+msgid "Password"
+msgstr ""
+
+#. module: ow_mail_oauth
+#. odoo-python
+#: code:addons/ow_mail_oauth/wizards/ow_mail_connect_wizard.py:0
+msgid "Please fill in the password."
+msgstr ""
+
+#. module: ow_mail_oauth
+#: model:ir.model.fields,field_description:ow_mail_oauth.field_ow_mail_connect_wizard__provider
+msgid "Provider"
+msgstr ""
+
+#. module: ow_mail_oauth
+#: model_terms:ir.ui.view,arch_db:ow_mail_oauth.view_ow_mail_account_form_oauth
+msgid "Reconnect"
+msgstr ""
+
+#. module: ow_mail_oauth
+#: model:ir.model.fields,field_description:ow_mail_oauth.field_ow_mail_account__google_gmail_refresh_token
+msgid "Refresh Token"
+msgstr ""
+
+#. module: ow_mail_oauth
+#. odoo-python
+#: code:addons/ow_mail_oauth/models/ow_mail_account.py:0
+msgid "Select a Gmail or Microsoft 365 authentication type first."
+msgstr ""
+
+#. module: ow_mail_oauth
+#: model:ir.model.fields,help:ow_mail_oauth.field_ow_mail_account__google_gmail_uri
+msgid "The URL to generate the authorization code from Google"
+msgstr ""
+
+#. module: ow_mail_oauth
+#: model:ir.model.fields,help:ow_mail_oauth.field_ow_mail_account__microsoft_outlook_uri
+msgid "The URL to generate the authorization code from Outlook"
+msgstr ""
+
+#. module: ow_mail_oauth
+#. odoo-python
+#: code:addons/ow_mail_oauth/models/ow_mail_account.py:0
+msgid "This account does not use OAuth."
+msgstr ""
+
+#. module: ow_mail_oauth
+#. odoo-python
+#: code:addons/ow_mail_oauth/models/ow_mail_account.py:0
+msgid ""
+"This account is not connected to Google yet. Open the account and use "
+"'Connect' first."
+msgstr ""
+
+#. module: ow_mail_oauth
+#: model:ir.model.fields,field_description:ow_mail_oauth.field_ow_mail_account__google_gmail_uri
+msgid "URI"
+msgstr ""

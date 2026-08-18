@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_ow_mail_account_form_oauth" model="ir.ui.view">
+        <field name="name">ow.mail.account.form.oauth</field>
+        <field name="model">ow.mail.account</field>
+        <field name="inherit_id" ref="ow_mail.view_ow_mail_account_form"/>
+        <field name="arch" type="xml">
+            <button name="action_sync" position="before">
+                <button name="action_connect_oauth" type="object"
+                        class="btn-primary"
+                        string="Connect with Google"
+                        invisible="auth_type != 'gmail' or oauth_connected"/>
+                <button name="action_connect_oauth" type="object"
+                        class="btn-primary"
+                        string="Connect with Microsoft"
+                        invisible="auth_type != 'outlook' or oauth_connected"/>
+                <button name="action_connect_oauth" type="object"
+                        string="Reconnect"
+                        invisible="auth_type == 'password' or not oauth_connected"/>
+            </button>
+            <field name="email" position="after">
+                <field name="auth_type" widget="radio" options="{'horizontal': true}"/>
+                <field name="oauth_connected" invisible="auth_type == 'password'"
+                       readonly="1" string="Connected"/>
+            </field>
+            <xpath expr="//page[@name='incoming']//field[@name='imap_password']"
+                   position="attributes">
+                <attribute name="invisible">auth_type != 'password'</attribute>
+            </xpath>
+            <xpath expr="//page[@name='incoming']//field[@name='imap_login']"
+                   position="attributes">
+                <attribute name="help">For OAuth accounts this is the mailbox
+address used in the XOAUTH2 handshake; it normally equals the email
+address.</attribute>
+            </xpath>
+            <xpath expr="//page[@name='outgoing']//field[@name='smtp_login']"
+                   position="attributes">
+                <attribute name="invisible">smtp_same_as_imap or auth_type != 'password'</attribute>
+            </xpath>
+            <xpath expr="//page[@name='outgoing']//field[@name='smtp_password']"
+                   position="attributes">
+                <attribute name="invisible">smtp_same_as_imap or auth_type != 'password'</attribute>
+            </xpath>
+        </field>
+    </record>
+</odoo>
