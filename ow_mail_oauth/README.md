@@ -1,64 +1,69 @@
 # OW Mail OAuth (Gmail / Microsoft 365)
 
-Brugmodule die OAuth2-authenticatie (XOAUTH2) toevoegt aan OW Mail-accounts,
-bovenop Odoo's standaard `google_gmail`- en `microsoft_outlook`-modules.
-Token-opslag, -verversing en de SASL-string komen uit die mixins; deze module
-levert het per-gebruiker koppel-proces (de standaardflow van Odoo is
-admin-only) en de XOAUTH2-tak in de IMAP/SMTP-verbindingen van ow_mail.
+Bridge module that adds OAuth2 authentication (XOAUTH2) to OW Mail
+accounts, on top of Odoo's standard `google_gmail` and `microsoft_outlook`
+modules. Token storage, refresh and the SASL string come from those
+mixins; this module provides the per-user connect flow (Odoo's standard
+flow is admin-only) and the XOAUTH2 branch in ow_mail's IMAP/SMTP
+connections.
 
-Bestaande wachtwoord-accounts blijven ongewijzigd werken (`auth_type`
-standaard "Password").
+Existing password accounts keep working unchanged (`auth_type` defaults
+to "Password").
 
-## Vereisten
+## Requirements
 
-- Odoo bereikbaar via **HTTPS** (de OAuth-callbacks vereisen dit).
-- `web.base.url` correct ingesteld (bepaalt de redirect-URI's).
+- Odoo reachable over **HTTPS** (the OAuth callbacks require it).
+- `web.base.url` set correctly (it determines the redirect URIs).
 
 ### Microsoft 365 (Azure / Entra ID)
 
 1. Azure Portal → App registrations → New registration.
-2. Redirect URI (type *Web*): `https://<jouw-odoo>/ow_mail_oauth/outlook/confirm`
-3. API permissions → Microsoft Graph is niet nodig; voeg **delegated**
-   permissies toe onder *APIs my organization uses → Office 365 Exchange
+2. Redirect URI (type *Web*): `https://<your-odoo>/ow_mail_oauth/outlook/confirm`
+3. API permissions → Microsoft Graph is not needed; add **delegated**
+   permissions under *APIs my organization uses → Office 365 Exchange
    Online*: `IMAP.AccessAsUser.All`, `SMTP.Send`, plus `offline_access`.
-4. Certificates & secrets → nieuw client secret.
-5. In Odoo: Settings → General Settings → sectie *Outlook Credentials*
-   (van de standaardmodule `microsoft_outlook`): vul Client ID en Client
-   Secret in. Optioneel `microsoft_outlook_tenant_id` als systeemparameter
-   voor single-tenant-apps (default `common`).
-6. Zorg dat **SMTP AUTH** aanstaat op de mailbox (Microsoft 365 admin
-   center → gebruiker → Mail → Manage email apps → Authenticated SMTP).
+4. Certificates & secrets → create a client secret.
+5. In Odoo: Settings → General Settings → *Outlook Credentials* section
+   (added by the standard `microsoft_outlook` module): fill in the
+   Client ID and Client Secret. Optionally set the
+   `microsoft_outlook_tenant_id` system parameter for single-tenant
+   apps (defaults to `common`).
+6. Make sure **SMTP AUTH** is enabled on the mailbox (Microsoft 365
+   admin center → user → Mail → Manage email apps → Authenticated SMTP).
 
 ### Gmail (Google Cloud)
 
 1. Google Cloud Console → project → *APIs & Services* → OAuth consent
-   screen. Scope: `https://mail.google.com/` (restricted — voor publieke
-   productie is Google-verificatie nodig; voor een eigen Workspace-domein
-   kies "Internal", of gebruik testgebruikers).
+   screen. Scope: `https://mail.google.com/` (restricted — public
+   production use requires Google verification; for your own Workspace
+   domain choose "Internal", or use test users).
 2. Credentials → OAuth client ID (type *Web application*), redirect URI:
-   `https://<jouw-odoo>/ow_mail_oauth/gmail/confirm`
-3. In Odoo: Settings → General Settings → sectie *Gmail Credentials*
-   (van de standaardmodule `google_gmail`): Client ID + Client Secret.
+   `https://<your-odoo>/ow_mail_oauth/gmail/confirm`
+3. In Odoo: Settings → General Settings → *Gmail Credentials* section
+   (added by the standard `google_gmail` module): Client ID + Client
+   Secret.
 
-## Gebruik
+## Usage
 
-- **Nieuwe mailbox**: OW Mail → Configuration → Connect Mailbox → kies
-  provider *Gmail* of *Microsoft 365* → naam + e-mailadres → Connect.
-  De browser gaat naar het toestemmingsscherm van de provider; na akkoord
-  wordt de verbinding getest, de mappenboom geladen en land je in de client.
-- **Bestaand account omzetten**: open het account, zet *Authentication* op
-  Gmail of Microsoft 365 en klik *Connect with Google/Microsoft*.
-- *Reconnect* verschijnt zodra een account verbonden is (bijv. na een
-  ingetrokken token of gewijzigde scopes).
+- **New mailbox**: OW Mail → Configuration → Connect Mailbox → pick
+  provider *Gmail* or *Microsoft 365* → name + email address → Connect.
+  The browser goes to the provider's consent screen; after approval the
+  connection is tested, the folder tree is loaded and you land in the
+  client.
+- **Converting an existing account**: open the account, set
+  *Authentication* to Gmail or Microsoft 365 and click *Connect with
+  Google/Microsoft*.
+- *Reconnect* appears once an account is connected (e.g. after a revoked
+  token or changed scopes).
 
-## Testen
+## Testing
 
-- Unit-tests (geen netwerk): `--test-tags ow_mail_oauth`.
-- De XOAUTH2-handshake zelf is alleen end-to-end te verifiëren met echte
-  accounts (GreenMail ondersteunt geen XOAUTH2). Handmatige checklist:
-  1. Wizard-preset → consent-scherm → callback → account `confirmed`.
-  2. Mail lezen én verzenden via de client.
-  3. Cron-tick (`OW Mail: refresh folder counts`) na >60 min: log toont
-     "fetch new access token" — verversing werkt onder OdooBot.
-  4. Token intrekken bij de provider → volgende sync zet het account op
-     *Error* met een duidelijke melding; *Reconnect* herstelt het.
+- Unit tests (no network): `--test-tags ow_mail_oauth`.
+- The XOAUTH2 handshake itself can only be verified end-to-end with real
+  accounts (GreenMail does not support XOAUTH2). Manual checklist:
+  1. Wizard preset → consent screen → callback → account `confirmed`.
+  2. Read and send mail through the client.
+  3. Cron tick (`OW Mail: refresh folder counts`) after >60 min: the log
+     shows "fetch new access token" — refresh works under OdooBot.
+  4. Revoke the token at the provider → the next sync puts the account
+     in *Error* with a clear message; *Reconnect* restores it.
