@@ -479,7 +479,11 @@ def sanitize_and_detect(html_body):
             if _DATA_NONIMAGE_RX.match(val) or _DANGER_SCHEME_RX.match(val):
                 del el.attrib[attr_name]
                 continue
-            if _REMOTE_URL_RX.match(val):
+            # A plain hyperlink is user-initiated navigation, not
+            # auto-fetched remote content — it must not trigger the
+            # safe-mode banner (nor be neutered by it client-side).
+            if _REMOTE_URL_RX.match(val) and not (
+                    local_tag == "a" and attr_name == "href"):
                 has_remote = True
         # Inline style
         style = el.attrib.get("style")
