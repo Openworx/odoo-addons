@@ -16,11 +16,11 @@ class TestPreferences(TransactionCase):
         super().setUpClass()
         cls.user_a = cls.env["res.users"].create({
             "name": "Prefs A", "login": "ow_prefs_a",
-            "groups_id": [(4, cls.env.ref("base.group_user").id)],
+            "group_ids": [(4, cls.env.ref("base.group_user").id)],
         })
         cls.user_b = cls.env["res.users"].create({
             "name": "Prefs B", "login": "ow_prefs_b",
-            "groups_id": [(4, cls.env.ref("base.group_user").id)],
+            "group_ids": [(4, cls.env.ref("base.group_user").id)],
         })
 
     def test_get_for_user_creates_defaults(self):
@@ -62,7 +62,7 @@ class TestTagKeywordRename(TransactionCase):
         super().setUpClass()
         cls.user = cls.env["res.users"].create({
             "name": "Tagger", "login": "ow_tagger",
-            "groups_id": [(4, cls.env.ref("base.group_user").id)],
+            "group_ids": [(4, cls.env.ref("base.group_user").id)],
         })
         cls.Tag = cls.env["ow.mail.tag"].with_user(cls.user)
 

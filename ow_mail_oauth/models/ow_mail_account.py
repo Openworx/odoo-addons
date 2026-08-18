@@ -215,13 +215,17 @@ class OwMailAccount(models.Model):
                 timeout=_TOKEN_TIMEOUT,
             )
             payload = self._ow_oauth_check_token_response(response)
-            self.write({
-                "google_gmail_authorization_code": code,
+            vals = {
                 "google_gmail_refresh_token": payload["refresh_token"],
                 "google_gmail_access_token": payload["access_token"],
                 "google_gmail_access_token_expiration":
                     int(time.time()) + int(payload["expires_in"]),
-            })
+            }
+            # Odoo 18's mixin also tracks the raw authorization code; the
+            # field was dropped in Odoo 19 — write it only when it exists.
+            if "google_gmail_authorization_code" in self._fields:
+                vals["google_gmail_authorization_code"] = code
+            self.write(vals)
         elif self.auth_type == "outlook":
             response = requests.post(
                 url_join(self._get_microsoft_endpoint(), "token"),

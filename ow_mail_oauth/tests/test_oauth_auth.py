@@ -35,7 +35,7 @@ class TestOauthDispatch(TransactionCase):
         super().setUpClass()
         cls.user = cls.env["res.users"].create({
             "name": "OAuth User", "login": "ow_oauth_user",
-            "groups_id": [(4, cls.env.ref("base.group_user").id)],
+            "group_ids": [(4, cls.env.ref("base.group_user").id)],
         })
         cls.Account = cls.env["ow.mail.account"].with_user(cls.user)
 
@@ -100,7 +100,7 @@ class TestOauthDispatch(TransactionCase):
         acc = self._gmail_account()
         stranger = self.env["res.users"].create({
             "name": "Stranger", "login": "ow_oauth_stranger",
-            "groups_id": [(4, self.env.ref("base.group_user").id)],
+            "group_ids": [(4, self.env.ref("base.group_user").id)],
         })
         # de ir.rule verbergt het record voor een vreemde…
         with self.assertRaises(AccessError):
