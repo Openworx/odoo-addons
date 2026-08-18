@@ -326,6 +326,10 @@ export const owMailService = {
             state.selection.tagId = null;
             state.selection.smart = null;
             state.selection.filter = "all";
+            // Switching mailbox starts a fresh view: an active search would
+            // otherwise silently keep filtering the new folder while the
+            // search box still shows the old query.
+            state.selection.search = "";
             state.page = 1;
             state.selectedKey = null;
             state.selectedMessage = null;
@@ -370,6 +374,7 @@ export const owMailService = {
             _cancelMarkReadTimer();
             state.selection.tagId = tagId;
             state.selection.smart = null;
+            state.selection.search = "";
             state.page = 1;
             state.selectedKey = null;
             state.selectedMessage = null;

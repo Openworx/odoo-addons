@@ -918,6 +918,10 @@ class OwMailAccount(models.Model):
                 _logger.warning("Sent APPEND failed for account %s: %s",
                                 self.name, e)
                 sent_warning = str(e) or e.__class__.__name__
+        else:
+            # Same principle as the APPEND failure above: silently skipping
+            # the Sent copy hides mail history from the user.
+            sent_warning = _("no Sent folder is configured on this account")
         return {"ok": True, "sent_append_failed": sent_warning} if sent_warning \
             else {"ok": True}
 
