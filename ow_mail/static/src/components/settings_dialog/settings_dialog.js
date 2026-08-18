@@ -29,6 +29,7 @@ export class SettingsDialog extends Component {
         this.local = useState({
             mark_read_delay: String(this.mail.state.prefs.mark_read_delay || 0),
             thread_view_default: this.mail.state.prefs.thread_view_default,
+            stacked_threads: this.mail.state.prefs.stacked_threads,
         });
         this.title = _t("Mail Settings");
     }
@@ -47,6 +48,7 @@ export class SettingsDialog extends Component {
         const ok = await this.mail.savePrefs({
             mark_read_delay: parseInt(this.local.mark_read_delay, 10) || 0,
             thread_view_default: !!this.local.thread_view_default,
+            stacked_threads: !!this.local.stacked_threads,
         });
         if (ok) {
             this.props.close();

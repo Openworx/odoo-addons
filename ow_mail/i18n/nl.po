@@ -2333,3 +2333,17 @@ msgstr "Breedte 75%"
 #: code:addons/ow_mail/static/src/components/compose_window/compose_window.xml:0
 msgid "Width 100%"
 msgstr "Breedte 100%"
+
+#. module: ow_mail
+#. odoo-javascript
+#: code:addons/ow_mail/static/src/components/settings_dialog/settings_dialog.xml:0
+msgid "Stack conversations in the reading pane"
+msgstr "Conversaties gestapeld in het leesvenster"
+
+#. module: ow_mail
+#. odoo-javascript
+#: code:addons/ow_mail/static/src/components/settings_dialog/settings_dialog.xml:0
+msgid ""
+"Show the whole conversation (including your replies) when\n"
+"                    opening any message of a thread."
+msgstr "Toon het hele gesprek (inclusief je eigen antwoorden) bij het openen van elk bericht uit een conversatie."

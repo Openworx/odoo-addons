@@ -51,7 +51,13 @@ class TestPreferences(TransactionCase):
         prefs.write({"mark_read_delay": -1, "thread_view_default": True})
         self.assertEqual(prefs._to_wire(), {
             "mark_read_delay": -1, "thread_view_default": True,
+            "stacked_threads": True,
         })
+
+    def test_stacked_threads_default_on(self):
+        prefs = self.env["ow.mail.preferences"].with_user(
+            self.user_a)._get_for_user()
+        self.assertTrue(prefs.stacked_threads)
 
 
 @tagged("post_install", "-at_install", "ow_mail")
