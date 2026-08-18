@@ -238,18 +238,25 @@ class OwMailAccount(models.Model):
         self.ensure_one()
         cls = imaplib.IMAP4_SSL if self.imap_ssl else imaplib.IMAP4
         conn = cls(self.imap_host, self.imap_port)
-        conn.login(self.imap_login, self._get_imap_password())
+        self._imap_authenticate(conn)
         return conn
+
+    def _imap_authenticate(self, conn):
+        """Authenticate an open IMAP connection.
+
+        Extension hook: the default implementation performs a password
+        LOGIN; auth modules (e.g. ``ow_mail_oauth``) override this to use
+        another SASL mechanism without duplicating the connection setup.
+        """
+        self.ensure_one()
+        conn.login(self.imap_login, self._get_imap_password())
 
     def _smtp_connect(self):
         """Open and authenticate an SMTP connection.
 
         ``ssl`` wraps the socket immediately (``SMTP_SSL``, port 465);
         ``starttls`` connects plain then upgrades; ``none`` stays plain.
-        ``login()`` is only called when both a login name and password are
-        present — some internal relays accept unauthenticated submission and
-        would reject a spurious AUTH attempt, so we skip it rather than
-        treating missing credentials as an error.
+        Authentication is delegated to ``_smtp_authenticate``.
         """
         self.ensure_one()
         ctx = ssl.create_default_context()
@@ -259,6 +266,19 @@ class OwMailAccount(models.Model):
             conn = smtplib.SMTP(self.smtp_host, self.smtp_port, timeout=30)
             if self.smtp_encryption == "starttls":
                 conn.starttls(context=ctx)
+        self._smtp_authenticate(conn)
+        return conn
+
+    def _smtp_authenticate(self, conn):
+        """Authenticate an open SMTP connection.
+
+        Extension hook — same contract as ``_imap_authenticate``.
+        ``login()`` is only called when both a login name and password are
+        present — some internal relays accept unauthenticated submission and
+        would reject a spurious AUTH attempt, so we skip it rather than
+        treating missing credentials as an error.
+        """
+        self.ensure_one()
         login = self.smtp_login or self.imap_login
         pwd = self._get_smtp_password()
         if login and pwd:
@@ -266,7 +286,6 @@ class OwMailAccount(models.Model):
                 conn.login(login, pwd)
             except smtplib.SMTPNotSupportedError:
                 pass
-        return conn
 
     # ---------------- Actions ----------------
 
