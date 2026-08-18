@@ -2078,3 +2078,9 @@ msgstr "Accounts"
 #: model:ir.model,name:ow_mail.model_ow_mail_preferences
 msgid "OW Mail Preferences"
 msgstr "OW Mail-voorkeuren"
+
+#. module: ow_mail
+#. odoo-python
+#: code:addons/ow_mail/models/ow_mail_account.py:0
+msgid "no Sent folder is configured on this account"
+msgstr "er is geen Verzonden-map ingesteld op dit account"

@@ -695,17 +695,48 @@ def snippet_from_bytes(payload, ctype, cte, charset, max_len=_PREVIEW_MAX_LEN):
         return ""
 
 
-def _parse_part_mime(mime_bytes):
-    """Parse a ``BODY[n.MIME]`` header block into ``(ctype, charset, cte)``."""
-    try:
-        hdr = email.message_from_bytes(mime_bytes or b"")
-        return (
-            hdr.get_content_type(),
-            hdr.get_content_charset(),
-            hdr.get("Content-Transfer-Encoding", ""),
-        )
-    except Exception:
-        return "text/plain", None, ""
+# Closed set of MIME transfer encodings — used to spot the CTE token inside a
+# raw BODYSTRUCTURE line without writing a full parenthesis parser.
+_BS_CTE_RX = re.compile(r'"(7bit|8bit|binary|base64|quoted-printable)"', re.I)
+_BS_CHARSET_RX = re.compile(r'"charset"\s+"([^"]+)"', re.I)
+_BS_FIRST_TEXT_RX = re.compile(r'^\(+\s*"text"\s+"(plain|html)"', re.I)
+
+
+def preview_plan_from_bodystructure(line):
+    """Derive the preview fetch plan from one raw BODYSTRUCTURE response line.
+
+    Returns ``(section, ctype, charset, cte)`` or ``None`` when the message's
+    first leaf part is not text (image-only mail, exotic nesting).
+
+    The section is derived from the nesting depth of the *first* part:
+    ``("text" …)`` → single-part → ``1``; ``(("text" …) … "alternative")`` →
+    part 1 is the text leaf → ``1``; ``((("text" …) …) "mixed")`` → the leaf
+    sits one level deeper → ``1.1``; and so on. This deliberately avoids
+    fetching ``BODY[n.MIME]``: GreenMail answers that with a hard ``NO`` for
+    single-part messages, which used to fail the whole batched FETCH and blank
+    every preview on the page.
+    """
+    m_bs = re.search(r"BODYSTRUCTURE \(", line)
+    if not m_bs:
+        return None
+    rest = line[m_bs.end() - 1:]
+    depth = len(rest) - len(rest.lstrip("("))
+    if depth < 1:
+        return None
+    # Only trust the shape when the first leaf really is a text part —
+    # otherwise the section we compute would point at e.g. an image.
+    m_txt = _BS_FIRST_TEXT_RX.match(rest)
+    if not m_txt:
+        return None
+    section = "1" + ".1" * max(0, depth - 2)
+    m_cs = _BS_CHARSET_RX.search(rest)
+    m_cte = _BS_CTE_RX.search(rest)
+    return (
+        section,
+        f"text/{m_txt.group(1).lower()}",
+        m_cs.group(1) if m_cs else None,
+        m_cte.group(1).lower() if m_cte else "",
+    )
 
 
 def _parse_preview_fetch(data):
@@ -736,43 +767,55 @@ def _parse_preview_fetch(data):
 def fetch_previews(conn, uids, max_len=_PREVIEW_MAX_LEN):
     """Return ``{uid: snippet}`` for the given UIDs using bounded partial fetches.
 
-    One batched ``UID FETCH`` grabs part ``1`` (the text/plain alternative of
-    a multipart/alternative message, or the single body part) plus its MIME
-    headers, truncated at ``_PREVIEW_FETCH_BYTES``. Messages whose part 1 is
-    itself multipart (multipart/mixed wrapping an alternative) get one second
-    batched fetch for part ``1.1``. Cost: at most 2 round-trips per page and
-    ~2 KB per message. Fully best-effort — any failure yields ``{}`` or a
-    missing uid, never an exception.
+    Two phases, both batched: one ``UID FETCH (UID BODYSTRUCTURE)`` to derive
+    each message's text-part section + charset/encoding (see
+    ``preview_plan_from_bodystructure``), then one truncated
+    ``BODY.PEEK[<section>]<0.N>`` fetch per distinct section (in practice 1–2
+    commands per page, ~2 KB per message). ``.MIME`` fetches are deliberately
+    avoided — GreenMail rejects them for single-part messages and fails the
+    whole batch. Fully best-effort — any failure yields ``{}`` or a missing
+    uid, never an exception.
     """
     if not uids:
         return {}
     previews = {}
     try:
-        def _fetch_round(round_uids, section):
-            uid_set = ",".join(str(u) for u in round_uids)
-            typ, data = conn.uid(
-                "FETCH", uid_set,
-                f"(UID BODY.PEEK[{section}.MIME] "
-                f"BODY.PEEK[{section}]<0.{_PREVIEW_FETCH_BYTES}>)")
-            if typ != "OK":
-                return {}
-            return _parse_preview_fetch(data)
-
-        nested = []
-        for uid, parts in _fetch_round(uids, "1").items():
-            ctype, charset, cte = _parse_part_mime(parts.get("1.MIME"))
-            if ctype.startswith("multipart/"):
-                nested.append(uid)
+        uid_set = ",".join(str(u) for u in uids)
+        typ, data = conn.uid("FETCH", uid_set, "(UID BODYSTRUCTURE)")
+        if typ != "OK":
+            return {}
+        plan = {}
+        for item in data or []:
+            if isinstance(item, tuple):
+                line = b" ".join(
+                    p for p in item if isinstance(p, (bytes, bytearray))
+                ).decode(errors="replace")
+            elif isinstance(item, (bytes, bytearray)):
+                line = item.decode(errors="replace")
+            else:
                 continue
-            previews[uid] = snippet_from_bytes(
-                parts.get("1", b""), ctype, cte, charset, max_len)
-        if nested:
-            for uid, parts in _fetch_round(nested, "1.1").items():
-                ctype, charset, cte = _parse_part_mime(parts.get("1.1.MIME"))
-                if ctype.startswith("multipart/"):
+            m_uid = re.search(r"UID (\d+)", line)
+            if not m_uid:
+                continue
+            entry = preview_plan_from_bodystructure(line)
+            if entry:
+                plan[int(m_uid.group(1))] = entry
+        by_section = {}
+        for uid, (section, _ct, _cs, _cte) in plan.items():
+            by_section.setdefault(section, []).append(uid)
+        for section, sec_uids in by_section.items():
+            typ, data = conn.uid(
+                "FETCH", ",".join(str(u) for u in sec_uids),
+                f"(UID BODY.PEEK[{section}]<0.{_PREVIEW_FETCH_BYTES}>)")
+            if typ != "OK":
+                continue
+            for uid, parts in _parse_preview_fetch(data).items():
+                if uid not in plan:
                     continue
+                _sec, ctype, charset, cte = plan[uid]
                 previews[uid] = snippet_from_bytes(
-                    parts.get("1.1", b""), ctype, cte, charset, max_len)
+                    parts.get(section.upper(), b""), ctype, cte, charset,
+                    max_len)
     except Exception as e:
         _logger.debug("ow_mail preview fetch failed: %s", e)
     return previews

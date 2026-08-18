@@ -94,6 +94,15 @@ class TestMessagesRoute(HttpCase):
             html="<p>Months ago</p>",
             date_utc=cls.old_date,
         )
+        # 5. Single-part text-only message — GreenMail rejects
+        # BODY[1.MIME] on these; previews must still work (regression
+        # guard for the BODYSTRUCTURE-based fetch plan).
+        greenmail_append(
+            frm="Plain <plain@ow.test>",
+            subject="Plain only note",
+            text="Alleen platte tekst als inhoud.",
+            date_utc=now - timedelta(hours=4),
+        )
         # Pull the folder tree + special folder mapping.
         cls.account._refresh_folders()
 
@@ -178,3 +187,8 @@ class TestMessagesRoute(HttpCase):
                          "Lunch tomorrow?")
         self.assertEqual(by_subject["Weekly report — Q2"]["preview"],
                          "Weekly report — Q2")
+        # Single-part message on the same page: its own preview must be
+        # filled AND its presence must not blank the others (GreenMail
+        # BODY[1.MIME] regression).
+        self.assertEqual(by_subject["Plain only note"]["preview"],
+                         "Alleen platte tekst als inhoud.")

@@ -1,6 +1,6 @@
 /** @odoo-module **/
 
-import { Component, useState } from "@odoo/owl";
+import { Component, useEffect, useState } from "@odoo/owl";
 import { useService } from "@web/core/utils/hooks";
 import { _t } from "@web/core/l10n/translation";
 import { AvatarInitials } from "../avatar_initials/avatar_initials";
@@ -90,6 +90,16 @@ export class MessageList extends Component {
         this.notification = useService("notification");
         this.state = useState(this.mail.state);
         this.local = useState({ search: this.state.selection.search || "", checked: {}, expandedThreads: {} });
+        // Keep the search box in sync when the service resets the query
+        // (folder/tag switch clears the search — the input must follow).
+        useEffect(
+            (search) => {
+                if ((search || "") !== this.local.search) {
+                    this.local.search = search || "";
+                }
+            },
+            () => [this.state.selection.search]
+        );
     }
 
     /**

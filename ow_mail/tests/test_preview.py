@@ -12,6 +12,7 @@ from odoo.tests import TransactionCase, tagged
 
 from ..models.ow_mail_imap import (
     _parse_preview_fetch,
+    preview_plan_from_bodystructure,
     snippet_from_bytes,
 )
 
@@ -97,3 +98,46 @@ class TestPreviewFetchParser(TransactionCase):
 
     def test_garbage_items_ignored(self):
         self.assertEqual(_parse_preview_fetch([b")", None, (b"junk",)]), {})
+
+
+@tagged("post_install", "-at_install", "ow_mail")
+class TestPreviewPlan(TransactionCase):
+    """BODYSTRUCTURE → (section, ctype, charset, cte) plan derivation.
+
+    Fixture lines mirror real server output; the single-part one is
+    verbatim GreenMail (which rejects ``BODY[1.MIME]`` on such messages —
+    the reason this parser exists at all).
+    """
+
+    def test_single_part_plain(self):
+        line = ('5 (BODYSTRUCTURE ("text" "plain" ("charset" "utf-8") '
+                'NIL NIL "7bit" 50 1 NIL NIL NIL) UID 10)')
+        self.assertEqual(preview_plan_from_bodystructure(line),
+                         ("1", "text/plain", "utf-8", "7bit"))
+
+    def test_multipart_alternative(self):
+        line = ('7 (UID 12 BODYSTRUCTURE (("text" "plain" ("charset" "utf-8") '
+                'NIL NIL "quoted-printable" 60 2 NIL NIL NIL)'
+                '("text" "html" ("charset" "utf-8") NIL NIL "base64" 120 3 '
+                'NIL NIL NIL) "alternative" ("boundary" "b1") NIL NIL))')
+        self.assertEqual(preview_plan_from_bodystructure(line),
+                         ("1", "text/plain", "utf-8", "quoted-printable"))
+
+    def test_mixed_wrapping_alternative(self):
+        line = ('9 (UID 14 BODYSTRUCTURE ((("text" "plain" ("charset" "utf-8") '
+                'NIL NIL "7bit" 30 1 NIL NIL NIL)'
+                '("text" "html" ("charset" "utf-8") NIL NIL "7bit" 60 1 NIL '
+                'NIL NIL) "alternative" ("boundary" "b2") NIL NIL)'
+                '("text" "csv" ("charset" "us-ascii") NIL NIL "base64" 20 1 '
+                'NIL ("attachment" ("filename" "d.csv")) NIL) "mixed" '
+                '("boundary" "b3") NIL NIL))')
+        self.assertEqual(preview_plan_from_bodystructure(line),
+                         ("1.1", "text/plain", "utf-8", "7bit"))
+
+    def test_non_text_first_leaf_skipped(self):
+        line = ('3 (BODYSTRUCTURE ("image" "png" NIL NIL NIL "base64" 500 '
+                'NIL NIL NIL) UID 4)')
+        self.assertIsNone(preview_plan_from_bodystructure(line))
+
+    def test_no_bodystructure(self):
+        self.assertIsNone(preview_plan_from_bodystructure("5 (UID 10 FLAGS ())"))
