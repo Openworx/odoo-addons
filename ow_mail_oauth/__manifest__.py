@@ -1,6 +1,6 @@
 {
     "name": "OW Mail OAuth (Gmail / Microsoft 365)",
-    "version": "18.0.1.0.2",
+    "version": "18.0.1.0.3",
     "summary": "OAuth2 (XOAUTH2) authentication for OW Mail accounts: "
                "Gmail and Microsoft 365 (beta)",
     "description": """
