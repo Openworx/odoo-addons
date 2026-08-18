@@ -8,6 +8,7 @@
         <div t-if="props.win.expanded" class="o-ow-compose-backdrop" t-on-click="toggleExpand"/>
 
         <div class="o-ow-compose-inner card d-flex flex-column position-relative"
+             t-ref="inner"
              t-att-class="{'shadow-lg': props.win.expanded}"
              t-on-dragenter="onDragEnter"
              t-on-dragover="onDragOver"
@@ -151,7 +152,31 @@
 
                 <!-- Body -->
                 <div class="o-ow-compose-body flex-grow-1 overflow-auto px-3 py-2"
-                     contenteditable="true" t-ref="body" t-on-input="onBodyInput"/>
+                     contenteditable="true" t-ref="body"
+                     t-on-input="onBodyInput"
+                     t-on-click="onBodyClick"
+                     t-on-paste="onPaste"
+                     t-on-scroll="deselectImg"/>
+
+                <!-- Image-resize overlay (selection border, size toolbar, drag handle) -->
+                <t t-if="local.imgSel">
+                    <div class="o-ow-img-outline"
+                         t-att-style="'top:' + local.imgSel.top + 'px; left:' + local.imgSel.left + 'px; width:' + local.imgSel.width + 'px; height:' + local.imgSel.height + 'px;'"/>
+                    <div class="o-ow-img-toolbar" role="toolbar" aria-label="Image size"
+                         t-att-style="'top:' + local.imgSel.barTop + 'px; left:' + local.imgSel.left + 'px;'">
+                        <button t-on-click="() => this.setImgWidth('25%')" aria-label="Width 25%">25%</button>
+                        <button t-on-click="() => this.setImgWidth('50%')" aria-label="Width 50%">50%</button>
+                        <button t-on-click="() => this.setImgWidth('75%')" aria-label="Width 75%">75%</button>
+                        <button t-on-click="() => this.setImgWidth('100%')" aria-label="Width 100%">100%</button>
+                        <button t-on-click="() => this.setImgWidth(null)" title="Original size"
+                                aria-label="Original size"><i class="fa fa-refresh"/></button>
+                        <button class="o-ow-img-remove" t-on-click="removeSelectedImg"
+                                title="Remove image" aria-label="Remove image"><i class="fa fa-trash-o"/></button>
+                    </div>
+                    <span class="o-ow-img-handle" title="Drag to resize"
+                          t-att-style="'top:' + (local.imgSel.top + local.imgSel.height - 7) + 'px; left:' + (local.imgSel.left + local.imgSel.width - 7) + 'px;'"
+                          t-on-pointerdown="onImgHandleDown"/>
+                </t>
 
                 <!-- Attachments -->
                 <div class="o-ow-compose-attachments px-3 pb-1" t-if="props.win.attachments.length">

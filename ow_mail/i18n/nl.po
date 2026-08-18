@@ -2285,3 +2285,51 @@ msgstr "— berichten met een label"
 #: code:addons/ow_mail/static/src/components/message_list/message_list.xml:0
 msgid "— text in field"
 msgstr "— tekst in veld"
+
+#. module: ow_mail
+#. odoo-javascript
+#: code:addons/ow_mail/static/src/components/compose_window/compose_window.xml:0
+msgid "Image size"
+msgstr "Afbeeldingsgrootte"
+
+#. module: ow_mail
+#. odoo-javascript
+#: code:addons/ow_mail/static/src/components/compose_window/compose_window.xml:0
+msgid "Original size"
+msgstr "Oorspronkelijke grootte"
+
+#. module: ow_mail
+#. odoo-javascript
+#: code:addons/ow_mail/static/src/components/compose_window/compose_window.xml:0
+msgid "Remove image"
+msgstr "Afbeelding verwijderen"
+
+#. module: ow_mail
+#. odoo-javascript
+#: code:addons/ow_mail/static/src/components/compose_window/compose_window.xml:0
+msgid "Drag to resize"
+msgstr "Sleep om te schalen"
+
+#. module: ow_mail
+#. odoo-javascript
+#: code:addons/ow_mail/static/src/components/compose_window/compose_window.xml:0
+msgid "Width 25%"
+msgstr "Breedte 25%"
+
+#. module: ow_mail
+#. odoo-javascript
+#: code:addons/ow_mail/static/src/components/compose_window/compose_window.xml:0
+msgid "Width 50%"
+msgstr "Breedte 50%"
+
+#. module: ow_mail
+#. odoo-javascript
+#: code:addons/ow_mail/static/src/components/compose_window/compose_window.xml:0
+msgid "Width 75%"
+msgstr "Breedte 75%"
+
+#. module: ow_mail
+#. odoo-javascript
+#: code:addons/ow_mail/static/src/components/compose_window/compose_window.xml:0
+msgid "Width 100%"
+msgstr "Breedte 100%"

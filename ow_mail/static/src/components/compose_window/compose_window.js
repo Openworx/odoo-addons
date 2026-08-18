@@ -157,8 +157,15 @@ export class ComposeWindow extends Component {
     setup() {
         this.mail = useService("ow_mail");
         this.state = useState(this.mail.state);
-        this.local = useState({ dragActive: false });
+        // imgSel: overlay-geometry (relative to the compose-inner card) for
+        // the image-resize toolbar; the selected <img> itself lives in
+        // this._selImg (plain DOM ref — never mutated with marker classes,
+        // so the saved HTML stays clean).
+        this.local = useState({ dragActive: false, imgSel: null });
         this.bodyRef = useRef("body");
+        this.innerRef = useRef("inner");
+        this._selImg = null;
+        this._imgDrag = null;
         this._savedRange = null;
         this._dragCount = 0;
         onMounted(() => {
@@ -171,7 +178,17 @@ export class ComposeWindow extends Component {
         this._autosaveTimer = setInterval(
             () => this.mail.autosaveDraft(this.props.win),
             AUTOSAVE_INTERVAL_MS);
-        onWillDestroy(() => clearInterval(this._autosaveTimer));
+        // Drag-resize listeners live on the document so the pointer can
+        // leave the handle while dragging.
+        this._onImgDragMove = this._onImgDragMove.bind(this);
+        this._onImgDragEnd = this._onImgDragEnd.bind(this);
+        document.addEventListener("pointermove", this._onImgDragMove);
+        document.addEventListener("pointerup", this._onImgDragEnd);
+        onWillDestroy(() => {
+            clearInterval(this._autosaveTimer);
+            document.removeEventListener("pointermove", this._onImgDragMove);
+            document.removeEventListener("pointerup", this._onImgDragEnd);
+        });
     }
 
     /** Flag the window as having unsaved changes (drives autosave + guards). */
@@ -246,10 +263,169 @@ export class ComposeWindow extends Component {
      * body (for save/send), and the `contenteditable` is the live editor, the
      * two must be kept in sync on every `input` event.
      */
-    onBodyInput() {
+    /** Sync the contenteditable HTML into the window state + mark dirty. */
+    _syncBody() {
         if (!this.bodyRef.el) return;
         this.props.win.body = this.bodyRef.el.innerHTML;
         this.markDirty();
+    }
+
+    onBodyInput() {
+        this._syncBody();
+        // Typing invalidates the image-selection overlay geometry.
+        this.deselectImg();
+    }
+
+    // ------------------------------------------------------------------
+    // Image paste + resize
+    // ------------------------------------------------------------------
+
+    /**
+     * Intercept pastes that carry image files (screenshots, copied images).
+     *
+     * Without this, Chrome inserts `blob:` URLs that only resolve inside
+     * the current browser session — the image would be broken in the saved
+     * draft and for every recipient. Image files are converted to inline
+     * `data:` URIs via the same path as the toolbar's insert-image button.
+     * Text/HTML pastes are left to the browser.
+     *
+     * @param {ClipboardEvent} ev
+     */
+    async onPaste(ev) {
+        const files = [...((ev.clipboardData && ev.clipboardData.files) || [])]
+            .filter((f) => f.type.startsWith("image/"));
+        if (!files.length) return;
+        ev.preventDefault();
+        for (const f of files) {
+            await this._insertImageFile(f);
+        }
+    }
+
+    /**
+     * Read an image file and insert it at the caret as an inline data URI.
+     * Shared by the toolbar insert button and the paste handler.
+     *
+     * @param {File} file
+     */
+    async _insertImageFile(file) {
+        const dataUrl = await new Promise((resolve, reject) => {
+            const r = new FileReader();
+            r.onload = () => resolve(r.result);
+            r.onerror = reject;
+            r.readAsDataURL(file);
+        });
+        const safe = String(dataUrl).replace(/"/g, "&quot;");
+        this.exec("insertHTML",
+            `<img src="${safe}" style="max-width:100%;height:auto;" alt=""/>`);
+    }
+
+    /**
+     * Body click: clicking an image selects it (overlay with size toolbar +
+     * drag handle); clicking anywhere else deselects.
+     *
+     * @param {MouseEvent} ev
+     */
+    onBodyClick(ev) {
+        if (ev.target && ev.target.tagName === "IMG") {
+            this._selectImg(ev.target);
+        } else {
+            this.deselectImg();
+        }
+    }
+
+    /**
+     * Compute the overlay geometry (selection border, toolbar, drag handle)
+     * for *img*, relative to the compose-inner card.
+     *
+     * @param {HTMLImageElement} img
+     */
+    _selectImg(img) {
+        if (!this.innerRef.el) return;
+        this._selImg = img;
+        const inner = this.innerRef.el.getBoundingClientRect();
+        const r = img.getBoundingClientRect();
+        this.local.imgSel = {
+            top: r.top - inner.top,
+            left: r.left - inner.left,
+            width: r.width,
+            height: r.height,
+            barTop: Math.max(2, r.top - inner.top - 34),
+        };
+    }
+
+    /** Clear the image selection overlay. */
+    deselectImg() {
+        this._selImg = null;
+        this.local.imgSel = null;
+    }
+
+    /**
+     * Apply a preset width to the selected image (`"50%"` … or `null` for
+     * the original size). Percentages scale with the recipient's viewport,
+     * which survives mail clients better than fixed pixels.
+     *
+     * @param {string|null} width
+     */
+    setImgWidth(width) {
+        const img = this._selImg;
+        if (!img) return;
+        if (width) {
+            img.style.width = width;
+            img.style.height = "auto";
+            img.style.maxWidth = "100%";
+        } else {
+            img.style.width = "";
+            img.style.height = "";
+        }
+        this._syncBody();
+        this._selectImg(img); // overlay opnieuw uitlijnen op de nieuwe maat
+    }
+
+    /** Remove the selected image from the body. */
+    removeSelectedImg() {
+        const img = this._selImg;
+        if (!img) return;
+        img.remove();
+        this.deselectImg();
+        this._syncBody();
+    }
+
+    /**
+     * Start a corner-handle drag. Width follows the pointer in pixels and
+     * is converted to a body-relative percentage on release.
+     *
+     * @param {PointerEvent} ev
+     */
+    onImgHandleDown(ev) {
+        if (!this._selImg) return;
+        ev.preventDefault();
+        ev.stopPropagation();
+        this._imgDrag = {
+            startX: ev.clientX,
+            startWidth: this._selImg.getBoundingClientRect().width,
+        };
+    }
+
+    _onImgDragMove(ev) {
+        if (!this._imgDrag || !this._selImg || !this.bodyRef.el) return;
+        const maxW = this.bodyRef.el.clientWidth - 8;
+        const w = Math.min(maxW, Math.max(
+            40, this._imgDrag.startWidth + (ev.clientX - this._imgDrag.startX)));
+        this._selImg.style.width = `${Math.round(w)}px`;
+        this._selImg.style.height = "auto";
+        this._selectImg(this._selImg);
+    }
+
+    _onImgDragEnd() {
+        if (!this._imgDrag || !this._selImg || !this.bodyRef.el) {
+            this._imgDrag = null;
+            return;
+        }
+        this._imgDrag = null;
+        const bodyW = this.bodyRef.el.clientWidth || 1;
+        const pct = Math.round(
+            (this._selImg.getBoundingClientRect().width / bodyW) * 100);
+        this.setImgWidth(pct >= 98 ? "100%" : `${Math.max(5, pct)}%`);
     }
 
     /**
@@ -313,6 +489,7 @@ export class ComposeWindow extends Component {
      * minimized and expanded.
      */
     toggleMin() {
+        this.deselectImg();
         this.props.win.minimized = !this.props.win.minimized;
         if (this.props.win.minimized) this.props.win.expanded = false;
     }
@@ -598,16 +775,8 @@ export class ComposeWindow extends Component {
         const file = ev.target.files && ev.target.files[0];
         ev.target.value = "";
         if (!file || !file.type.startsWith("image/")) return;
-        const dataUrl = await new Promise((resolve, reject) => {
-            const r = new FileReader();
-            r.onload = () => resolve(r.result);
-            r.onerror = reject;
-            r.readAsDataURL(file);
-        });
         this._restoreSelection();
-        const safe = String(dataUrl).replace(/"/g, "&quot;");
-        this.exec("insertHTML",
-            `<img src="${safe}" style="max-width:100%;height:auto;" alt=""/>`);
+        await this._insertImageFile(file);
     }
 
     /**
