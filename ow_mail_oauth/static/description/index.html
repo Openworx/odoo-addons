@@ -5,112 +5,100 @@
     <title>OW Mail OAuth</title>
 </head>
 <body>
-<section style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif; max-width: 940px; margin: 0 auto; padding: 32px 20px; color: #1a202c; line-height: 1.65; background: #ffffff;">
+<section style="font-family: 'Montserrat', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif; max-width: 960px; margin: 0 auto; padding: 28px 18px; color: #1d2b3a; line-height: 1.7; background: #ffffff;">
 
-    <!-- HERO BANNER -->
-    <div style="background: linear-gradient(135deg, #0A1128 0%, #16244f 55%, #1d3167 100%); border-radius: 18px; padding: 52px 36px 44px 36px; text-align: center; margin-bottom: 18px;">
-        <img src="https://download.openworx.nl/logo.png" alt="Openworx" style="max-width: 150px; height: auto; margin-bottom: 26px; filter: brightness(0) invert(1);"/>
-        <div>
-            <span style="display: inline-block; background: rgba(255,148,13,0.15); color: #FFB65C; font-size: 12px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; padding: 7px 18px; border-radius: 999px; margin-bottom: 22px; border: 1px solid rgba(255,148,13,0.35);">Companion module for OW Mail</span>
-            <span style="display: inline-block; background: rgba(0,152,255,0.18); color: #7cc4ff; font-size: 12px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; padding: 7px 18px; border-radius: 999px; margin-bottom: 22px; margin-left: 8px; border: 1px solid rgba(0,152,255,0.4);">Beta</span>
+    <!-- HERO -->
+    <div style="background: #14212E; background-image: radial-gradient(circle at 88% 15%, rgba(0,114,192,0.35) 0, transparent 45%), radial-gradient(circle at 75% 85%, rgba(0,114,192,0.18) 0, transparent 40%), radial-gradient(circle at 96% 55%, rgba(255,149,14,0.10) 0, transparent 30%); border-radius: 14px; padding: 54px 40px 46px 40px; margin-bottom: 20px;">
+        <img src="https://download.openworx.nl/logo.png" alt="Openworx" style="max-width: 170px; height: auto; margin-bottom: 30px;"/>
+        <div style="margin-bottom: 22px;">
+            <span style="display: inline-block; background: #0072C0; color: #fff; font-size: 13px; font-weight: 700; padding: 7px 16px; border-radius: 6px; margin: 0 8px 8px 0;">Companion module for OW Mail</span>
+            <span style="display: inline-block; background: #ff950e; color: #fff; font-size: 13px; font-weight: 700; padding: 7px 16px; border-radius: 6px; margin: 0 0 8px 0;">Beta</span>
         </div>
-        <h1 style="font-size: 42px; line-height: 1.1; margin: 0 0 18px 0; font-weight: 800; letter-spacing: -0.02em; color: #ffffff;">
-            <span style="color: #FF940D;">OW Mail OAuth.</span><br/>Gmail &amp; Microsoft 365, done right.
+        <h1 style="font-size: 40px; line-height: 1.15; margin: 0 0 16px 0; font-weight: 800; letter-spacing: -0.01em; color: #ffffff; max-width: 640px;">
+            OW Mail OAuth — Gmail &amp; Microsoft 365, done right<span style="color: #ff950e;">.</span>
         </h1>
-        <p style="font-size: 18px; color: #b8c4dd; max-width: 620px; margin: 0 auto;">
+        <p style="font-size: 17px; color: #b9c6d4; max-width: 620px; margin: 0 0 26px 0; font-weight: 500;">
             Modern OAuth&nbsp;2.0 (XOAUTH2) sign-in for OW Mail accounts — no passwords in
             Odoo, automatic token refresh, and a connect flow that every user can run
             for their own mailbox.
         </p>
-    </div>
-
-    <!-- PILLARS -->
-    <div style="display: flex; flex-wrap: wrap; gap: 14px; margin-bottom: 48px;">
-        <div style="flex: 1 1 260px; background: #FFF9F2; border: 1px solid #ffe3c2; border-radius: 12px; padding: 18px 20px; text-align: center;">
-            <div style="font-size: 26px; margin-bottom: 6px;">✉️</div>
-            <div style="font-weight: 700; color: #0A1128; margin-bottom: 4px;">Gmail</div>
-            <div style="color: #4a5568; font-size: 14px;">Official Google consent screen, refresh tokens handled for you.</div>
-        </div>
-        <div style="flex: 1 1 260px; background: #F2F9FF; border: 1px solid #c9e6ff; border-radius: 12px; padding: 18px 20px; text-align: center;">
-            <div style="font-size: 26px; margin-bottom: 6px;">📨</div>
-            <div style="font-weight: 700; color: #0A1128; margin-bottom: 4px;">Microsoft 365</div>
-            <div style="color: #4a5568; font-size: 14px;">Ready for the basic-auth shutdown — one token for IMAP and SMTP.</div>
-        </div>
-        <div style="flex: 1 1 260px; background: #FFF9F2; border: 1px solid #ffe3c2; border-radius: 12px; padding: 18px 20px; text-align: center;">
-            <div style="font-size: 26px; margin-bottom: 6px;">🙋</div>
-            <div style="font-weight: 700; color: #0A1128; margin-bottom: 4px;">Per-user flow</div>
-            <div style="color: #4a5568; font-size: 14px;">Admin registers the app once; every user connects their own mailbox.</div>
+        <div style="font-size: 15px; color: #ffffff; font-weight: 700;">
+            <span style="display: inline-block; margin: 4px 26px 4px 0;"><span style="color: #ff950e; margin-right: 8px;">&#10004;</span>Official consent screens</span>
+            <span style="display: inline-block; margin: 4px 26px 4px 0;"><span style="color: #ff950e; margin-right: 8px;">&#10004;</span>Ready for the basic-auth shutdown</span>
+            <span style="display: inline-block; margin: 4px 0;"><span style="color: #ff950e; margin-right: 8px;">&#10004;</span>Every user links their own mailbox</span>
         </div>
     </div>
 
     <!-- HOW IT WORKS -->
-    <div style="margin-bottom: 48px;">
-        <h2 style="font-size: 30px; font-weight: 800; color: #0A1128; margin: 0 0 14px 0; border-bottom: 3px solid #FF940D; padding-bottom: 10px;">How it works</h2>
-        <p style="font-size: 16px; color: #4a5568; margin: 0 0 16px 0;">
-            OW Mail OAuth extends <strong style="color: #0A1128;">OW Mail</strong> — the personal
+    <div style="margin-bottom: 48px; margin-top: 44px;">
+        <div style="font-size: 12px; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: #0072C0; margin-bottom: 6px;">The idea</div>
+        <h2 style="font-size: 30px; font-weight: 800; color: #14212E; margin: 0 0 12px 0;">How it works<span style="color: #ff950e;">.</span></h2>
+        <p style="font-size: 16px; color: #55677a; margin: 0 0 20px 0;">
+            OW Mail OAuth extends <strong style="color: #14212E;">OW Mail</strong> — the personal
             mail client for the Odoo backend — with an OAuth&nbsp;2.0 authentication type. It
-            builds on Odoo's standard <code style="background: #f7fafc; padding: 1px 6px; border-radius: 4px;">google_gmail</code>
-            and <code style="background: #f7fafc; padding: 1px 6px; border-radius: 4px;">microsoft_outlook</code>
+            builds on Odoo's standard <code style="background: #EEF5FB; padding: 1px 6px; border-radius: 4px;">google_gmail</code>
+            and <code style="background: #EEF5FB; padding: 1px 6px; border-radius: 4px;">microsoft_outlook</code>
             modules for token storage and refresh, and adds the XOAUTH2 handshake to OW Mail's
             IMAP and SMTP connections. Existing password accounts keep working unchanged.
         </p>
         <div style="display: flex; flex-wrap: wrap; gap: 14px;">
-            <div style="flex: 1 1 400px; background: #fff; border: 1px solid #e2e8f0; border-top: 3px solid #FF940D; border-radius: 12px; padding: 20px 22px;">
+            <div style="flex: 1 1 340px; background: #fff; border: 1px solid #dfe9f2; border-radius: 10px; padding: 20px 22px; box-shadow: 0 2px 10px rgba(20,33,46,0.05);">
                 <div style="font-size: 24px; margin-bottom: 8px;">🧭</div>
-                <h3 style="margin: 0 0 6px 0; color: #0A1128; font-size: 17px; font-weight: 700;">Provider presets in the wizard</h3>
-                <p style="margin: 0; color: #4a5568; font-size: 15px;">Pick Gmail or Microsoft&nbsp;365 in the Connect Mailbox wizard — servers are pre-filled and the browser goes straight to the provider's consent screen. After approval the connection is tested and your folders are loaded.</p>
+                <h3 style="margin: 0 0 6px 0; color: #14212E; font-size: 17px; font-weight: 700;">Provider presets in the wizard<span style="color: #ff950e;">.</span></h3>
+                <p style="margin: 0; color: #55677a; font-size: 15px;">Pick Gmail or Microsoft&nbsp;365 in the Connect Mailbox wizard — servers are pre-filled and the browser goes straight to the provider's consent screen. After approval the connection is tested and your folders are loaded.</p>
             </div>
-            <div style="flex: 1 1 400px; background: #fff; border: 1px solid #e2e8f0; border-top: 3px solid #0098FF; border-radius: 12px; padding: 20px 22px;">
+            <div style="flex: 1 1 340px; background: #fff; border: 1px solid #dfe9f2; border-radius: 10px; padding: 20px 22px; box-shadow: 0 2px 10px rgba(20,33,46,0.05);">
                 <div style="font-size: 24px; margin-bottom: 8px;">🔄</div>
-                <h3 style="margin: 0 0 6px 0; color: #0A1128; font-size: 17px; font-weight: 700;">Automatic token refresh</h3>
-                <p style="margin: 0; color: #4a5568; font-size: 15px;">Access tokens are refreshed in the background — reading, sending, and the new-mail check keep working without re-authentication. A revoked token puts the account in a clear error state with a Reconnect button.</p>
+                <h3 style="margin: 0 0 6px 0; color: #14212E; font-size: 17px; font-weight: 700;">Automatic token refresh<span style="color: #ff950e;">.</span></h3>
+                <p style="margin: 0; color: #55677a; font-size: 15px;">Access tokens are refreshed in the background — reading, sending, and the new-mail check keep working without re-authentication. A revoked token puts the account in a clear error state with a Reconnect button.</p>
             </div>
-            <div style="flex: 1 1 400px; background: #fff; border: 1px solid #e2e8f0; border-top: 3px solid #0098FF; border-radius: 12px; padding: 20px 22px;">
+            <div style="flex: 1 1 340px; background: #fff; border: 1px solid #dfe9f2; border-radius: 10px; padding: 20px 22px; box-shadow: 0 2px 10px rgba(20,33,46,0.05);">
                 <div style="font-size: 24px; margin-bottom: 8px;">🔀</div>
-                <h3 style="margin: 0 0 6px 0; color: #0A1128; font-size: 17px; font-weight: 700;">Convert existing accounts</h3>
-                <p style="margin: 0; color: #4a5568; font-size: 15px;">Switch an existing OW Mail account from password to OAuth on the account form — one click on <em>Connect with Google / Microsoft</em>.</p>
+                <h3 style="margin: 0 0 6px 0; color: #14212E; font-size: 17px; font-weight: 700;">Convert existing accounts<span style="color: #ff950e;">.</span></h3>
+                <p style="margin: 0; color: #55677a; font-size: 15px;">Switch an existing OW Mail account from password to OAuth on the account form — one click on <em>Connect with Google / Microsoft</em>.</p>
             </div>
-            <div style="flex: 1 1 400px; background: #fff; border: 1px solid #e2e8f0; border-top: 3px solid #FF940D; border-radius: 12px; padding: 20px 22px;">
+            <div style="flex: 1 1 340px; background: #fff; border: 1px solid #dfe9f2; border-radius: 10px; padding: 20px 22px; box-shadow: 0 2px 10px rgba(20,33,46,0.05);">
                 <div style="font-size: 24px; margin-bottom: 8px;">🛡️</div>
-                <h3 style="margin: 0 0 6px 0; color: #0A1128; font-size: 17px; font-weight: 700;">Secure by construction</h3>
-                <p style="margin: 0; color: #4a5568; font-size: 15px;">No mailbox passwords in Odoo. The callback verifies ownership and a signed state token before any token is stored, and each user can only ever connect their own accounts.</p>
+                <h3 style="margin: 0 0 6px 0; color: #14212E; font-size: 17px; font-weight: 700;">Secure by construction<span style="color: #ff950e;">.</span></h3>
+                <p style="margin: 0; color: #55677a; font-size: 15px;">No mailbox passwords in Odoo. The callback verifies ownership and a signed state token before any token is stored, and each user can only ever connect their own accounts.</p>
             </div>
         </div>
     </div>
 
     <!-- SETUP -->
-    <div style="margin-bottom: 48px;">
-        <h2 style="font-size: 30px; font-weight: 800; color: #0A1128; margin: 0 0 24px 0; border-bottom: 3px solid #FF940D; padding-bottom: 10px;">One-time setup</h2>
+    <div style="background: #EEF5FB; border-radius: 14px; padding: 34px 26px; margin-bottom: 48px;">
+        <div style="font-size: 12px; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: #0072C0; margin-bottom: 6px;">Getting started</div>
+        <h2 style="font-size: 30px; font-weight: 800; color: #14212E; margin: 0 0 22px 0;">One-time setup<span style="color: #ff950e;">.</span></h2>
 
-        <div style="margin-bottom: 14px; padding: 18px 20px 18px 64px; background: #fff; border: 1px solid #e2e8f0; border-radius: 10px; position: relative;">
-            <span style="position: absolute; left: 16px; top: 18px; width: 32px; height: 32px; background: #FF940D; color: #fff; border-radius: 50%; text-align: center; line-height: 32px; font-weight: 800; font-size: 14px;">1</span>
-            Register a (free) app with <strong style="color: #0A1128;">Google Cloud</strong> and/or <strong style="color: #0A1128;">Azure&nbsp;/&nbsp;Entra&nbsp;ID</strong> — the module's README walks you through every screen, including the exact redirect URLs and permissions.
+        <div style="margin-bottom: 14px; padding: 18px 20px 18px 66px; background: #fff; border: 1px solid #dfe9f2; border-radius: 10px; position: relative;">
+            <span style="position: absolute; left: 18px; top: 18px; width: 32px; height: 32px; background: #0072C0; color: #fff; border-radius: 50%; text-align: center; line-height: 32px; font-weight: 800; font-size: 14px;">1</span>
+            Register a (free) app with <strong style="color: #14212E;">Google Cloud</strong> and/or <strong style="color: #14212E;">Azure&nbsp;/&nbsp;Entra&nbsp;ID</strong> — the module's README walks you through every screen, including the exact redirect URLs and permissions.
         </div>
-        <div style="margin-bottom: 14px; padding: 18px 20px 18px 64px; background: #fafbfc; border: 1px solid #e2e8f0; border-radius: 10px; position: relative;">
-            <span style="position: absolute; left: 16px; top: 18px; width: 32px; height: 32px; background: #FF940D; color: #fff; border-radius: 50%; text-align: center; line-height: 32px; font-weight: 800; font-size: 14px;">2</span>
-            Enter the Client ID and Client Secret in <strong style="color: #0A1128;">Settings → General Settings</strong> (the standard Gmail / Outlook credential fields).
+        <div style="margin-bottom: 14px; padding: 18px 20px 18px 66px; background: #fff; border: 1px solid #dfe9f2; border-radius: 10px; position: relative;">
+            <span style="position: absolute; left: 18px; top: 18px; width: 32px; height: 32px; background: #0072C0; color: #fff; border-radius: 50%; text-align: center; line-height: 32px; font-weight: 800; font-size: 14px;">2</span>
+            Enter the Client ID and Client Secret in <strong style="color: #14212E;">Settings → General Settings</strong> (the standard Gmail / Outlook credential fields).
         </div>
-        <div style="margin-bottom: 14px; padding: 18px 20px 18px 64px; background: #fff; border: 1px solid #e2e8f0; border-radius: 10px; position: relative;">
-            <span style="position: absolute; left: 16px; top: 18px; width: 32px; height: 32px; background: #FF940D; color: #fff; border-radius: 50%; text-align: center; line-height: 32px; font-weight: 800; font-size: 14px;">3</span>
-            Every user: <strong style="color: #0A1128;">OW Mail → Connect Mailbox</strong> → pick your provider → sign in on the consent screen. Done.
+        <div style="margin-bottom: 16px; padding: 18px 20px 18px 66px; background: #fff; border: 1px solid #dfe9f2; border-radius: 10px; position: relative;">
+            <span style="position: absolute; left: 18px; top: 18px; width: 32px; height: 32px; background: #0072C0; color: #fff; border-radius: 50%; text-align: center; line-height: 32px; font-weight: 800; font-size: 14px;">3</span>
+            Every user: <strong style="color: #14212E;">OW Mail → Connect Mailbox</strong> → pick your provider → sign in on the consent screen. Done.
         </div>
-        <p style="margin: 0 0 8px 0; color: #718096; font-size: 14px;">
+        <p style="margin: 0 0 8px 0; color: #55677a; font-size: 14px;">
             Requires OW Mail and an Odoo instance reachable over HTTPS. Google marks the Gmail scope
             as <em>restricted</em>: use "Internal" for your own Workspace domain, or complete Google's
             verification for public production use.
         </p>
-        <p style="margin: 0; color: #718096; font-size: 14px;">
-            <strong style="color: #0A1128;">Beta status:</strong> the module is fully unit-tested, but the
+        <p style="margin: 0; color: #55677a; font-size: 14px;">
+            <strong style="color: #14212E;">Beta status:</strong> the module is fully unit-tested, but the
             end-to-end OAuth flow depends on your provider app registration — feedback from real-world
             Gmail / Microsoft&nbsp;365 tenants is welcome.
         </p>
     </div>
 
     <!-- FOOTER -->
-    <div style="text-align: center; padding: 40px 24px; background: #0A1128; border-radius: 14px;">
-        <img src="https://download.openworx.nl/logo.png" alt="Openworx" style="max-width: 160px; height: auto; margin-bottom: 14px; filter: brightness(0) invert(1);"/>
-        <p style="margin: 8px 0 4px 0; color: #fff; font-size: 16px; font-weight: 600;">Built by <span style="color: #FF940D;">Openworx</span> — Odoo specialists.</p>
-        <p style="margin: 0;"><a href="https://www.openworx.nl" style="color: #0098FF; text-decoration: none; font-size: 15px;">openworx.nl</a></p>
+    <div style="text-align: center; padding: 40px 24px; background: #14212E; background-image: radial-gradient(circle at 85% 30%, rgba(0,114,192,0.25) 0, transparent 45%); border-radius: 14px;">
+        <img src="https://download.openworx.nl/logo.png" alt="Openworx" style="max-width: 170px; height: auto; margin-bottom: 14px;"/>
+        <p style="margin: 8px 0 4px 0; color: #fff; font-size: 16px; font-weight: 700;">Jouw partner in Odoo — implementatie, maatwerk en hosting<span style="color: #ff950e;">.</span></p>
+        <p style="margin: 0;"><a href="https://www.openworx.nl" style="color: #4da3e0; text-decoration: none; font-size: 15px; font-weight: 700;">openworx.nl</a></p>
     </div>
 
 </section>
