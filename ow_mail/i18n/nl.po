@@ -11,6 +11,7 @@ msgstr ""
 "Last-Translator: Thomas Pot | Open2bizz <info@open2bizz.nl>\n"
 "Language-Team: \n"
 "Language: nl\n"
+"l\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -50,15 +51,44 @@ msgid "Account Name"
 msgstr "Accountnaam"
 
 #. module: ow_mail
+#: model:ir.ui.menu,name:ow_mail.menu_ow_mail_accounts
+msgid "Accounts"
+msgstr "Accounts"
+
+#. module: ow_mail
+#. odoo-javascript
+#: code:addons/ow_mail/static/src/components/shortcuts_dialog/shortcuts_dialog.js:0
+msgid "Actions"
+msgstr "Acties"
+
+#. module: ow_mail
 #: model:ir.model.fields,field_description:ow_mail.field_ow_mail_account__active
 msgid "Active"
 msgstr "Actief"
 
 #. module: ow_mail
 #. odoo-javascript
+#: code:addons/ow_mail/static/src/components/sidebar/sidebar.xml:0
+msgid "Add tag"
+msgstr "Tag toevoegen"
+
+#. module: ow_mail
+#. odoo-javascript
 #: code:addons/ow_mail/static/src/components/message_viewer/message_viewer.xml:0
 msgid "Add to Calendar"
 msgstr "Toevoegen aan agenda"
+
+#. module: ow_mail
+#. odoo-javascript
+#: code:addons/ow_mail/static/src/components/settings_dialog/settings_dialog.js:0
+msgid "After 2 seconds"
+msgstr "Na 2 seconden"
+
+#. module: ow_mail
+#. odoo-javascript
+#: code:addons/ow_mail/static/src/components/settings_dialog/settings_dialog.js:0
+msgid "After 5 seconds"
+msgstr "Na 5 seconden"
 
 #. module: ow_mail
 #. odoo-javascript
@@ -91,9 +121,15 @@ msgid "All Mailboxes"
 msgstr "Alle mailboxen"
 
 #. module: ow_mail
+#: model:ir.model.constraint,message:ow_mail.constraint_ow_mail_trusted_sender_user_email_uniq
+msgid "Already trusted."
+msgstr "Al vertrouwd."
+
+#. module: ow_mail
 #. odoo-javascript
 #: code:addons/ow_mail/static/src/components/message_list/message_list.xml:0
 #: code:addons/ow_mail/static/src/components/message_viewer/message_viewer.xml:0
+#: code:addons/ow_mail/static/src/components/shortcuts_dialog/shortcuts_dialog.js:0
 #: model:ir.model.fields.selection,name:ow_mail.selection__ow_mail_folder__kind__archive
 msgid "Archive"
 msgstr "Archief"
@@ -164,6 +200,12 @@ msgstr "Vet"
 
 #. module: ow_mail
 #. odoo-javascript
+#: code:addons/ow_mail/static/src/components/message_list/message_list.xml:0
+msgid "Bulk actions"
+msgstr "Bulkacties"
+
+#. module: ow_mail
+#. odoo-javascript
 #: code:addons/ow_mail/static/src/components/compose_window/compose_window.xml:0
 msgid "Bullet list"
 msgstr "Opsommingslijst"
@@ -171,11 +213,18 @@ msgstr "Opsommingslijst"
 #. module: ow_mail
 #. odoo-javascript
 #: code:addons/ow_mail/static/src/components/contacts/contacts.xml:0
+#: code:addons/ow_mail/static/src/components/sidebar/sidebar.js:0
 #: model_terms:ir.ui.view,arch_db:ow_mail.ow_mail_attach_record_view_form
 #: model_terms:ir.ui.view,arch_db:ow_mail.ow_mail_create_record_view_form
 #: model_terms:ir.ui.view,arch_db:ow_mail.view_ow_mail_connect_wizard_form
 msgid "Cancel"
 msgstr "Annuleren"
+
+#. module: ow_mail
+#. odoo-python
+#: code:addons/ow_mail/models/ow_mail_account.py:0
+msgid "Cannot move folder into itself or its own subfolder"
+msgstr "Kan map niet naar zichzelf of een eigen submap verplaatsen"
 
 #. module: ow_mail
 #. odoo-python
@@ -190,9 +239,21 @@ msgid "Cannot reach SMTP server %s:%s — %s"
 msgstr "Kan SMTP-server %s:%s niet bereiken — %s"
 
 #. module: ow_mail
+#. odoo-python
+#: code:addons/ow_mail/models/ow_mail_account.py:0
+msgid "Cannot select %s"
+msgstr "Kan %s niet selecteren"
+
+#. module: ow_mail
 #: model:ir.model.fields,field_description:ow_mail.field_ow_mail_compose__cc
 msgid "Cc"
 msgstr "Cc"
+
+#. module: ow_mail
+#. odoo-javascript
+#: code:addons/ow_mail/static/src/components/sidebar/sidebar.xml:0
+msgid "Change color"
+msgstr "Kleur wijzigen"
 
 #. module: ow_mail
 #. odoo-javascript
@@ -214,10 +275,23 @@ msgstr "Selectie wissen"
 
 #. module: ow_mail
 #. odoo-javascript
+#: code:addons/ow_mail/static/src/components/message_list/message_list.xml:0
+msgid "Click to add · × to remove"
+msgstr "Klik om toe te voegen · × om te verwijderen"
+
+#. module: ow_mail
+#. odoo-javascript
 #: code:addons/ow_mail/static/src/components/compose_window/compose_window.xml:0
 #: code:addons/ow_mail/static/src/components/message_source/message_source.xml:0
+#: code:addons/ow_mail/static/src/components/shortcuts_dialog/shortcuts_dialog.xml:0
 msgid "Close"
 msgstr "Sluiten"
+
+#. module: ow_mail
+#. odoo-javascript
+#: code:addons/ow_mail/static/src/components/shortcuts_dialog/shortcuts_dialog.js:0
+msgid "Close the open message"
+msgstr "Geopend bericht sluiten"
 
 #. module: ow_mail
 #. odoo-javascript
@@ -246,6 +320,12 @@ msgid "Compose"
 msgstr "Opstellen"
 
 #. module: ow_mail
+#. odoo-javascript
+#: code:addons/ow_mail/static/src/components/shortcuts_dialog/shortcuts_dialog.js:0
+msgid "Compose a new message"
+msgstr "Nieuw bericht opstellen"
+
+#. module: ow_mail
 #: model:ir.ui.menu,name:ow_mail.menu_ow_mail_config
 msgid "Configuration"
 msgstr "Configuratie"
@@ -267,6 +347,9 @@ msgid "Connect"
 msgstr "Verbinden"
 
 #. module: ow_mail
+#. odoo-javascript
+#: code:addons/ow_mail/static/src/components/mailclient/mailclient.xml:0
+#: model:ir.ui.menu,name:ow_mail.menu_ow_mail_connect
 #: model_terms:ir.ui.view,arch_db:ow_mail.view_ow_mail_connect_wizard_form
 msgid "Connect Mailbox"
 msgstr "Mailbox koppelen"
@@ -275,6 +358,14 @@ msgstr "Mailbox koppelen"
 #: model:ir.actions.act_window,name:ow_mail.action_ow_mail_connect_wizard
 msgid "Connect to Mailbox"
 msgstr "Verbinding maken met mailbox"
+
+#. module: ow_mail
+#. odoo-javascript
+#: code:addons/ow_mail/static/src/components/mailclient/mailclient.xml:0
+msgid ""
+"Connect your IMAP/SMTP mailbox to start reading and\n"
+"                            sending mail right here in Odoo."
+msgstr "Koppel je IMAP/SMTP-mailbox om direct in Odoo mail te lezen en te versturen."
 
 #. module: ow_mail
 #. odoo-python
@@ -297,8 +388,45 @@ msgstr "Relatie"
 #. odoo-javascript
 #: code:addons/ow_mail/static/src/components/sidebar/sidebar.xml:0
 #: model:ir.actions.act_window,name:ow_mail.action_ow_mail_contact
+#: model:ir.ui.menu,name:ow_mail.menu_ow_mail_contacts
 msgid "Contacts"
 msgstr "Contacten"
+
+#. module: ow_mail
+#. odoo-javascript
+#: code:addons/ow_mail/static/src/components/settings_dialog/settings_dialog.xml:0
+msgid "Conversation view by default"
+msgstr "Conversatieweergave standaard aan"
+
+#. module: ow_mail
+#. odoo-javascript
+#: code:addons/ow_mail/static/src/services/ow_mail_service.js:0
+msgid "Could not create tag: %s"
+msgstr "Kon tag niet aanmaken: %s"
+
+#. module: ow_mail
+#. odoo-javascript
+#: code:addons/ow_mail/static/src/services/ow_mail_service.js:0
+msgid "Could not delete tag: %s"
+msgstr "Kon tag niet verwijderen: %s"
+
+#. module: ow_mail
+#. odoo-javascript
+#: code:addons/ow_mail/static/src/services/ow_mail_service.js:0
+msgid "Could not rename tag: %s"
+msgstr "Kon tag niet hernoemen: %s"
+
+#. module: ow_mail
+#. odoo-javascript
+#: code:addons/ow_mail/static/src/services/ow_mail_service.js:0
+msgid "Could not save settings: %s"
+msgstr "Kon instellingen niet opslaan: %s"
+
+#. module: ow_mail
+#. odoo-javascript
+#: code:addons/ow_mail/static/src/services/ow_mail_service.js:0
+msgid "Could not update tag: %s"
+msgstr "Kon tag niet bijwerken: %s"
 
 #. module: ow_mail
 #. odoo-javascript
@@ -313,11 +441,6 @@ msgid "Create Record from Mail"
 msgstr "Record aanmaken vanuit e-mail"
 
 #. module: ow_mail
-#: model:ir.model,website_form_label:ow_mail.model_res_partner
-msgid "Create a Customer"
-msgstr "Klant aanmaken"
-
-#. module: ow_mail
 #: model:ir.model.fields,field_description:ow_mail.field_ow_mail_account__create_uid
 #: model:ir.model.fields,field_description:ow_mail.field_ow_mail_attach_record__create_uid
 #: model:ir.model.fields,field_description:ow_mail.field_ow_mail_compose__create_uid
@@ -325,6 +448,7 @@ msgstr "Klant aanmaken"
 #: model:ir.model.fields,field_description:ow_mail.field_ow_mail_contact__create_uid
 #: model:ir.model.fields,field_description:ow_mail.field_ow_mail_create_record__create_uid
 #: model:ir.model.fields,field_description:ow_mail.field_ow_mail_folder__create_uid
+#: model:ir.model.fields,field_description:ow_mail.field_ow_mail_preferences__create_uid
 #: model:ir.model.fields,field_description:ow_mail.field_ow_mail_tag__create_uid
 #: model:ir.model.fields,field_description:ow_mail.field_ow_mail_trusted_sender__create_uid
 msgid "Created by"
@@ -338,6 +462,7 @@ msgstr "Aangemaakt door"
 #: model:ir.model.fields,field_description:ow_mail.field_ow_mail_contact__create_date
 #: model:ir.model.fields,field_description:ow_mail.field_ow_mail_create_record__create_date
 #: model:ir.model.fields,field_description:ow_mail.field_ow_mail_folder__create_date
+#: model:ir.model.fields,field_description:ow_mail.field_ow_mail_preferences__create_date
 #: model:ir.model.fields,field_description:ow_mail.field_ow_mail_tag__create_date
 #: model:ir.model.fields,field_description:ow_mail.field_ow_mail_trusted_sender__create_date
 msgid "Created on"
@@ -353,6 +478,13 @@ msgstr "Aangepast"
 #: model:ir.model.fields,field_description:ow_mail.field_ow_mail_account__from_name_custom
 msgid "Custom sender name"
 msgstr "Aangepaste afzendernaam"
+
+#. module: ow_mail
+#. odoo-javascript
+#: code:addons/ow_mail/static/src/components/message_list/message_list.xml:0
+#: code:addons/ow_mail/static/src/components/message_viewer/message_viewer.xml:0
+msgid "Customer"
+msgstr "Klant"
 
 #. module: ow_mail
 #. odoo-javascript
@@ -374,8 +506,15 @@ msgstr "Inspringing verkleinen"
 #: code:addons/ow_mail/static/src/components/folders_widget/folders_widget.xml:0
 #: code:addons/ow_mail/static/src/components/message_list/message_list.xml:0
 #: code:addons/ow_mail/static/src/components/message_viewer/message_viewer.xml:0
+#: code:addons/ow_mail/static/src/components/sidebar/sidebar.js:0
 msgid "Delete"
 msgstr "Verwijderen"
+
+#. module: ow_mail
+#. odoo-javascript
+#: code:addons/ow_mail/static/src/components/shortcuts_dialog/shortcuts_dialog.js:0
+msgid "Delete (move to Trash)"
+msgstr "Verwijderen (naar prullenbak)"
 
 #. module: ow_mail
 #. odoo-javascript
@@ -384,19 +523,35 @@ msgid "Delete selected folder"
 msgstr "Geselecteerde map verwijderen"
 
 #. module: ow_mail
-#: model:ir.model.fields,field_description:ow_mail.field_mail_message__display_name
-#: model:ir.model.fields,field_description:ow_mail.field_mail_thread__display_name
+#. odoo-javascript
+#: code:addons/ow_mail/static/src/components/sidebar/sidebar.js:0
+#: code:addons/ow_mail/static/src/components/sidebar/sidebar.xml:0
+msgid "Delete tag"
+msgstr "Tag verwijderen"
+
+#. module: ow_mail
+#. odoo-javascript
+#: code:addons/ow_mail/static/src/components/sidebar/sidebar.js:0
+msgid "Delete the tag \"%s\"? The label is also removed from tagged messages on the mail server."
+msgstr "Tag \"%s\" verwijderen? Het label wordt ook van getagde berichten op de mailserver verwijderd."
+
+#. module: ow_mail
+#. odoo-javascript
+#: code:addons/ow_mail/static/src/components/settings_dialog/settings_dialog.xml:0
+msgid "Discard"
+msgstr "Verwerpen"
+
+#. module: ow_mail
 #: model:ir.model.fields,field_description:ow_mail.field_ow_mail_account__display_name
 #: model:ir.model.fields,field_description:ow_mail.field_ow_mail_attach_record__display_name
 #: model:ir.model.fields,field_description:ow_mail.field_ow_mail_compose__display_name
 #: model:ir.model.fields,field_description:ow_mail.field_ow_mail_connect_wizard__display_name
 #: model:ir.model.fields,field_description:ow_mail.field_ow_mail_contact__display_name
 #: model:ir.model.fields,field_description:ow_mail.field_ow_mail_create_record__display_name
-#: model:ir.model.fields,field_description:ow_mail.field_ow_mail_crypto__display_name
 #: model:ir.model.fields,field_description:ow_mail.field_ow_mail_folder__display_name
+#: model:ir.model.fields,field_description:ow_mail.field_ow_mail_preferences__display_name
 #: model:ir.model.fields,field_description:ow_mail.field_ow_mail_tag__display_name
 #: model:ir.model.fields,field_description:ow_mail.field_ow_mail_trusted_sender__display_name
-#: model:ir.model.fields,field_description:ow_mail.field_res_partner__display_name
 msgid "Display Name"
 msgstr "Schermnaam"
 
@@ -420,6 +575,12 @@ msgid "Draft"
 msgstr "Concept"
 
 #. module: ow_mail
+#. odoo-javascript
+#: code:addons/ow_mail/static/src/components/compose_window/compose_window.js:0
+msgid "Draft saved at %s"
+msgstr "Concept opgeslagen om %s"
+
+#. module: ow_mail
 #: model:ir.model.fields.selection,name:ow_mail.selection__ow_mail_folder__kind__drafts
 msgid "Drafts"
 msgstr "Concepten"
@@ -434,6 +595,11 @@ msgstr "Conceptenmap"
 #: code:addons/ow_mail/static/src/components/compose_window/compose_window.xml:0
 msgid "Drop files to attach"
 msgstr "Sleep bestanden om bij te voegen"
+
+#. module: ow_mail
+#: model:ir.model.constraint,message:ow_mail.constraint_ow_mail_preferences_user_uniq
+msgid "Each user has a single OW Mail preferences record."
+msgstr "Elke gebruiker heeft één OW Mail-voorkeurenrecord."
 
 #. module: ow_mail
 #. odoo-javascript
@@ -520,6 +686,12 @@ msgid "Flagged"
 msgstr "Gemarkeerd"
 
 #. module: ow_mail
+#. odoo-javascript
+#: code:addons/ow_mail/static/src/components/shortcuts_dialog/shortcuts_dialog.js:0
+msgid "Focus the search box"
+msgstr "Naar het zoekveld"
+
+#. module: ow_mail
 #: model:ir.model.fields,field_description:ow_mail.field_ow_mail_account__folder_ids
 #: model:ir.model.fields,field_description:ow_mail.field_ow_mail_attach_record__folder_id
 #: model:ir.model.fields,field_description:ow_mail.field_ow_mail_create_record__folder_id
@@ -531,6 +703,11 @@ msgstr "Map"
 #: code:addons/ow_mail/models/ow_mail_account.py:0
 msgid "Folder name is required"
 msgstr "Mapnaam is vereist"
+
+#. module: ow_mail
+#: model:ir.model.constraint,message:ow_mail.constraint_ow_mail_folder_account_path_uniq
+msgid "Folder path must be unique per account."
+msgstr "Mappad moet uniek zijn per account."
 
 #. module: ow_mail
 #: model_terms:ir.ui.view,arch_db:ow_mail.view_ow_mail_account_form
@@ -547,6 +724,7 @@ msgstr "Mappen opgehaald"
 #. odoo-javascript
 #: code:addons/ow_mail/static/src/components/message_list/message_list.xml:0
 #: code:addons/ow_mail/static/src/components/message_viewer/message_viewer.xml:0
+#: code:addons/ow_mail/static/src/components/shortcuts_dialog/shortcuts_dialog.js:0
 msgid "Forward"
 msgstr "Doorsturen"
 
@@ -583,6 +761,12 @@ msgstr "Volledig pad"
 #: model:ir.model.fields,help:ow_mail.field_ow_mail_trusted_sender__email
 msgid "Full email address or bare domain to trust."
 msgstr "Volledig e-mailadres of domein om te vertrouwen."
+
+#. module: ow_mail
+#. odoo-javascript
+#: code:addons/ow_mail/static/src/components/mailclient/mailclient.xml:0
+msgid "Getting started"
+msgstr "Aan de slag"
 
 #. module: ow_mail
 #: model:ir.model.fields,field_description:ow_mail.field_ow_mail_attach_record__has_attachments
@@ -637,19 +821,16 @@ msgid "I"
 msgstr "I"
 
 #. module: ow_mail
-#: model:ir.model.fields,field_description:ow_mail.field_mail_message__id
-#: model:ir.model.fields,field_description:ow_mail.field_mail_thread__id
 #: model:ir.model.fields,field_description:ow_mail.field_ow_mail_account__id
 #: model:ir.model.fields,field_description:ow_mail.field_ow_mail_attach_record__id
 #: model:ir.model.fields,field_description:ow_mail.field_ow_mail_compose__id
 #: model:ir.model.fields,field_description:ow_mail.field_ow_mail_connect_wizard__id
 #: model:ir.model.fields,field_description:ow_mail.field_ow_mail_contact__id
 #: model:ir.model.fields,field_description:ow_mail.field_ow_mail_create_record__id
-#: model:ir.model.fields,field_description:ow_mail.field_ow_mail_crypto__id
 #: model:ir.model.fields,field_description:ow_mail.field_ow_mail_folder__id
+#: model:ir.model.fields,field_description:ow_mail.field_ow_mail_preferences__id
 #: model:ir.model.fields,field_description:ow_mail.field_ow_mail_tag__id
 #: model:ir.model.fields,field_description:ow_mail.field_ow_mail_trusted_sender__id
-#: model:ir.model.fields,field_description:ow_mail.field_res_partner__id
 msgid "ID"
 msgstr "ID"
 
@@ -661,8 +842,26 @@ msgstr "IMAP"
 #. module: ow_mail
 #. odoo-python
 #: code:addons/ow_mail/models/ow_mail_account.py:0
+msgid "IMAP %s failed: %s"
+msgstr "IMAP %s mislukt: %s"
+
+#. module: ow_mail
+#. odoo-python
+#: code:addons/ow_mail/models/ow_mail_account.py:0
+msgid "IMAP APPEND to Drafts failed: %s"
+msgstr "IMAP APPEND naar Concepten mislukt: %s"
+
+#. module: ow_mail
+#. odoo-python
+#: code:addons/ow_mail/models/ow_mail_account.py:0
 msgid "IMAP CREATE failed: %s"
 msgstr "IMAP aanmaken mislukt: %s"
+
+#. module: ow_mail
+#. odoo-python
+#: code:addons/ow_mail/models/ow_mail_account.py:0
+msgid "IMAP DELETE failed: %s"
+msgstr "IMAP DELETE mislukt: %s"
 
 #. module: ow_mail
 #: model:ir.model.fields,field_description:ow_mail.field_ow_mail_account__imap_host
@@ -690,6 +889,12 @@ msgstr "IMAP-wachtwoord (versleuteld)"
 #: model:ir.model.fields,field_description:ow_mail.field_ow_mail_connect_wizard__imap_port
 msgid "IMAP Port"
 msgstr "IMAP-poort"
+
+#. module: ow_mail
+#. odoo-python
+#: code:addons/ow_mail/models/ow_mail_account.py:0
+msgid "IMAP RENAME failed: %s"
+msgstr "IMAP RENAME mislukt: %s"
 
 #. module: ow_mail
 #: model:ir.model.fields,field_description:ow_mail.field_ow_mail_account__imap_ssl
@@ -721,16 +926,19 @@ msgstr "Als dit vakje is aangevinkt, wordt de Odoo-handtekening gebruikt."
 
 #. module: ow_mail
 #: model:ir.model.fields,help:ow_mail.field_ow_mail_account__signature_enabled
-msgid ""
-"If unchecked, no signature is inserted in new compose, reply or forward."
-msgstr ""
-"Indien uitgevinkt wordt er geen handtekening ingevoegd bij een nieuwe mail, "
-"reply of doorsturen."
+msgid "If unchecked, no signature is inserted in new compose, reply or forward."
+msgstr "Indien uitgevinkt wordt er geen handtekening ingevoegd bij een nieuwe mail, reply of doorsturen."
 
 #. module: ow_mail
 #: model:ir.model.fields,field_description:ow_mail.field_ow_mail_tag__imap_keyword
 msgid "Imap Keyword"
 msgstr "IMAP-trefwoord"
+
+#. module: ow_mail
+#. odoo-javascript
+#: code:addons/ow_mail/static/src/components/settings_dialog/settings_dialog.js:0
+msgid "Immediately"
+msgstr "Direct"
 
 #. module: ow_mail
 #: model:ir.model.fields,field_description:ow_mail.field_ow_mail_compose__in_reply_to
@@ -810,9 +1018,27 @@ msgid "Italic"
 msgstr "Cursief"
 
 #. module: ow_mail
+#. odoo-javascript
+#: code:addons/ow_mail/static/src/components/shortcuts_dialog/shortcuts_dialog.js:0
+msgid "Keyboard Shortcuts"
+msgstr "Sneltoetsen"
+
+#. module: ow_mail
+#. odoo-javascript
+#: code:addons/ow_mail/static/src/components/settings_dialog/settings_dialog.xml:0
+msgid "Keyboard shortcuts…"
+msgstr "Sneltoetsen…"
+
+#. module: ow_mail
 #: model:ir.model.fields,field_description:ow_mail.field_ow_mail_folder__kind
 msgid "Kind"
 msgstr "Type"
+
+#. module: ow_mail
+#. odoo-javascript
+#: code:addons/ow_mail/static/src/components/message_list/message_list.xml:0
+msgid "Label"
+msgstr "Label"
 
 #. module: ow_mail
 #. odoo-javascript
@@ -838,6 +1064,7 @@ msgstr "Laatste synchronisatie"
 #: model:ir.model.fields,field_description:ow_mail.field_ow_mail_contact__write_uid
 #: model:ir.model.fields,field_description:ow_mail.field_ow_mail_create_record__write_uid
 #: model:ir.model.fields,field_description:ow_mail.field_ow_mail_folder__write_uid
+#: model:ir.model.fields,field_description:ow_mail.field_ow_mail_preferences__write_uid
 #: model:ir.model.fields,field_description:ow_mail.field_ow_mail_tag__write_uid
 #: model:ir.model.fields,field_description:ow_mail.field_ow_mail_trusted_sender__write_uid
 msgid "Last Updated by"
@@ -851,6 +1078,7 @@ msgstr "Laatst bijgewerkt door"
 #: model:ir.model.fields,field_description:ow_mail.field_ow_mail_contact__write_date
 #: model:ir.model.fields,field_description:ow_mail.field_ow_mail_create_record__write_date
 #: model:ir.model.fields,field_description:ow_mail.field_ow_mail_folder__write_date
+#: model:ir.model.fields,field_description:ow_mail.field_ow_mail_preferences__write_date
 #: model:ir.model.fields,field_description:ow_mail.field_ow_mail_tag__write_date
 #: model:ir.model.fields,field_description:ow_mail.field_ow_mail_trusted_sender__write_date
 msgid "Last Updated on"
@@ -895,15 +1123,44 @@ msgid "Mail Accounts"
 msgstr "E-mailaccounts"
 
 #. module: ow_mail
+#. odoo-javascript
+#: code:addons/ow_mail/static/src/components/settings_dialog/settings_dialog.js:0
+msgid "Mail Settings"
+msgstr "Mailinstellingen"
+
+#. module: ow_mail
+#. odoo-javascript
+#: code:addons/ow_mail/static/src/components/sidebar/sidebar.xml:0
+msgid "Mail settings"
+msgstr "Mailinstellingen"
+
+#. module: ow_mail
 #. odoo-python
 #: code:addons/ow_mail/models/res_partner.py:0
 msgid "Mail with %s"
 msgstr "E-mail met %s"
 
 #. module: ow_mail
+#. odoo-javascript
+#: code:addons/ow_mail/static/src/components/sidebar/sidebar.xml:0
+msgid "Mailboxes"
+msgstr "Mailboxen"
+
+#. module: ow_mail
 #: model_terms:ir.ui.view,arch_db:ow_mail.view_ow_mail_account_form
 msgid "Manual Sync"
 msgstr "Handmatige synchronisatie"
+
+#. module: ow_mail
+#: model:ir.model.fields,field_description:ow_mail.field_ow_mail_preferences__mark_read_delay
+msgid "Mark Read Delay"
+msgstr "Vertraging markeren als gelezen"
+
+#. module: ow_mail
+#. odoo-javascript
+#: code:addons/ow_mail/static/src/components/settings_dialog/settings_dialog.xml:0
+msgid "Mark as read"
+msgstr "Markeren als gelezen"
 
 #. module: ow_mail
 #. odoo-javascript
@@ -926,16 +1183,28 @@ msgstr "Menu"
 #. module: ow_mail
 #. odoo-javascript
 #: code:addons/ow_mail/static/src/components/message_list/message_list.xml:0
+#: code:addons/ow_mail/static/src/components/message_viewer/message_viewer.xml:0
 #: model:ir.model,name:ow_mail.model_mail_message
 msgid "Message"
 msgstr "Bericht"
 
 #. module: ow_mail
+#. odoo-javascript
+#: code:addons/ow_mail/static/src/components/message_viewer/message_viewer.xml:0
+msgid "Message actions"
+msgstr "Berichtacties"
+
+#. module: ow_mail
+#. odoo-javascript
+#: code:addons/ow_mail/static/src/components/message_list/message_list.xml:0
+msgid "Message list"
+msgstr "Berichtenlijst"
+
+#. module: ow_mail
 #. odoo-python
 #: code:addons/ow_mail/controllers/main.py:0
 msgid "Message sent, but saving to Sent folder failed: %s"
-msgstr ""
-"Bericht verzonden, maar het opslaan in de map 'Verzonden' is mislukt: %s"
+msgstr "Bericht verzonden, maar het opslaan in de map 'Verzonden' is mislukt: %s"
 
 #. module: ow_mail
 #. odoo-javascript
@@ -975,6 +1244,12 @@ msgstr "Naam"
 
 #. module: ow_mail
 #. odoo-javascript
+#: code:addons/ow_mail/static/src/components/shortcuts_dialog/shortcuts_dialog.js:0
+msgid "Navigation"
+msgstr "Navigatie"
+
+#. module: ow_mail
+#. odoo-javascript
 #: code:addons/ow_mail/static/src/components/folders_widget/folders_widget.xml:0
 msgid "New"
 msgstr "Nieuw"
@@ -999,9 +1274,21 @@ msgstr "Nieuwe map"
 
 #. module: ow_mail
 #. odoo-javascript
+#: code:addons/ow_mail/static/src/components/sidebar/sidebar.xml:0
+msgid "New tag…"
+msgstr "Nieuwe tag…"
+
+#. module: ow_mail
+#. odoo-javascript
 #: code:addons/ow_mail/static/src/components/message_list/message_list.xml:0
 msgid "Next"
 msgstr "Volgende"
+
+#. module: ow_mail
+#. odoo-javascript
+#: code:addons/ow_mail/static/src/components/shortcuts_dialog/shortcuts_dialog.js:0
+msgid "Next / previous message"
+msgstr "Volgend / vorig bericht"
 
 #. module: ow_mail
 #. odoo-javascript
@@ -1017,9 +1304,21 @@ msgstr "Nog geen contacten."
 
 #. module: ow_mail
 #. odoo-javascript
+#: code:addons/ow_mail/static/src/components/mailclient/mailclient.xml:0
+msgid "No mailbox connected yet"
+msgstr "Nog geen mailbox gekoppeld"
+
+#. module: ow_mail
+#. odoo-javascript
 #: code:addons/ow_mail/static/src/components/message_list/message_list.xml:0
 msgid "No messages"
 msgstr "Geen berichten"
+
+#. module: ow_mail
+#. odoo-python
+#: code:addons/ow_mail/models/ow_mail_account.py:0
+msgid "No valid recipient address. Please fill in To, Cc, or Bcc."
+msgstr "Geen geldig ontvangeradres. Vul Aan, Cc of Bcc in."
 
 #. module: ow_mail
 #: model:ir.model.fields.selection,name:ow_mail.selection__ow_mail_account__smtp_encryption__none
@@ -1097,6 +1396,11 @@ msgid "OW Mail Folder"
 msgstr "OW Mail-map"
 
 #. module: ow_mail
+#: model:ir.model,name:ow_mail.model_ow_mail_preferences
+msgid "OW Mail Preferences"
+msgstr "OW Mail-voorkeuren"
+
+#. module: ow_mail
 #: model:ir.model,name:ow_mail.model_ow_mail_tag
 msgid "OW Mail Tag"
 msgstr "OW Mail-label"
@@ -1132,6 +1436,12 @@ msgstr "Odoo"
 #: model:ir.model.fields.selection,name:ow_mail.selection__ow_mail_account__from_name_mode__user
 msgid "Odoo user name"
 msgstr "Odoo-gebruikersnaam"
+
+#. module: ow_mail
+#. odoo-javascript
+#: code:addons/ow_mail/static/src/components/settings_dialog/settings_dialog.js:0
+msgid "Only manually"
+msgstr "Alleen handmatig"
 
 #. module: ow_mail
 #. odoo-javascript
@@ -1256,10 +1566,8 @@ msgstr "Referenties"
 #. module: ow_mail
 #. odoo-javascript
 #: code:addons/ow_mail/static/src/components/safe_mode_banner/safe_mode_banner.xml:0
-msgid ""
-"Remote content in this message has been blocked to protect your privacy."
-msgstr ""
-"Externe inhoud in dit bericht is geblokkeerd om uw privacy te beschermen."
+msgid "Remote content in this message has been blocked to protect your privacy."
+msgstr "Externe inhoud in dit bericht is geblokkeerd om uw privacy te beschermen."
 
 #. module: ow_mail
 #. odoo-javascript
@@ -1287,14 +1595,22 @@ msgstr "Geselecteerde map hernoemen"
 
 #. module: ow_mail
 #. odoo-javascript
+#: code:addons/ow_mail/static/src/components/sidebar/sidebar.xml:0
+msgid "Rename tag"
+msgstr "Tag hernoemen"
+
+#. module: ow_mail
+#. odoo-javascript
 #: code:addons/ow_mail/static/src/components/message_list/message_list.xml:0
 #: code:addons/ow_mail/static/src/components/message_viewer/message_viewer.xml:0
+#: code:addons/ow_mail/static/src/components/shortcuts_dialog/shortcuts_dialog.js:0
 msgid "Reply"
 msgstr "Beantwoorden"
 
 #. module: ow_mail
 #. odoo-javascript
 #: code:addons/ow_mail/static/src/components/message_viewer/message_viewer.xml:0
+#: code:addons/ow_mail/static/src/components/shortcuts_dialog/shortcuts_dialog.js:0
 msgid "Reply all"
 msgstr "Allen beantwoorden"
 
@@ -1369,6 +1685,7 @@ msgstr "Veilige modus."
 #. module: ow_mail
 #. odoo-javascript
 #: code:addons/ow_mail/static/src/components/contacts/contacts.xml:0
+#: code:addons/ow_mail/static/src/components/settings_dialog/settings_dialog.xml:0
 msgid "Save"
 msgstr "Opslaan"
 
@@ -1388,15 +1705,25 @@ msgstr "Afzender opslaan"
 #. odoo-javascript
 #: code:addons/ow_mail/static/src/components/folders_widget/folders_widget.xml:0
 msgid "Save the account and run a sync to load its folder tree."
-msgstr ""
-"Sla het account op en voer een synchronisatie uit om de mappenstructuur te "
-"laden."
+msgstr "Sla het account op en voer een synchronisatie uit om de mappenstructuur te laden."
+
+#. module: ow_mail
+#. odoo-javascript
+#: code:addons/ow_mail/static/src/components/compose_window/compose_window.js:0
+msgid "Save this draft before closing?"
+msgstr "Dit concept opslaan voor het sluiten?"
 
 #. module: ow_mail
 #. odoo-javascript
 #: code:addons/ow_mail/static/src/components/message_viewer/message_viewer.xml:0
 msgid "Save to personal contacts"
 msgstr "Opslaan in persoonlijke contacten"
+
+#. module: ow_mail
+#. odoo-javascript
+#: code:addons/ow_mail/static/src/components/compose_window/compose_window.js:0
+msgid "Saving…"
+msgstr "Opslaan…"
 
 #. module: ow_mail
 #. odoo-javascript
@@ -1442,9 +1769,22 @@ msgstr "Alles selecteren"
 
 #. module: ow_mail
 #. odoo-javascript
+#: code:addons/ow_mail/static/src/components/message_list/message_list.xml:0
+msgid "Select message"
+msgstr "Bericht selecteren"
+
+#. module: ow_mail
+#. odoo-javascript
 #: code:addons/ow_mail/static/src/components/compose_window/compose_window.xml:0
 msgid "Send"
 msgstr "Verzenden"
+
+#. module: ow_mail
+#. odoo-javascript
+#: code:addons/ow_mail/static/src/components/message_list/message_list.xml:0
+#: code:addons/ow_mail/static/src/components/message_viewer/message_viewer.xml:0
+msgid "Sender is an Odoo contact"
+msgstr "Afzender is een Odoo-contact"
 
 #. module: ow_mail
 #: model:ir.model.fields,field_description:ow_mail.field_ow_mail_account__from_name_mode
@@ -1474,10 +1814,22 @@ msgid "Show Once"
 msgstr "Eenmalig tonen"
 
 #. module: ow_mail
+#. odoo-javascript
+#: code:addons/ow_mail/static/src/components/shortcuts_dialog/shortcuts_dialog.js:0
+msgid "Show this cheatsheet"
+msgstr "Dit overzicht tonen"
+
+#. module: ow_mail
 #: model:ir.model.fields,field_description:ow_mail.field_ow_mail_account__signature_html
 #: model_terms:ir.ui.view,arch_db:ow_mail.view_ow_mail_account_form
 msgid "Signature"
 msgstr "Handtekening"
+
+#. module: ow_mail
+#. odoo-javascript
+#: code:addons/ow_mail/static/src/components/settings_dialog/settings_dialog.xml:0
+msgid "Signature & account settings…"
+msgstr "Handtekening & accountinstellingen…"
 
 #. module: ow_mail
 #: model:ir.model.fields,field_description:ow_mail.field_ow_mail_account__signature_placement
@@ -1513,6 +1865,18 @@ msgid "Star"
 msgstr "Markeer"
 
 #. module: ow_mail
+#. odoo-javascript
+#: code:addons/ow_mail/static/src/components/sidebar/sidebar.xml:0
+msgid "Starred"
+msgstr "Met ster"
+
+#. module: ow_mail
+#. odoo-javascript
+#: code:addons/ow_mail/static/src/components/sidebar/sidebar.xml:0
+msgid "Starred — all accounts"
+msgstr "Met ster — alle accounts"
+
+#. module: ow_mail
 #: model:ir.model.fields,field_description:ow_mail.field_ow_mail_account__state
 msgid "State"
 msgstr "Status"
@@ -1520,15 +1884,8 @@ msgstr "Status"
 #. module: ow_mail
 #. odoo-python
 #: code:addons/ow_mail/models/ow_mail_crypto.py:0
-msgid ""
-"Stored credential cannot be decrypted. The encryption key "
-"(ir.config_parameter '%s') has changed or the ciphertext is corrupt. Re-"
-"enter the password on the account form to re-encrypt with the current key."
-msgstr ""
-"De opgeslagen inloggegevens kunnen niet worden gedecodeerd. De "
-"coderingssleutel (ir.config_parameter '%s') is gewijzigd of de gecodeerde "
-"tekst is beschadigd. Voer het wachtwoord opnieuw in op het accountformulier "
-"om de gegevens opnieuw te coderen met de huidige sleutel."
+msgid "Stored credential cannot be decrypted. The encryption key (ir.config_parameter '%s') has changed or the ciphertext is corrupt. Re-enter the password on the account form to re-encrypt with the current key."
+msgstr "De opgeslagen inloggegevens kunnen niet worden gedecodeerd. De coderingssleutel (ir.config_parameter '%s') is gewijzigd of de gecodeerde tekst is beschadigd. Voer het wachtwoord opnieuw in op het accountformulier om de gegevens opnieuw te coderen met de huidige sleutel."
 
 #. module: ow_mail
 #. odoo-javascript
@@ -1558,9 +1915,23 @@ msgid "Sync this mailbox"
 msgstr "Mailbox synchroniseren"
 
 #. module: ow_mail
+#: model:ir.model.constraint,message:ow_mail.constraint_ow_mail_tag_user_name_uniq
+msgid "Tag name must be unique per user."
+msgstr "Tagnaam moet uniek zijn per gebruiker."
+
+#. module: ow_mail
+#. odoo-javascript
+#: code:addons/ow_mail/static/src/components/sidebar/sidebar.xml:0
 #: model:ir.actions.act_window,name:ow_mail.action_ow_mail_tag
+#: model:ir.ui.menu,name:ow_mail.menu_ow_mail_tags
 msgid "Tags"
 msgstr "Labels"
+
+#. module: ow_mail
+#. odoo-javascript
+#: code:addons/ow_mail/static/src/components/message_viewer/message_viewer.xml:0
+msgid "Tags:"
+msgstr "Tags:"
 
 #. module: ow_mail
 #: model:ir.model.fields,field_description:ow_mail.field_ow_mail_attach_record__record_ref
@@ -1591,6 +1962,11 @@ msgid "The selected record does not exist."
 msgstr "Het geselecteerde record bestaat niet."
 
 #. module: ow_mail
+#: model:ir.model.constraint,message:ow_mail.constraint_ow_mail_contact_user_email_uniq
+msgid "This email is already in your contacts."
+msgstr "Dit e-mailadres staat al in je contacten."
+
+#. module: ow_mail
 #. odoo-javascript
 #: code:addons/ow_mail/static/src/components/message_viewer/message_viewer.xml:0
 msgid "This is a draft message."
@@ -1601,6 +1977,11 @@ msgstr "Dit is een conceptbericht."
 #: code:addons/ow_mail/wizards/ow_mail_attach_record.py:0
 msgid "This message has already been attached to this record."
 msgstr "Dit bericht is al aan dit dossier toegevoegd."
+
+#. module: ow_mail
+#: model:ir.model.fields,field_description:ow_mail.field_ow_mail_preferences__thread_view_default
+msgid "Thread View Default"
+msgstr "Conversatieweergave standaard"
 
 #. module: ow_mail
 #: model:ir.model.fields,field_description:ow_mail.field_ow_mail_compose__to
@@ -1627,9 +2008,21 @@ msgstr "Gespreksweergave aan/uitzetten"
 
 #. module: ow_mail
 #. odoo-javascript
+#: code:addons/ow_mail/static/src/components/shortcuts_dialog/shortcuts_dialog.js:0
+msgid "Toggle read / unread"
+msgstr "Gelezen / ongelezen wisselen"
+
+#. module: ow_mail
+#. odoo-javascript
 #: code:addons/ow_mail/static/src/components/message_list/message_list.xml:0
 msgid "Toggle sort order"
 msgstr "Sorteervolgorde wijzigen"
+
+#. module: ow_mail
+#. odoo-javascript
+#: code:addons/ow_mail/static/src/components/shortcuts_dialog/shortcuts_dialog.js:0
+msgid "Toggle star"
+msgstr "Ster aan/uit"
 
 #. module: ow_mail
 #: model:ir.model.fields,field_description:ow_mail.field_ow_mail_folder__total_count
@@ -1679,6 +2072,7 @@ msgstr "Ongedaan maken"
 #. module: ow_mail
 #. odoo-javascript
 #: code:addons/ow_mail/static/src/components/message_list/message_list.js:0
+#: code:addons/ow_mail/static/src/components/sidebar/sidebar.xml:0
 msgid "Unread"
 msgstr "Ongelezen"
 
@@ -1686,6 +2080,18 @@ msgstr "Ongelezen"
 #: model:ir.model.fields,field_description:ow_mail.field_ow_mail_folder__unread_count
 msgid "Unread Count"
 msgstr "Aantal ongelezen"
+
+#. module: ow_mail
+#. odoo-javascript
+#: code:addons/ow_mail/static/src/components/sidebar/sidebar.xml:0
+msgid "Unread — all accounts"
+msgstr "Ongelezen — alle accounts"
+
+#. module: ow_mail
+#. odoo-javascript
+#: code:addons/ow_mail/static/src/components/compose_window/compose_window.js:0
+msgid "Unsaved changes"
+msgstr "Niet-opgeslagen wijzigingen"
 
 #. module: ow_mail
 #: model:ir.model.fields,field_description:ow_mail.field_ow_mail_account__signature_odoo
@@ -1702,6 +2108,7 @@ msgstr "Gebruik aanhalingstekens voor zinnen:"
 #: model:ir.model.fields,field_description:ow_mail.field_ow_mail_account__user_id
 #: model:ir.model.fields,field_description:ow_mail.field_ow_mail_contact__user_id
 #: model:ir.model.fields,field_description:ow_mail.field_ow_mail_folder__user_id
+#: model:ir.model.fields,field_description:ow_mail.field_ow_mail_preferences__user_id
 #: model:ir.model.fields,field_description:ow_mail.field_ow_mail_tag__user_id
 #: model:ir.model.fields,field_description:ow_mail.field_ow_mail_trusted_sender__user_id
 msgid "User"
@@ -1714,13 +2121,15 @@ msgid "View original"
 msgstr "Origineel bekijken"
 
 #. module: ow_mail
+#. odoo-javascript
+#: code:addons/ow_mail/static/src/components/settings_dialog/settings_dialog.xml:0
+msgid "When an opened message is marked as read."
+msgstr "Wanneer een geopend bericht als gelezen wordt gemarkeerd."
+
+#. module: ow_mail
 #: model:ir.model.fields,help:ow_mail.field_ow_mail_account__signature_placement
-msgid ""
-"Where the signature is inserted in replies and forwards relative to the "
-"quoted original."
-msgstr ""
-"Waar de handtekening wordt geplaatst in reply en forward ten opzichte van "
-"het geciteerde bericht."
+msgid "Where the signature is inserted in replies and forwards relative to the quoted original."
+msgstr "Waar de handtekening wordt geplaatst in reply en forward ten opzichte van het geciteerde bericht."
 
 #. module: ow_mail
 #. odoo-javascript
@@ -1792,6 +2201,12 @@ msgstr "berichten"
 #: code:addons/ow_mail/static/src/components/message_list/message_list.xml:0
 msgid "newer_than:30d"
 msgstr "nieuwer_dan:30 dagen"
+
+#. module: ow_mail
+#. odoo-python
+#: code:addons/ow_mail/models/ow_mail_account.py:0
+msgid "no Sent folder is configured on this account"
+msgstr "er is geen Verzonden-map ingesteld op dit account"
 
 #. module: ow_mail
 #. odoo-javascript
@@ -1870,217 +2285,3 @@ msgstr "— berichten met een label"
 #: code:addons/ow_mail/static/src/components/message_list/message_list.xml:0
 msgid "— text in field"
 msgstr "— tekst in veld"
-
-#. module: ow_mail
-#. odoo-javascript
-#: code:addons/ow_mail/static/src/components/sidebar/sidebar.xml:0
-msgid "Starred"
-msgstr "Met ster"
-
-#. module: ow_mail
-#. odoo-javascript
-#: code:addons/ow_mail/static/src/components/mailclient/mailclient.xml:0
-msgid "No mailbox connected yet"
-msgstr "Nog geen mailbox gekoppeld"
-
-#. module: ow_mail
-#. odoo-javascript
-#: code:addons/ow_mail/static/src/components/mailclient/mailclient.xml:0
-msgid "Connect your IMAP/SMTP mailbox to start reading and sending mail right here in Odoo."
-msgstr "Koppel je IMAP/SMTP-mailbox om direct in Odoo mail te lezen en te versturen."
-
-#. module: ow_mail
-#. odoo-javascript
-#: code:addons/ow_mail/static/src/components/settings_dialog/settings_dialog.js:0
-msgid "Mail Settings"
-msgstr "Mailinstellingen"
-
-#. module: ow_mail
-#. odoo-javascript
-#: code:addons/ow_mail/static/src/components/settings_dialog/settings_dialog.js:0
-msgid "Immediately"
-msgstr "Direct"
-
-#. module: ow_mail
-#. odoo-javascript
-#: code:addons/ow_mail/static/src/components/settings_dialog/settings_dialog.js:0
-msgid "After 2 seconds"
-msgstr "Na 2 seconden"
-
-#. module: ow_mail
-#. odoo-javascript
-#: code:addons/ow_mail/static/src/components/settings_dialog/settings_dialog.js:0
-msgid "After 5 seconds"
-msgstr "Na 5 seconden"
-
-#. module: ow_mail
-#. odoo-javascript
-#: code:addons/ow_mail/static/src/components/settings_dialog/settings_dialog.js:0
-msgid "Only manually"
-msgstr "Alleen handmatig"
-
-#. module: ow_mail
-#. odoo-javascript
-#: code:addons/ow_mail/static/src/components/settings_dialog/settings_dialog.xml:0
-msgid "Mark as read"
-msgstr "Markeren als gelezen"
-
-#. module: ow_mail
-#. odoo-javascript
-#: code:addons/ow_mail/static/src/components/settings_dialog/settings_dialog.xml:0
-msgid "When an opened message is marked as read."
-msgstr "Wanneer een geopend bericht als gelezen wordt gemarkeerd."
-
-#. module: ow_mail
-#. odoo-javascript
-#: code:addons/ow_mail/static/src/components/settings_dialog/settings_dialog.xml:0
-msgid "Conversation view by default"
-msgstr "Conversatieweergave standaard aan"
-
-#. module: ow_mail
-#. odoo-javascript
-#: code:addons/ow_mail/static/src/components/settings_dialog/settings_dialog.xml:0
-msgid "Signature & account settings…"
-msgstr "Handtekening & accountinstellingen…"
-
-#. module: ow_mail
-#. odoo-javascript
-#: code:addons/ow_mail/static/src/components/settings_dialog/settings_dialog.xml:0
-msgid "Keyboard shortcuts…"
-msgstr "Sneltoetsen…"
-
-#. module: ow_mail
-#. odoo-javascript
-#: code:addons/ow_mail/static/src/components/settings_dialog/settings_dialog.xml:0
-msgid "Discard"
-msgstr "Verwerpen"
-
-#. module: ow_mail
-#. odoo-javascript
-#: code:addons/ow_mail/static/src/components/shortcuts_dialog/shortcuts_dialog.js:0
-msgid "Keyboard Shortcuts"
-msgstr "Sneltoetsen"
-
-#. module: ow_mail
-#. odoo-javascript
-#: code:addons/ow_mail/static/src/components/shortcuts_dialog/shortcuts_dialog.js:0
-msgid "Navigation"
-msgstr "Navigatie"
-
-#. module: ow_mail
-#. odoo-javascript
-#: code:addons/ow_mail/static/src/components/shortcuts_dialog/shortcuts_dialog.js:0
-msgid "Actions"
-msgstr "Acties"
-
-#. module: ow_mail
-#. odoo-javascript
-#: code:addons/ow_mail/static/src/components/shortcuts_dialog/shortcuts_dialog.js:0
-msgid "Next / previous message"
-msgstr "Volgend / vorig bericht"
-
-#. module: ow_mail
-#. odoo-javascript
-#: code:addons/ow_mail/static/src/components/shortcuts_dialog/shortcuts_dialog.js:0
-msgid "Close the open message"
-msgstr "Geopend bericht sluiten"
-
-#. module: ow_mail
-#. odoo-javascript
-#: code:addons/ow_mail/static/src/components/shortcuts_dialog/shortcuts_dialog.js:0
-msgid "Focus the search box"
-msgstr "Naar het zoekveld"
-
-#. module: ow_mail
-#. odoo-javascript
-#: code:addons/ow_mail/static/src/components/shortcuts_dialog/shortcuts_dialog.js:0
-msgid "Show this cheatsheet"
-msgstr "Dit overzicht tonen"
-
-#. module: ow_mail
-#. odoo-javascript
-#: code:addons/ow_mail/static/src/components/shortcuts_dialog/shortcuts_dialog.js:0
-msgid "Compose a new message"
-msgstr "Nieuw bericht opstellen"
-
-#. module: ow_mail
-#. odoo-javascript
-#: code:addons/ow_mail/static/src/components/shortcuts_dialog/shortcuts_dialog.js:0
-msgid "Delete (move to Trash)"
-msgstr "Verwijderen (naar prullenbak)"
-
-#. module: ow_mail
-#. odoo-javascript
-#: code:addons/ow_mail/static/src/components/shortcuts_dialog/shortcuts_dialog.js:0
-msgid "Toggle star"
-msgstr "Ster aan/uit"
-
-#. module: ow_mail
-#. odoo-javascript
-#: code:addons/ow_mail/static/src/components/shortcuts_dialog/shortcuts_dialog.js:0
-msgid "Toggle read / unread"
-msgstr "Gelezen / ongelezen wisselen"
-
-#. module: ow_mail
-#. odoo-javascript
-#: code:addons/ow_mail/static/src/components/compose_window/compose_window.js:0
-msgid "Save this draft before closing?"
-msgstr "Dit concept opslaan voor het sluiten?"
-
-#. module: ow_mail
-#. odoo-javascript
-#: code:addons/ow_mail/static/src/components/compose_window/compose_window.js:0
-msgid "Saving…"
-msgstr "Opslaan…"
-
-#. module: ow_mail
-#. odoo-javascript
-#: code:addons/ow_mail/static/src/components/compose_window/compose_window.js:0
-msgid "Unsaved changes"
-msgstr "Niet-opgeslagen wijzigingen"
-
-#. module: ow_mail
-#. odoo-javascript
-#: code:addons/ow_mail/static/src/components/compose_window/compose_window.js:0
-msgid "Draft saved at %s"
-msgstr "Concept opgeslagen om %s"
-
-#. module: ow_mail
-#. odoo-javascript
-#: code:addons/ow_mail/static/src/services/ow_mail_service.js:0
-msgid "Could not save settings: %s"
-msgstr "Kon instellingen niet opslaan: %s"
-
-#. module: ow_mail
-#. odoo-javascript
-#: code:addons/ow_mail/static/src/services/ow_mail_service.js:0
-msgid "Could not rename tag: %s"
-msgstr "Kon tag niet hernoemen: %s"
-
-#. module: ow_mail
-#. odoo-javascript
-#: code:addons/ow_mail/static/src/components/sidebar/sidebar.js:0
-msgid "Delete the tag \"%s\"? The label is also removed from tagged messages on the mail server."
-msgstr "Tag \"%s\" verwijderen? Het label wordt ook van getagde berichten op de mailserver verwijderd."
-
-#. module: ow_mail
-#. odoo-javascript
-#: code:addons/ow_mail/static/src/components/message_list/message_list.xml:0
-msgid "Click to add · × to remove"
-msgstr "Klik om toe te voegen · × om te verwijderen"
-
-#. module: ow_mail
-#: model:ir.ui.menu,name:ow_mail.menu_ow_mail_accounts
-msgid "Accounts"
-msgstr "Accounts"
-
-#. module: ow_mail
-#: model:ir.model,name:ow_mail.model_ow_mail_preferences
-msgid "OW Mail Preferences"
-msgstr "OW Mail-voorkeuren"
-
-#. module: ow_mail
-#. odoo-python
-#: code:addons/ow_mail/models/ow_mail_account.py:0
-msgid "no Sent folder is configured on this account"
-msgstr "er is geen Verzonden-map ingesteld op dit account"
