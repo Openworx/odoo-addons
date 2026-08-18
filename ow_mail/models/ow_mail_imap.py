@@ -903,9 +903,18 @@ def sort_uids(conn, criteria, sort_by="date", sort_order="desc"):
 
 
 def search_thread_uids(conn, message_ids):
-    """Search for messages matching any of the given Message-IDs via HEADER search.
+    """Find every member of a conversation given some of its Message-IDs.
 
-    Builds a nested OR query: OR (HEADER Message-ID "<id1>") (OR ...)
+    Two match directions per id, folded into one nested OR query:
+
+    * ``HEADER Message-ID "<id>"`` — the messages themselves (ancestors of
+      the opened message, whose ids appear in its References chain).
+    * ``HEADER References "<id>"`` — **descendants**: every later reply
+      carries the earlier ids (including the thread root) in its own
+      References header. Without this leg, opening the root or a middle
+      message of a thread only ever showed the ancestors, so the stacked
+      conversation view seemed to "miss" replies.
+
     Returns list of UIDs (ascending).
     """
     if not message_ids:
@@ -918,12 +927,12 @@ def search_thread_uids(conn, message_ids):
             clean.append(mid)
     if not clean:
         return []
-    clean = clean[-20:]
-    if len(clean) == 1:
-        criteria = f'HEADER Message-ID "{clean[0]}"'
-    else:
-        # Build nested OR: OR (HEADER ...) (OR (HEADER ...) (HEADER ...))
-        criteria = f'HEADER Message-ID "{clean[-1]}"'
-        for mid in reversed(clean[:-1]):
-            criteria = f'OR HEADER Message-ID "{mid}" {criteria}'
+    # Two criteria per id — halve the id cap to keep the command bounded.
+    clean = clean[-10:]
+    atoms = [f'HEADER Message-ID "{mid}"' for mid in clean]
+    atoms += [f'HEADER References "{mid}"' for mid in clean]
+    # Build nested OR: OR (a) (OR (b) (c))
+    criteria = atoms[-1]
+    for atom in reversed(atoms[:-1]):
+        criteria = f"OR {atom} {criteria}"
     return search_uids(conn, criteria)

@@ -165,7 +165,8 @@ export const owMailService = {
             accounts: [],
             tags: [],
             bootstrapped: false,
-            prefs: { mark_read_delay: 0, thread_view_default: false },
+            prefs: { mark_read_delay: 0, thread_view_default: false,
+                     stacked_threads: true },
             // selection.smart: "starred" | "unread" | null — virtual
             // cross-account smart folders (implemented as the existing
             // all-mailboxes view + FLAGGED/UNSEEN filter).
@@ -953,7 +954,10 @@ export const owMailService = {
             if (msg.references) {
                 msg.references.split(/\s+/).forEach((id) => { if (id) allIds.add(id); });
             }
-            if (allIds.size <= 1) {
+            // A bare Message-ID is enough: the server also matches replies
+            // whose References carry this id. Only bail when the message
+            // has no id at all (nothing to search on).
+            if (!allIds.size) {
                 if (mySeq !== _msgSeq) return;
                 state.threadMessages = [msg];
                 return;
@@ -1056,8 +1060,12 @@ export const owMailService = {
                     } catch {}
                 }, delay * 1000);
             }
-            // Auto-load thread if message is part of a conversation
-            if (data.references || data.in_reply_to) {
+            // Stacked conversation (Gmail-style) is a per-user preference.
+            // When on, look the conversation up on every open — the server
+            // also finds *descendants* (replies whose References carry this
+            // message's id), so the stack works from the thread root and
+            // middle messages, not only from the newest reply.
+            if (state.prefs.stacked_threads) {
                 await loadThread(folderId, uid, mySeq);
             } else {
                 state.threadMessages = [data];

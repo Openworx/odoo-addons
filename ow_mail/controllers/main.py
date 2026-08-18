@@ -433,7 +433,8 @@ class OwMailController(http.Controller):
         Only whitelisted keys are accepted (mass-assignment guard, mirroring
         ``contacts_update``); values are type-coerced before the write.
         """
-        allowed = {"mark_read_delay": int, "thread_view_default": bool}
+        allowed = {"mark_read_delay": int, "thread_view_default": bool,
+                   "stacked_threads": bool}
         clean = {}
         for key, coerce in allowed.items():
             if key in (vals or {}):
@@ -823,6 +824,11 @@ class OwMailController(http.Controller):
     @http.route("/ow_mail/thread", type="json", auth="user")
     def thread(self, account_id, message_ids):
         """Fetch all messages in a conversation thread for a single account.
+
+        ``search_thread_uids`` matches in both directions: the given ids
+        themselves (ancestors) and messages whose References header carries
+        one of them (descendants) — so the stacked view is complete from any
+        member of the thread, root included.
 
         Only Inbox and Sent are searched because a thread is composed of
         received messages (Inbox) and authored replies (Sent); searching every

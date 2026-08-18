@@ -19,6 +19,10 @@ class OwMailPreferences(models.Model):
     # 0 = immediately (historic behaviour), -1 = only manually.
     mark_read_delay = fields.Integer(default=0)
     thread_view_default = fields.Boolean(default=False)
+    # Gmail-style stacked conversation in the reading pane: when enabled the
+    # client looks up the full thread (ancestors + descendants) on every
+    # message open; disabled shows only the opened message.
+    stacked_threads = fields.Boolean(default=True)
 
     _sql_constraints = [
         ("user_uniq", "unique(user_id)",
@@ -38,4 +42,5 @@ class OwMailPreferences(models.Model):
         return {
             "mark_read_delay": self.mark_read_delay,
             "thread_view_default": self.thread_view_default,
+            "stacked_threads": self.stacked_threads,
         }
