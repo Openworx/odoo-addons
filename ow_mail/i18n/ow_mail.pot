@@ -4,10 +4,10 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: Odoo Server 18.0-20260810\n"
+"Project-Id-Version: Odoo Server 18.0-20260630\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-08-18 10:53+0000\n"
-"PO-Revision-Date: 2026-08-18 10:53+0000\n"
+"POT-Creation-Date: 2026-08-21 11:32+0000\n"
+"PO-Revision-Date: 2026-08-21 11:32+0000\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -151,7 +151,7 @@ msgstr ""
 #. module: ow_mail
 #. odoo-javascript
 #: code:addons/ow_mail/static/src/components/message_viewer/message_viewer.xml:0
-msgid "Attach to record"
+msgid "Attach to existing record…"
 msgstr ""
 
 #. module: ow_mail
@@ -185,7 +185,6 @@ msgstr ""
 
 #. module: ow_mail
 #: model:ir.model.fields,field_description:ow_mail.field_ow_mail_attach_record__body_html
-#: model:ir.model.fields,field_description:ow_mail.field_ow_mail_create_record__body_html
 msgid "Body Html"
 msgstr ""
 
@@ -210,11 +209,17 @@ msgstr ""
 #. module: ow_mail
 #. odoo-javascript
 #: code:addons/ow_mail/static/src/components/contacts/contacts.xml:0
+#: code:addons/ow_mail/static/src/components/record_picker/record_model_picker.xml:0
 #: code:addons/ow_mail/static/src/components/sidebar/sidebar.js:0
 #: model_terms:ir.ui.view,arch_db:ow_mail.ow_mail_attach_record_view_form
-#: model_terms:ir.ui.view,arch_db:ow_mail.ow_mail_create_record_view_form
 #: model_terms:ir.ui.view,arch_db:ow_mail.view_ow_mail_connect_wizard_form
 msgid "Cancel"
+msgstr ""
+
+#. module: ow_mail
+#. odoo-python
+#: code:addons/ow_mail/models/ow_mail_record_link.py:0
+msgid "Cannot attach email to %s."
 msgstr ""
 
 #. module: ow_mail
@@ -244,6 +249,12 @@ msgstr ""
 #. module: ow_mail
 #: model:ir.model.fields,field_description:ow_mail.field_ow_mail_compose__cc
 msgid "Cc"
+msgstr ""
+
+#. module: ow_mail
+#. odoo-javascript
+#: code:addons/ow_mail/static/src/components/message_viewer/message_viewer.xml:0
+msgid "Cc:"
 msgstr ""
 
 #. module: ow_mail
@@ -329,7 +340,6 @@ msgstr ""
 
 #. module: ow_mail
 #: model_terms:ir.ui.view,arch_db:ow_mail.ow_mail_attach_record_view_form
-#: model_terms:ir.ui.view,arch_db:ow_mail.ow_mail_create_record_view_form
 msgid "Confirm"
 msgstr ""
 
@@ -377,6 +387,8 @@ msgid "Connection failed: %s"
 msgstr ""
 
 #. module: ow_mail
+#. odoo-python
+#: code:addons/ow_mail/models/ow_mail_record_link.py:0
 #: model:ir.model,name:ow_mail.model_res_partner
 msgid "Contact"
 msgstr ""
@@ -410,6 +422,18 @@ msgstr ""
 #. module: ow_mail
 #. odoo-javascript
 #: code:addons/ow_mail/static/src/services/ow_mail_service.js:0
+msgid "Could not link email: %s"
+msgstr ""
+
+#. module: ow_mail
+#. odoo-javascript
+#: code:addons/ow_mail/static/src/services/ow_mail_service.js:0
+msgid "Could not prepare record: %s"
+msgstr ""
+
+#. module: ow_mail
+#. odoo-javascript
+#: code:addons/ow_mail/static/src/services/ow_mail_service.js:0
 msgid "Could not rename tag: %s"
 msgstr ""
 
@@ -428,13 +452,14 @@ msgstr ""
 #. module: ow_mail
 #. odoo-javascript
 #: code:addons/ow_mail/static/src/components/message_viewer/message_viewer.xml:0
-msgid "Create Record"
+msgid "Create"
 msgstr ""
 
 #. module: ow_mail
-#: model:ir.model,name:ow_mail.model_ow_mail_create_record
-#: model_terms:ir.ui.view,arch_db:ow_mail.ow_mail_create_record_view_form
-msgid "Create Record from Mail"
+#. odoo-javascript
+#: code:addons/ow_mail/static/src/components/message_viewer/message_viewer.xml:0
+#: code:addons/ow_mail/static/src/components/record_picker/record_model_picker.js:0
+msgid "Create record from email"
 msgstr ""
 
 #. module: ow_mail
@@ -443,7 +468,6 @@ msgstr ""
 #: model:ir.model.fields,field_description:ow_mail.field_ow_mail_compose__create_uid
 #: model:ir.model.fields,field_description:ow_mail.field_ow_mail_connect_wizard__create_uid
 #: model:ir.model.fields,field_description:ow_mail.field_ow_mail_contact__create_uid
-#: model:ir.model.fields,field_description:ow_mail.field_ow_mail_create_record__create_uid
 #: model:ir.model.fields,field_description:ow_mail.field_ow_mail_folder__create_uid
 #: model:ir.model.fields,field_description:ow_mail.field_ow_mail_preferences__create_uid
 #: model:ir.model.fields,field_description:ow_mail.field_ow_mail_tag__create_uid
@@ -457,7 +481,6 @@ msgstr ""
 #: model:ir.model.fields,field_description:ow_mail.field_ow_mail_compose__create_date
 #: model:ir.model.fields,field_description:ow_mail.field_ow_mail_connect_wizard__create_date
 #: model:ir.model.fields,field_description:ow_mail.field_ow_mail_contact__create_date
-#: model:ir.model.fields,field_description:ow_mail.field_ow_mail_create_record__create_date
 #: model:ir.model.fields,field_description:ow_mail.field_ow_mail_folder__create_date
 #: model:ir.model.fields,field_description:ow_mail.field_ow_mail_preferences__create_date
 #: model:ir.model.fields,field_description:ow_mail.field_ow_mail_tag__create_date
@@ -487,8 +510,13 @@ msgstr ""
 #. odoo-javascript
 #: code:addons/ow_mail/static/src/components/message_list/message_list.js:0
 #: model:ir.model.fields,field_description:ow_mail.field_ow_mail_attach_record__date
-#: model:ir.model.fields,field_description:ow_mail.field_ow_mail_create_record__date
 msgid "Date"
+msgstr ""
+
+#. module: ow_mail
+#. odoo-javascript
+#: code:addons/ow_mail/static/src/components/message_viewer/message_viewer.xml:0
+msgid "Date:"
 msgstr ""
 
 #. module: ow_mail
@@ -546,7 +574,6 @@ msgstr ""
 #: model:ir.model.fields,field_description:ow_mail.field_ow_mail_compose__display_name
 #: model:ir.model.fields,field_description:ow_mail.field_ow_mail_connect_wizard__display_name
 #: model:ir.model.fields,field_description:ow_mail.field_ow_mail_contact__display_name
-#: model:ir.model.fields,field_description:ow_mail.field_ow_mail_create_record__display_name
 #: model:ir.model.fields,field_description:ow_mail.field_ow_mail_folder__display_name
 #: model:ir.model.fields,field_description:ow_mail.field_ow_mail_preferences__display_name
 #: model:ir.model.fields,field_description:ow_mail.field_ow_mail_tag__display_name
@@ -592,6 +619,12 @@ msgstr ""
 #. module: ow_mail
 #. odoo-javascript
 #: code:addons/ow_mail/static/src/components/compose_window/compose_window.xml:0
+msgid "Drag to resize"
+msgstr ""
+
+#. module: ow_mail
+#. odoo-javascript
+#: code:addons/ow_mail/static/src/components/compose_window/compose_window.xml:0
 msgid "Drop files to attach"
 msgstr ""
 
@@ -629,8 +662,9 @@ msgid "Email Address"
 msgstr ""
 
 #. module: ow_mail
-#: model:ir.model,name:ow_mail.model_mail_thread
-msgid "Email Thread"
+#. odoo-javascript
+#: code:addons/ow_mail/static/src/services/ow_mail_service.js:0
+msgid "Email linked to %s"
 msgstr ""
 
 #. module: ow_mail
@@ -674,6 +708,12 @@ msgstr ""
 
 #. module: ow_mail
 #. odoo-javascript
+#: code:addons/ow_mail/static/src/components/record_picker/record_model_picker.xml:0
+msgid "Filter models…"
+msgstr ""
+
+#. module: ow_mail
+#. odoo-javascript
 #: code:addons/ow_mail/static/src/components/message_list/message_list.xml:0
 msgid "First"
 msgstr ""
@@ -693,7 +733,6 @@ msgstr ""
 #. module: ow_mail
 #: model:ir.model.fields,field_description:ow_mail.field_ow_mail_account__folder_ids
 #: model:ir.model.fields,field_description:ow_mail.field_ow_mail_attach_record__folder_id
-#: model:ir.model.fields,field_description:ow_mail.field_ow_mail_create_record__folder_id
 msgid "Folder"
 msgstr ""
 
@@ -701,6 +740,12 @@ msgstr ""
 #. odoo-python
 #: code:addons/ow_mail/models/ow_mail_account.py:0
 msgid "Folder name is required"
+msgstr ""
+
+#. module: ow_mail
+#. odoo-python
+#: code:addons/ow_mail/wizards/ow_mail_attach_record.py:0
+msgid "Folder not found."
 msgstr ""
 
 #. module: ow_mail
@@ -735,13 +780,11 @@ msgstr ""
 
 #. module: ow_mail
 #: model:ir.model.fields,field_description:ow_mail.field_ow_mail_attach_record__from_email
-#: model:ir.model.fields,field_description:ow_mail.field_ow_mail_create_record__from_email
 msgid "From Email"
 msgstr ""
 
 #. module: ow_mail
 #: model:ir.model.fields,field_description:ow_mail.field_ow_mail_attach_record__from_name
-#: model:ir.model.fields,field_description:ow_mail.field_ow_mail_create_record__from_name
 msgid "From Name"
 msgstr ""
 
@@ -749,6 +792,12 @@ msgstr ""
 #. odoo-javascript
 #: code:addons/ow_mail/static/src/components/compose_window/recipient_input.xml:0
 msgid "From Odoo Contacts"
+msgstr ""
+
+#. module: ow_mail
+#. odoo-javascript
+#: code:addons/ow_mail/static/src/components/message_viewer/message_viewer.xml:0
+msgid "From:"
 msgstr ""
 
 #. module: ow_mail
@@ -797,6 +846,12 @@ msgid "Heading 3"
 msgstr ""
 
 #. module: ow_mail
+#. odoo-python
+#: code:addons/ow_mail/models/ow_mail_record_link.py:0
+msgid "Helpdesk Ticket"
+msgstr ""
+
+#. module: ow_mail
 #: model:ir.model.fields,help:ow_mail.field_ow_mail_folder__last_seen_uid
 msgid "Highest UID seen — used for new-mail detection"
 msgstr ""
@@ -825,7 +880,6 @@ msgstr ""
 #: model:ir.model.fields,field_description:ow_mail.field_ow_mail_compose__id
 #: model:ir.model.fields,field_description:ow_mail.field_ow_mail_connect_wizard__id
 #: model:ir.model.fields,field_description:ow_mail.field_ow_mail_contact__id
-#: model:ir.model.fields,field_description:ow_mail.field_ow_mail_create_record__id
 #: model:ir.model.fields,field_description:ow_mail.field_ow_mail_folder__id
 #: model:ir.model.fields,field_description:ow_mail.field_ow_mail_preferences__id
 #: model:ir.model.fields,field_description:ow_mail.field_ow_mail_tag__id
@@ -927,6 +981,12 @@ msgstr ""
 #: model:ir.model.fields,help:ow_mail.field_ow_mail_account__signature_enabled
 msgid ""
 "If unchecked, no signature is inserted in new compose, reply or forward."
+msgstr ""
+
+#. module: ow_mail
+#. odoo-javascript
+#: code:addons/ow_mail/static/src/components/compose_window/compose_window.xml:0
+msgid "Image size"
 msgstr ""
 
 #. module: ow_mail
@@ -1062,7 +1122,6 @@ msgstr ""
 #: model:ir.model.fields,field_description:ow_mail.field_ow_mail_compose__write_uid
 #: model:ir.model.fields,field_description:ow_mail.field_ow_mail_connect_wizard__write_uid
 #: model:ir.model.fields,field_description:ow_mail.field_ow_mail_contact__write_uid
-#: model:ir.model.fields,field_description:ow_mail.field_ow_mail_create_record__write_uid
 #: model:ir.model.fields,field_description:ow_mail.field_ow_mail_folder__write_uid
 #: model:ir.model.fields,field_description:ow_mail.field_ow_mail_preferences__write_uid
 #: model:ir.model.fields,field_description:ow_mail.field_ow_mail_tag__write_uid
@@ -1076,7 +1135,6 @@ msgstr ""
 #: model:ir.model.fields,field_description:ow_mail.field_ow_mail_compose__write_date
 #: model:ir.model.fields,field_description:ow_mail.field_ow_mail_connect_wizard__write_date
 #: model:ir.model.fields,field_description:ow_mail.field_ow_mail_contact__write_date
-#: model:ir.model.fields,field_description:ow_mail.field_ow_mail_create_record__write_date
 #: model:ir.model.fields,field_description:ow_mail.field_ow_mail_folder__write_date
 #: model:ir.model.fields,field_description:ow_mail.field_ow_mail_preferences__write_date
 #: model:ir.model.fields,field_description:ow_mail.field_ow_mail_tag__write_date
@@ -1096,8 +1154,20 @@ msgid "Last used"
 msgstr ""
 
 #. module: ow_mail
+#. odoo-python
+#: code:addons/ow_mail/models/ow_mail_record_link.py:0
+msgid "Lead"
+msgstr ""
+
+#. module: ow_mail
 #: model_terms:ir.ui.view,arch_db:ow_mail.view_ow_mail_account_form
 msgid "Leave empty to use IMAP login"
+msgstr ""
+
+#. module: ow_mail
+#. odoo-javascript
+#: code:addons/ow_mail/static/src/components/message_viewer/message_viewer.xml:0
+msgid "Linked:"
 msgstr ""
 
 #. module: ow_mail
@@ -1165,13 +1235,21 @@ msgstr ""
 #. module: ow_mail
 #. odoo-javascript
 #: code:addons/ow_mail/static/src/components/message_list/message_list.xml:0
+#: code:addons/ow_mail/static/src/components/message_viewer/message_viewer.xml:0
 msgid "Mark read"
 msgstr ""
 
 #. module: ow_mail
 #. odoo-javascript
 #: code:addons/ow_mail/static/src/components/message_list/message_list.xml:0
+#: code:addons/ow_mail/static/src/components/message_viewer/message_viewer.xml:0
 msgid "Mark unread"
+msgstr ""
+
+#. module: ow_mail
+#. odoo-python
+#: code:addons/ow_mail/models/ow_mail_record_link.py:0
+msgid "Meeting"
 msgstr ""
 
 #. module: ow_mail
@@ -1202,6 +1280,12 @@ msgstr ""
 
 #. module: ow_mail
 #. odoo-python
+#: code:addons/ow_mail/models/ow_mail_record_link.py:0
+msgid "Message not found on the mail server."
+msgstr ""
+
+#. module: ow_mail
+#. odoo-python
 #: code:addons/ow_mail/controllers/main.py:0
 msgid "Message sent, but saving to Sent folder failed: %s"
 msgstr ""
@@ -1220,8 +1304,13 @@ msgstr ""
 
 #. module: ow_mail
 #: model:ir.model.fields,field_description:ow_mail.field_ow_mail_attach_record__res_model_id
-#: model:ir.model.fields,field_description:ow_mail.field_ow_mail_create_record__res_model_id
 msgid "Model"
+msgstr ""
+
+#. module: ow_mail
+#. odoo-javascript
+#: code:addons/ow_mail/static/src/components/message_viewer/message_viewer.xml:0
+msgid "More actions"
 msgstr ""
 
 #. module: ow_mail
@@ -1306,6 +1395,12 @@ msgstr ""
 #. odoo-javascript
 #: code:addons/ow_mail/static/src/components/mailclient/mailclient.xml:0
 msgid "No mailbox connected yet"
+msgstr ""
+
+#. module: ow_mail
+#. odoo-javascript
+#: code:addons/ow_mail/static/src/components/record_picker/record_model_picker.xml:0
+msgid "No matching models"
 msgstr ""
 
 #. module: ow_mail
@@ -1396,8 +1491,19 @@ msgid "OW Mail Folder"
 msgstr ""
 
 #. module: ow_mail
+#: model:ir.model.fields,field_description:ow_mail.field_mail_mail__ow_mail_message_id
+#: model:ir.model.fields,field_description:ow_mail.field_mail_message__ow_mail_message_id
+msgid "OW Mail Message-ID"
+msgstr ""
+
+#. module: ow_mail
 #: model:ir.model,name:ow_mail.model_ow_mail_preferences
 msgid "OW Mail Preferences"
+msgstr ""
+
+#. module: ow_mail
+#: model:ir.model,name:ow_mail.model_ow_mail_record_link
+msgid "OW Mail Record Integration Helper"
 msgstr ""
 
 #. module: ow_mail
@@ -1446,6 +1552,7 @@ msgstr ""
 #. module: ow_mail
 #. odoo-javascript
 #: code:addons/ow_mail/static/src/components/message_viewer/message_viewer.xml:0
+#: code:addons/ow_mail/static/src/services/ow_mail_service.js:0
 msgid "Open"
 msgstr ""
 
@@ -1459,6 +1566,24 @@ msgstr ""
 #. odoo-javascript
 #: code:addons/ow_mail/static/src/components/message_source/message_source.xml:0
 msgid "Open in new tab"
+msgstr ""
+
+#. module: ow_mail
+#. odoo-python
+#: code:addons/ow_mail/models/ow_mail_record_link.py:0
+msgid "Opportunity"
+msgstr ""
+
+#. module: ow_mail
+#. odoo-javascript
+#: code:addons/ow_mail/static/src/components/compose_window/compose_window.xml:0
+msgid "Original size"
+msgstr ""
+
+#. module: ow_mail
+#. odoo-javascript
+#: code:addons/ow_mail/static/src/components/message_viewer/message_viewer.xml:0
+msgid "Other…"
 msgstr ""
 
 #. module: ow_mail
@@ -1519,12 +1644,6 @@ msgstr ""
 
 #. module: ow_mail
 #. odoo-python
-#: code:addons/ow_mail/wizards/ow_mail_create_record.py:0
-msgid "Please select a model."
-msgstr ""
-
-#. module: ow_mail
-#. odoo-python
 #: code:addons/ow_mail/wizards/ow_mail_attach_record.py:0
 msgid "Please select a target record."
 msgstr ""
@@ -1574,6 +1693,12 @@ msgstr ""
 #. odoo-javascript
 #: code:addons/ow_mail/static/src/components/compose_window/compose_window.xml:0
 msgid "Remove attachment"
+msgstr ""
+
+#. module: ow_mail
+#. odoo-javascript
+#: code:addons/ow_mail/static/src/components/compose_window/compose_window.xml:0
+msgid "Remove image"
 msgstr ""
 
 #. module: ow_mail
@@ -1681,6 +1806,12 @@ msgstr ""
 #. odoo-javascript
 #: code:addons/ow_mail/static/src/components/safe_mode_banner/safe_mode_banner.xml:0
 msgid "Safe Mode."
+msgstr ""
+
+#. module: ow_mail
+#. odoo-python
+#: code:addons/ow_mail/models/ow_mail_record_link.py:0
+msgid "Sales Order"
 msgstr ""
 
 #. module: ow_mail
@@ -1816,6 +1947,14 @@ msgstr ""
 
 #. module: ow_mail
 #. odoo-javascript
+#: code:addons/ow_mail/static/src/components/settings_dialog/settings_dialog.xml:0
+msgid ""
+"Show the whole conversation (including your replies) when\n"
+"                    opening any message of a thread."
+msgstr ""
+
+#. module: ow_mail
+#. odoo-javascript
 #: code:addons/ow_mail/static/src/components/shortcuts_dialog/shortcuts_dialog.js:0
 msgid "Show this cheatsheet"
 msgstr ""
@@ -1857,6 +1996,17 @@ msgstr ""
 #. module: ow_mail
 #: model_terms:ir.ui.view,arch_db:ow_mail.view_ow_mail_account_form
 msgid "Special Folders"
+msgstr ""
+
+#. module: ow_mail
+#. odoo-javascript
+#: code:addons/ow_mail/static/src/components/settings_dialog/settings_dialog.xml:0
+msgid "Stack conversations in the reading pane"
+msgstr ""
+
+#. module: ow_mail
+#: model:ir.model.fields,field_description:ow_mail.field_ow_mail_preferences__stacked_threads
+msgid "Stacked Threads"
 msgstr ""
 
 #. module: ow_mail
@@ -1903,7 +2053,6 @@ msgstr ""
 #: code:addons/ow_mail/static/src/components/message_list/message_list.js:0
 #: model:ir.model.fields,field_description:ow_mail.field_ow_mail_attach_record__subject
 #: model:ir.model.fields,field_description:ow_mail.field_ow_mail_compose__subject
-#: model:ir.model.fields,field_description:ow_mail.field_ow_mail_create_record__subject
 msgid "Subject"
 msgstr ""
 
@@ -1944,6 +2093,12 @@ msgid "Target Record"
 msgstr ""
 
 #. module: ow_mail
+#. odoo-python
+#: code:addons/ow_mail/models/ow_mail_record_link.py:0
+msgid "Task"
+msgstr ""
+
+#. module: ow_mail
 #: model_terms:ir.ui.view,arch_db:ow_mail.view_ow_mail_account_form
 msgid "Test Incoming Server"
 msgstr ""
@@ -1961,7 +2116,7 @@ msgstr ""
 
 #. module: ow_mail
 #. odoo-python
-#: code:addons/ow_mail/wizards/ow_mail_attach_record.py:0
+#: code:addons/ow_mail/models/ow_mail_record_link.py:0
 msgid "The selected record does not exist."
 msgstr ""
 
@@ -1978,7 +2133,7 @@ msgstr ""
 
 #. module: ow_mail
 #. odoo-python
-#: code:addons/ow_mail/wizards/ow_mail_attach_record.py:0
+#: code:addons/ow_mail/models/ow_mail_record_link.py:0
 msgid "This message has already been attached to this record."
 msgstr ""
 
@@ -2008,6 +2163,12 @@ msgstr ""
 #. odoo-javascript
 #: code:addons/ow_mail/static/src/components/message_list/message_list.xml:0
 msgid "Toggle conversation view"
+msgstr ""
+
+#. module: ow_mail
+#. odoo-javascript
+#: code:addons/ow_mail/static/src/components/message_viewer/message_viewer.xml:0
+msgid "Toggle message details"
 msgstr ""
 
 #. module: ow_mail
@@ -2057,7 +2218,6 @@ msgstr ""
 
 #. module: ow_mail
 #: model:ir.model.fields,field_description:ow_mail.field_ow_mail_attach_record__uid
-#: model:ir.model.fields,field_description:ow_mail.field_ow_mail_create_record__uid
 msgid "Uid"
 msgstr ""
 
@@ -2071,6 +2231,12 @@ msgstr ""
 #. odoo-javascript
 #: code:addons/ow_mail/static/src/components/compose_window/compose_window.xml:0
 msgid "Undo"
+msgstr ""
+
+#. module: ow_mail
+#. odoo-python
+#: code:addons/ow_mail/models/ow_mail_record_link.py:0
+msgid "Unknown model: %s"
 msgstr ""
 
 #. module: ow_mail
@@ -2135,6 +2301,30 @@ msgstr ""
 msgid ""
 "Where the signature is inserted in replies and forwards relative to the "
 "quoted original."
+msgstr ""
+
+#. module: ow_mail
+#. odoo-javascript
+#: code:addons/ow_mail/static/src/components/compose_window/compose_window.xml:0
+msgid "Width 100%"
+msgstr ""
+
+#. module: ow_mail
+#. odoo-javascript
+#: code:addons/ow_mail/static/src/components/compose_window/compose_window.xml:0
+msgid "Width 25%"
+msgstr ""
+
+#. module: ow_mail
+#. odoo-javascript
+#: code:addons/ow_mail/static/src/components/compose_window/compose_window.xml:0
+msgid "Width 50%"
+msgstr ""
+
+#. module: ow_mail
+#. odoo-javascript
+#: code:addons/ow_mail/static/src/components/compose_window/compose_window.xml:0
+msgid "Width 75%"
 msgstr ""
 
 #. module: ow_mail

@@ -8,4 +8,3 @@ access_ow_mail_preferences_user,ow.mail.preferences.user,model_ow_mail_preferenc
 access_ow_mail_compose,ow.mail.compose.user,model_ow_mail_compose,base.group_user,1,1,1,1
 access_ow_mail_connect_wizard,ow.mail.connect.wizard.user,model_ow_mail_connect_wizard,base.group_user,1,1,1,1
 access_ow_mail_attach_record,ow.mail.attach.record.user,model_ow_mail_attach_record,base.group_user,1,1,1,1
-access_ow_mail_create_record,ow.mail.create.record.user,model_ow_mail_create_record,base.group_user,1,1,1,1

@@ -457,6 +457,50 @@
             .o-ow-viewer { display: flex !important; }
         }
 
+        // One scroll context in the reading pane: the pane itself scrolls,
+        // children take natural height, and the message iframe is sized to
+        // its content by _fitIframe() — so toolbar + header scroll away
+        // while reading instead of squeezing the body into a small strip.
+        .o-ow-viewer {
+            overflow-y: auto;
+        }
+        .o-ow-viewer-body {
+            flex: 0 0 auto;
+
+            iframe {
+                height: auto;
+                min-height: 120px;
+            }
+        }
+        .o-ow-thread-body {
+            flex: 0 0 auto;
+            overflow: visible;
+        }
+
+        .o-ow-toolbar-mobile {
+            flex-wrap: nowrap;
+        }
+        .o-ow-viewer .dropdown-menu {
+            max-height: 70vh;
+            overflow-y: auto;
+        }
+        .o-ow-head-mobile {
+            cursor: pointer;
+        }
+        .o-ow-reply-fab {
+            position: fixed;
+            right: 16px;
+            bottom: 16px;
+            width: 52px;
+            height: 52px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.1rem;
+            z-index: 1040; // under the compose stack (1050)
+        }
+
         .o-ow-contacts {
             .o-ow-contact-detail { display: none !important; }
         }
@@ -607,6 +651,17 @@
         font-weight: 500;
         cursor: pointer;
         &:hover { border-color: #8b8f94; }
+    }
+
+    // Linked-record chips — inline at subject height (single + thread view)
+    .o-ow-linked .o-ow-linked-btn {
+        font-size: 0.72rem;
+        font-weight: 400;
+        padding: 0.1rem 0.5rem;
+        max-width: 14rem;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
     }
 }
 

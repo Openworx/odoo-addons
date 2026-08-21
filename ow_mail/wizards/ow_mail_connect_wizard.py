@@ -100,7 +100,8 @@ class OwMailConnectWizard(models.TransientModel):
         # was created, encrypted password stored, then action_test_connection
         # flipped state to 'error' — requiring manual cleanup).
         imap_login = self.email  # keep existing convention; users can
-        # override after creation (the 'demo' quirk documented in CLAUDE.md)
+        # override after creation (login may differ from the address,
+        # e.g. GreenMail's 'demo' user)
         self._probe_imap(imap_login)
         self._probe_smtp(imap_login)
 
