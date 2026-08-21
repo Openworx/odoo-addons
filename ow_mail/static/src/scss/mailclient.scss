@@ -1,9 +1,79 @@
+// ---------------------------------------------------------------------------
+// Theme tokens. Light values on the light scope; the dark scope (driven by
+// the `.o-ow-dark` root class / `.o-ow-themed.o-ow-dark` dialog hook — see
+// ow_mail_service.applyTheme) overrides them. Dark palette is derived from
+// Odoo's #262A36 / #FFFFFF pair.
+// ---------------------------------------------------------------------------
+.o-ow-mail, .o-ow-themed {
+    --ow-surface: #fff;
+    --ow-surface-body: #f6f7f9;
+    --ow-surface-muted: #fafafa;
+    --ow-surface-raised: #fafbfc;
+    --ow-hover: #f1f4fe;
+    --ow-selected: #e3edff;
+    --ow-selected-strong: #dce8ff;
+    --ow-primary-soft: #eef3ff;
+    --ow-primary-border: #c6dcff;
+    --ow-unread-bg: #fcfcff;
+    --ow-border: #dee2e6;
+    --ow-border-strong: #ced4da;
+    --ow-text: #1f2937;
+    --ow-text-muted: #6b7280;
+    --ow-badge-bg: #e9ecef;
+    --ow-count-bg: #6c757d;
+    --ow-on-accent: #fff;
+    --ow-primary: #0d6efd;
+    --ow-danger: #b91c1c;
+    --ow-danger-soft: rgba(220, 38, 38, 0.08);
+    --ow-warning: #ffc107;
+    --ow-warning-soft: #fef3cd;
+    --ow-success: #1d7a4f;
+    --ow-success-soft: #e7f1ec;
+    --ow-success-border: #bcd9c9;
+    --ow-scrim: rgba(0, 0, 0, 0.4);
+    --ow-shadow: rgba(0, 0, 0, 0.15);
+    --ow-hover-ghost: rgba(0, 0, 0, 0.06);
+}
+
+.o-ow-mail.o-ow-dark, .o-ow-themed.o-ow-dark {
+    --ow-surface: #262a36;
+    --ow-surface-body: #1e222c;
+    --ow-surface-muted: #2b303d;
+    --ow-surface-raised: #2e3340;
+    --ow-hover: #2a3040;
+    --ow-selected: #2f3d58;
+    --ow-selected-strong: #34456a;
+    --ow-primary-soft: #283349;
+    --ow-primary-border: #3a4c6e;
+    --ow-unread-bg: #2a2e3c;
+    --ow-border: #3a4150;
+    --ow-border-strong: #4a5262;
+    --ow-text: #e5e7eb;
+    --ow-text-muted: #9aa3b2;
+    --ow-badge-bg: #3a4150;
+    --ow-count-bg: #4a5262;
+    --ow-primary: #4d8dfd;
+    --ow-danger: #f87171;
+    --ow-danger-soft: rgba(248, 113, 113, 0.15);
+    --ow-warning-soft: #3d3524;
+    --ow-success: #4ade80;
+    --ow-success-soft: #22332a;
+    --ow-success-border: #2f4a3c;
+    --ow-scrim: rgba(0, 0, 0, 0.6);
+    --ow-shadow: rgba(0, 0, 0, 0.5);
+    --ow-hover-ghost: rgba(255, 255, 255, 0.08);
+
+    color: var(--ow-text);
+    // Native dark scrollbars + form controls for this subtree.
+    color-scheme: dark;
+}
+
 .o-ow-mail {
-    background: #f6f7f9;
+    background: var(--ow-surface-body);
     min-height: 0;
 
     .o-ow-topbar {
-        background: #fff;
+        background: var(--ow-surface);
         .o-ow-brand { font-size: 1.1rem; }
     }
 
@@ -13,20 +83,20 @@
         width: 220px;
         min-width: 200px;
         flex: 0 0 220px;
-        background: #fafafa;
+        background: var(--ow-surface-muted);
         transition: flex-basis 0.15s ease, width 0.15s ease;
         .o-ow-folder {
             cursor: pointer;
             border-radius: 6px;
             margin: 1px 4px;
-            &:hover { background: #eef; }
-            &.active { background: #dce8ff; font-weight: 600; }
+            &:hover { background: var(--ow-hover); }
+            &.active { background: var(--ow-selected-strong); font-weight: 600; }
             &.o-ow-drop-target {
-                outline: 2px dashed #0d6efd;
-                background: #e8f0ff;
+                outline: 2px dashed var(--ow-primary);
+                background: var(--ow-primary-soft);
             }
         }
-        .o-ow-all-mailboxes.active { background: #dce8ff; }
+        .o-ow-all-mailboxes.active { background: var(--ow-selected-strong); }
 
         .o-ow-account-dot {
             display: inline-block;
@@ -38,8 +108,8 @@
         .o-ow-count {
             display: inline-block;
             flex: 0 0 auto;
-            background: #e9ecef;
-            color: #1f2937;
+            background: var(--ow-badge-bg);
+            color: var(--ow-text);
             font-size: 0.72rem;
             font-weight: 600;
             font-variant-numeric: tabular-nums;
@@ -97,7 +167,7 @@
     .o-ow-list {
         flex: 0 0 520px;
         min-width: 480px;
-        background: #fff;
+        background: var(--ow-surface);
     }
 
     .o-ow-list-toolbar {
@@ -110,7 +180,7 @@
         z-index: 2;
     }
     .o-ow-bulk-bar {
-        background: #eef3ff;
+        background: var(--ow-primary-soft);
         position: relative;
         z-index: 2;
     }
@@ -122,9 +192,9 @@
         cursor: pointer;
         position: relative;
         &.o-ow-dragging { opacity: 0.5; }
-        &:hover { background: #f2f5ff; }
-        &.active { background: #e3edff; }
-        &.o-ow-unread { background: #fcfcff; border-left: 3px solid #0d6efd; }
+        &:hover { background: var(--ow-hover); }
+        &.active { background: var(--ow-selected); }
+        &.o-ow-unread { background: var(--ow-unread-bg); border-left: 3px solid var(--ow-primary); }
 
         .o-ow-hover-actions {
             position: absolute;
@@ -149,7 +219,7 @@
             border: 0;
             padding: 0;
             background: transparent;
-            color: #6b7280;
+            color: var(--ow-text-muted);
             border-radius: 5px;
             box-shadow: none;
             transition: background 0.12s ease, color 0.12s ease;
@@ -157,13 +227,13 @@
             i { font-size: 12px; }
 
             &:hover {
-                background: rgba(0, 0, 0, 0.06);
-                color: #1f2937;
+                background: var(--ow-hover-ghost);
+                color: var(--ow-text);
             }
 
             &.o-ow-delete:hover {
-                background: rgba(220, 38, 38, 0.08);
-                color: #b91c1c;
+                background: var(--ow-danger-soft);
+                color: var(--ow-danger);
             }
         }
     }
@@ -174,27 +244,27 @@
         justify-content: center;
         width: 36px; height: 36px;
         border-radius: 50%;
-        color: #fff; font-weight: 600;
+        color: var(--ow-surface); font-weight: 600;
         font-size: 0.85rem;
         flex-shrink: 0;
     }
 
     .o-ow-viewer {
-        background: #fff;
+        background: var(--ow-surface);
         min-width: 0;
         flex: 1 1 auto;
     }
     .o-ow-invite {
-        background: #f5f9ff;
-        border-color: #c6dcff !important;
-        border-left: 4px solid #0d6efd !important;
+        background: var(--ow-primary-soft);
+        border-color: var(--ow-primary-border) !important;
+        border-left: 4px solid var(--ow-primary) !important;
     }
     .o-ow-viewer-body { min-height: 0; }
 
     /* Thread list grouping */
     .o-ow-thread-header {
         cursor: pointer;
-        &:hover { background: #f2f5ff; }
+        &:hover { background: var(--ow-hover); }
     }
     .o-ow-thread-toggle {
         width: 14px;
@@ -203,31 +273,31 @@
         flex-shrink: 0;
     }
     .o-ow-thread-count {
-        background: #6c757d;
-        color: #fff;
+        background: var(--ow-count-bg);
+        color: var(--ow-surface);
         border-radius: 10px;
         font-size: 0.7rem;
         padding: 1px 6px;
         flex-shrink: 0;
     }
     .o-ow-thread-child {
-        border-left: 3px solid #dee2e6;
-        background: #fafbfc;
+        border-left: 3px solid var(--ow-border);
+        background: var(--ow-surface-raised);
         cursor: pointer;
-        &:hover { background: #f0f3ff; }
-        &.active { background: #e3edff; }
+        &:hover { background: var(--ow-hover); }
+        &.active { background: var(--ow-selected); }
     }
 
     /* Conversation viewer */
     .o-ow-thread-subject {
-        background: #fafbfc;
+        background: var(--ow-surface-raised);
     }
     .o-ow-thread-message {
         .o-ow-thread-msg-header {
             cursor: pointer;
-            &:hover { background: #f8f9fb; }
+            &:hover { background: var(--ow-hover); }
             &.o-ow-thread-msg-collapsed {
-                background: #fafbfc;
+                background: var(--ow-surface-raised);
             }
         }
         .o-ow-thread-msg-body {
@@ -262,7 +332,7 @@
         }
         .o-ow-compose-header {
             cursor: pointer;
-            background: #fff;
+            background: var(--ow-surface);
         }
         .o-ow-compose-body {
             min-height: 180px;
@@ -271,7 +341,7 @@
             line-height: 1.5;
         }
         .o-ow-compose-toolbar {
-            background: #fafbfc;
+            background: var(--ow-surface-raised);
             flex-wrap: wrap;
             .btn { font-size: 0.8rem; padding: 2px 6px; }
             select { font-size: 0.8rem; padding: 2px 4px; }
@@ -279,10 +349,10 @@
         .card-body { flex: 1 1 auto; overflow-y: auto; min-height: 0; }
 
         .o-ow-att-item {
-            background: #fef3cd;
-            border-left: 3px solid #ffc107;
+            background: var(--ow-warning-soft);
+            border-left: 3px solid var(--ow-warning);
             &:nth-child(even) {
-                background: #fff3cd;
+                background: var(--ow-warning-soft);
             }
         }
 
@@ -291,7 +361,7 @@
             position: absolute;
             z-index: 7;
             pointer-events: none;
-            outline: 2px solid #0d6efd;
+            outline: 2px solid var(--ow-primary);
             outline-offset: 1px;
             border-radius: 2px;
         }
@@ -323,8 +393,8 @@
             z-index: 8;
             width: 14px;
             height: 14px;
-            background: #0d6efd;
-            border: 2px solid #fff;
+            background: var(--ow-primary);
+            border: 2px solid var(--ow-surface);
             border-radius: 50%;
             cursor: nwse-resize;
             touch-action: none;
@@ -335,13 +405,13 @@
             inset: 0;
             z-index: 5;
             pointer-events: none;
-            background: rgba(13, 110, 253, 0.08);
-            border: 2px dashed #0d6efd;
+            background: var(--ow-primary-soft);
+            border: 2px dashed var(--ow-primary);
             border-radius: 8px;
             display: flex;
             align-items: center;
             justify-content: center;
-            color: #0d6efd;
+            color: var(--ow-primary);
             font-weight: 600;
             .o-ow-dropzone-inner {
                 text-align: center;
@@ -362,7 +432,7 @@
             .o-ow-compose-backdrop {
                 position: absolute;
                 top: 0; left: 0; right: 0; bottom: 0;
-                background: rgba(0,0,0,0.4);
+                background: var(--ow-scrim);
             }
             .o-ow-compose-inner {
                 position: relative;
@@ -390,7 +460,7 @@
 /* Mobile (<768px): single-pane stacking, sidebar drawer, full-screen compose. */
 @media (max-width: 767.98px) {
     .o-ow-topbar-mobile {
-        background: #fff;
+        background: var(--ow-surface);
     }
 
     .o-ow-mail {
@@ -403,7 +473,7 @@
             z-index: 1060;
             transform: translateX(-100%);
             transition: transform 0.2s ease;
-            box-shadow: 2px 0 8px rgba(0, 0, 0, 0.15);
+            box-shadow: 2px 0 8px var(--ow-shadow);
 
             /* Override desktop-collapsed narrow styles; drawer is full-size */
             &.o-ow-sidebar-collapsed {
@@ -517,7 +587,7 @@
     .o-ow-sidebar-backdrop {
         position: fixed;
         inset: 0;
-        background: rgba(0, 0, 0, 0.35);
+        background: var(--ow-scrim);
         z-index: 1059;
     }
 
@@ -548,10 +618,10 @@
 }
 
 .o-ow-folders-widget {
-    background: #fff;
+    background: var(--ow-surface);
 
     .o-ow-folders-toolbar {
-        background: #fafbfc;
+        background: var(--ow-surface-raised);
     }
 
     .o-ow-folder-tree {
@@ -559,7 +629,7 @@
         max-height: 420px;
         overflow-y: auto;
         &.o-ow-drop-target {
-            background: #f0f4ff;
+            background: var(--ow-hover);
         }
     }
 
@@ -567,9 +637,9 @@
         cursor: pointer;
         padding: 6px 12px;
         user-select: none;
-        &:hover { background: #f2f5ff; }
-        &.active { background: #dce8ff; }
-        &.o-ow-drop-target { outline: 2px dashed #0d6efd; background: #e8f0ff; }
+        &:hover { background: var(--ow-hover); }
+        &.active { background: var(--ow-selected-strong); }
+        &.o-ow-drop-target { outline: 2px dashed var(--ow-primary); background: var(--ow-primary-soft); }
     }
 
     .o-ow-folder-row .form-switch .form-check-input {
@@ -591,8 +661,8 @@
         border-radius: 6px;
         margin: 1px 4px;
         user-select: none;
-        &:hover { background: #eef; }
-        &.active { background: #dce8ff; font-weight: 600; }
+        &:hover { background: var(--ow-hover); }
+        &.active { background: var(--ow-selected-strong); font-weight: 600; }
         .o-ow-tag-delete { visibility: hidden; }
         &:hover .o-ow-tag-delete { visibility: visible; }
     }
@@ -608,8 +678,8 @@
         top: 100%;
         left: 8px;
         z-index: 1051;
-        background: #fff;
-        border: 1px solid #dee2e6;
+        background: var(--ow-surface);
+        border: 1px solid var(--ow-border);
         border-radius: 8px;
         padding: 6px;
         display: flex;
@@ -625,7 +695,7 @@
         cursor: pointer;
         border: 2px solid transparent;
         &:hover { transform: scale(1.15); }
-        &.active { border-color: #212529; }
+        &.active { border-color: var(--ow-text); }
     }
 
     .o-ow-chip-row .badge {
@@ -635,22 +705,22 @@
     }
 
     .o-ow-customer-badge {
-        background: #e7f1ec;
-        color: #1d7a4f;
-        border: 1px solid #bcd9c9;
+        background: var(--ow-success-soft);
+        color: var(--ow-success);
+        border: 1px solid var(--ow-success-border);
         font-weight: 500;
     }
 
     .o-ow-viewer-tags .o-ow-tag-toggle {
         display: inline-flex;
         align-items: center;
-        background: #fff;
-        border: 1px solid #ced4da;
-        color: #495057;
+        background: var(--ow-surface);
+        border: 1px solid var(--ow-border-strong);
+        color: var(--ow-text);
         font-size: 0.72rem;
         font-weight: 500;
         cursor: pointer;
-        &:hover { border-color: #8b8f94; }
+        &:hover { border-color: var(--ow-border-strong); }
     }
 
     // Linked-record chips — inline at subject height (single + thread view)
@@ -668,13 +738,13 @@
 // ---- Accessibility: visible keyboard-focus ring on all interactive parts ----
 .o-ow-mail {
     :focus-visible {
-        outline: 2px solid #0d6efd;
+        outline: 2px solid var(--ow-primary);
         outline-offset: 1px;
         border-radius: 4px;
     }
 
     .o-ow-onboarding {
-        background: #fff;
+        background: var(--ow-surface);
     }
 
     .o-ow-save-status {
@@ -686,12 +756,124 @@
     font-family: ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
     font-size: 0.8rem;
     line-height: 1.45;
-    background: #f8f9fa;
-    border: 1px solid #e5e7eb;
+    background: var(--ow-surface-raised);
+    border: 1px solid var(--ow-border);
     border-radius: 4px;
     padding: 10px 12px;
     max-height: 65vh;
     overflow: auto;
     white-space: pre-wrap;
     word-break: break-word;
+}
+
+// ---------------------------------------------------------------------------
+// Dark theme: Bootstrap utility classes used in the templates are not
+// dark-aware in community Odoo, so they are re-based on the tokens here.
+// The `:has()` scope extends the theming to the modal chrome around our
+// dialog content (which renders outside `.o-ow-mail`).
+// ---------------------------------------------------------------------------
+.o-ow-mail.o-ow-dark,
+.o-ow-themed.o-ow-dark,
+.modal-content:has(.o-ow-themed.o-ow-dark) {
+    background-color: var(--ow-surface);
+    color: var(--ow-text);
+
+    // Bootstrap/Odoo set an explicit dark headings color; re-base it.
+    h1, h2, h3, h4, h5, h6 { color: var(--ow-text); }
+    strong, b { color: var(--ow-text); }
+
+    .text-muted { color: var(--ow-text-muted) !important; }
+
+    .border, .border-top, .border-bottom, .border-start, .border-end {
+        border-color: var(--ow-border) !important;
+    }
+
+    .btn-light {
+        background-color: var(--ow-surface-raised);
+        border-color: var(--ow-border);
+        color: var(--ow-text);
+
+        &:hover, &.active {
+            background-color: var(--ow-hover);
+            border-color: var(--ow-border-strong);
+            color: var(--ow-text);
+        }
+    }
+    .btn-outline-secondary {
+        color: var(--ow-text-muted);
+        border-color: var(--ow-border-strong);
+
+        &:hover {
+            background-color: var(--ow-hover);
+            color: var(--ow-text);
+        }
+    }
+    .btn-outline-primary {
+        color: var(--ow-primary);
+        border-color: var(--ow-primary);
+    }
+
+    .form-control, .form-select {
+        background-color: var(--ow-surface-raised);
+        border-color: var(--ow-border);
+        color: var(--ow-text);
+
+        &::placeholder { color: var(--ow-text-muted); }
+        &:focus {
+            background-color: var(--ow-surface-raised);
+            color: var(--ow-text);
+        }
+    }
+    .form-check-input:not(:checked) {
+        background-color: var(--ow-surface-raised);
+        border-color: var(--ow-border-strong);
+    }
+    .form-text { color: var(--ow-text-muted); }
+
+    .dropdown-menu {
+        background-color: var(--ow-surface);
+        border-color: var(--ow-border);
+
+        .dropdown-item {
+            color: var(--ow-text);
+
+            &:hover, &:focus { background-color: var(--ow-hover); }
+        }
+        .dropdown-header { color: var(--ow-text-muted); }
+        .dropdown-divider { border-color: var(--ow-border); }
+    }
+
+    .badge.bg-secondary {
+        background-color: var(--ow-count-bg) !important;
+        color: var(--ow-on-accent);
+    }
+    .alert-info {
+        background-color: var(--ow-primary-soft);
+        border-color: var(--ow-primary-border);
+        color: var(--ow-text);
+    }
+    .card, .list-group-item {
+        background-color: var(--ow-surface-raised);
+        border-color: var(--ow-border);
+        color: var(--ow-text);
+    }
+}
+
+// Modal chrome (header/footer live outside our themed slot content)
+.modal-content:has(.o-ow-themed.o-ow-dark) {
+    border: 1px solid var(--ow-border-strong);
+    box-shadow: 0 10px 34px rgba(0, 0, 0, 0.55);
+
+    .modal-header, .modal-footer { border-color: var(--ow-border); }
+    .modal-title { color: var(--ow-text); }
+    .btn-close { filter: invert(1) grayscale(1); }
+    .btn-secondary {
+        background-color: var(--ow-surface-raised);
+        border-color: var(--ow-border-strong);
+        color: var(--ow-text);
+    }
+}
+
+.o-ow-list-sentinel {
+    height: 1px;
 }

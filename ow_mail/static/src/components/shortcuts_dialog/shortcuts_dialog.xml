@@ -3,7 +3,7 @@
 
 <t t-name="ow_mail.ShortcutsDialog">
     <Dialog title="title" size="'md'">
-        <div class="o-ow-shortcuts row">
+        <div class="o-ow-shortcuts row" t-att-class="themeClass">
             <t t-foreach="groups" t-as="group" t-key="group.label">
                 <div class="col-sm-6">
                     <div class="text-muted small text-uppercase fw-semibold mb-2"

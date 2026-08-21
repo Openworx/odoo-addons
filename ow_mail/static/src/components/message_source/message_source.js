@@ -2,6 +2,7 @@
 
 import { Component, onWillStart, useState } from "@odoo/owl";
 import { Dialog } from "@web/core/dialog/dialog";
+import { useService } from "@web/core/utils/hooks";
 
 /**
  * Modal dialog for inspecting the raw RFC 822 source of a message.
@@ -28,6 +29,7 @@ export class MessageSourceDialog extends Component {
      * or an error message instead of blank content.
      */
     setup() {
+        this.mail = useService("ow_mail");
         this.state = useState({ text: "", loading: true, error: "" });
         onWillStart(async () => {
             try {
@@ -66,5 +68,10 @@ export class MessageSourceDialog extends Component {
             "_blank",
             "noopener"
         );
+    }
+
+    /** Theme scope classes for content rendered outside .o-ow-mail. */
+    get themeClass() {
+        return this.mail.state.darkMode ? "o-ow-themed o-ow-dark" : "o-ow-themed";
     }
 }

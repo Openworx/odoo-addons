@@ -2,6 +2,7 @@
 
 import { Component } from "@odoo/owl";
 import { Dialog } from "@web/core/dialog/dialog";
+import { useService } from "@web/core/utils/hooks";
 import { _t } from "@web/core/l10n/translation";
 
 /**
@@ -16,6 +17,7 @@ export class ShortcutsDialog extends Component {
     static props = { close: Function };
 
     setup() {
+        this.mail = useService("ow_mail");
         this.title = _t("Keyboard Shortcuts");
         this.groups = [
             {
@@ -41,5 +43,10 @@ export class ShortcutsDialog extends Component {
                 ],
             },
         ];
+    }
+
+    /** Theme scope classes for content rendered outside .o-ow-mail. */
+    get themeClass() {
+        return this.mail.state.darkMode ? "o-ow-themed o-ow-dark" : "o-ow-themed";
     }
 }

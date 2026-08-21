@@ -30,8 +30,25 @@ export class SettingsDialog extends Component {
             mark_read_delay: String(this.mail.state.prefs.mark_read_delay || 0),
             thread_view_default: this.mail.state.prefs.thread_view_default,
             stacked_threads: this.mail.state.prefs.stacked_threads,
+            theme: this.mail.state.prefs.theme || "system",
+            infinite_scroll: this.mail.state.prefs.infinite_scroll,
         });
         this.title = _t("Mail Settings");
+    }
+
+
+    /** Theme scope classes for content rendered outside .o-ow-mail. */
+    get themeClass() {
+        return this.mail.state.darkMode ? "o-ow-themed o-ow-dark" : "o-ow-themed";
+    }
+
+    /** Options for the theme select. */
+    get themeOptions() {
+        return [
+            { value: "system", label: _t("Follow Odoo theme / system") },
+            { value: "light", label: _t("Light") },
+            { value: "dark", label: _t("Dark") },
+        ];
     }
 
     /** Options for the mark-read-delay select. */
@@ -49,6 +66,8 @@ export class SettingsDialog extends Component {
             mark_read_delay: parseInt(this.local.mark_read_delay, 10) || 0,
             thread_view_default: !!this.local.thread_view_default,
             stacked_threads: !!this.local.stacked_threads,
+            theme: this.local.theme,
+            infinite_scroll: !!this.local.infinite_scroll,
         });
         if (ok) {
             this.props.close();

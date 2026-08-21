@@ -9,7 +9,7 @@
             white-space: normal;
 
             &.active {
-                background-color: #e7f1ff;
+                background-color: var(--ow-selected);
                 color: inherit;
             }
         }

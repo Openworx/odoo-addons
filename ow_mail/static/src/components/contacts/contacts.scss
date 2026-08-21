@@ -1,12 +1,12 @@
 .o-ow-contacts {
-    background: #fff;
+    background: var(--ow-surface);
 }
 
 .o-ow-contact-list {
     width: 320px;
     min-width: 260px;
     max-width: 360px;
-    background: #fafafa;
+    background: var(--ow-surface-muted);
 }
 
 .o-ow-contact-row {
@@ -14,16 +14,16 @@
     transition: background-color 0.1s ease;
 
     &:hover {
-        background: #f0f0f0;
+        background: var(--ow-hover);
     }
 
     &.active {
-        background: #e7f1ff;
+        background: var(--ow-selected);
     }
 }
 
 .o-ow-contact-detail {
-    background: #fff;
+    background: var(--ow-surface);
 }
 
 @media (max-width: 767.98px) {

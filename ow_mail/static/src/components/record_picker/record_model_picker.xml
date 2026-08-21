@@ -3,6 +3,7 @@
 
 <t t-name="ow_mail.RecordModelPickerDialog">
     <Dialog title="title" size="'md'">
+        <div t-att-class="themeClass">
         <input type="text" class="form-control mb-2" placeholder="Filter models…"
                t-model="local.filter" autofocus="autofocus"/>
         <div class="o-ow-model-picker-list overflow-auto" style="max-height: 50vh;">
@@ -16,6 +17,7 @@
             <div t-if="!filteredModels.length" class="text-muted small p-2">
                 No matching models
             </div>
+        </div>
         </div>
         <t t-set-slot="footer">
             <button class="btn btn-secondary" t-on-click="() => this.props.close()">Cancel</button>

@@ -1,6 +1,6 @@
 {
     "name": "OW Mail",
-    "version": "19.0.1.12.1",
+    "version": "19.0.1.13.0",
     "summary": "Mail client for Odoo backend (IMAP/SMTP, multi-account, tags, safe mode)",
     "description": """
 OW Mail — personal mail client inside Odoo.
@@ -15,6 +15,10 @@ Features:
 * Floating compose window with draft autosave
 * Create Odoo records from an email (contact, task, lead, ticket, …) with a prefilled dialog
 * Attach an email to any record; linked records shown next to the message
+* Auto-file replies on linked records (opt-in per mailbox)
+* Dark mode: light/dark/follow the Odoo theme, per user
+* Optional infinite scrolling in the message list
+* Mobile-friendly reading view with single scroll and floating reply
 
 * Message preview snippets in the list view
 * Starred / Unread smart folders across accounts

@@ -86,6 +86,7 @@
                         <page string="Notifications" name="notifications">
                             <group>
                                 <field name="notify_new_mail"/>
+                                <field name="auto_link_replies"/>
                             </group>
                         </page>
                         <page string="Incoming Server" name="incoming">

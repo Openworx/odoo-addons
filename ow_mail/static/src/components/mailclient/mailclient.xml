@@ -10,6 +10,7 @@
             'o-ow-mobile-viewer': state.viewport === 'mobile' &amp;&amp; !!state.selectedMessage &amp;&amp; state.view === 'mail',
             'o-ow-mobile-contacts-detail': state.viewport === 'mobile' &amp;&amp; state.contactsDetailOpen &amp;&amp; state.view === 'contacts',
             'o-ow-sidebar-overlay-open': state.sidebarOverlayOpen,
+            'o-ow-dark': state.darkMode,
          }">
         <div class="o-ow-topbar-mobile d-flex align-items-center gap-2 px-2 py-1 border-bottom"
              t-if="state.viewport === 'mobile'">

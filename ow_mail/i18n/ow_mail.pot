@@ -6,14 +6,23 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 18.0-20260630\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-08-21 11:32+0000\n"
-"PO-Revision-Date: 2026-08-21 11:32+0000\n"
+"POT-Creation-Date: 2026-08-21 15:17+0000\n"
+"PO-Revision-Date: 2026-08-21 15:17+0000\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: \n"
 "Plural-Forms: \n"
+
+#. module: ow_mail
+#. odoo-javascript
+#: code:addons/ow_mail/static/src/components/settings_dialog/settings_dialog.xml:0
+msgid ""
+"\"Follow Odoo theme / system\" tracks the backend dark-mode\n"
+"                    toggle when a theme module provides one, otherwise your\n"
+"                    operating system preference."
+msgstr ""
 
 #. module: ow_mail
 #: model_terms:ir.ui.view,arch_db:ow_mail.view_ow_mail_account_form
@@ -159,6 +168,11 @@ msgstr ""
 #: code:addons/ow_mail/static/src/components/message_viewer/message_viewer.xml:0
 #: model:ir.model.fields,field_description:ow_mail.field_ow_mail_compose__attachment_ids
 msgid "Attachments"
+msgstr ""
+
+#. module: ow_mail
+#: model:ir.model.fields,field_description:ow_mail.field_ow_mail_folder__auto_link_uid
+msgid "Auto Link Uid"
 msgstr ""
 
 #. module: ow_mail
@@ -508,6 +522,13 @@ msgstr ""
 
 #. module: ow_mail
 #. odoo-javascript
+#: code:addons/ow_mail/static/src/components/settings_dialog/settings_dialog.js:0
+#: model:ir.model.fields.selection,name:ow_mail.selection__ow_mail_preferences__theme__dark
+msgid "Dark"
+msgstr ""
+
+#. module: ow_mail
+#. odoo-javascript
 #: code:addons/ow_mail/static/src/components/message_list/message_list.js:0
 #: model:ir.model.fields,field_description:ow_mail.field_ow_mail_attach_record__date
 msgid "Date"
@@ -701,6 +722,11 @@ msgid "Fetch folders failed: %s"
 msgstr ""
 
 #. module: ow_mail
+#: model:ir.model.fields,field_description:ow_mail.field_ow_mail_account__auto_link_replies
+msgid "File replies on linked records"
+msgstr ""
+
+#. module: ow_mail
 #. odoo-javascript
 #: code:addons/ow_mail/static/src/components/message_list/message_list.js:0
 msgid "Filter"
@@ -762,6 +788,12 @@ msgstr ""
 #. odoo-python
 #: code:addons/ow_mail/models/ow_mail_account.py:0
 msgid "Folders fetched"
+msgstr ""
+
+#. module: ow_mail
+#. odoo-javascript
+#: code:addons/ow_mail/static/src/components/settings_dialog/settings_dialog.js:0
+msgid "Follow Odoo theme / system"
 msgstr ""
 
 #. module: ow_mail
@@ -849,6 +881,13 @@ msgstr ""
 #. odoo-python
 #: code:addons/ow_mail/models/ow_mail_record_link.py:0
 msgid "Helpdesk Ticket"
+msgstr ""
+
+#. module: ow_mail
+#: model:ir.model.fields,help:ow_mail.field_ow_mail_folder__auto_link_uid
+msgid ""
+"Highest UID processed by reply auto-filing — independent of last_seen_uid "
+"and advanced only after successful processing"
 msgstr ""
 
 #. module: ow_mail
@@ -1054,6 +1093,17 @@ msgid "Increase indent"
 msgstr ""
 
 #. module: ow_mail
+#: model:ir.model.fields,field_description:ow_mail.field_ow_mail_preferences__infinite_scroll
+msgid "Infinite Scroll"
+msgstr ""
+
+#. module: ow_mail
+#. odoo-javascript
+#: code:addons/ow_mail/static/src/components/settings_dialog/settings_dialog.xml:0
+msgid "Infinite scrolling in the message list"
+msgstr ""
+
+#. module: ow_mail
 #. odoo-javascript
 #: code:addons/ow_mail/static/src/components/compose_window/compose_window.xml:0
 msgid "Insert image"
@@ -1166,6 +1216,13 @@ msgstr ""
 
 #. module: ow_mail
 #. odoo-javascript
+#: code:addons/ow_mail/static/src/components/settings_dialog/settings_dialog.js:0
+#: model:ir.model.fields.selection,name:ow_mail.selection__ow_mail_preferences__theme__light
+msgid "Light"
+msgstr ""
+
+#. module: ow_mail
+#. odoo-javascript
 #: code:addons/ow_mail/static/src/components/message_viewer/message_viewer.xml:0
 msgid "Linked:"
 msgstr ""
@@ -1175,6 +1232,14 @@ msgstr ""
 #: code:addons/ow_mail/static/src/components/contacts/contacts.xml:0
 #: code:addons/ow_mail/static/src/components/message_source/message_source.xml:0
 msgid "Loading…"
+msgstr ""
+
+#. module: ow_mail
+#. odoo-javascript
+#: code:addons/ow_mail/static/src/components/settings_dialog/settings_dialog.xml:0
+msgid ""
+"Loads more messages automatically while you scroll,\n"
+"                    instead of pages of 50."
 msgstr ""
 
 #. module: ow_mail
@@ -2068,6 +2133,11 @@ msgid "Sync this mailbox"
 msgstr ""
 
 #. module: ow_mail
+#: model:ir.model.fields.selection,name:ow_mail.selection__ow_mail_preferences__theme__system
+msgid "System"
+msgstr ""
+
+#. module: ow_mail
 #: model:ir.model.constraint,message:ow_mail.constraint_ow_mail_tag_user_name_uniq
 msgid "Tag name must be unique per user."
 msgstr ""
@@ -2118,6 +2188,13 @@ msgstr ""
 #. odoo-python
 #: code:addons/ow_mail/models/ow_mail_record_link.py:0
 msgid "The selected record does not exist."
+msgstr ""
+
+#. module: ow_mail
+#. odoo-javascript
+#: code:addons/ow_mail/static/src/components/settings_dialog/settings_dialog.xml:0
+#: model:ir.model.fields,field_description:ow_mail.field_ow_mail_preferences__theme
+msgid "Theme"
 msgstr ""
 
 #. module: ow_mail
@@ -2291,6 +2368,13 @@ msgid "View original"
 msgstr ""
 
 #. module: ow_mail
+#: model:ir.model.fields,help:ow_mail.field_ow_mail_account__auto_link_replies
+msgid ""
+"When a new inbox message is a reply in a thread that was already attached to"
+" an Odoo record, post it automatically to that record's chatter."
+msgstr ""
+
+#. module: ow_mail
 #. odoo-javascript
 #: code:addons/ow_mail/static/src/components/settings_dialog/settings_dialog.xml:0
 msgid "When an opened message is marked as read."
@@ -2388,6 +2472,7 @@ msgstr ""
 
 #. module: ow_mail
 #. odoo-javascript
+#: code:addons/ow_mail/static/src/components/message_list/message_list.xml:0
 #: code:addons/ow_mail/static/src/components/message_viewer/message_viewer.xml:0
 msgid "messages"
 msgstr ""

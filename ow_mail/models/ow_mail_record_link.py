@@ -316,8 +316,9 @@ class OwMailRecordLink(models.AbstractModel):
             "ow_mail_message_id": envelope.get("message_id") or False,
         })
         # Odoo 19 ORM: a later search() on these fields no longer flushes
-        # this pending write, so the duplicate guard would miss attaches in
-        # the same transaction without an explicit flush.
+        # this pending write, so the duplicate guard (and same-tick reply
+        # auto-filing) would miss attaches in the same transaction without
+        # an explicit flush.
         stamped.flush_recordset(
             ["ow_mail_uid", "ow_mail_folder_id", "ow_mail_message_id"])
         if author:
