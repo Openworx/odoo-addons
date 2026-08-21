@@ -132,8 +132,8 @@ function buildThreads(messages) {
  *   (e.g. new mail detected by the IMAP cron).
  */
 export const owMailService = {
-    dependencies: ["notification", "bus_service", "orm", "title"],
-    async start(env, { notification, bus_service, orm, title }) {
+    dependencies: ["notification", "bus_service", "orm", "title", "action"],
+    async start(env, { notification, bus_service, orm, title, action }) {
         const PAGE_SIZE = 50;
         const LS_SORT_BY = "ow_mail.sortBy";
         const LS_SORT_ORDER = "ow_mail.sortOrder";
@@ -167,6 +167,9 @@ export const owMailService = {
             bootstrapped: false,
             prefs: { mark_read_delay: 0, thread_view_default: false,
                      stacked_threads: true },
+            // Curated "Create record" dropdown entries; filled by bootstrap
+            // (server filters on installed models + create access).
+            createMenu: [],
             // selection.smart: "starred" | "unread" | null — virtual
             // cross-account smart folders (implemented as the existing
             // all-mailboxes view + FLAGGED/UNSEEN filter).
@@ -229,6 +232,7 @@ export const owMailService = {
             const data = await rpc("/ow_mail/bootstrap");
             state.accounts = data.accounts;
             state.tags = data.tags;
+            state.createMenu = data.create_menu || [];
             if (data.prefs) {
                 Object.assign(state.prefs, data.prefs);
                 // The server-side default only applies while the user has no
@@ -847,6 +851,82 @@ export const owMailService = {
                 return null;
             }
             return res;
+        }
+
+        /**
+         * Server-computed `default_*` context for the create-record dialog.
+         *
+         * @async
+         * @param {number} folderId
+         * @param {number} uid
+         * @param {object} args - `{key}` for a curated dropdown entry, or
+         *   `{model}` for a pick from the "Other…" dialog.
+         * @returns {object|null} `{model, context, title}` or `null` on error.
+         */
+        async function recordPrefill(folderId, uid, args) {
+            const res = await rpc("/ow_mail/record/prefill",
+                { folder_id: folderId, uid, ...args });
+            if (res && res.error) {
+                notification.add(_t("Could not prepare record: %s", res.error),
+                    { type: "danger" });
+                return null;
+            }
+            return res;
+        }
+
+        /**
+         * Attach the email to an existing record (post into its chatter).
+         *
+         * On success: updates the linked-records bar of the still-open
+         * message and shows a success toast with an "Open" button.
+         *
+         * @async
+         * @returns {object|null} attach result or `null` on error.
+         */
+        async function recordAttach(folderId, uid, model, resId) {
+            const res = await rpc("/ow_mail/record/attach",
+                { folder_id: folderId, uid, model, res_id: resId });
+            if (res && res.error) {
+                notification.add(_t("Could not link email: %s", res.error),
+                    { type: "danger" });
+                return null;
+            }
+            const entry = { model: res.model, res_id: res.res_id,
+                            display_name: res.display_name };
+            const addTo = (m) => {
+                if (!m || m.folder_id !== folderId || m.uid !== uid) return;
+                const linked = m.linked_records || [];
+                if (!linked.some((r) => r.model === entry.model && r.res_id === entry.res_id)) {
+                    m.linked_records = [...linked, entry];
+                }
+            };
+            addTo(state.selectedMessage);
+            (state.threadMessages || []).forEach(addTo);
+            notification.add(_t("Email linked to %s", res.display_name), {
+                type: "success",
+                buttons: [{
+                    name: _t("Open"),
+                    onClick: () => action.doAction({
+                        type: "ir.actions.act_window",
+                        res_model: res.model,
+                        res_id: res.res_id,
+                        views: [[false, "form"]],
+                        target: "current",
+                    }),
+                }],
+            });
+            return res;
+        }
+
+        // "Other…" picker list — cached per session: the creatable-model
+        // set only changes with module installs or ACL edits.
+        let _recordModelsCache = null;
+        async function recordModels() {
+            if (!_recordModelsCache) {
+                const res = await rpc("/ow_mail/record/models", {});
+                _recordModelsCache = (res && res.models) || [];
+            }
+            return _recordModelsCache;
         }
 
         /**
@@ -1760,6 +1840,7 @@ export const owMailService = {
             moveSelection, openReply, openForward,
             archiveSelected, deleteSelected, toggleStarSelected, toggleReadSelected,
             focusSearch, goAllMailboxes, goInbox, addInviteToCalendar,
+            recordPrefill, recordAttach, recordModels,
             createFolder, renameFolder, moveFolder, deleteFolder, emptyFolder,
             subscribeFolder, fetchQuota,
             setView, loadContacts, createContact, updateContact, deleteContact,

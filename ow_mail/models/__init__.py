@@ -9,4 +9,4 @@ from . import ow_mail_preferences
 from . import ow_mail_trusted_sender
 from . import res_partner
 from . import mail_message
-from . import mail_thread
+from . import ow_mail_record_link

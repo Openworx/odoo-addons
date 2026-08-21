@@ -15,6 +15,7 @@ import re
 from urllib.parse import quote
 
 from odoo import _, http
+from odoo.exceptions import UserError
 from odoo.http import Response, request
 
 from ..models import ow_mail_imap as imap_utils
@@ -107,7 +108,7 @@ def _security_headers(extra=None):
 def _get_folder(folder_id):
     """Resolve *folder_id* and assert ownership.
 
-    CLAUDE.md is explicit: controllers must not rely on ``ir.rule`` alone.
+    Project convention: controllers must not rely on ``ir.rule`` alone.
     This helper is defense-in-depth — if a rule is ever dropped or widened
     by mistake, every controller route still rejects cross-user access.
     """
@@ -424,6 +425,7 @@ class OwMailController(http.Controller):
             "tags": [{"id": t.id, "name": t.name, "color": t.color,
                       "keyword": t.imap_keyword} for t in tags],
             "prefs": request.env["ow.mail.preferences"]._get_for_user()._to_wire(),
+            "create_menu": request.env["ow.mail.record.link"].get_create_menu(),
         }
 
     @http.route("/ow_mail/prefs/save", type="json", auth="user")
@@ -693,14 +695,7 @@ class OwMailController(http.Controller):
 
         partner_ids = []
         for att in invite.get("attendees") or []:
-            addr = (att.get("email") or "").lower()
-            if not addr:
-                continue
-            p = request.env["res.partner"].search(
-                [("email_normalized", "=", addr)], limit=1)
-            if not p:
-                p = request.env["res.partner"].search(
-                    [("email", "=ilike", addr)], limit=1)
+            p = request.env["res.partner"]._ow_find_by_email(att.get("email"))
             if p:
                 partner_ids.append(p.id)
 
@@ -722,6 +717,98 @@ class OwMailController(http.Controller):
             "target": "new",
             "context": context,
         }
+
+    @http.route("/ow_mail/record/prefill", type="json", auth="user")
+    def record_prefill(self, folder_id, uid, key=None, model=None):
+        """Server-computed ``default_*`` context for the create-record dialog.
+
+        Exactly one of ``key`` (curated dropdown entry) or ``model`` (from
+        the "Other…" picker) must be given; both are re-validated against
+        the installed + create-allowed filters, so the client can never
+        smuggle in an arbitrary model or context. Mirrors the
+        ``calendar_from_invite`` pattern: fetch once, parse + sanitize
+        server-side, return prefill data for the FormViewDialog.
+        """
+        folder = _get_folder(folder_id)
+        if not folder:
+            return _imap_err("Folder not found")
+        Link = request.env["ow.mail.record.link"]
+        extra_context = None
+        if key:
+            entry = Link.menu_entry(key)
+            if not entry:
+                return _imap_err("Unknown create action")
+            model_name = entry["model"]
+            title = str(entry["label"])
+            extra_context = entry.get("extra_context")
+        elif model:
+            row = next((r for r in Link.get_creatable_models()
+                        if r["model"] == model), None)
+            if not row:
+                return _imap_err("Model not available")
+            model_name, title = model, row["name"]
+        else:
+            return _imap_err("Missing key or model")
+
+        try:
+            with imap_utils.imap_session(folder.account_id, folder.full_path,
+                                         readonly=True) as conn:
+                _flags, raw = imap_utils.fetch_full(conn, int(uid))
+        except Exception as e:
+            _logger.warning("record prefill fetch failed: %s", e)
+            return _imap_err(e)
+        if not raw:
+            return _imap_err("Message not found")
+        msg = email.message_from_bytes(raw)
+        envelope = imap_utils.parse_envelope(msg)
+        text, html, _inline, _atts = imap_utils.extract_parts(msg)
+        # No _rewrite_inline here: /ow_mail/inline URLs embedded in a record
+        # description would 404 for every other user of that record.
+        sanitized, _has_remote = imap_utils.sanitize_and_detect(html or "")
+        if not sanitized and text:
+            sanitized = "<pre>%s</pre>" % text.replace("<", "&lt;")
+        context = Link.prefill_context(model_name, envelope, sanitized,
+                                       extra_context=extra_context)
+        return {"model": model_name, "context": context, "title": title}
+
+    @http.route("/ow_mail/record/attach", type="json", auth="user")
+    def record_attach(self, folder_id, uid, model, res_id,
+                      include_attachments=True):
+        """Post the email into the chatter of *model*/*res_id*.
+
+        Called by the FormViewDialog's ``onRecordSaved`` callback right
+        after the record is created, and reusable for any explicit
+        attach. All heavy lifting (fetch, sanitize, duplicate guard,
+        Message-ID stamping) lives in ``ow.mail.record.link``.
+        """
+        folder = _get_folder(folder_id)
+        if not folder:
+            return _imap_err("Folder not found")
+        try:
+            message = request.env["ow.mail.record.link"].attach_email(
+                folder, int(uid), model, int(res_id),
+                include_attachments=bool(include_attachments))
+        except UserError as e:
+            return _imap_err(e)
+        except Exception as e:
+            _logger.warning("record attach failed: %s", e)
+            return _imap_err(e)
+        record = request.env[model].browse(int(res_id))
+        return {
+            "ok": True,
+            "mail_message_id": message.id,
+            "model": model,
+            "res_id": record.id,
+            "display_name": record.display_name,
+        }
+
+    @http.route("/ow_mail/record/models", type="json", auth="user")
+    def record_models(self):
+        """Models for the "Other…" picker — fetched lazily when it opens
+        (the ir.model scan is the expensive part, so it stays out of
+        bootstrap)."""
+        return {"models": request.env["ow.mail.record.link"]
+                .get_creatable_models()}
 
     @http.route("/ow_mail/message", type="json", auth="user")
     def message(self, folder_id, uid, peek=False):
@@ -772,11 +859,7 @@ class OwMailController(http.Controller):
         trusted = _is_sender_trusted(folder.account_id.user_id.id, env["from_email"])
         invite = imap_utils.extract_invite(msg, default_tz=request.env.user.tz)
 
-        partner = request.env["res.partner"].search(
-            [("email_normalized", "=", env["from_email"])], limit=1
-        ) or request.env["res.partner"].search(
-            [("email", "=ilike", env["from_email"])], limit=1
-        )
+        partner = request.env["res.partner"]._ow_find_by_email(env["from_email"])
 
         # flags_str is the raw FETCH response line (e.g. ``1 (UID 1 FLAGS
         # (\Seen OwTag_X) BODY[] {n}``) — extract the FLAGS group before
@@ -811,6 +894,8 @@ class OwMailController(http.Controller):
                 "is_inline": False,
             } for a in atts],
             "partner_id": partner.id or False,
+            "linked_records": request.env["ow.mail.record.link"]
+                .linked_records(folder, int(uid), env["message_id"]),
             "folder_kind": folder.kind,
             "invite": invite,
             "flags": {
@@ -893,6 +978,10 @@ class OwMailController(http.Controller):
                                 "url": f"/ow_mail/attachment/{fid}/{uid}/{a['section']}",
                             } for a in atts],
                             "folder_kind": folder.kind,
+                            "linked_records":
+                                request.env["ow.mail.record.link"]
+                                .linked_records(folder, int(uid),
+                                                env["message_id"]),
                         })
             except Exception as e:
                 _logger.warning("thread search failed for folder %s: %s", fid, e)

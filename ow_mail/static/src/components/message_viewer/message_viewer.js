@@ -6,6 +6,8 @@ import { owColor } from "../../utils/colors";
 import { SafeModeBanner } from "../safe_mode_banner/safe_mode_banner";
 import { AvatarInitials } from "../avatar_initials/avatar_initials";
 import { MessageSourceDialog } from "../message_source/message_source";
+import { RecordModelPickerDialog } from "../record_picker/record_model_picker";
+import { FormViewDialog } from "@web/views/view_dialogs/form_view_dialog";
 
 const BLANK_PIXEL = "data:image/gif;base64,R0lGODlhAQABAAAAACw=";
 const XLINK_NS = "http://www.w3.org/1999/xlink";
@@ -651,26 +653,92 @@ export class MessageViewer extends Component {
     }
 
     /**
-     * Open the "Create Record" wizard for the currently displayed message.
+     * Create an Odoo record from the current message via a curated
+     * dropdown entry (Contact, Task, Lead, …).
+     *
+     * @param {object} entry - `{key, model, label, icon}` from
+     *   `state.createMenu`.
      */
-    async onCreateRecord() {
-        const msg = this.state.selectedMessage;
-        if (!msg) return;
+    async onCreateFromMenu(entry) {
+        await this._openCreateDialog({ key: entry.key });
+    }
 
+    /**
+     * "Other…": pick any creatable mail-thread model, then run the same
+     * prefill + dialog flow.
+     */
+    async onCreateOther() {
+        const models = await this.mail.recordModels();
+        this.dialog.add(RecordModelPickerDialog, {
+            models,
+            onConfirm: (model) => this._openCreateDialog({ model }),
+        });
+    }
+
+    /**
+     * Shared create-record flow: ask the server for a prefilled context,
+     * open a FormViewDialog inside the mail client, and attach the email
+     * to the record right after it is saved.
+     *
+     * Known gap: the dialog's header "expand" button navigates to the
+     * full form and saves outside `saveRecord`, so `onRecordSaved` never
+     * fires on that path — the email is then not attached automatically
+     * (the user can still use "Attach to record").
+     *
+     * @param {object} prefillArgs - `{key}` or `{model}`.
+     */
+    async _openCreateDialog(prefillArgs) {
+        const m = this.state.selectedMessage;
+        if (!m) return;
+        // Capture identity now — the selection can change while the
+        // form dialog is open.
+        const { folder_id, uid } = m;
+        const res = await this.mail.recordPrefill(folder_id, uid, prefillArgs);
+        if (!res) return; // service already showed the error toast
+        this.dialog.add(FormViewDialog, {
+            resModel: res.model,
+            context: res.context,
+            title: res.title,
+            size: "lg",
+            onRecordSaved: async (record) => {
+                await this.mail.recordAttach(folder_id, uid, res.model, record.resId);
+            },
+        });
+    }
+
+    /**
+     * Union of the linked records of all messages in the open thread,
+     * deduped on (model, res_id) — shown at subject height in the
+     * stacked view.
+     *
+     * @returns {object[]} `[{model, res_id, display_name}]`
+     */
+    get threadLinkedRecords() {
+        const seen = new Set();
+        const result = [];
+        for (const tm of this.state.threadMessages || []) {
+            for (const lr of tm.linked_records || []) {
+                const key = `${lr.model}:${lr.res_id}`;
+                if (seen.has(key)) continue;
+                seen.add(key);
+                result.push(lr);
+            }
+        }
+        return result;
+    }
+
+    /**
+     * Open a record linked to this email (linked-records chips).
+     *
+     * @param {object} lr - `{model, res_id, display_name}`.
+     */
+    onOpenLinked(lr) {
         this.action.doAction({
             type: "ir.actions.act_window",
-            res_model: "ow.mail.create.record",
+            res_model: lr.model,
+            res_id: lr.res_id,
             views: [[false, "form"]],
-            target: "new",
-            context: {
-                default_folder_id: msg.folder_id,
-                default_uid: msg.uid,
-                default_subject: msg.subject,
-                default_from_name: msg.from_name,
-                default_from_email: msg.from_email,
-                default_date: msg.date,
-                default_body_html: msg.html,
-            },
+            target: "current",
         });
     }
 

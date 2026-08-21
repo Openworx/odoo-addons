@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+
+<t t-name="ow_mail.RecordModelPickerDialog">
+    <Dialog title="title" size="'md'">
+        <input type="text" class="form-control mb-2" placeholder="Filter models…"
+               t-model="local.filter" autofocus="autofocus"/>
+        <div class="o-ow-model-picker-list overflow-auto" style="max-height: 50vh;">
+            <t t-foreach="filteredModels" t-as="m" t-key="m.model">
+                <button class="list-group-item list-group-item-action w-100 text-start border-0 py-2"
+                        t-on-click="() => this.onPick(m.model)">
+                    <span t-esc="m.name"/>
+                    <span class="text-muted small ms-2" t-esc="m.model"/>
+                </button>
+            </t>
+            <div t-if="!filteredModels.length" class="text-muted small p-2">
+                No matching models
+            </div>
+        </div>
+        <t t-set-slot="footer">
+            <button class="btn btn-secondary" t-on-click="() => this.props.close()">Cancel</button>
+        </t>
+    </Dialog>
+</t>
+
+</templates>

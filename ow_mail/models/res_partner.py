@@ -1,8 +1,23 @@
-from odoo import _, models
+from odoo import _, api, models
 
 
 class ResPartner(models.Model):
     _inherit = "res.partner"
+
+    @api.model
+    def _ow_find_by_email(self, email):
+        """Resolve a sender address to a partner.
+
+        Exact match on ``email_normalized`` first, then a case-insensitive
+        fallback on the raw ``email`` column for legacy rows where the
+        normalized value was never computed. Single home for the lookup —
+        controllers and the record-link helper all funnel through here.
+        """
+        email = (email or "").strip().lower()
+        if not email:
+            return self.browse()
+        return (self.search([("email_normalized", "=", email)], limit=1)
+                or self.search([("email", "=ilike", email)], limit=1))
 
     def action_ow_mail_conversations(self):
         """Open the OW mail client pre-filtered to emails involving this partner.

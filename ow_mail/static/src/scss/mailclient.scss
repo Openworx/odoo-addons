@@ -608,6 +608,17 @@
         cursor: pointer;
         &:hover { border-color: #8b8f94; }
     }
+
+    // Linked-record chips — inline at subject height (single + thread view)
+    .o-ow-linked .o-ow-linked-btn {
+        font-size: 0.72rem;
+        font-weight: 400;
+        padding: 0.1rem 0.5rem;
+        max-width: 14rem;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
 }
 
 // ---- Accessibility: visible keyboard-focus ring on all interactive parts ----

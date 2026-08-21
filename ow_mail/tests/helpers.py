@@ -1,8 +1,9 @@
 """Test helpers for ow_mail — GreenMail IMAP priming + reachability.
 
 The Docker-Compose dev stack runs a GreenMail container (see
-CLAUDE.md); from inside the Odoo container the host is ``greenmail``
-on port 3143 (IMAP, plaintext) with credentials ``demo`` / ``demo``.
+docker-compose.yml in the repo root); from inside the Odoo container the
+host is ``greenmail`` on port 3143 (IMAP, plaintext) with credentials
+``demo`` / ``demo``.
 """
 import imaplib
 import socket

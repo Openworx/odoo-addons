@@ -22,5 +22,11 @@ run in barebones environments.
 - `test_search_dsl.py` — DSL parser cases (no IMAP, no HTTP).
 - `test_messages_route.py` — seeds GreenMail with fixture messages,
   POSTs to `/ow_mail/messages` with DSL queries, asserts the UID set.
+- `test_record_link.py` — create-record-from-email helper: curated menu
+  filtering, prefill mapping, attach + Message-ID stamping, linked-records
+  lookup (pure ORM; IMAP mocked via the `_fetch_raw` seam).
+- `test_record_routes.py` — GreenMail round-trip of
+  `/ow_mail/record/prefill` → `/ow_mail/record/attach` →
+  `linked_records` in `/ow_mail/message`.
 - `helpers.py` — GreenMail reachability check + `greenmail_append` /
   `clear_inbox` primitives built on `imaplib`.

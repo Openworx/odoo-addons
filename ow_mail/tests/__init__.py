@@ -5,3 +5,5 @@ from . import test_preferences
 from . import test_draft_autosave
 from . import test_thread_route
 from . import test_sanitize_links
+from . import test_record_link
+from . import test_record_routes

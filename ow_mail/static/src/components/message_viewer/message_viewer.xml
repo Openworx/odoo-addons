@@ -40,12 +40,32 @@
                     </t>
                 </select>
                 <div class="flex-grow-1"/>
-                <button class="btn btn-sm btn-light" t-on-click="onCreateRecord" title="Create Record">
-                    <i class="fa fa-plus-square-o"/>
-                </button>
-                <button class="btn btn-sm btn-light" t-on-click="onAttach" title="Attach to record">
-                    <i class="fa fa-chain"/>
-                </button>
+                <div class="dropdown">
+                    <button class="btn btn-sm btn-light dropdown-toggle" data-bs-toggle="dropdown"
+                            aria-expanded="false" title="Create record from email">
+                        <i class="fa fa-plus-square-o"/> Create
+                    </button>
+                    <ul class="dropdown-menu dropdown-menu-end">
+                        <t t-foreach="state.createMenu" t-as="entry" t-key="entry.key">
+                            <li>
+                                <button class="dropdown-item" t-on-click="() => this.onCreateFromMenu(entry)">
+                                    <i t-att-class="'fa me-2 ' + entry.icon"/> <t t-esc="entry.label"/>
+                                </button>
+                            </li>
+                        </t>
+                        <li>
+                            <button class="dropdown-item" t-on-click="onCreateOther">
+                                <i class="fa fa-ellipsis-h me-2"/> Other…
+                            </button>
+                        </li>
+                        <li><hr class="dropdown-divider"/></li>
+                        <li>
+                            <button class="dropdown-item" t-on-click="onAttach">
+                                <i class="fa fa-chain me-2"/> Attach to existing record…
+                            </button>
+                        </li>
+                    </ul>
+                </div>
                 <div class="border-start mx-1"/>
                 <button class="btn btn-sm btn-light" t-on-click="onPrint" title="Print">
                     <i class="fa fa-print"/>
@@ -85,8 +105,18 @@
             </div>
             <!-- Conversation thread view -->
             <t t-if="isThreadView">
-                <div class="o-ow-thread-subject px-3 py-2 border-bottom d-flex align-items-center">
+                <div class="o-ow-thread-subject px-3 py-2 border-bottom d-flex align-items-center flex-wrap gap-1">
                     <h5 class="mb-0 flex-grow-1" t-esc="threadSubject"/>
+                    <span t-if="threadLinkedRecords.length" class="o-ow-linked d-flex align-items-center flex-wrap gap-1">
+                        <span class="small text-muted fw-normal me-1"><i class="fa fa-chain me-1"/>Linked:</span>
+                        <t t-foreach="threadLinkedRecords" t-as="lr" t-key="lr.model + ':' + lr.res_id">
+                            <button class="btn btn-sm btn-outline-secondary o-ow-linked-btn"
+                                    t-on-click="() => this.onOpenLinked(lr)"
+                                    t-att-title="'Open ' + lr.display_name">
+                                <t t-esc="lr.display_name"/>
+                            </button>
+                        </t>
+                    </span>
                     <span class="badge bg-secondary ms-2"><t t-esc="state.threadMessages.length"/> messages</span>
                 </div>
                 <div class="o-ow-thread-body flex-grow-1 overflow-auto">
@@ -150,12 +180,23 @@
             <!-- Single message view -->
             <t t-else="">
                 <div class="o-ow-viewer-head px-3 py-2">
-                    <h4 class="mb-2 d-flex align-items-center" tabindex="-1" t-ref="subjectHeading">
+                    <h4 class="mb-2 d-flex align-items-center flex-wrap gap-1" tabindex="-1" t-ref="subjectHeading">
                         <span t-esc="state.selectedMessage.subject"/>
                         <button t-if="isDraft" class="btn btn-sm btn-link ms-2 p-0" t-on-click="onEditDraft"
                                 title="Edit draft">
                             <i class="fa fa-pencil-square-o text-info"/>
                         </button>
+                        <span t-if="state.selectedMessage.linked_records and state.selectedMessage.linked_records.length"
+                              class="o-ow-linked ms-auto d-flex align-items-center flex-wrap gap-1">
+                            <span class="small text-muted fw-normal me-1"><i class="fa fa-chain me-1"/>Linked:</span>
+                            <t t-foreach="state.selectedMessage.linked_records" t-as="lr" t-key="lr.model + ':' + lr.res_id">
+                                <button class="btn btn-sm btn-outline-secondary o-ow-linked-btn"
+                                        t-on-click="() => this.onOpenLinked(lr)"
+                                        t-att-title="'Open ' + lr.display_name">
+                                    <t t-esc="lr.display_name"/>
+                                </button>
+                            </t>
+                        </span>
                     </h4>
                     <t t-if="isDraft">
                         <div class="alert alert-info py-2 px-3 d-flex align-items-center mb-2">
