@@ -223,16 +223,31 @@ export class MessageViewer extends Component {
         this.action = useService("action");
         this.dialog = useService("dialog");
         this.state = useState(this.mail.state);
-        this.local = useState({ showRemote: false, expandedThread: {} });
+        this.local = useState({ showRemote: false, expandedThread: {},
+                                headExpanded: false });
         this.iframeRef = useRef("iframe");
 
         useEffect(
             (msg, showRemote) => {
+                this.local.headExpanded = false;
                 if (!this.isThreadView) {
                     this.renderBody(msg, showRemote);
                 }
             },
             () => [this.state.selectedMessage, this.local.showRemote]
+        );
+
+        // Mobile uses a single scroll context: the pane scrolls and the
+        // iframe grows to its content height. Re-measure when the message
+        // or the viewport class changes (and once more after a beat, for
+        // late-loading images).
+        useEffect(
+            () => {
+                this._fitIframe();
+                const timer = setTimeout(() => this._fitIframe(), 700);
+                return () => clearTimeout(timer);
+            },
+            () => [this.state.viewport, this.state.selectedMessage]
         );
 
         // Accessibility: move focus to the subject heading when a message
@@ -452,8 +467,34 @@ export class MessageViewer extends Component {
                 }
             </style>
             </head><body>${header}${html}</body></html>`;
-        iframe.onload = () => this._prepareIframeLinks(iframe);
+        iframe.onload = () => {
+            this._prepareIframeLinks(iframe);
+            this._fitIframe();
+        };
         iframe.setAttribute("srcdoc", doc);
+    }
+
+    /**
+     * Size the single-message iframe to its content on mobile so the whole
+     * pane scrolls as one context (toolbar and header scroll away while
+     * reading). On desktop the inline height is cleared again — the CSS
+     * `h-100` + flex layout takes over.
+     */
+    _fitIframe() {
+        const iframe = this.iframeRef.el;
+        if (!iframe) return;
+        if (!this.isMobile) {
+            iframe.style.height = "";
+            return;
+        }
+        try {
+            const doc = iframe.contentDocument;
+            if (doc && doc.documentElement) {
+                iframe.style.height = (doc.documentElement.scrollHeight + 8) + "px";
+            }
+        } catch {
+            // srcdoc is same-origin; only a mid-teardown race lands here
+        }
     }
 
     /**
@@ -1094,13 +1135,50 @@ export class MessageViewer extends Component {
      */
     async onMove(ev) {
         const folderId = parseInt(ev.target.value, 10);
-        if (!folderId) return;
         ev.target.value = "";
+        await this.onMoveTo(folderId);
+    }
+
+    /**
+     * Move the open message to a folder — shared by the desktop `<select>`
+     * and the mobile overflow-menu entries.
+     *
+     * @param {number} folderId
+     */
+    async onMoveTo(folderId) {
+        if (!folderId) return;
         const m = this.state.selectedMessage;
         if (!m || m.folder_id === folderId) return;
         await this.mail.runAction(m.folder_id, [m.uid], "move", { folder_id: folderId });
         this.state.selectedMessage = null;
         this.state.selectedKey = null;
+    }
+
+    /** Mobile viewport? Drives the compact toolbar + single-scroll layout. */
+    get isMobile() {
+        return this.state.viewport === "mobile";
+    }
+
+    /** Collapse/expand the compact mobile message header. */
+    toggleHead() {
+        this.local.headExpanded = !this.local.headExpanded;
+    }
+
+    /**
+     * Human date for the message header: time only for today, otherwise
+     * locale date + short time — instead of the raw ISO string.
+     *
+     * @param {string} iso
+     * @returns {string}
+     */
+    fmtHeadDate(iso) {
+        if (!iso) return "";
+        const d = new Date(iso);
+        if (isNaN(d)) return iso;
+        const now = new Date();
+        const time = d.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
+        if (d.toDateString() === now.toDateString()) return time;
+        return `${d.toLocaleDateString()} ${time}`;
     }
 
     /**

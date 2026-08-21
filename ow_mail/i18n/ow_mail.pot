@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 18.0-20260630\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-08-19 14:27+0000\n"
-"PO-Revision-Date: 2026-08-19 14:27+0000\n"
+"POT-Creation-Date: 2026-08-21 11:32+0000\n"
+"PO-Revision-Date: 2026-08-21 11:32+0000\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -249,6 +249,12 @@ msgstr ""
 #. module: ow_mail
 #: model:ir.model.fields,field_description:ow_mail.field_ow_mail_compose__cc
 msgid "Cc"
+msgstr ""
+
+#. module: ow_mail
+#. odoo-javascript
+#: code:addons/ow_mail/static/src/components/message_viewer/message_viewer.xml:0
+msgid "Cc:"
 msgstr ""
 
 #. module: ow_mail
@@ -505,6 +511,12 @@ msgstr ""
 #: code:addons/ow_mail/static/src/components/message_list/message_list.js:0
 #: model:ir.model.fields,field_description:ow_mail.field_ow_mail_attach_record__date
 msgid "Date"
+msgstr ""
+
+#. module: ow_mail
+#. odoo-javascript
+#: code:addons/ow_mail/static/src/components/message_viewer/message_viewer.xml:0
+msgid "Date:"
 msgstr ""
 
 #. module: ow_mail
@@ -780,6 +792,12 @@ msgstr ""
 #. odoo-javascript
 #: code:addons/ow_mail/static/src/components/compose_window/recipient_input.xml:0
 msgid "From Odoo Contacts"
+msgstr ""
+
+#. module: ow_mail
+#. odoo-javascript
+#: code:addons/ow_mail/static/src/components/message_viewer/message_viewer.xml:0
+msgid "From:"
 msgstr ""
 
 #. module: ow_mail
@@ -1217,12 +1235,14 @@ msgstr ""
 #. module: ow_mail
 #. odoo-javascript
 #: code:addons/ow_mail/static/src/components/message_list/message_list.xml:0
+#: code:addons/ow_mail/static/src/components/message_viewer/message_viewer.xml:0
 msgid "Mark read"
 msgstr ""
 
 #. module: ow_mail
 #. odoo-javascript
 #: code:addons/ow_mail/static/src/components/message_list/message_list.xml:0
+#: code:addons/ow_mail/static/src/components/message_viewer/message_viewer.xml:0
 msgid "Mark unread"
 msgstr ""
 
@@ -1285,6 +1305,12 @@ msgstr ""
 #. module: ow_mail
 #: model:ir.model.fields,field_description:ow_mail.field_ow_mail_attach_record__res_model_id
 msgid "Model"
+msgstr ""
+
+#. module: ow_mail
+#. odoo-javascript
+#: code:addons/ow_mail/static/src/components/message_viewer/message_viewer.xml:0
+msgid "More actions"
 msgstr ""
 
 #. module: ow_mail
@@ -2137,6 +2163,12 @@ msgstr ""
 #. odoo-javascript
 #: code:addons/ow_mail/static/src/components/message_list/message_list.xml:0
 msgid "Toggle conversation view"
+msgstr ""
+
+#. module: ow_mail
+#. odoo-javascript
+#: code:addons/ow_mail/static/src/components/message_viewer/message_viewer.xml:0
+msgid "Toggle message details"
 msgstr ""
 
 #. module: ow_mail
