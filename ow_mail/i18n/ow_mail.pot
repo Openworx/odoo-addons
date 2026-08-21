@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 18.0-20260630\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-08-21 15:03+0000\n"
-"PO-Revision-Date: 2026-08-21 15:03+0000\n"
+"POT-Creation-Date: 2026-08-21 15:17+0000\n"
+"PO-Revision-Date: 2026-08-21 15:17+0000\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -1093,6 +1093,17 @@ msgid "Increase indent"
 msgstr ""
 
 #. module: ow_mail
+#: model:ir.model.fields,field_description:ow_mail.field_ow_mail_preferences__infinite_scroll
+msgid "Infinite Scroll"
+msgstr ""
+
+#. module: ow_mail
+#. odoo-javascript
+#: code:addons/ow_mail/static/src/components/settings_dialog/settings_dialog.xml:0
+msgid "Infinite scrolling in the message list"
+msgstr ""
+
+#. module: ow_mail
 #. odoo-javascript
 #: code:addons/ow_mail/static/src/components/compose_window/compose_window.xml:0
 msgid "Insert image"
@@ -1221,6 +1232,14 @@ msgstr ""
 #: code:addons/ow_mail/static/src/components/contacts/contacts.xml:0
 #: code:addons/ow_mail/static/src/components/message_source/message_source.xml:0
 msgid "Loading…"
+msgstr ""
+
+#. module: ow_mail
+#. odoo-javascript
+#: code:addons/ow_mail/static/src/components/settings_dialog/settings_dialog.xml:0
+msgid ""
+"Loads more messages automatically while you scroll,\n"
+"                    instead of pages of 50."
 msgstr ""
 
 #. module: ow_mail
@@ -2453,6 +2472,7 @@ msgstr ""
 
 #. module: ow_mail
 #. odoo-javascript
+#: code:addons/ow_mail/static/src/components/message_list/message_list.xml:0
 #: code:addons/ow_mail/static/src/components/message_viewer/message_viewer.xml:0
 msgid "messages"
 msgstr ""

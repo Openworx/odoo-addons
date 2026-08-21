@@ -167,7 +167,8 @@ export const owMailService = {
             tags: [],
             bootstrapped: false,
             prefs: { mark_read_delay: 0, thread_view_default: false,
-                     stacked_threads: true, theme: "system" },
+                     stacked_threads: true, theme: "system",
+                     infinite_scroll: false },
             // Effective theme flag driving the `.o-ow-dark` root class.
             // Seeded from localStorage so a dark user gets no light flash
             // before bootstrap resolves the server preference.
@@ -183,6 +184,10 @@ export const owMailService = {
             totalMessages: 0,
             page: 1,
             pageSize: PAGE_SIZE,
+            // Infinite-scroll bookkeeping: separate spinner for appends and
+            // a soft end-of-list flag (server totals can drift).
+            loadingMore: false,
+            listEnd: false,
             selectedKey: null,
             selectedMessage: null,
             composeWindows: [],
@@ -307,38 +312,94 @@ export const owMailService = {
          *
          * @async
          */
-        async function refreshList() {
+        async function refreshList({ append = false } = {}) {
             // Only bail when no accounts loaded yet (pre-bootstrap)
             if (!state.selection.folderId && !state.selection.tagId && !state.accounts.length) {
                 state.messages = [];
                 state.totalMessages = 0;
                 return;
             }
-            state.loading = true;
+            const infinite = !!state.prefs.infinite_scroll;
+            const appending = append && infinite;
+            // Infinite mode reloads the size it had built up (server caps
+            // the limit at 200; beyond that we reload the first 200 and let
+            // the sentinel pick up the rest again) so archive/delete/bus
+            // refreshes don't collapse a grown list back to one page.
+            let offset, limit;
+            if (appending) {
+                // Offset from what is actually loaded — more drift-robust
+                // than page arithmetic when new mail arrived in between.
+                offset = state.messages.length;
+                limit = PAGE_SIZE;
+                state.loadingMore = true;
+            } else if (infinite) {
+                offset = 0;
+                limit = Math.min(
+                    Math.max(state.messages.length, PAGE_SIZE), 200);
+                state.page = 1;
+                state.loading = true;
+            } else {
+                offset = (state.page - 1) * PAGE_SIZE;
+                limit = PAGE_SIZE;
+                state.loading = true;
+            }
             try {
-                const offset = (state.page - 1) * PAGE_SIZE;
                 const res = await rpc("/ow_mail/messages", {
                     folder_id: state.selection.folderId || null,
                     filter: state.selection.filter,
                     search: state.selection.search || null,
                     tag_id: state.selection.tagId || null,
                     offset,
-                    limit: PAGE_SIZE,
+                    limit,
                     sort_by: state.sortBy,
                     sort_order: state.sortOrder,
                 });
                 if (res.error) {
                     notification.add("Mailbox error: " + res.error, { type: "warning" });
-                    state.messages = [];
-                    state.totalMessages = 0;
+                    if (!appending) {
+                        state.messages = [];
+                        state.totalMessages = 0;
+                    }
+                } else if (appending) {
+                    // Offset paging is a slice of a freshly computed list, so
+                    // mail arriving in between can shift rows into this page
+                    // again — dedupe on the row key (a duplicate t-key would
+                    // crash the list rendering).
+                    const seen = new Set(state.messages.map(msgKey));
+                    const fresh = res.messages.filter((m) => !seen.has(msgKey(m)));
+                    state.messages.push(...fresh);
+                    state.totalMessages = res.total;
+                    state.threads = state.threadView
+                        ? buildThreads(state.messages) : [];
+                    state.listEnd = res.messages.length < PAGE_SIZE;
                 } else {
                     state.messages = res.messages;
                     state.totalMessages = res.total;
                     state.threads = state.threadView ? buildThreads(res.messages) : [];
+                    state.listEnd = infinite
+                        ? res.messages.length >= res.total : false;
                 }
             } finally {
-                state.loading = false;
+                if (appending) {
+                    state.loadingMore = false;
+                } else {
+                    state.loading = false;
+                }
             }
+        }
+
+        /**
+         * Load the next batch in infinite-scroll mode (sentinel callback).
+         * No-ops outside infinite mode, while a load is running, or once
+         * the end of the list was reached.
+         */
+        async function loadMore() {
+            if (!state.prefs.infinite_scroll || state.loading ||
+                state.loadingMore || state.listEnd ||
+                state.messages.length >= state.totalMessages) {
+                return;
+            }
+            await refreshList({ append: true });
         }
 
         /**
@@ -1794,8 +1855,16 @@ export const owMailService = {
                 return false;
             }
             if (res && res.prefs) {
+                const modeSwitched =
+                    state.prefs.infinite_scroll !== res.prefs.infinite_scroll;
                 Object.assign(state.prefs, res.prefs);
                 applyTheme();
+                if (modeSwitched) {
+                    state.page = 1;
+                    state.listEnd = false;
+                    state.messages = [];
+                    await refreshList();
+                }
             }
             return true;
         }
@@ -1863,7 +1932,7 @@ export const owMailService = {
             state, bootstrap, refreshList, selectFolder, selectTag, selectSmart,
             setFilter, setSearch, searchAll, setSort,
             createTag, deleteTag, renameTag, setTagColor, setMessageTags,
-            toggleThreadView, loadThread, goToPage,
+            toggleThreadView, loadThread, goToPage, loadMore,
             openMessage, editDraft, sync, runAction, archiveMessages, openCompose, closeCompose, sendCompose, saveDraft,
             autosaveDraft, discardAutosavedDraft, savePrefs,
             moveSelection, openReply, openForward,

@@ -23,6 +23,9 @@ class OwMailPreferences(models.Model):
     # client looks up the full thread (ancestors + descendants) on every
     # message open; disabled shows only the opened message.
     stacked_threads = fields.Boolean(default=True)
+    # Message list loading: classic 50-per-page pager (default) or
+    # automatic loading while scrolling.
+    infinite_scroll = fields.Boolean(default=False)
     # Client theme. "system" follows the Odoo backend theme via the
     # standard ``color_scheme`` cookie (set by Enterprise and by the
     # common community theme modules), falling back to the OS preference.
@@ -50,4 +53,5 @@ class OwMailPreferences(models.Model):
             "thread_view_default": self.thread_view_default,
             "stacked_threads": self.stacked_threads,
             "theme": self.theme,
+            "infinite_scroll": self.infinite_scroll,
         }

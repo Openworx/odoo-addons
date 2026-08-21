@@ -54,6 +54,7 @@ class TestPreferences(TransactionCase):
         self.assertEqual(prefs._to_wire(), {
             "mark_read_delay": -1, "thread_view_default": True,
             "stacked_threads": True, "theme": "system",
+            "infinite_scroll": False,
         })
 
     def test_theme_default_system(self):
@@ -72,6 +73,17 @@ class TestPreferences(TransactionCase):
             self.user_a)._get_for_user()
         with self.assertRaises(ValueError):
             prefs.write({"theme": "midnight"})
+
+    def test_infinite_scroll_default_off(self):
+        prefs = self.env["ow.mail.preferences"].with_user(
+            self.user_a)._get_for_user()
+        self.assertFalse(prefs.infinite_scroll)
+
+    def test_infinite_scroll_roundtrip(self):
+        prefs = self.env["ow.mail.preferences"].with_user(
+            self.user_a)._get_for_user()
+        prefs.write({"infinite_scroll": True})
+        self.assertTrue(prefs._to_wire()["infinite_scroll"])
 
     def test_stacked_threads_default_on(self):
         prefs = self.env["ow.mail.preferences"].with_user(
@@ -142,3 +154,8 @@ class TestThemePrefsRoute(HttpCase):
     def test_invalid_theme_rejected(self):
         res = self._save({"theme": "midnight"})
         self.assertTrue(res.get("error"))
+
+    def test_infinite_scroll_whitelisted(self):
+        res = self._save({"infinite_scroll": True})
+        self.assertTrue(res.get("ok"))
+        self.assertTrue(res["prefs"]["infinite_scroll"])

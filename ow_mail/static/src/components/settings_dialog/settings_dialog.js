@@ -31,6 +31,7 @@ export class SettingsDialog extends Component {
             thread_view_default: this.mail.state.prefs.thread_view_default,
             stacked_threads: this.mail.state.prefs.stacked_threads,
             theme: this.mail.state.prefs.theme || "system",
+            infinite_scroll: this.mail.state.prefs.infinite_scroll,
         });
         this.title = _t("Mail Settings");
     }
@@ -66,6 +67,7 @@ export class SettingsDialog extends Component {
             thread_view_default: !!this.local.thread_view_default,
             stacked_threads: !!this.local.stacked_threads,
             theme: this.local.theme,
+            infinite_scroll: !!this.local.infinite_scroll,
         });
         if (ok) {
             this.props.close();

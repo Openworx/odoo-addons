@@ -1,6 +1,6 @@
 /** @odoo-module **/
 
-import { Component, useEffect, useState } from "@odoo/owl";
+import { Component, useEffect, useRef, useState } from "@odoo/owl";
 import { useService } from "@web/core/utils/hooks";
 import { _t } from "@web/core/l10n/translation";
 import { AvatarInitials } from "../avatar_initials/avatar_initials";
@@ -90,6 +90,29 @@ export class MessageList extends Component {
         this.notification = useService("notification");
         this.state = useState(this.mail.state);
         this.local = useState({ search: this.state.selection.search || "", checked: {}, expandedThreads: {} });
+        this.listBodyRef = useRef("listBody");
+        this.sentinelRef = useRef("sentinel");
+        // Infinite scroll: observe the sentinel at the bottom of the scroll
+        // container; entering the 250px pre-fetch margin loads the next
+        // batch. The effect tracks the sentinel element itself — it exists
+        // only while infinite mode is on and the end isn't reached, so the
+        // observer's lifecycle follows the t-if for free.
+        useEffect(
+            (sentinelEl) => {
+                if (!sentinelEl) return;
+                const observer = new IntersectionObserver(
+                    (entries) => {
+                        if (entries.some((e) => e.isIntersecting)) {
+                            this.mail.loadMore();
+                        }
+                    },
+                    { root: this.listBodyRef.el, rootMargin: "250px" }
+                );
+                observer.observe(sentinelEl);
+                return () => observer.disconnect();
+            },
+            () => [this.sentinelRef.el]
+        );
         // Keep the search box in sync when the service resets the query
         // (folder/tag switch clears the search — the input must follow).
         useEffect(

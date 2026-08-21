@@ -442,7 +442,8 @@ class OwMailController(http.Controller):
             return value
 
         allowed = {"mark_read_delay": int, "thread_view_default": bool,
-                   "stacked_threads": bool, "theme": _coerce_theme}
+                   "stacked_threads": bool, "theme": _coerce_theme,
+                   "infinite_scroll": bool}
         clean = {}
         for key, coerce in allowed.items():
             if key in (vals or {}):

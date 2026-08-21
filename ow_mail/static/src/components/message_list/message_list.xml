@@ -143,7 +143,7 @@
                 <i class="fa fa-times"/>
             </button>
         </div>
-        <div class="o-ow-list-body flex-grow-1 overflow-auto"
+        <div class="o-ow-list-body flex-grow-1 overflow-auto" t-ref="listBody"
              role="listbox" aria-label="Messages">
             <t t-if="!state.messages.length">
                 <div class="text-muted text-center p-5">No messages</div>
@@ -342,8 +342,15 @@
                     </div>
                 </t>
             </t>
+            <div t-if="state.prefs.infinite_scroll and state.messages.length and !state.listEnd"
+                 t-ref="sentinel" class="o-ow-list-sentinel" aria-hidden="true"/>
         </div>
-        <div t-if="state.totalMessages" class="o-ow-pager border-top px-3 py-2 d-flex align-items-center justify-content-center gap-2">
+        <div t-if="state.totalMessages and state.prefs.infinite_scroll"
+             class="o-ow-pager border-top px-3 py-2 d-flex align-items-center justify-content-center gap-2 small text-muted">
+            <i t-if="state.loadingMore" class="fa fa-circle-o-notch fa-spin me-1"/>
+            <span><t t-esc="state.messages.length"/> / <t t-esc="state.totalMessages"/> messages</span>
+        </div>
+        <div t-if="state.totalMessages and !state.prefs.infinite_scroll" class="o-ow-pager border-top px-3 py-2 d-flex align-items-center justify-content-center gap-2">
             <button class="btn btn-sm btn-outline-secondary border-0" t-att-disabled="state.page === 1" t-on-click="onFirstPage" title="First">
                 <i class="fa fa-angle-double-left"/>
             </button>
