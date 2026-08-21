@@ -8,6 +8,11 @@ Ownership is asserted in every route via ``_get_folder`` / ``_get_account``
 independent of ``ir.rule``. This defense-in-depth ensures that even if an
 ``ir.rule`` is accidentally widened or removed, cross-user access is still
 rejected at the controller layer.
+
+Every route uses ``auth="ow_mail_user"`` (see ``models/ir_http.py``) rather
+than ``auth="user"``: the stock method only rejects the *public* user, so a
+logged-in portal customer would otherwise reach the controller body and be
+stopped only by the model ACL.
 """
 import email
 import logging
@@ -371,7 +376,7 @@ def _tag_ids_from_keywords(keywords):
 
 class OwMailController(http.Controller):
 
-    @http.route("/ow_mail/bootstrap", type="json", auth="user")
+    @http.route("/ow_mail/bootstrap", type="json", auth="ow_mail_user")
     def bootstrap(self):
         """Return all data needed to mount the mail client in one call.
 
@@ -428,7 +433,7 @@ class OwMailController(http.Controller):
             "create_menu": request.env["ow.mail.record.link"].get_create_menu(),
         }
 
-    @http.route("/ow_mail/prefs/save", type="json", auth="user")
+    @http.route("/ow_mail/prefs/save", type="json", auth="ow_mail_user")
     def prefs_save(self, vals):
         """Persist client preferences for the current user.
 
@@ -456,7 +461,7 @@ class OwMailController(http.Controller):
             prefs.write(clean)
         return {"ok": True, "prefs": prefs._to_wire()}
 
-    @http.route("/ow_mail/sync", type="json", auth="user")
+    @http.route("/ow_mail/sync", type="json", auth="ow_mail_user")
     def sync(self, account_id=None):
         """Trigger a live IMAP LIST + STATUS refresh for one or all accounts.
 
@@ -472,7 +477,7 @@ class OwMailController(http.Controller):
         accounts.action_sync()
         return {"ok": True}
 
-    @http.route("/ow_mail/messages", type="json", auth="user")
+    @http.route("/ow_mail/messages", type="json", auth="ow_mail_user")
     def messages(self, folder_id=None, filter="all", search=None, tag_id=None,
                  offset=0, limit=60, account_id=None,
                  sort_by="date", sort_order="desc"):
@@ -649,7 +654,7 @@ class OwMailController(http.Controller):
                               folder.full_path, e)
 
     @http.route("/ow_mail/message/source/<int:folder_id>/<int:uid>",
-                type="http", auth="user")
+                type="http", auth="ow_mail_user")
     def message_source(self, folder_id, uid):
         """Stream the raw RFC 822 bytes of a message as ``text/plain``.
 
@@ -674,7 +679,7 @@ class OwMailController(http.Controller):
                      ("Content-Disposition", "inline")],
         )
 
-    @http.route("/ow_mail/calendar/from_invite", type="json", auth="user")
+    @http.route("/ow_mail/calendar/from_invite", type="json", auth="ow_mail_user")
     def calendar_from_invite(self, folder_id, uid):
         """Parse an iCalendar invite from an email and return an ``ir.actions.act_window``.
 
@@ -725,7 +730,7 @@ class OwMailController(http.Controller):
             "context": context,
         }
 
-    @http.route("/ow_mail/record/prefill", type="json", auth="user")
+    @http.route("/ow_mail/record/prefill", type="json", auth="ow_mail_user")
     def record_prefill(self, folder_id, uid, key=None, model=None):
         """Server-computed ``default_*`` context for the create-record dialog.
 
@@ -778,7 +783,7 @@ class OwMailController(http.Controller):
                                        extra_context=extra_context)
         return {"model": model_name, "context": context, "title": title}
 
-    @http.route("/ow_mail/record/attach", type="json", auth="user")
+    @http.route("/ow_mail/record/attach", type="json", auth="ow_mail_user")
     def record_attach(self, folder_id, uid, model, res_id,
                       include_attachments=True):
         """Post the email into the chatter of *model*/*res_id*.
@@ -809,7 +814,7 @@ class OwMailController(http.Controller):
             "display_name": record.display_name,
         }
 
-    @http.route("/ow_mail/record/models", type="json", auth="user")
+    @http.route("/ow_mail/record/models", type="json", auth="ow_mail_user")
     def record_models(self):
         """Models for the "Other…" picker — fetched lazily when it opens
         (the ir.model scan is the expensive part, so it stays out of
@@ -817,7 +822,7 @@ class OwMailController(http.Controller):
         return {"models": request.env["ow.mail.record.link"]
                 .get_creatable_models()}
 
-    @http.route("/ow_mail/message", type="json", auth="user")
+    @http.route("/ow_mail/message", type="json", auth="ow_mail_user")
     def message(self, folder_id, uid, peek=False):
         """Fetch and render a full message for the MessageViewer.
 
@@ -913,7 +918,7 @@ class OwMailController(http.Controller):
             "tag_ids": _tag_ids_from_keywords(keywords),
         }
 
-    @http.route("/ow_mail/thread", type="json", auth="user")
+    @http.route("/ow_mail/thread", type="json", auth="ow_mail_user")
     def thread(self, account_id, message_ids):
         """Fetch all messages in a conversation thread for a single account.
 
@@ -997,7 +1002,7 @@ class OwMailController(http.Controller):
         return {"messages": results}
 
     @http.route("/ow_mail/inline/<int:folder_id>/<int:uid>/<path:cid>",
-                type="http", auth="user")
+                type="http", auth="ow_mail_user")
     def inline(self, folder_id, uid, cid, **kw):
         """Serve a cid-referenced inline part.
 
@@ -1044,7 +1049,7 @@ class OwMailController(http.Controller):
         return request.not_found()
 
     @http.route("/ow_mail/attachment/<int:folder_id>/<int:uid>/<string:section>",
-                type="http", auth="user")
+                type="http", auth="ow_mail_user")
     def attachment(self, folder_id, uid, section, download=False, **kw):
         """Serve an attachment part.
 
@@ -1092,7 +1097,7 @@ class OwMailController(http.Controller):
             return request.not_found()
         return request.not_found()
 
-    @http.route("/ow_mail/attachment/prepare", type="json", auth="user")
+    @http.route("/ow_mail/attachment/prepare", type="json", auth="ow_mail_user")
     def attachment_prepare(self, folder_id, uid):
         """Copy all attachments from an IMAP message to Odoo ir.attachment.
 
@@ -1140,7 +1145,7 @@ class OwMailController(http.Controller):
 
         return out
 
-    @http.route("/ow_mail/send", type="json", auth="user")
+    @http.route("/ow_mail/send", type="json", auth="ow_mail_user")
     def send(self, account_id, to, cc=None, bcc=None, subject="", body_html="",
              attachment_ids=None, in_reply_to=None, references=None):
         """Send a message via SMTP and APPEND a copy to the Sent folder.
@@ -1168,7 +1173,7 @@ class OwMailController(http.Controller):
             ) % result["sent_append_failed"]}
         return {"ok": True}
 
-    @http.route("/ow_mail/draft", type="json", auth="user")
+    @http.route("/ow_mail/draft", type="json", auth="ow_mail_user")
     def save_draft(self, account_id, to="", cc="", bcc="", subject="", body_html="",
                    attachment_ids=None, in_reply_to=None, references=None,
                    replace_uid=None):
@@ -1203,7 +1208,7 @@ class OwMailController(http.Controller):
         return {"ok": True, "uid": new_uid,
                 "folder_id": acc.drafts_folder_id.id}
 
-    @http.route("/ow_mail/draft/discard", type="json", auth="user")
+    @http.route("/ow_mail/draft/discard", type="json", auth="ow_mail_user")
     def discard_draft(self, account_id, uid):
         """Expunge one draft from the account's Drafts folder (best-effort).
 
@@ -1222,7 +1227,7 @@ class OwMailController(http.Controller):
             return _imap_err(str(e))
         return {"ok": True}
 
-    @http.route("/ow_mail/message/action", type="json", auth="user")
+    @http.route("/ow_mail/message/action", type="json", auth="ow_mail_user")
     def message_action(self, folder_id, uids, action, payload=None):
         """Apply a bulk action to one or more messages identified by UID.
 
@@ -1379,7 +1384,7 @@ class OwMailController(http.Controller):
 
     # ---------------- Folder management ----------------
 
-    @http.route("/ow_mail/folder/create", type="json", auth="user")
+    @http.route("/ow_mail/folder/create", type="json", auth="ow_mail_user")
     def folder_create(self, account_id, name, parent_id=None):
         """Create a new IMAP mailbox under an optional parent.
 
@@ -1402,7 +1407,7 @@ class OwMailController(http.Controller):
             return _imap_err(e)
         return {"ok": True}
 
-    @http.route("/ow_mail/folder/rename", type="json", auth="user")
+    @http.route("/ow_mail/folder/rename", type="json", auth="ow_mail_user")
     def folder_rename(self, folder_id, new_name):
         """Rename the leaf segment of a folder's path via IMAP RENAME.
 
@@ -1423,7 +1428,7 @@ class OwMailController(http.Controller):
             return _imap_err(e)
         return {"ok": True}
 
-    @http.route("/ow_mail/folder/move", type="json", auth="user")
+    @http.route("/ow_mail/folder/move", type="json", auth="ow_mail_user")
     def folder_move(self, folder_id, new_parent_id=None):
         """Move a folder to a new parent (or to the root) via IMAP RENAME.
 
@@ -1450,7 +1455,7 @@ class OwMailController(http.Controller):
             return _imap_err(e)
         return {"ok": True}
 
-    @http.route("/ow_mail/folder/delete", type="json", auth="user")
+    @http.route("/ow_mail/folder/delete", type="json", auth="ow_mail_user")
     def folder_delete(self, folder_id):
         """Delete a mailbox from the IMAP server and remove it from the local cache.
 
@@ -1467,7 +1472,7 @@ class OwMailController(http.Controller):
             return _imap_err(e)
         return {"ok": True}
 
-    @http.route("/ow_mail/folder/subscribe", type="json", auth="user")
+    @http.route("/ow_mail/folder/subscribe", type="json", auth="ow_mail_user")
     def folder_subscribe(self, folder_id, subscribed):
         """Toggle the IMAP SUBSCRIBE/UNSUBSCRIBE state for a folder.
 
@@ -1485,7 +1490,7 @@ class OwMailController(http.Controller):
             return _imap_err(e)
         return {"ok": True}
 
-    @http.route("/ow_mail/account/quota", type="json", auth="user")
+    @http.route("/ow_mail/account/quota", type="json", auth="ow_mail_user")
     def account_quota(self, account_id):
         """Fetch mailbox quota via IMAP GETQUOTA / GETQUOTAROOT.
 
@@ -1501,7 +1506,7 @@ class OwMailController(http.Controller):
         except Exception as e:
             return _imap_err(e)
 
-    @http.route("/ow_mail/folder/empty", type="json", auth="user")
+    @http.route("/ow_mail/folder/empty", type="json", auth="ow_mail_user")
     def folder_empty(self, folder_id):
         """Permanently delete all messages in a folder via IMAP.
 
@@ -1529,7 +1534,7 @@ class OwMailController(http.Controller):
         "text/javascript", "text/ecmascript",
     })
 
-    @http.route("/ow_mail/attachment/upload", type="http", auth="user",
+    @http.route("/ow_mail/attachment/upload", type="http", auth="ow_mail_user",
                 methods=["POST"], csrf=True)
     def upload(self, ufile=None, **kw):
         """Store a compose-time attachment.
@@ -1592,7 +1597,7 @@ class OwMailController(http.Controller):
             "last_used": c.last_used and c.last_used.isoformat() or None,
         }
 
-    @http.route("/ow_mail/contacts/list", type="json", auth="user")
+    @http.route("/ow_mail/contacts/list", type="json", auth="ow_mail_user")
     def contacts_list(self, search=None, limit=500):
         """Return the full contact list, optionally filtered by a search string.
 
@@ -1609,7 +1614,7 @@ class OwMailController(http.Controller):
         records = request.env["ow.mail.contact"].search(domain, limit=limit)
         return {"contacts": [self._contact_to_dict(c) for c in records]}
 
-    @http.route("/ow_mail/contacts/suggest", type="json", auth="user")
+    @http.route("/ow_mail/contacts/suggest", type="json", auth="ow_mail_user")
     def contacts_suggest(self, query, limit=8):
         """Return address-book suggestions for the compose To/CC/BCC typeahead.
 
@@ -1663,7 +1668,7 @@ class OwMailController(http.Controller):
                     break
         return {"suggestions": out}
 
-    @http.route("/ow_mail/contacts/create", type="json", auth="user")
+    @http.route("/ow_mail/contacts/create", type="json", auth="ow_mail_user")
     def contacts_create(self, name, email, company=None, phone=None,
                         note=None, partner_id=None):
         """Create a new personal contact, or return the existing one if email matches.
@@ -1692,7 +1697,7 @@ class OwMailController(http.Controller):
         c = request.env["ow.mail.contact"].create(vals)
         return {"contact": self._contact_to_dict(c), "already": False}
 
-    @http.route("/ow_mail/contacts/update", type="json", auth="user")
+    @http.route("/ow_mail/contacts/update", type="json", auth="ow_mail_user")
     def contacts_update(self, id, vals):
         """Update writable fields on a contact.
 
@@ -1716,7 +1721,7 @@ class OwMailController(http.Controller):
             return _imap_err(e)
         return {"contact": self._contact_to_dict(c)}
 
-    @http.route("/ow_mail/contacts/delete", type="json", auth="user")
+    @http.route("/ow_mail/contacts/delete", type="json", auth="ow_mail_user")
     def contacts_delete(self, ids):
         """Delete one or more contacts by ID.
 
@@ -1730,7 +1735,7 @@ class OwMailController(http.Controller):
         records.unlink()
         return {"ok": True}
 
-    @http.route("/ow_mail/contacts/touch", type="json", auth="user")
+    @http.route("/ow_mail/contacts/touch", type="json", auth="ow_mail_user")
     def contacts_touch(self, emails):
         """Update the ``last_used`` timestamp on contacts matching the given addresses.
 

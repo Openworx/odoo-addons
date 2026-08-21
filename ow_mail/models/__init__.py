@@ -1,3 +1,4 @@
+from . import ir_http
 from . import ow_mail_crypto
 from . import ow_mail_imap
 from . import ow_mail_search

@@ -37,5 +37,31 @@
             <field name="domain_force">[('user_id','=',user.id)]</field>
             <field name="groups" eval="[(4, ref('base.group_user'))]"/>
         </record>
+
+        <!-- Transient wizards. Odoo does not isolate transient records by
+             creator on its own: TransientModel has no _check_access override,
+             so access is decided by ir.model.access + ir.rule like any other
+             model (the class docstring still promises otherwise). Without
+             these rules every internal user could read every other user's
+             wizard rows — which hold the mailbox password (connect wizard)
+             and full message bodies (attach wizard). -->
+        <record id="rule_ow_mail_connect_wizard_own" model="ir.rule">
+            <field name="name">OW Mail connect wizard: own only</field>
+            <field name="model_id" ref="model_ow_mail_connect_wizard"/>
+            <field name="domain_force">[('create_uid','=',user.id)]</field>
+            <field name="groups" eval="[(4, ref('base.group_user'))]"/>
+        </record>
+        <record id="rule_ow_mail_attach_record_own" model="ir.rule">
+            <field name="name">OW Mail attach wizard: own only</field>
+            <field name="model_id" ref="model_ow_mail_attach_record"/>
+            <field name="domain_force">[('create_uid','=',user.id)]</field>
+            <field name="groups" eval="[(4, ref('base.group_user'))]"/>
+        </record>
+        <record id="rule_ow_mail_compose_own" model="ir.rule">
+            <field name="name">OW Mail compose: own only</field>
+            <field name="model_id" ref="model_ow_mail_compose"/>
+            <field name="domain_force">[('create_uid','=',user.id)]</field>
+            <field name="groups" eval="[(4, ref('base.group_user'))]"/>
+        </record>
     </data>
 </odoo>

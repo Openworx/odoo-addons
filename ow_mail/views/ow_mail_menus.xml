@@ -1,5 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
+    <!-- ir.actions.client carries no groups_id (only act_window and server
+         actions do), so the menu group below is what hides the app from
+         non-internal users; the data itself is gated by auth="ow_mail_user"
+         on every route. -->
     <record id="action_ow_mail_mailclient" model="ir.actions.client">
         <field name="name">OW Mail</field>
         <field name="tag">ow_mail.mailclient</field>
@@ -7,34 +11,41 @@
 
     <menuitem id="menu_ow_mail_root" name="OW Mail"
               web_icon="ow_mail,static/description/menu_icon.png"
+              groups="base.group_user"
               sequence="10"/>
 
     <menuitem id="menu_ow_mail_mailclient" name="Mail"
               parent="menu_ow_mail_root"
               action="action_ow_mail_mailclient"
+              groups="base.group_user"
               sequence="1"/>
 
     <menuitem id="menu_ow_mail_config" name="Configuration"
               parent="menu_ow_mail_root"
+              groups="base.group_user"
               sequence="90"/>
 
     <menuitem id="menu_ow_mail_accounts" name="Accounts"
               parent="menu_ow_mail_config"
               action="action_ow_mail_account"
+              groups="base.group_user"
               sequence="10"/>
 
     <menuitem id="menu_ow_mail_connect" name="Connect Mailbox"
               parent="menu_ow_mail_config"
               action="action_ow_mail_connect_wizard"
+              groups="base.group_user"
               sequence="20"/>
 
     <menuitem id="menu_ow_mail_tags" name="Tags"
               parent="menu_ow_mail_config"
               action="action_ow_mail_tag"
+              groups="base.group_user"
               sequence="30"/>
 
     <menuitem id="menu_ow_mail_contacts" name="Contacts"
               parent="menu_ow_mail_config"
               action="action_ow_mail_contact"
+              groups="base.group_user"
               sequence="40"/>
 </odoo>

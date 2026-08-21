@@ -13,6 +13,8 @@ from datetime import datetime, timezone
 from email.header import decode_header, make_header
 from email.utils import getaddresses, parseaddr, parsedate_to_datetime
 
+from .ow_mail_search import _imap_quote
+
 _logger = logging.getLogger(__name__)
 
 # Tags dropped entirely — they can execute, navigate, or load remote content
@@ -933,8 +935,12 @@ def search_thread_uids(conn, message_ids):
         return []
     # Two criteria per id — halve the id cap to keep the command bounded.
     clean = clean[-10:]
-    atoms = [f'HEADER Message-ID "{mid}"' for mid in clean]
-    atoms += [f'HEADER References "{mid}"' for mid in clean]
+    # The ids arrive straight from the client (/ow_mail/thread), so they go
+    # through the same quoting as any other SEARCH value: an unescaped quote
+    # would break out of the quoted string and a CR/LF would inject a second
+    # IMAP command onto the wire.
+    atoms = [f"HEADER Message-ID {_imap_quote(mid)}" for mid in clean]
+    atoms += [f"HEADER References {_imap_quote(mid)}" for mid in clean]
     # Build nested OR: OR (a) (OR (b) (c))
     criteria = atoms[-1]
     for atom in reversed(atoms[:-1]):
