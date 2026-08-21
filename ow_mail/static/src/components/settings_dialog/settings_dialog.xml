@@ -3,7 +3,7 @@
 
 <t t-name="ow_mail.SettingsDialog">
     <Dialog title="title" size="'md'">
-        <div class="o-ow-settings">
+        <div class="o-ow-settings" t-att-class="themeClass">
             <div class="mb-3">
                 <label class="form-label fw-semibold" for="ow-settings-mark-read">Mark as read</label>
                 <select id="ow-settings-mark-read" class="form-select"
@@ -14,6 +14,19 @@
                 </select>
                 <div class="form-text">
                     When an opened message is marked as read.
+                </div>
+            </div>
+            <div class="mb-3">
+                <label class="form-label fw-semibold" for="ow-settings-theme">Theme</label>
+                <select id="ow-settings-theme" class="form-select" t-model="local.theme">
+                    <t t-foreach="themeOptions" t-as="opt" t-key="opt.value">
+                        <option t-att-value="opt.value" t-esc="opt.label"/>
+                    </t>
+                </select>
+                <div class="form-text">
+                    "Follow Odoo theme / system" tracks the backend dark-mode
+                    toggle when a theme module provides one, otherwise your
+                    operating system preference.
                 </div>
             </div>
             <div class="form-check mb-2">

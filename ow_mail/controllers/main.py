@@ -435,8 +435,14 @@ class OwMailController(http.Controller):
         Only whitelisted keys are accepted (mass-assignment guard, mirroring
         ``contacts_update``); values are type-coerced before the write.
         """
+        def _coerce_theme(value):
+            value = str(value)
+            if value not in ("system", "light", "dark"):
+                raise ValueError(value)
+            return value
+
         allowed = {"mark_read_delay": int, "thread_view_default": bool,
-                   "stacked_threads": bool}
+                   "stacked_threads": bool, "theme": _coerce_theme}
         clean = {}
         for key, coerce in allowed.items():
             if key in (vals or {}):

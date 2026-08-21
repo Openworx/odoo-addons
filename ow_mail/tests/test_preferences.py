@@ -5,7 +5,9 @@ No IMAP: ``_sync_keyword_on_server`` only contacts accounts in state
 a pure ORM affair here (the IMAP round-trip is covered by the GreenMail
 integration tests).
 """
-from odoo.tests import TransactionCase, tagged
+import json
+
+from odoo.tests import HttpCase, TransactionCase, tagged
 
 
 @tagged("post_install", "-at_install", "ow_mail")
@@ -51,8 +53,25 @@ class TestPreferences(TransactionCase):
         prefs.write({"mark_read_delay": -1, "thread_view_default": True})
         self.assertEqual(prefs._to_wire(), {
             "mark_read_delay": -1, "thread_view_default": True,
-            "stacked_threads": True,
+            "stacked_threads": True, "theme": "system",
         })
+
+    def test_theme_default_system(self):
+        prefs = self.env["ow.mail.preferences"].with_user(
+            self.user_a)._get_for_user()
+        self.assertEqual(prefs.theme, "system")
+
+    def test_theme_roundtrip(self):
+        prefs = self.env["ow.mail.preferences"].with_user(
+            self.user_a)._get_for_user()
+        prefs.write({"theme": "dark"})
+        self.assertEqual(prefs._to_wire()["theme"], "dark")
+
+    def test_theme_invalid_rejected(self):
+        prefs = self.env["ow.mail.preferences"].with_user(
+            self.user_a)._get_for_user()
+        with self.assertRaises(ValueError):
+            prefs.write({"theme": "midnight"})
 
     def test_stacked_threads_default_on(self):
         prefs = self.env["ow.mail.preferences"].with_user(
@@ -98,3 +117,28 @@ class TestTagKeywordRename(TransactionCase):
         tag = self.Tag.create({"name": "Weg", "user_id": self.user.id})
         tag.unlink()
         self.assertFalse(tag.exists())
+
+
+@tagged("post_install", "-at_install", "ow_mail")
+class TestThemePrefsRoute(HttpCase):
+    """The prefs_save whitelist must validate the theme value."""
+
+    def _save(self, vals):
+        self.authenticate("admin", "admin")
+        response = self.url_open(
+            "/ow_mail/prefs/save",
+            data=json.dumps({"jsonrpc": "2.0", "method": "call",
+                             "params": {"vals": vals}}),
+            headers={"Content-Type": "application/json"},
+        )
+        response.raise_for_status()
+        return response.json()["result"]
+
+    def test_valid_theme_accepted(self):
+        res = self._save({"theme": "dark"})
+        self.assertTrue(res.get("ok"))
+        self.assertEqual(res["prefs"]["theme"], "dark")
+
+    def test_invalid_theme_rejected(self):
+        res = self._save({"theme": "midnight"})
+        self.assertTrue(res.get("error"))

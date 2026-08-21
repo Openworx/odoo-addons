@@ -3,6 +3,7 @@
 import { registry } from "@web/core/registry";
 import { rpc } from "@web/core/network/rpc";
 import { _t } from "@web/core/l10n/translation";
+import { cookie } from "@web/core/browser/cookie";
 import { reactive } from "@odoo/owl";
 
 /**
@@ -166,7 +167,11 @@ export const owMailService = {
             tags: [],
             bootstrapped: false,
             prefs: { mark_read_delay: 0, thread_view_default: false,
-                     stacked_threads: true },
+                     stacked_threads: true, theme: "system" },
+            // Effective theme flag driving the `.o-ow-dark` root class.
+            // Seeded from localStorage so a dark user gets no light flash
+            // before bootstrap resolves the server preference.
+            darkMode: _lsGet("ow_mail.darkMode", "0") === "1",
             // Curated "Create record" dropdown entries; filled by bootstrap
             // (server filters on installed models + create access).
             createMenu: [],
@@ -214,6 +219,28 @@ export const owMailService = {
             mqTablet.addEventListener("change", applyViewport);
         }
 
+        // Theme resolution. "system" follows the Odoo backend theme via
+        // the standard `color_scheme` cookie (written by Enterprise and by
+        // the common community theme modules, which reload the page on
+        // toggle), falling back to the OS preference; the matchMedia
+        // listener only matters for that OS fallback.
+        const mqDark = (typeof window !== "undefined" && window.matchMedia)
+            ? window.matchMedia("(prefers-color-scheme: dark)")
+            : null;
+
+        function applyTheme() {
+            const theme = state.prefs.theme || "system";
+            state.darkMode = theme === "dark" ||
+                (theme === "system" &&
+                    (cookie.get("color_scheme") === "dark" ||
+                     !!(mqDark && mqDark.matches)));
+            _lsSet("ow_mail.darkMode", state.darkMode ? "1" : "0");
+        }
+        applyTheme();
+        if (mqDark) {
+            mqDark.addEventListener("change", applyTheme);
+        }
+
         /**
          * Perform the initial data load: fetch accounts, folder tree, and tags from
          * `/ow_mail/bootstrap`, then select the Inbox of the first account and load
@@ -235,6 +262,7 @@ export const owMailService = {
             state.createMenu = data.create_menu || [];
             if (data.prefs) {
                 Object.assign(state.prefs, data.prefs);
+                applyTheme();
                 // The server-side default only applies while the user has no
                 // device-level override in localStorage.
                 if (_lsGet(LS_THREAD_VIEW, null) === null) {
@@ -1767,6 +1795,7 @@ export const owMailService = {
             }
             if (res && res.prefs) {
                 Object.assign(state.prefs, res.prefs);
+                applyTheme();
             }
             return true;
         }

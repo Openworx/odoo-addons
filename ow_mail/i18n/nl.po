@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 19.0+e\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-08-21 14:34+0000\n"
+"POT-Creation-Date: 2026-08-21 15:03+0000\n"
 "PO-Revision-Date: 2026-06-02 20:47+0200\n"
 "Last-Translator: Thomas Pot | Open2bizz <info@open2bizz.nl>\n"
 "Language-Team: \n"
@@ -17,6 +17,15 @@ msgstr ""
 "l\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Poedit 3.9\n"
+
+#. module: ow_mail
+#. odoo-javascript
+#: code:addons/ow_mail/static/src/components/settings_dialog/settings_dialog.xml:0
+msgid ""
+"\"Follow Odoo theme / system\" tracks the backend dark-mode\n"
+"                    toggle when a theme module provides one, otherwise your\n"
+"                    operating system preference."
+msgstr ""
 
 #. module: ow_mail
 #: model_terms:ir.ui.view,arch_db:ow_mail.view_ow_mail_account_form
@@ -517,6 +526,13 @@ msgstr "Klant"
 
 #. module: ow_mail
 #. odoo-javascript
+#: code:addons/ow_mail/static/src/components/settings_dialog/settings_dialog.js:0
+#: model:ir.model.fields.selection,name:ow_mail.selection__ow_mail_preferences__theme__dark
+msgid "Dark"
+msgstr "Donker"
+
+#. module: ow_mail
+#. odoo-javascript
 #: code:addons/ow_mail/static/src/components/message_list/message_list.js:0
 #: model:ir.model.fields,field_description:ow_mail.field_ow_mail_attach_record__date
 msgid "Date"
@@ -779,6 +795,12 @@ msgstr "Mappen"
 #: code:addons/ow_mail/models/ow_mail_account.py:0
 msgid "Folders fetched"
 msgstr "Mappen opgehaald"
+
+#. module: ow_mail
+#. odoo-javascript
+#: code:addons/ow_mail/static/src/components/settings_dialog/settings_dialog.js:0
+msgid "Follow Odoo theme / system"
+msgstr "Odoo-thema / systeem volgen"
 
 #. module: ow_mail
 #. odoo-javascript
@@ -1188,6 +1210,13 @@ msgstr "Lead"
 #: model_terms:ir.ui.view,arch_db:ow_mail.view_ow_mail_account_form
 msgid "Leave empty to use IMAP login"
 msgstr "Leeg laten om IMAP-login te gebruiken"
+
+#. module: ow_mail
+#. odoo-javascript
+#: code:addons/ow_mail/static/src/components/settings_dialog/settings_dialog.js:0
+#: model:ir.model.fields.selection,name:ow_mail.selection__ow_mail_preferences__theme__light
+msgid "Light"
+msgstr "Licht"
 
 #. module: ow_mail
 #. odoo-javascript
@@ -2103,6 +2132,11 @@ msgid "Sync this mailbox"
 msgstr "Mailbox synchroniseren"
 
 #. module: ow_mail
+#: model:ir.model.fields.selection,name:ow_mail.selection__ow_mail_preferences__theme__system
+msgid "System"
+msgstr "Systeem"
+
+#. module: ow_mail
 #: model:ir.model.constraint,message:ow_mail.constraint_ow_mail_tag_user_name_uniq
 msgid "Tag name must be unique per user."
 msgstr "Tagnaam moet uniek zijn per gebruiker."
@@ -2154,6 +2188,13 @@ msgstr "Tekstkleur"
 #: code:addons/ow_mail/models/ow_mail_record_link.py:0
 msgid "The selected record does not exist."
 msgstr "Het geselecteerde record bestaat niet."
+
+#. module: ow_mail
+#. odoo-javascript
+#: code:addons/ow_mail/static/src/components/settings_dialog/settings_dialog.xml:0
+#: model:ir.model.fields,field_description:ow_mail.field_ow_mail_preferences__theme
+msgid "Theme"
+msgstr "Thema"
 
 #. module: ow_mail
 #: model:ir.model.constraint,message:ow_mail.constraint_ow_mail_contact_user_email_uniq

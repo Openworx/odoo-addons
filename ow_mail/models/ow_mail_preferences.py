@@ -23,6 +23,12 @@ class OwMailPreferences(models.Model):
     # client looks up the full thread (ancestors + descendants) on every
     # message open; disabled shows only the opened message.
     stacked_threads = fields.Boolean(default=True)
+    # Client theme. "system" follows the Odoo backend theme via the
+    # standard ``color_scheme`` cookie (set by Enterprise and by the
+    # common community theme modules), falling back to the OS preference.
+    theme = fields.Selection(
+        [("system", "System"), ("light", "Light"), ("dark", "Dark")],
+        default="system", required=True)
 
     _sql_constraints = [
         ("user_uniq", "unique(user_id)",
@@ -43,4 +49,5 @@ class OwMailPreferences(models.Model):
             "mark_read_delay": self.mark_read_delay,
             "thread_view_default": self.thread_view_default,
             "stacked_threads": self.stacked_threads,
+            "theme": self.theme,
         }

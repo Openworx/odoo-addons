@@ -17,6 +17,32 @@ const REMOTE_SCHEME_RX = /^\s*(?:https?:)?\/\//i;
 const CSS_URL_REMOTE_RX = /url\s*\(\s*(["']?)\s*(?:https?:)?\/\/[^"')]*\1\s*\)/gi;
 const CSS_IMPORT_REMOTE_RX = /@import\s+(?:url\()?\s*["']?(?:https?:)?\/\/[^"');]*["']?\)?\s*;?/gi;
 
+// Shared base CSS for the message-body iframes and the print window.
+// `background:#fff` + `color-scheme:light` pin the body to a light canvas:
+// email HTML is authored for light backgrounds, so it is framed by the dark
+// chrome rather than inverted when the client runs in dark mode.
+const IFRAME_BASE_CSS =
+    "html,body{background:#fff;color-scheme:light;}" +
+    "body{font-family:system-ui,sans-serif;padding:12px;color:#222;}" +
+    "img{max-width:100%;}a{color:#0d6efd;}";
+
+// Dark variant for the message body. Sender HTML is authored for light
+// backgrounds, so — like Odoo's own mail rendering — text and backgrounds
+// are force-overridden; images keep their own colors. Printing from a dark
+// iframe must stay light, hence the @media print escape.
+const IFRAME_DARK_CSS =
+    "html,body{background:#1e222c;color-scheme:dark;}" +
+    "body{color:#e5e7eb;}" +
+    "body *{color:#e5e7eb!important;background-color:transparent!important;" +
+    "border-color:#3a4150!important;}" +
+    "a,a *{color:#4d8dfd!important;}" +
+    "@media print{html,body{background:#fff;}body{color:#222;}" +
+    "body *{color:#222!important;}a,a *{color:#0d6efd!important;}}";
+
+function iframeCss(dark) {
+    return dark ? IFRAME_BASE_CSS + IFRAME_DARK_CSS : IFRAME_BASE_CSS;
+}
+
 /**
  * Strip external URL references from a CSS string.
  *
@@ -234,7 +260,8 @@ export class MessageViewer extends Component {
                     this.renderBody(msg, showRemote);
                 }
             },
-            () => [this.state.selectedMessage, this.local.showRemote]
+            () => [this.state.selectedMessage, this.local.showRemote,
+                   this.state.darkMode]
         );
 
         // Mobile uses a single scroll context: the pane scrolls and the
@@ -375,15 +402,16 @@ export class MessageViewer extends Component {
             const key = `${tm.folder_id}:${tm.uid}`;
             if (!this.local.expandedThread[key]) continue;
             const el = document.querySelector(`[data-thread-iframe="${key}"]`);
-            if (!el || el.dataset.rendered === "1") continue;
-            el.dataset.rendered = "1";
+            const renderKey = this.state.darkMode ? "dark" : "light";
+            if (!el || el.dataset.rendered === renderKey) continue;
+            el.dataset.rendered = renderKey;
             let html = tm.html || `<pre>${(tm.text || "").replace(/</g, "&lt;")}</pre>`;
             if (tm.has_remote_content && !this.local.showRemote && !tm.trusted) {
                 html = stripRemote(html).html;
             }
             const doc = `<!doctype html><html><head><meta charset="utf-8"/>
                 <base target="_blank"/>
-                <style>body{font-family:system-ui,sans-serif;padding:12px;color:#222;}img{max-width:100%;}a{color:#0d6efd;}</style>
+                <style>${iframeCss(this.state.darkMode)}</style>
                 </head><body>${html}</body></html>`;
             el.setAttribute("srcdoc", doc);
             // Auto-size iframe after load + link hygiene
@@ -452,8 +480,7 @@ export class MessageViewer extends Component {
         const doc = `<!doctype html><html><head><meta charset="utf-8"/>
             <base target="_blank"/>
             <style>
-                body{font-family:system-ui,sans-serif;padding:12px;color:#222;}
-                img{max-width:100%;}a{color:#0d6efd;}
+                ${iframeCss(this.state.darkMode)}
                 .ow-print-header{display:none;}
                 @media print{
                     .ow-print-header{
