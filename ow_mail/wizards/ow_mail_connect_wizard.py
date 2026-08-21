@@ -11,8 +11,20 @@ _logger = logging.getLogger(__name__)
 
 
 class OwMailConnectWizard(models.TransientModel):
+    """Quick mailbox setup: probe the credentials, then create the account.
+
+    ``password`` is necessarily a stored column for the duration of the
+    dialog, so its lifetime is kept as short as possible: the row is
+    unlinked as soon as ``action_connect`` succeeds and
+    ``_transient_max_hours`` shortens the vacuum window for the rows left
+    behind by an abandoned or failed attempt. Same pattern as Odoo's own
+    ``change.password.own``. Cross-user reads are blocked by the
+    ``rule_ow_mail_connect_wizard_own`` record rule — transient models get
+    no creator isolation from the ORM.
+    """
     _name = "ow.mail.connect.wizard"
     _description = "OW Mail Connect Wizard"
+    _transient_max_hours = 0.1
 
     name = fields.Char(required=True)
     email = fields.Char(required=True)
@@ -129,6 +141,9 @@ class OwMailConnectWizard(models.TransientModel):
                               acc.id)
             acc.sudo().unlink()
             raise
+        # The password now lives encrypted on the account; drop the plain-text
+        # copy from the wizard table instead of waiting for the vacuum.
+        self.unlink()
         return {
             "type": "ir.actions.client",
             "tag": "ow_mail.mailclient",

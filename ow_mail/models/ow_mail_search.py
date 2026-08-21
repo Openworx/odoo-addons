@@ -32,14 +32,26 @@ _IS_MAP = {
 }
 
 
+# Control characters are illegal in an IMAP quoted-string and a raw CR/LF
+# would terminate the command line, so anything after it is read by the
+# server as a fresh command. imaplib does no filtering of its own.
+_CTL_RX = re.compile(r"[\x00-\x1f\x7f]")
+
+
 def _imap_quote(s):
     """Escape a value for use inside an IMAP SEARCH quoted string.
 
     IMAP SEARCH arguments that contain spaces must be passed as quoted strings.
     Per RFC 3501, both backslash and double-quote must be escaped with a leading
     backslash inside the quoted-string syntax.
+
+    Control characters are dropped before escaping — that is the command
+    injection vector. Unlike ``imap_mbox_quote``, which raises, this strips:
+    the input here is a search box, where a stray character should narrow
+    the search rather than fail the request.
     """
-    return '"' + s.replace("\\", "\\\\").replace('"', '\\"') + '"'
+    clean = _CTL_RX.sub("", s or "")
+    return '"' + clean.replace("\\", "\\\\").replace('"', '\\"') + '"'
 
 
 def _fmt_imap_date(d):

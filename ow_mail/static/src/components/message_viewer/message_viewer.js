@@ -839,7 +839,7 @@ export class MessageViewer extends Component {
      * Print the message by triggering the iframe's print dialog.
      *
      * In thread view, delegates to `_printThreadView` which assembles all
-     * expanded thread messages into a dedicated print window. For a single
+     * expanded thread messages into a sandboxed print frame. For a single
      * message, focuses the iframe's `contentWindow` first so the browser
      * print dialog targets only the message content rather than the full
      * Odoo shell. If accessing `contentWindow` throws (cross-origin
@@ -873,17 +873,19 @@ export class MessageViewer extends Component {
      * Print all expanded messages of the current thread.
      *
      * Collects the rendered bodies from the per-message thread iframes and
-     * writes them, with a From/To/Cc/Date header per message, into a new
-     * window that is then printed. Falls back to `window.print()` when a
-     * popup cannot be opened.
+     * assembles them, with a From/To/Cc/Date header per message, into a
+     * hidden sandboxed iframe which is then printed.
+     *
+     * The document deliberately does not go into a `window.open("")` popup:
+     * such a popup inherits the Odoo origin and carries no sandbox, which
+     * would undo the protection the reading iframes provide. Message bodies
+     * are attacker-controlled — anyone who can email the user — and a
+     * sanitiser bypass (mutation XSS survives a parse/serialise round trip)
+     * would then run with the reader's session. The sandbox below mirrors
+     * the reading iframes: no `allow-scripts`, and `allow-modals` only so
+     * the print dialog may open.
      */
     _printThreadView() {
-        const printWindow = window.open("", "_blank");
-        if (!printWindow) {
-            window.print();
-            return;
-        }
-
         const messages = [];
         for (const tm of this.state.threadMessages || []) {
             const key = `${tm.folder_id}:${tm.uid}`;
@@ -915,12 +917,10 @@ export class MessageViewer extends Component {
         }
 
         if (!messages.length) {
-            printWindow.close();
             return;
         }
 
-        printWindow.document.open();
-        printWindow.document.write(`<!doctype html>
+        const doc = `<!doctype html>
             <html>
                 <head>
                     <meta charset="utf-8"/>
@@ -957,11 +957,52 @@ export class MessageViewer extends Component {
                 <body>
                     ${messages.join("")}
                 </body>
-            </html>`);
-        printWindow.document.close();
+            </html>`;
 
-        printWindow.focus();
-        printWindow.print();
+        this._printInSandbox(doc);
+    }
+
+    /**
+     * Render `doc` in an off-screen sandboxed iframe and open the print
+     * dialog on it, then clean the iframe up.
+     *
+     * The frame is positioned off-screen rather than `display:none` — a
+     * frame that never lays out can print blank pages. Cleanup runs on
+     * `afterprint`, deferred by a tick because removing the frame while the
+     * dialog is closing aborts the job in some browsers; a long timer sweeps
+     * up in the browsers that never fire the event.
+     *
+     * @param {string} doc - Complete HTML document to print.
+     */
+    _printInSandbox(doc) {
+        const frame = document.createElement("iframe");
+        frame.setAttribute("sandbox", "allow-same-origin allow-modals");
+        frame.setAttribute("aria-hidden", "true");
+        frame.setAttribute("tabindex", "-1");
+        frame.style.cssText =
+            "position:fixed;left:-10000px;top:0;width:800px;height:600px;border:0;";
+        let done = false;
+        const cleanup = () => {
+            if (done) return;
+            done = true;
+            frame.remove();
+        };
+        frame.addEventListener("load", () => {
+            const win = frame.contentWindow;
+            try {
+                win.addEventListener(
+                    "afterprint", () => setTimeout(cleanup, 0), { once: true });
+                win.focus();
+                win.print();
+            } catch {
+                cleanup();
+                window.print();
+                return;
+            }
+            setTimeout(cleanup, 60000);
+        }, { once: true });
+        frame.setAttribute("srcdoc", doc);
+        document.body.appendChild(frame);
     }
 
     /**
