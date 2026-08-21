@@ -7,3 +7,4 @@ from . import test_thread_route
 from . import test_sanitize_links
 from . import test_record_link
 from . import test_record_routes
+from . import test_auto_link

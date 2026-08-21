@@ -87,6 +87,11 @@ class OwMailAccount(models.Model):
     smtp_same_as_imap = fields.Boolean(string="Login same as incoming", default=True)
 
     notify_new_mail = fields.Boolean(string="Notify on new mail", default=True)
+    auto_link_replies = fields.Boolean(
+        string="File replies on linked records", default=False,
+        help="When a new inbox message is a reply in a thread that was "
+             "already attached to an Odoo record, post it automatically "
+             "to that record's chatter.")
 
     from_name_mode = fields.Selection(
         [("user", "Odoo user name"), ("custom", "Custom")],
@@ -414,9 +419,13 @@ class OwMailAccount(models.Model):
                 conn = acc._imap_connect()
                 try:
                     acc.folder_ids.refresh_counts(conn=conn)
-                    # New-mail detection for inbox
-                    if acc.notify_new_mail and acc.inbox_folder_id:
-                        self._check_new_mail(acc, conn, imap_utils)
+                    if acc.inbox_folder_id:
+                        # New-mail detection for inbox
+                        if acc.notify_new_mail:
+                            self._check_new_mail(acc, conn, imap_utils)
+                        # Auto-file replies on threads linked to records
+                        if acc.auto_link_replies and acc.user_id.active:
+                            self._auto_link_new_mail(acc, conn, imap_utils)
                 finally:
                     conn.logout()
                 self.env.cr.commit()
@@ -449,6 +458,92 @@ class OwMailAccount(models.Model):
             stale.unlink()
             _logger.info("ow_mail: gc-ed %s orphan compose attachments", count)
         return count
+
+    # Upper bound of messages auto-filed per cron tick, so a burst (or a
+    # freshly enabled busy mailbox) can never stall the counts refresh.
+    AUTO_LINK_BATCH = 50
+
+    @api.model
+    def _auto_link_new_mail(self, acc, conn, imap_utils):
+        """Auto-file new inbox messages that reply to a linked thread.
+
+        Scans by UID range above the dedicated ``auto_link_uid`` watermark
+        (independent of ``last_seen_uid``, which is UNSEEN-only and advances
+        before any downstream work), fetches just the envelopes, and hands
+        them to :meth:`_auto_link_process`. Best-effort: any failure is
+        logged and retried on the next tick.
+        """
+        inbox = acc.inbox_folder_id
+        try:
+            typ, _ = conn.select(
+                imap_utils.imap_mbox_quote(inbox.full_path), readonly=True)
+            if typ != "OK":
+                return
+            last = inbox.auto_link_uid or 0
+            uids = imap_utils.search_uids(conn, f"UID {last + 1}:*")
+            # IMAP quirk: ``UID n:*`` always returns at least the highest
+            # existing UID, even when nothing is newer — re-filter.
+            uids = sorted(u for u in uids if u > last)
+            if last == 0:
+                # First enable: seed the watermark at the current top so we
+                # never backfill the whole historical inbox in one tick.
+                if uids:
+                    inbox.sudo().write({"auto_link_uid": max(uids)})
+                return
+            if not uids:
+                return
+            batch = uids[:self.AUTO_LINK_BATCH]
+            envs = imap_utils.fetch_envelopes(conn, batch)
+            envs.sort(key=lambda e: e["uid"])
+            self._auto_link_process(acc, envs)
+        except Exception as e:
+            _logger.debug("auto-link check failed for %s: %s", acc.name, e)
+
+    @api.model
+    def _auto_link_process(self, acc, envs):
+        """Attach reply envelopes to the records their thread is linked to.
+
+        Pure-ORM half (unit-test seam). For each envelope, the bracketed
+        Message-IDs from ``In-Reply-To`` + ``References`` are matched
+        against the ``ow_mail_message_id`` stamps that
+        ``ow.mail.record.link.attach_email`` leaves on ``mail.message``;
+        every distinct linked record gets the reply posted to its chatter,
+        acting as the account owner (``with_user``) so access rules and
+        authorship match a manual attach. ``attach_email`` posts a chatter
+        note (mt_note): followers see it, no notification mail goes out —
+        which also rules out autoreply loops.
+
+        The ``auto_link_uid`` watermark advances per fully handled
+        envelope; deterministic refusals (``UserError``: duplicate or no
+        access) still advance it, an unexpected error stops the batch
+        without advancing so the message is retried next tick.
+        """
+        inbox = acc.inbox_folder_id
+        Link = self.env["ow.mail.record.link"].with_user(acc.user_id)
+        for env_d in envs:
+            uid = env_d["uid"]
+            header_blob = "%s %s" % (env_d.get("in_reply_to") or "",
+                                     env_d.get("references") or "")
+            ids = re.findall(r"<[^>]+>", header_blob)
+            if ids:
+                rows = self.env["mail.message"].sudo().search_read(
+                    [("ow_mail_message_id", "in", ids),
+                     ("model", "!=", False), ("res_id", "!=", 0)],
+                    ["model", "res_id"])
+                targets = list({(r["model"], r["res_id"]) for r in rows})
+                for model_name, res_id in targets:
+                    try:
+                        Link.attach_email(inbox, uid, model_name, res_id)
+                    except UserError:
+                        # duplicate or no access — deterministic, skip
+                        continue
+                    except Exception as e:
+                        _logger.warning(
+                            "ow_mail auto-link failed for account %s uid %s "
+                            "(%s,%s): %s", acc.id, uid, model_name, res_id, e)
+                        # transient: stop without advancing past this uid
+                        return
+            inbox.sudo().write({"auto_link_uid": uid})
 
     def _check_new_mail(self, acc, conn, imap_utils):
         """Detect new unseen messages in the inbox and fire a bus notification.

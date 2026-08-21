@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 18.0-20260630\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-08-21 11:32+0000\n"
-"PO-Revision-Date: 2026-08-21 11:32+0000\n"
+"POT-Creation-Date: 2026-08-21 14:34+0000\n"
+"PO-Revision-Date: 2026-08-21 14:34+0000\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -159,6 +159,11 @@ msgstr ""
 #: code:addons/ow_mail/static/src/components/message_viewer/message_viewer.xml:0
 #: model:ir.model.fields,field_description:ow_mail.field_ow_mail_compose__attachment_ids
 msgid "Attachments"
+msgstr ""
+
+#. module: ow_mail
+#: model:ir.model.fields,field_description:ow_mail.field_ow_mail_folder__auto_link_uid
+msgid "Auto Link Uid"
 msgstr ""
 
 #. module: ow_mail
@@ -701,6 +706,11 @@ msgid "Fetch folders failed: %s"
 msgstr ""
 
 #. module: ow_mail
+#: model:ir.model.fields,field_description:ow_mail.field_ow_mail_account__auto_link_replies
+msgid "File replies on linked records"
+msgstr ""
+
+#. module: ow_mail
 #. odoo-javascript
 #: code:addons/ow_mail/static/src/components/message_list/message_list.js:0
 msgid "Filter"
@@ -849,6 +859,13 @@ msgstr ""
 #. odoo-python
 #: code:addons/ow_mail/models/ow_mail_record_link.py:0
 msgid "Helpdesk Ticket"
+msgstr ""
+
+#. module: ow_mail
+#: model:ir.model.fields,help:ow_mail.field_ow_mail_folder__auto_link_uid
+msgid ""
+"Highest UID processed by reply auto-filing — independent of last_seen_uid "
+"and advanced only after successful processing"
 msgstr ""
 
 #. module: ow_mail
@@ -2288,6 +2305,13 @@ msgstr ""
 #. odoo-javascript
 #: code:addons/ow_mail/static/src/components/message_viewer/message_viewer.xml:0
 msgid "View original"
+msgstr ""
+
+#. module: ow_mail
+#: model:ir.model.fields,help:ow_mail.field_ow_mail_account__auto_link_replies
+msgid ""
+"When a new inbox message is a reply in a thread that was already attached to"
+" an Odoo record, post it automatically to that record's chatter."
 msgstr ""
 
 #. module: ow_mail

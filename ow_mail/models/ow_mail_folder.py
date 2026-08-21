@@ -34,6 +34,10 @@ class OwMailFolder(models.Model):
     total_count = fields.Integer(default=0)
     subscribed = fields.Boolean(default=True)
     last_seen_uid = fields.Integer(default=0, help="Highest UID seen — used for new-mail detection")
+    auto_link_uid = fields.Integer(
+        default=0,
+        help="Highest UID processed by reply auto-filing — independent of "
+             "last_seen_uid and advanced only after successful processing")
 
     _sql_constraints = [
         ("account_path_uniq", "unique(account_id, full_path)",

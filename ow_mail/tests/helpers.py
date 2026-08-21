@@ -29,7 +29,7 @@ def greenmail_reachable(host=GREENMAIL_HOST, port=GREENMAIL_IMAP_PORT, timeout=0
 
 
 def _build_message(frm, to, subject, html=None, text=None, attachments=None,
-                   date_utc=None):
+                   date_utc=None, headers=None):
     msg = EmailMessage()
     msg["From"] = frm
     msg["To"] = to
@@ -37,7 +37,11 @@ def _build_message(frm, to, subject, html=None, text=None, attachments=None,
     msg["Date"] = formatdate(
         timeval=(date_utc or datetime.now(timezone.utc)).timestamp(),
         localtime=False)
-    msg["Message-ID"] = make_msgid(domain="test.ow.test")
+    hdrs = dict(headers or {})
+    msg["Message-ID"] = hdrs.pop("Message-ID", None) \
+        or make_msgid(domain="test.ow.test")
+    for name, value in hdrs.items():
+        msg[name] = value
     msg.set_content(text or subject or "")
     if html:
         msg.add_alternative(html, subtype="html")
@@ -53,13 +57,18 @@ def _build_message(frm, to, subject, html=None, text=None, attachments=None,
 
 def greenmail_append(folder="INBOX", frm="Sender <sender@test.ow.test>",
                      to=None, subject="", html=None, text=None,
-                     attachments=None, date_utc=None,
+                     attachments=None, date_utc=None, headers=None,
                      host=GREENMAIL_HOST, port=GREENMAIL_IMAP_PORT,
                      user=GREENMAIL_USER, password=GREENMAIL_PASS):
-    """Append a message to GreenMail. Returns the Message-ID header."""
+    """Append a message to GreenMail. Returns the Message-ID header.
+
+    ``headers`` allows extra RFC 822 headers (e.g. ``In-Reply-To`` /
+    ``References`` to build reply threads, or a fixed ``Message-ID``).
+    """
     to = to or f"{user}@ow.test"
     msg = _build_message(frm, to, subject, html=html, text=text,
-                         attachments=attachments, date_utc=date_utc)
+                         attachments=attachments, date_utc=date_utc,
+                         headers=headers)
     conn = imaplib.IMAP4(host, port)
     conn.login(user, password)
     try:
