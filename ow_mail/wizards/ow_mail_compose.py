@@ -1,5 +1,5 @@
 """Transient model backing the floating compose window."""
-from odoo import _, api, fields, models
+from odoo import api, fields, models
 
 
 class OwMailCompose(models.TransientModel):

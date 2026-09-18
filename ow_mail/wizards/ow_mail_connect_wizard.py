@@ -4,7 +4,7 @@ import logging
 import smtplib
 import ssl as ssl_mod
 
-from odoo import _, api, fields, models
+from odoo import api, fields, models
 from odoo.exceptions import UserError
 
 _logger = logging.getLogger(__name__)
@@ -58,13 +58,13 @@ class OwMailConnectWizard(models.TransientModel):
         try:
             conn = cls(self.imap_host, self.imap_port)
         except (OSError, imaplib.IMAP4.error) as e:
-            raise UserError(_("Cannot reach IMAP server %s:%s — %s")
+            raise UserError(self.env._("Cannot reach IMAP server %s:%s — %s")
                             % (self.imap_host, self.imap_port, e))
         try:
             try:
                 conn.login(login, self.password)
             except imaplib.IMAP4.error as e:
-                raise UserError(_("IMAP login failed for %s — %s")
+                raise UserError(self.env._("IMAP login failed for %s — %s")
                                 % (login, e))
         finally:
             try:
@@ -84,7 +84,7 @@ class OwMailConnectWizard(models.TransientModel):
                 if self.smtp_encryption == "starttls":
                     smtp.starttls(context=ctx)
         except (OSError, smtplib.SMTPException) as e:
-            raise UserError(_("Cannot reach SMTP server %s:%s — %s")
+            raise UserError(self.env._("Cannot reach SMTP server %s:%s — %s")
                             % (self.smtp_host, self.smtp_port, e))
         try:
             try:
@@ -93,7 +93,7 @@ class OwMailConnectWizard(models.TransientModel):
                 # Some relays accept unauthenticated submission on LAN.
                 pass
             except smtplib.SMTPException as e:
-                raise UserError(_("SMTP login failed for %s — %s")
+                raise UserError(self.env._("SMTP login failed for %s — %s")
                                 % (login, e))
         finally:
             try:
@@ -104,7 +104,7 @@ class OwMailConnectWizard(models.TransientModel):
     def action_connect(self):
         self.ensure_one()
         if not self.imap_host or not self.smtp_host:
-            raise UserError(_("Please fill in IMAP and SMTP hosts."))
+            raise UserError(self.env._("Please fill in IMAP and SMTP hosts."))
 
         # Probe BEFORE creating the account record. If credentials are wrong
         # or the server is unreachable the user sees a clear error and no

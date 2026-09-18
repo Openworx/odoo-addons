@@ -1,7 +1,7 @@
 import logging
 import re
 
-from odoo import _, api, fields, models
+from odoo import api, fields, models
 from odoo.exceptions import ValidationError
 
 from .ow_mail_imap import imap_mbox_quote, search_uids
@@ -81,7 +81,7 @@ class OwMailTag(models.Model):
         for rec in self:
             kw = rec.imap_keyword or ""
             if kw and not _KEYWORD_RX.match(kw):
-                raise ValidationError(_(
+                raise ValidationError(self.env._(
                     "IMAP keyword %r must match [A-Za-z0-9_-] (1–64 chars)."
                 ) % kw)
 

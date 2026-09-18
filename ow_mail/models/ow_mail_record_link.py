@@ -27,7 +27,7 @@ from datetime import timedelta
 import pytz
 from markupsafe import Markup
 
-from odoo import _, _lt, api, fields, models
+from odoo import _lt, api, fields, models
 from odoo.exceptions import UserError
 from odoo.tools import html2plaintext
 
@@ -283,17 +283,17 @@ class OwMailRecordLink(models.AbstractModel):
         """
         uid = int(uid)
         if model_name not in self.env:
-            raise UserError(_("Unknown model: %s") % model_name)
+            raise UserError(self.env._("Unknown model: %s") % model_name)
         Model = self.env[model_name]
         if Model._abstract or Model._transient:
-            raise UserError(_("Cannot attach email to %s.") % model_name)
+            raise UserError(self.env._("Cannot attach email to %s.") % model_name)
         record = Model.browse(int(res_id)).exists()
         if not record or not record.has_access("read"):
-            raise UserError(_("The selected record does not exist."))
+            raise UserError(self.env._("The selected record does not exist."))
 
         raw = self._fetch_raw(folder, uid)
         if not raw:
-            raise UserError(_("Message not found on the mail server."))
+            raise UserError(self.env._("Message not found on the mail server."))
         msg = email.message_from_bytes(raw)
         envelope = imap_utils.parse_envelope(msg)
 
@@ -367,7 +367,7 @@ class OwMailRecordLink(models.AbstractModel):
                         ("ow_mail_folder_id", "=", folder.id)], limit=1)
         if duplicate:
             raise UserError(
-                _("This message has already been attached to this record."))
+                self.env._("This message has already been attached to this record."))
 
     @api.model
     def _create_attachments(self, msg, model_name, res_id):

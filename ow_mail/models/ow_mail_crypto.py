@@ -25,7 +25,7 @@ import os
 
 from cryptography.fernet import Fernet, InvalidToken
 
-from odoo import _, models
+from odoo import models
 from odoo.exceptions import UserError
 
 _logger = logging.getLogger(__name__)
@@ -83,7 +83,7 @@ class OwMailCrypto(models.AbstractModel):
                 PARAM_KEY, e.__class__.__name__,
             )
             if strict:
-                raise CipherKeyError(_(
+                raise CipherKeyError(self.env._(
                     "Stored credential cannot be decrypted. The encryption "
                     "key (ir.config_parameter '%s') has changed or the "
                     "ciphertext is corrupt. Re-enter the password on the "

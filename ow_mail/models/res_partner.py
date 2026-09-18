@@ -1,4 +1,4 @@
-from odoo import _, api, models
+from odoo import api, models
 
 
 class ResPartner(models.Model):
@@ -32,6 +32,6 @@ class ResPartner(models.Model):
         return {
             "type": "ir.actions.client",
             "tag": "ow_mail.mailclient",
-            "name": _("Mail with %s") % self.display_name,
+            "name": self.env._("Mail with %s") % self.display_name,
             "params": {"search": query},
         }

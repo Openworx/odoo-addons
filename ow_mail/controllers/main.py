@@ -19,7 +19,7 @@ import logging
 import re
 from urllib.parse import quote
 
-from odoo import _, http
+from odoo import http
 from odoo.exceptions import UserError
 from odoo.http import Response, request
 
@@ -1168,7 +1168,7 @@ class OwMailController(http.Controller):
         # Propagate the Sent-APPEND warning when SMTP succeeded but the
         # copy to Sent didn't — the client shows a non-blocking notice.
         if isinstance(result, dict) and result.get("sent_append_failed"):
-            return {"ok": True, "warning": _(
+            return {"ok": True, "warning": request.env._(
                 "Message sent, but saving to Sent folder failed: %s"
             ) % result["sent_append_failed"]}
         return {"ok": True}

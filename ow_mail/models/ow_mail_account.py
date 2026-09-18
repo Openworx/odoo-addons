@@ -9,7 +9,7 @@ from datetime import datetime, timedelta, timezone
 from email.message import EmailMessage
 from email.utils import getaddresses
 
-from odoo import _, api, fields, models
+from odoo import api, fields, models
 
 from .ow_mail_imap import imap_mbox_quote as _mbox
 from odoo.exceptions import UserError
@@ -309,11 +309,11 @@ class OwMailAccount(models.Model):
             s.quit()
         except Exception as e:
             self.write({"state": "error", "error_message": str(e)})
-            raise UserError(_("Connection failed: %s") % e)
+            raise UserError(self.env._("Connection failed: %s") % e)
         self.write({"state": "confirmed", "error_message": False})
         return {
             "type": "ir.actions.client", "tag": "display_notification",
-            "params": {"title": _("OW Mail"), "message": _("Connection OK"), "type": "success"},
+            "params": {"title": self.env._("OW Mail"), "message": self.env._("Connection OK"), "type": "success"},
         }
 
     def action_test_incoming(self):
@@ -330,11 +330,11 @@ class OwMailAccount(models.Model):
             c.logout()
         except Exception as e:
             self.write({"state": "error", "error_message": str(e)})
-            raise UserError(_("Incoming (IMAP) connection failed: %s") % e)
+            raise UserError(self.env._("Incoming (IMAP) connection failed: %s") % e)
         self.write({"state": "confirmed", "error_message": False})
         return {
             "type": "ir.actions.client", "tag": "display_notification",
-            "params": {"title": _("OW Mail"), "message": _("Incoming server OK"),
+            "params": {"title": self.env._("OW Mail"), "message": self.env._("Incoming server OK"),
                        "type": "success"},
         }
 
@@ -352,11 +352,11 @@ class OwMailAccount(models.Model):
             s.quit()
         except Exception as e:
             self.write({"state": "error", "error_message": str(e)})
-            raise UserError(_("Outgoing (SMTP) connection failed: %s") % e)
+            raise UserError(self.env._("Outgoing (SMTP) connection failed: %s") % e)
         self.write({"state": "confirmed", "error_message": False})
         return {
             "type": "ir.actions.client", "tag": "display_notification",
-            "params": {"title": _("OW Mail"), "message": _("Outgoing server OK"),
+            "params": {"title": self.env._("OW Mail"), "message": self.env._("Outgoing server OK"),
                        "type": "success"},
         }
 
@@ -375,10 +375,10 @@ class OwMailAccount(models.Model):
         except Exception as e:
             _logger.exception("OW fetch folders failed for %s", self.name)
             self.write({"state": "error", "error_message": str(e)})
-            raise UserError(_("Fetch folders failed: %s") % e)
+            raise UserError(self.env._("Fetch folders failed: %s") % e)
         return {
             "type": "ir.actions.client", "tag": "display_notification",
-            "params": {"title": _("OW Mail"), "message": _("Folders fetched"),
+            "params": {"title": self.env._("OW Mail"), "message": self.env._("Folders fetched"),
                        "type": "success"},
         }
 
@@ -616,14 +616,14 @@ class OwMailAccount(models.Model):
         self.ensure_one()
         name = (name or "").strip()
         if not name:
-            raise UserError(_("Folder name is required"))
+            raise UserError(self.env._("Folder name is required"))
         conn = self._imap_connect()
         try:
             delim = self._imap_delimiter(conn)
             full_path = f"{parent_full_path}{delim}{name}" if parent_full_path else name
             typ, data = conn.create(_mbox(full_path))
             if typ != "OK":
-                raise UserError(_("IMAP CREATE failed: %s") % (data or b"").decode("utf-8", "replace"))
+                raise UserError(self.env._("IMAP CREATE failed: %s") % (data or b"").decode("utf-8", "replace"))
             try:
                 conn.subscribe(_mbox(full_path))
             except Exception:
@@ -648,7 +648,7 @@ class OwMailAccount(models.Model):
         try:
             typ, data = conn.rename(_mbox(old_full_path), _mbox(new_full_path))
             if typ != "OK":
-                raise UserError(_("IMAP RENAME failed: %s") % (data or b"").decode("utf-8", "replace"))
+                raise UserError(self.env._("IMAP RENAME failed: %s") % (data or b"").decode("utf-8", "replace"))
         finally:
             try:
                 conn.logout()
@@ -669,7 +669,7 @@ class OwMailAccount(models.Model):
                 return new_full_path
             typ, data = conn.rename(_mbox(old_full_path), _mbox(new_full_path))
             if typ != "OK":
-                raise UserError(_("IMAP RENAME failed: %s") % (data or b"").decode("utf-8", "replace"))
+                raise UserError(self.env._("IMAP RENAME failed: %s") % (data or b"").decode("utf-8", "replace"))
         finally:
             try:
                 conn.logout()
@@ -690,14 +690,14 @@ class OwMailAccount(models.Model):
             if new_parent_path == old_full_path or (
                 new_parent_path and new_parent_path.startswith(old_full_path + delim)
             ):
-                raise UserError(_("Cannot move folder into itself or its own subfolder"))
+                raise UserError(self.env._("Cannot move folder into itself or its own subfolder"))
             leaf = old_full_path.split(delim)[-1]
             new_full_path = f"{new_parent_path}{delim}{leaf}" if new_parent_path else leaf
             if new_full_path == old_full_path:
                 return new_full_path
             typ, data = conn.rename(_mbox(old_full_path), _mbox(new_full_path))
             if typ != "OK":
-                raise UserError(_("IMAP RENAME failed: %s") % (data or b"").decode("utf-8", "replace"))
+                raise UserError(self.env._("IMAP RENAME failed: %s") % (data or b"").decode("utf-8", "replace"))
         finally:
             try:
                 conn.logout()
@@ -723,7 +723,7 @@ class OwMailAccount(models.Model):
                 pass
             typ, data = conn.delete(_mbox(full_path))
             if typ != "OK":
-                raise UserError(_("IMAP DELETE failed: %s") % (data or b"").decode("utf-8", "replace"))
+                raise UserError(self.env._("IMAP DELETE failed: %s") % (data or b"").decode("utf-8", "replace"))
         finally:
             try:
                 conn.logout()
@@ -745,7 +745,7 @@ class OwMailAccount(models.Model):
             else:
                 typ, data = conn.unsubscribe(_mbox(full_path))
             if typ != "OK":
-                raise UserError(_("IMAP %s failed: %s") % (
+                raise UserError(self.env._("IMAP %s failed: %s") % (
                     "SUBSCRIBE" if subscribed else "UNSUBSCRIBE",
                     (data or b"").decode("utf-8", "replace")))
         finally:
@@ -793,7 +793,7 @@ class OwMailAccount(models.Model):
         try:
             typ, _ = conn.select(_mbox(full_path))
             if typ != "OK":
-                raise UserError(_("Cannot select %s") % full_path)
+                raise UserError(self.env._("Cannot select %s") % full_path)
             conn.store("1:*", "+FLAGS", r"(\Deleted)")
             conn.expunge()
             conn.close()
@@ -1006,7 +1006,7 @@ class OwMailAccount(models.Model):
         addr_fields = [str(h) for h in (msg["To"], msg.get("Cc"), msg.get("Bcc")) if h]
         recipients = [a for _n, a in getaddresses(addr_fields) if a]
         if not recipients:
-            raise UserError(_(
+            raise UserError(self.env._(
                 "No valid recipient address. Please fill in To, Cc, or Bcc."))
         smtp = self._smtp_connect()
         try:
@@ -1035,7 +1035,7 @@ class OwMailAccount(models.Model):
         else:
             # Same principle as the APPEND failure above: silently skipping
             # the Sent copy hides mail history from the user.
-            sent_warning = _("no Sent folder is configured on this account")
+            sent_warning = self.env._("no Sent folder is configured on this account")
         return {"ok": True, "sent_append_failed": sent_warning} if sent_warning \
             else {"ok": True}
 
@@ -1073,7 +1073,7 @@ class OwMailAccount(models.Model):
                 drafts_mbox, "(\\Draft)",
                 imaplib.Time2Internaldate(datetime.now(timezone.utc)), msg.as_bytes())
             if typ != "OK":
-                raise UserError(_("IMAP APPEND to Drafts failed: %s")
+                raise UserError(self.env._("IMAP APPEND to Drafts failed: %s")
                                 % (data or [b""])[0].decode("utf-8", "replace"))
             new_uid = self._parse_appenduid(data)
             if new_uid is None:

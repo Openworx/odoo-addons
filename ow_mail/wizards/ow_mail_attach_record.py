@@ -1,4 +1,4 @@
-from odoo import _, api, fields, models
+from odoo import api, fields, models
 from odoo.exceptions import UserError
 
 
@@ -50,13 +50,13 @@ class OwMailAttachRecord(models.TransientModel):
     def action_confirm(self):
         self.ensure_one()
         if not self.res_model_id or not self.res_id:
-            raise UserError(_("Please select a target record."))
+            raise UserError(self.env._("Please select a target record."))
         folder = self.env["ow.mail.folder"].browse(self.folder_id).exists()
         # Defense-in-depth ownership assert, mirroring the controller's
         # _get_folder: a crafted default_folder_id in context must not let
         # a user attach (and thereby read) someone else's mail.
         if not folder or folder.account_id.user_id != self.env.user:
-            raise UserError(_("Folder not found."))
+            raise UserError(self.env._("Folder not found."))
         self.env["ow.mail.record.link"].attach_email(
             folder, self.uid, self.res_model_id.model, self.res_id,
             include_attachments=self.include_attachments)
