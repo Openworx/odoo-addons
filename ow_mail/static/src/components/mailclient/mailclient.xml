@@ -16,12 +16,12 @@
              t-if="this.state.viewport === 'mobile'">
             <t t-if="this.isMobileDetail">
                 <button class="btn btn-sm btn-light" t-on-click="this.onBack" title="Back">
-                    <i class="fa fa-arrow-left"/>
+                    <i class="oi" data-icon="arrow_back"/>
                 </button>
             </t>
             <t t-else="">
                 <button class="btn btn-sm btn-light" t-on-click="this.openSidebar" title="Menu">
-                    <i class="fa fa-bars"/>
+                    <i class="oi" data-icon="menu"/>
                 </button>
             </t>
             <strong class="ms-2 text-truncate flex-grow-1" t-out="this.mobileTitle"/>
@@ -38,18 +38,18 @@
                 <div class="o-ow-onboarding flex-grow-1 d-flex justify-content-center align-items-center"
                      role="region" aria-label="Getting started">
                     <div class="text-center p-4" style="max-width: 420px;">
-                        <i class="fa fa-envelope-open-o fa-4x text-muted mb-3" aria-hidden="true"/>
+                        <i class="oi oi-4x text-muted mb-3" data-icon="drafts" aria-hidden="true"/>
                         <h4 class="mb-2">No mailbox connected yet</h4>
                         <p class="text-muted">
                             Connect your IMAP/SMTP mailbox to start reading and
                             sending mail right here in Odoo.
                         </p>
                         <div t-if="this.onboardingError" class="alert alert-warning small text-start">
-                            <i class="fa fa-exclamation-triangle me-1" aria-hidden="true"/>
+                            <i class="oi me-1" data-icon="warning" aria-hidden="true"/>
                             <t t-out="this.onboardingError"/>
                         </div>
                         <button class="btn btn-primary" t-on-click="this.onConnectMailbox">
-                            <i class="fa fa-plug me-1" aria-hidden="true"/> Connect Mailbox
+                            <i class="oi me-1" data-icon="power" aria-hidden="true"/> Connect Mailbox
                         </button>
                     </div>
                 </div>

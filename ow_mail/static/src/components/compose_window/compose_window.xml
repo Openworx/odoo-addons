@@ -16,7 +16,7 @@
              t-on-drop="this.onDrop">
             <div t-if="this.local.dragActive" class="o-ow-dropzone">
                 <div class="o-ow-dropzone-inner">
-                    <i class="fa fa-cloud-upload fa-3x mb-2"/>
+                    <i class="oi oi-3x mb-2" data-icon="cloud_upload"/>
                     <div>Drop files to attach</div>
                 </div>
             </div>
@@ -24,14 +24,14 @@
             <div class="o-ow-compose-header card-header d-flex align-items-center py-1 px-3">
                 <strong class="flex-grow-1 text-truncate">New Message</strong>
                 <button class="btn btn-sm btn-link p-0 me-2 text-muted" t-on-click="this.toggleMin" title="Minimize">
-                    <i class="fa fa-minus"/>
+                    <i class="oi" data-icon="remove"/>
                 </button>
                 <button class="btn btn-sm btn-link p-0 me-2 text-muted" t-on-click="this.toggleExpand"
                         t-att-title="this.props.win.expanded ? 'Restore' : 'Full screen'">
-                    <i class="fa" t-att-class="this.props.win.expanded ? 'fa-compress' : 'fa-expand'"/>
+                    <i class="oi" t-att-data-icon="this.props.win.expanded ? 'close_fullscreen' : 'fullscreen'"/>
                 </button>
                 <button class="btn btn-sm btn-link p-0 text-muted" t-on-click="this.onClose" title="Close">
-                    <i class="fa fa-times"/>
+                    <i class="oi" data-icon="close"/>
                 </button>
             </div>
 
@@ -79,11 +79,11 @@
                     <button class="btn btn-sm btn-light" t-on-click="() => this.exec('strikeThrough')" title="Strikethrough"><s>S</s></button>
                     <div class="vr mx-1"/>
                     <label class="btn btn-sm btn-light mb-0" title="Text color">
-                        <i class="fa fa-font"/>
+                        <i class="oi" data-icon="text_fields"/>
                         <input type="color" class="d-none" t-on-input="this.onTextColor"/>
                     </label>
                     <label class="btn btn-sm btn-light mb-0" title="Highlight color">
-                        <i class="fa fa-paint-brush"/>
+                        <i class="oi" data-icon="brush"/>
                         <input type="color" value="#ffff00" class="d-none" t-on-input="this.onHighlight"/>
                     </label>
                     <div class="vr mx-1"/>
@@ -100,53 +100,53 @@
                     </select>
                     <div class="vr mx-1"/>
                     <button class="btn btn-sm btn-light" t-on-click="() => this.exec('insertUnorderedList')" title="Bullet list">
-                        <i class="fa fa-list-ul"/>
+                        <i class="oi" data-icon="format_list_bulleted"/>
                     </button>
                     <button class="btn btn-sm btn-light" t-on-click="() => this.exec('insertOrderedList')" title="Numbered list">
-                        <i class="fa fa-list-ol"/>
+                        <i class="oi" data-icon="format_list_numbered"/>
                     </button>
                     <div class="vr mx-1"/>
                     <button class="btn btn-sm btn-light" t-on-click="() => this.exec('outdent')" title="Decrease indent">
-                        <i class="fa fa-outdent"/>
+                        <i class="oi" data-icon="format_indent_decrease"/>
                     </button>
                     <button class="btn btn-sm btn-light" t-on-click="() => this.exec('indent')" title="Increase indent">
-                        <i class="fa fa-indent"/>
+                        <i class="oi" data-icon="format_indent_increase"/>
                     </button>
                     <div class="vr mx-1"/>
                     <button class="btn btn-sm btn-light" t-on-click="() => this.exec('justifyLeft')" title="Align left">
-                        <i class="fa fa-align-left"/>
+                        <i class="oi" data-icon="format_align_left"/>
                     </button>
                     <button class="btn btn-sm btn-light" t-on-click="() => this.exec('justifyCenter')" title="Align center">
-                        <i class="fa fa-align-center"/>
+                        <i class="oi" data-icon="format_align_center"/>
                     </button>
                     <button class="btn btn-sm btn-light" t-on-click="() => this.exec('justifyRight')" title="Align right">
-                        <i class="fa fa-align-right"/>
+                        <i class="oi" data-icon="format_align_right"/>
                     </button>
                     <div class="vr mx-1"/>
                     <button class="btn btn-sm btn-light" t-on-click="this.insertLink" title="Insert link">
-                        <i class="fa fa-link"/>
+                        <i class="oi" data-icon="link"/>
                     </button>
                     <button class="btn btn-sm btn-light" t-on-click="() => this.exec('unlink')" title="Remove link">
-                        <i class="fa fa-chain-broken"/>
+                        <i class="oi" data-icon="link_off"/>
                     </button>
                     <label class="btn btn-sm btn-light mb-0" title="Insert image"
                            t-on-mousedown="this.onImageMousedown">
-                        <i class="fa fa-picture-o"/>
+                        <i class="oi" data-icon="image"/>
                         <input type="file" accept="image/*" class="d-none" t-on-change="this.onInsertImage"/>
                     </label>
                     <button class="btn btn-sm btn-light" t-on-click="() => this.exec('insertHorizontalRule')" title="Horizontal rule">
-                        <i class="fa fa-minus"/>
+                        <i class="oi" data-icon="remove"/>
                     </button>
                     <div class="vr mx-1"/>
                     <button class="btn btn-sm btn-light" t-on-click="() => this.exec('undo')" title="Undo">
-                        <i class="fa fa-undo"/>
+                        <i class="oi" data-icon="undo"/>
                     </button>
                     <button class="btn btn-sm btn-light" t-on-click="() => this.exec('redo')" title="Redo">
-                        <i class="fa fa-repeat"/>
+                        <i class="oi" data-icon="repeat"/>
                     </button>
                     <div class="vr mx-1"/>
                     <button class="btn btn-sm btn-light" t-on-click="() => this.exec('removeFormat')" title="Clear formatting">
-                        <i class="fa fa-eraser"/>
+                        <i class="oi" data-icon="ink_eraser"/>
                     </button>
                 </div>
 
@@ -169,9 +169,9 @@
                         <button t-on-click="() => this.setImgWidth('75%')" aria-label="Width 75%">75%</button>
                         <button t-on-click="() => this.setImgWidth('100%')" aria-label="Width 100%">100%</button>
                         <button t-on-click="() => this.setImgWidth(null)" title="Original size"
-                                aria-label="Original size"><i class="fa fa-refresh"/></button>
+                                aria-label="Original size"><i class="oi" data-icon="refresh"/></button>
                         <button class="o-ow-img-remove" t-on-click="this.removeSelectedImg"
-                                title="Remove image" aria-label="Remove image"><i class="fa fa-trash-o"/></button>
+                                title="Remove image" aria-label="Remove image"><i class="oi" data-icon="delete"/></button>
                     </div>
                     <span class="o-ow-img-handle" title="Drag to resize"
                           t-att-style="'top:' + (this.local.imgSel.top + this.local.imgSel.height - 7) + 'px; left:' + (this.local.imgSel.left + this.local.imgSel.width - 7) + 'px;'"
@@ -186,7 +186,7 @@
                             <button class="btn btn-sm btn-link p-0 ms-2 text-muted"
                                     t-on-click="() => this.removeAttachment(a.id)"
                                     title="Remove attachment">
-                                <i class="fa fa-times"/>
+                                <i class="oi" data-icon="close"/>
                             </button>
                         </div>
                     </t>
@@ -196,21 +196,21 @@
             <!-- Footer -->
             <div class="card-footer d-flex align-items-center px-3 py-2" t-if="!this.props.win.minimized">
                 <label class="btn btn-sm btn-light mb-0 me-1" title="Attach file">
-                    <i class="fa fa-paperclip"/>
+                    <i class="oi" data-icon="attach_file"/>
                     <input type="file" multiple="multiple" class="d-none" t-on-change="this.onAttach"/>
                 </label>
                 <button class="btn btn-sm btn-light me-1" t-on-click="this.onInsertSignature"
                         title="Insert signature">
-                    <i class="fa fa-id-card-o"/>
+                    <i class="oi" data-icon="badge"/>
                 </button>
                 <div class="flex-grow-1 text-center">
                     <small class="text-muted o-ow-save-status" t-out="this.saveStatus"/>
                 </div>
                 <button class="btn btn-sm btn-outline-secondary me-2" t-on-click="this.onDraft">
-                    <i class="fa fa-floppy-o me-1"/> Draft
+                    <i class="oi me-1" data-icon="save"/> Draft
                 </button>
                 <button class="btn btn-sm btn-primary" t-on-click="this.onSend">
-                    <i class="fa fa-paper-plane me-1"/> Send
+                    <i class="oi me-1" data-icon="send"/> Send
                 </button>
             </div>
         </div>

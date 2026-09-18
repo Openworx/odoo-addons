@@ -3,7 +3,7 @@
 
 <t t-name="ow_mail.SafeModeBanner">
     <div class="alert alert-warning d-flex align-items-center m-2 py-2">
-        <i class="fa fa-shield me-2"/>
+        <i class="oi me-2" data-icon="security"/>
         <div class="flex-grow-1">
             <strong>Safe Mode.</strong>
             Remote content in this message has been blocked to protect your privacy.

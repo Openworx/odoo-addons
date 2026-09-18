@@ -39,21 +39,21 @@ _logger = logging.getLogger(__name__)
 # never a model name or context — so a crafted RPC cannot inject defaults.
 CREATE_MENU = [
     {"key": "contact", "model": "res.partner",
-     "label": _lt("Contact"), "icon": "fa-user"},
+     "label": _lt("Contact"), "icon": "person"},
     {"key": "meeting", "model": "calendar.event",
-     "label": _lt("Meeting"), "icon": "fa-calendar"},
+     "label": _lt("Meeting"), "icon": "calendar_today"},
     {"key": "task", "model": "project.task",
-     "label": _lt("Task"), "icon": "fa-check-square-o"},
+     "label": _lt("Task"), "icon": "check_box"},
     {"key": "lead", "model": "crm.lead",
-     "label": _lt("Lead"), "icon": "fa-star-o",
+     "label": _lt("Lead"), "icon": "star",
      "extra_context": {"default_type": "lead"}},
     {"key": "opportunity", "model": "crm.lead",
-     "label": _lt("Opportunity"), "icon": "fa-star",
+     "label": _lt("Opportunity"), "icon": "star_f",
      "extra_context": {"default_type": "opportunity"}},
     {"key": "sale_order", "model": "sale.order",
-     "label": _lt("Sales Order"), "icon": "fa-shopping-cart"},
+     "label": _lt("Sales Order"), "icon": "shopping_cart"},
     {"key": "ticket", "model": "helpdesk.ticket",
-     "label": _lt("Helpdesk Ticket"), "icon": "fa-life-ring"},
+     "label": _lt("Helpdesk Ticket"), "icon": "support"},
 ]
 
 # Technical surface the "Other…" picker must never offer, even when the

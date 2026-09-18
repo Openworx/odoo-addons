@@ -7,7 +7,7 @@
         <t t-if="!this.state.selectedMessage">
             <div class="d-flex flex-grow-1 justify-content-center align-items-center text-muted">
                 <div class="text-center">
-                    <i class="fa fa-envelope-o fa-3x mb-3"/>
+                    <i class="oi oi-3x mb-3" data-icon="mail"/>
                     <div>Select a message to read</div>
                 </div>
             </div>
@@ -16,22 +16,22 @@
             <div t-if="!this.isMobile" class="o-ow-viewer-toolbar border-bottom px-3 py-2 d-flex gap-2 flex-wrap"
                  role="toolbar" aria-label="Message actions">
                 <button class="btn btn-sm btn-primary" t-on-click="() => this.onReply(false)">
-                    <i class="fa fa-reply"/> Reply
+                    <i class="oi" data-icon="reply"/> Reply
                 </button>
                 <button class="btn btn-sm btn-light" t-on-click="() => this.onReply(true)">
-                    <i class="fa fa-reply-all"/> Reply all
+                    <i class="oi" data-icon="reply_all"/> Reply all
                 </button>
                 <button class="btn btn-sm btn-light" t-on-click="this.onForward">
-                    <i class="fa fa-mail-forward"/> Forward
+                    <i class="oi" data-icon="forward"/> Forward
                 </button>
                 <div class="border-start mx-1"/>
                 <button class="btn btn-sm btn-light" t-on-click="this.onToggleRead"
                         t-att-title="this.state.selectedMessage.flags.seen ? 'Mark unread' : 'Mark read'">
-                    <i class="fa" t-att-class="this.state.selectedMessage.flags.seen ? 'fa-envelope' : 'fa-envelope-open-o'"/>
+                    <i class="oi" t-att-data-icon="this.state.selectedMessage.flags.seen ? 'mail' : 'drafts'"/>
                 </button>
                 <button class="btn btn-sm btn-light" t-on-click="this.onToggleFlag"
                         t-att-title="this.state.selectedMessage.flags.flagged ? 'Remove star' : 'Star'">
-                    <i class="fa" t-att-class="this.state.selectedMessage.flags.flagged ? 'fa-star text-warning' : 'fa-star-o'"/>
+                    <i t-att-class="this.state.selectedMessage.flags.flagged ? 'oi text-warning' : 'oi'" t-att-data-icon="this.state.selectedMessage.flags.flagged ? 'star_f' : 'star'"/>
                 </button>
                 <select class="form-select form-select-sm" style="width:auto;" t-on-change="this.onMove">
                     <option value="">Move to…</option>
@@ -43,64 +43,64 @@
                 <div class="dropdown">
                     <button class="btn btn-sm btn-light dropdown-toggle" data-bs-toggle="dropdown"
                             aria-expanded="false" title="Create record from email">
-                        <i class="fa fa-plus-square-o"/> Create
+                        <i class="oi" data-icon="add_box"/> Create
                     </button>
                     <ul class="dropdown-menu dropdown-menu-end">
                         <t t-foreach="this.state.createMenu" t-as="entry" t-key="entry.key">
                             <li>
                                 <button class="dropdown-item" t-on-click="() => this.onCreateFromMenu(entry)">
-                                    <i t-att-class="'fa me-2 ' + entry.icon"/> <t t-out="entry.label"/>
+                                    <i class="oi me-2" t-att-data-icon="entry.icon"/> <t t-out="entry.label"/>
                                 </button>
                             </li>
                         </t>
                         <li>
                             <button class="dropdown-item" t-on-click="this.onCreateOther">
-                                <i class="fa fa-ellipsis-h me-2"/> Other…
+                                <i class="oi me-2" data-icon="more_horiz"/> Other…
                             </button>
                         </li>
                         <li><hr class="dropdown-divider"/></li>
                         <li>
                             <button class="dropdown-item" t-on-click="this.onAttach">
-                                <i class="fa fa-chain me-2"/> Attach to existing record…
+                                <i class="oi me-2" data-icon="link"/> Attach to existing record…
                             </button>
                         </li>
                     </ul>
                 </div>
                 <div class="border-start mx-1"/>
                 <button class="btn btn-sm btn-light" t-on-click="this.onPrint" title="Print">
-                    <i class="fa fa-print"/>
+                    <i class="oi" data-icon="print"/>
                 </button>
                 <button class="btn btn-sm btn-light" t-on-click="this.onViewSource" title="View original">
-                    <i class="fa fa-code"/>
+                    <i class="oi" data-icon="code"/>
                 </button>
                 <button class="btn btn-sm btn-light"
                         t-if="this.state.selectedMessage.partner_id"
                         t-on-click="this.onOpenContact" title="Open contact">
-                    <i class="fa fa-user"/>
+                    <i class="oi" data-icon="person"/>
                 </button>
                 <div class="dropdown">
                     <button class="btn btn-sm btn-success dropdown-toggle" data-bs-toggle="dropdown"
                             aria-expanded="false" title="Save sender">
-                        <i class="fa fa-user-plus"/>
+                        <i class="oi" data-icon="person_add"/>
                     </button>
                     <ul class="dropdown-menu dropdown-menu-end">
                         <li>
                             <button class="dropdown-item" t-on-click="this.onSaveContact">
-                                <i class="fa fa-address-card-o me-2"/> Save to personal contacts
+                                <i class="oi me-2" data-icon="badge"/> Save to personal contacts
                             </button>
                         </li>
                         <li>
                             <button class="dropdown-item" t-on-click="this.onSavePartner">
-                                <i class="fa fa-users me-2"/> Save as Odoo contact
+                                <i class="oi me-2" data-icon="group"/> Save as Odoo contact
                             </button>
                         </li>
                     </ul>
                 </div>
                 <button class="btn btn-sm btn-light" t-on-click="this.onArchive" title="Archive">
-                    <i class="fa fa-archive"/>
+                    <i class="oi" data-icon="archive"/>
                 </button>
                 <button class="btn btn-sm btn-danger" t-on-click="this.onDelete" title="Delete">
-                    <i class="fa fa-trash"/>
+                    <i class="oi" data-icon="delete"/>
                 </button>
             </div>
             <!-- Mobile: single-row toolbar — primary action + star + create,
@@ -108,34 +108,34 @@
             <div t-else="" class="o-ow-viewer-toolbar o-ow-toolbar-mobile border-bottom px-2 py-2 d-flex gap-2 align-items-center"
                  role="toolbar" aria-label="Message actions">
                 <button class="btn btn-sm btn-primary" t-on-click="() => this.onReply(false)">
-                    <i class="fa fa-reply"/> Reply
+                    <i class="oi" data-icon="reply"/> Reply
                 </button>
                 <button class="btn btn-sm btn-light" t-on-click="this.onToggleFlag"
                         t-att-title="this.state.selectedMessage.flags.flagged ? 'Remove star' : 'Star'">
-                    <i class="fa" t-att-class="this.state.selectedMessage.flags.flagged ? 'fa-star text-warning' : 'fa-star-o'"/>
+                    <i t-att-class="this.state.selectedMessage.flags.flagged ? 'oi text-warning' : 'oi'" t-att-data-icon="this.state.selectedMessage.flags.flagged ? 'star_f' : 'star'"/>
                 </button>
                 <div class="dropdown">
                     <button class="btn btn-sm btn-light dropdown-toggle" data-bs-toggle="dropdown"
                             aria-expanded="false" title="Create record from email">
-                        <i class="fa fa-plus-square-o"/>
+                        <i class="oi" data-icon="add_box"/>
                     </button>
                     <ul class="dropdown-menu">
                         <t t-foreach="this.state.createMenu" t-as="entry" t-key="entry.key">
                             <li>
                                 <button class="dropdown-item" t-on-click="() => this.onCreateFromMenu(entry)">
-                                    <i t-att-class="'fa me-2 ' + entry.icon"/> <t t-out="entry.label"/>
+                                    <i class="oi me-2" t-att-data-icon="entry.icon"/> <t t-out="entry.label"/>
                                 </button>
                             </li>
                         </t>
                         <li>
                             <button class="dropdown-item" t-on-click="this.onCreateOther">
-                                <i class="fa fa-ellipsis-h me-2"/> Other…
+                                <i class="oi me-2" data-icon="more_horiz"/> Other…
                             </button>
                         </li>
                         <li><hr class="dropdown-divider"/></li>
                         <li>
                             <button class="dropdown-item" t-on-click="this.onAttach">
-                                <i class="fa fa-chain me-2"/> Attach to existing record…
+                                <i class="oi me-2" data-icon="link"/> Attach to existing record…
                             </button>
                         </li>
                     </ul>
@@ -144,52 +144,52 @@
                 <div class="dropdown">
                     <button class="btn btn-sm btn-light dropdown-toggle" data-bs-toggle="dropdown"
                             aria-expanded="false" title="More actions" aria-label="More actions">
-                        <i class="fa fa-ellipsis-h"/>
+                        <i class="oi" data-icon="more_horiz"/>
                     </button>
                     <ul class="dropdown-menu dropdown-menu-end o-ow-overflow-menu">
                         <li><button class="dropdown-item" t-on-click="() => this.onReply(true)">
-                            <i class="fa fa-reply-all me-2"/> Reply all
+                            <i class="oi me-2" data-icon="reply_all"/> Reply all
                         </button></li>
                         <li><button class="dropdown-item" t-on-click="this.onForward">
-                            <i class="fa fa-mail-forward me-2"/> Forward
+                            <i class="oi me-2" data-icon="forward"/> Forward
                         </button></li>
                         <li><hr class="dropdown-divider"/></li>
                         <li><button class="dropdown-item" t-on-click="this.onToggleRead">
-                            <i class="fa me-2" t-att-class="this.state.selectedMessage.flags.seen ? 'fa-envelope' : 'fa-envelope-open-o'"/>
+                            <i class="oi me-2" t-att-data-icon="this.state.selectedMessage.flags.seen ? 'mail' : 'drafts'"/>
                             <t t-if="this.state.selectedMessage.flags.seen">Mark unread</t>
                             <t t-else="">Mark read</t>
                         </button></li>
                         <li t-if="this.moveTargetFolders.length"><h6 class="dropdown-header">Move to…</h6></li>
                         <t t-foreach="this.moveTargetFolders" t-as="f" t-key="f.id">
                             <li><button class="dropdown-item" t-on-click="() => this.onMoveTo(f.id)">
-                                <i class="fa fa-folder-o me-2"/> <t t-out="f.name"/>
+                                <i class="oi me-2" data-icon="folder"/> <t t-out="f.name"/>
                             </button></li>
                         </t>
                         <li><hr class="dropdown-divider"/></li>
                         <li t-if="this.state.selectedMessage.partner_id">
                             <button class="dropdown-item" t-on-click="this.onOpenContact">
-                                <i class="fa fa-user me-2"/> Open contact
+                                <i class="oi me-2" data-icon="person"/> Open contact
                             </button>
                         </li>
                         <li><button class="dropdown-item" t-on-click="this.onSaveContact">
-                            <i class="fa fa-address-card-o me-2"/> Save to personal contacts
+                            <i class="oi me-2" data-icon="badge"/> Save to personal contacts
                         </button></li>
                         <li><button class="dropdown-item" t-on-click="this.onSavePartner">
-                            <i class="fa fa-users me-2"/> Save as Odoo contact
+                            <i class="oi me-2" data-icon="group"/> Save as Odoo contact
                         </button></li>
                         <li><hr class="dropdown-divider"/></li>
                         <li><button class="dropdown-item" t-on-click="this.onPrint">
-                            <i class="fa fa-print me-2"/> Print
+                            <i class="oi me-2" data-icon="print"/> Print
                         </button></li>
                         <li><button class="dropdown-item" t-on-click="this.onViewSource">
-                            <i class="fa fa-code me-2"/> View original
+                            <i class="oi me-2" data-icon="code"/> View original
                         </button></li>
                         <li><hr class="dropdown-divider"/></li>
                         <li><button class="dropdown-item" t-on-click="this.onArchive">
-                            <i class="fa fa-archive me-2"/> Archive
+                            <i class="oi me-2" data-icon="archive"/> Archive
                         </button></li>
                         <li><button class="dropdown-item text-danger" t-on-click="this.onDelete">
-                            <i class="fa fa-trash me-2"/> Delete
+                            <i class="oi me-2" data-icon="delete"/> Delete
                         </button></li>
                     </ul>
                 </div>
@@ -198,14 +198,14 @@
                  toolbar scrolls away in the single scroll context -->
             <button t-if="this.isMobile" class="btn btn-primary o-ow-reply-fab shadow"
                     t-on-click="() => this.onReply(false)" title="Reply" aria-label="Reply">
-                <i class="fa fa-reply"/>
+                <i class="oi" data-icon="reply"/>
             </button>
             <!-- Conversation thread view -->
             <t t-if="this.isThreadView">
                 <div class="o-ow-thread-subject px-3 py-2 border-bottom d-flex align-items-center flex-wrap gap-1">
                     <h5 class="mb-0 flex-grow-1" t-out="this.threadSubject"/>
                     <span t-if="this.threadLinkedRecords.length" class="o-ow-linked d-flex align-items-center flex-wrap gap-1">
-                        <span class="small text-muted fw-normal me-1"><i class="fa fa-chain me-1"/>Linked:</span>
+                        <span class="small text-muted fw-normal me-1"><i class="oi me-1" data-icon="link"/>Linked:</span>
                         <t t-foreach="this.threadLinkedRecords" t-as="lr" t-key="lr.model + ':' + lr.res_id">
                             <button class="btn btn-sm btn-outline-secondary o-ow-linked-btn"
                                     t-on-click="() => this.onOpenLinked(lr)"
@@ -238,8 +238,8 @@
                                     </t>
                                 </div>
                                 <small class="text-muted ms-2 flex-shrink-0" t-out="this.formatThreadDate(tm.date)"/>
-                                <i class="fa ms-2 text-muted"
-                                   t-att-class="this.isThreadMsgExpanded(tm) ? 'fa-chevron-up' : 'fa-chevron-down'"/>
+                                <i class="oi ms-2 text-muted"
+                                   t-att-data-icon="this.isThreadMsgExpanded(tm) ? 'expand_less' : 'expand_more'"/>
                             </div>
                             <t t-if="this.isThreadMsgExpanded(tm)">
                                 <div class="o-ow-thread-msg-body px-3">
@@ -252,17 +252,17 @@
                                     <div class="d-flex flex-wrap gap-2">
                                         <t t-foreach="tm.attachments" t-as="a" t-key="a.section">
                                             <div class="o-ow-att card p-2 d-flex flex-row align-items-center">
-                                                <i class="fa fa-2x me-2"
-                                                   t-att-class="a.mimetype &amp;&amp; a.mimetype.startsWith('image/') ? 'fa-image' : a.mimetype === 'application/pdf' ? 'fa-file-pdf-o' : 'fa-file-o'"/>
+                                                <i class="oi oi-2x me-2"
+                                                   t-att-data-icon="a.mimetype &amp;&amp; a.mimetype.startsWith('image/') ? 'image' : a.mimetype === 'application/pdf' ? 'picture_as_pdf' : 'description'"/>
                                                 <div class="me-2">
                                                     <div class="small fw-bold text-truncate" style="max-width:180px;" t-out="a.name"/>
                                                     <div class="text-muted small"><t t-out="a.mimetype"/></div>
                                                 </div>
                                                 <a class="btn btn-sm btn-light" t-att-href="a.url" target="_blank" title="Open">
-                                                    <i class="fa fa-external-link"/>
+                                                    <i class="oi" data-icon="open_in_new"/>
                                                 </a>
                                                 <a class="btn btn-sm btn-light" t-att-href="a.url + '?download=1'" title="Download">
-                                                    <i class="fa fa-download"/>
+                                                    <i class="oi" data-icon="download"/>
                                                 </a>
                                             </div>
                                         </t>
@@ -281,11 +281,11 @@
                         <span t-out="this.state.selectedMessage.subject"/>
                         <button t-if="this.isDraft" class="btn btn-sm btn-link ms-2 p-0" t-on-click="this.onEditDraft"
                                 title="Edit draft">
-                            <i class="fa fa-pencil-square-o text-info"/>
+                            <i class="oi text-info" data-icon="edit_square"/>
                         </button>
                         <span t-if="this.state.selectedMessage.linked_records and this.state.selectedMessage.linked_records.length"
                               class="o-ow-linked ms-auto d-flex align-items-center flex-wrap gap-1">
-                            <span class="small text-muted fw-normal me-1"><i class="fa fa-chain me-1"/>Linked:</span>
+                            <span class="small text-muted fw-normal me-1"><i class="oi me-1" data-icon="link"/>Linked:</span>
                             <t t-foreach="this.state.selectedMessage.linked_records" t-as="lr" t-key="lr.model + ':' + lr.res_id">
                                 <button class="btn btn-sm btn-outline-secondary o-ow-linked-btn"
                                         t-on-click="() => this.onOpenLinked(lr)"
@@ -297,7 +297,7 @@
                     </h4>
                     <t t-if="this.isDraft">
                         <div class="alert alert-info py-2 px-3 d-flex align-items-center mb-2">
-                            <i class="fa fa-info-circle me-2"/>
+                            <i class="oi me-2" data-icon="info"/>
                             <span>This is a draft message.</span>
                             <button class="btn btn-sm btn-info ms-2" t-on-click="this.onEditDraft">Edit</button>
                         </div>
@@ -350,8 +350,8 @@
                                             t-out="this.state.selectedMessage.from_name or this.state.selectedMessage.from_email"/>
                                     <small class="text-muted ms-2 flex-shrink-0"
                                            t-out="this.fmtHeadDate(this.state.selectedMessage.date)"/>
-                                    <i class="fa ms-2 text-muted flex-shrink-0"
-                                       t-att-class="this.local.headExpanded ? 'fa-chevron-up' : 'fa-chevron-down'"/>
+                                    <i class="oi ms-2 text-muted flex-shrink-0"
+                                       t-att-data-icon="this.local.headExpanded ? 'expand_less' : 'expand_more'"/>
                                 </div>
                                 <div t-if="!this.local.headExpanded" class="small text-muted text-truncate">
                                     To: <t t-out="this.state.selectedMessage.to"/>
@@ -388,7 +388,7 @@
                     </div>
                     <div t-if="this.isMobile and this.state.selectedMessage.linked_records and this.state.selectedMessage.linked_records.length"
                          class="o-ow-linked d-flex align-items-center flex-wrap gap-1 mt-2">
-                        <span class="small text-muted fw-normal me-1"><i class="fa fa-chain me-1"/>Linked:</span>
+                        <span class="small text-muted fw-normal me-1"><i class="oi me-1" data-icon="link"/>Linked:</span>
                         <t t-foreach="this.state.selectedMessage.linked_records" t-as="lr" t-key="lr.model + ':' + lr.res_id">
                             <button class="btn btn-sm btn-outline-secondary o-ow-linked-btn"
                                     t-on-click="() => this.onOpenLinked(lr)"
@@ -405,32 +405,32 @@
                 <t t-if="this.state.selectedMessage.invite">
                     <div class="o-ow-invite mx-3 my-2 p-3 border rounded">
                         <div class="d-flex align-items-start">
-                            <i class="fa fa-calendar-o fa-2x me-3 text-primary"/>
+                            <i class="oi oi-2x me-3 text-primary" data-icon="calendar_today"/>
                             <div class="flex-grow-1">
                                 <div class="fw-bold mb-1">
                                     <t t-out="this.state.selectedMessage.invite.summary or 'Invitation'"/>
                                 </div>
                                 <div class="small text-muted" t-if="this.formatInviteWhen()">
-                                    <i class="fa fa-clock-o me-1"/>
+                                    <i class="oi me-1" data-icon="schedule"/>
                                     <t t-out="this.formatInviteWhen()"/>
                                 </div>
                                 <div class="small text-muted" t-if="this.state.selectedMessage.invite.location">
-                                    <i class="fa fa-map-marker me-1"/>
+                                    <i class="oi me-1" data-icon="location_on"/>
                                     <t t-out="this.state.selectedMessage.invite.location"/>
                                 </div>
                                 <div class="small text-muted" t-if="this.state.selectedMessage.invite.organizer_email">
-                                    <i class="fa fa-user me-1"/>
+                                    <i class="oi me-1" data-icon="person"/>
                                     <t t-out="this.state.selectedMessage.invite.organizer_name or this.state.selectedMessage.invite.organizer_email"/>
                                     <span class="ms-1">&lt;<t t-out="this.state.selectedMessage.invite.organizer_email"/>&gt;</span>
                                 </div>
                             </div>
                             <div class="d-flex flex-column gap-1">
                                 <button class="btn btn-sm btn-primary" t-on-click="this.onAddToCalendar">
-                                    <i class="fa fa-calendar-plus-o me-1"/> Add to Calendar
+                                    <i class="oi me-1" data-icon="calendar_add_on"/> Add to Calendar
                                 </button>
                                 <a class="btn btn-sm btn-light" t-att-href="this.inviteIcsUrl()"
                                    t-if="this.inviteIcsUrl()" title="Download .ics">
-                                    <i class="fa fa-download me-1"/> .ics
+                                    <i class="oi me-1" data-icon="download"/> .ics
                                 </a>
                             </div>
                         </div>
@@ -449,17 +449,17 @@
                     <div class="d-flex flex-wrap gap-2">
                         <t t-foreach="this.state.selectedMessage.attachments" t-as="a" t-key="a.section">
                             <div class="o-ow-att card p-2 d-flex flex-row align-items-center">
-                                <i class="fa fa-2x me-2"
-                                   t-att-class="a.mimetype &amp;&amp; a.mimetype.startsWith('image/') ? 'fa-image' : a.mimetype === 'application/pdf' ? 'fa-file-pdf-o' : 'fa-file-o'"/>
+                                <i class="oi oi-2x me-2"
+                                   t-att-data-icon="a.mimetype &amp;&amp; a.mimetype.startsWith('image/') ? 'image' : a.mimetype === 'application/pdf' ? 'picture_as_pdf' : 'description'"/>
                                 <div class="me-2">
                                     <div class="small fw-bold text-truncate" style="max-width:180px;" t-out="a.name"/>
                                     <div class="text-muted small"><t t-out="a.mimetype"/></div>
                                 </div>
                                 <a class="btn btn-sm btn-light" t-att-href="a.url" target="_blank" title="Open">
-                                    <i class="fa fa-external-link"/>
+                                    <i class="oi" data-icon="open_in_new"/>
                                 </a>
                                 <a class="btn btn-sm btn-light" t-att-href="a.url + '?download=1'" title="Download">
-                                    <i class="fa fa-download"/>
+                                    <i class="oi" data-icon="download"/>
                                 </a>
                             </div>
                         </t>

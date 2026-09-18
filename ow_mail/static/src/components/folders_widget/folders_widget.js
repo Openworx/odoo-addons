@@ -9,13 +9,13 @@ const FOLDER_MIME = "application/x-ow-folder";
 
 /** Maps folder `kind` to its Font Awesome icon class for use in the widget tree. */
 const SPECIAL_ICONS = {
-    inbox: "fa-inbox",
-    sent: "fa-paper-plane",
-    drafts: "fa-file-o",
-    archive: "fa-archive",
-    spam: "fa-fire",
-    trash: "fa-trash-o",
-    custom: "fa-folder-o",
+    inbox: "inbox",
+    sent: "send",
+    drafts: "description",
+    archive: "archive",
+    spam: "whatshot",
+    trash: "delete",
+    custom: "folder",
 };
 
 /** Display order for folder kinds when sorting a mixed-kind list. */
@@ -192,7 +192,7 @@ export class FoldersWidget extends Component {
      * @returns {string}
      */
     iconForKind(kind) {
-        return SPECIAL_ICONS[kind] || "fa-folder-o";
+        return SPECIAL_ICONS[kind] || "folder";
     }
 
     /**

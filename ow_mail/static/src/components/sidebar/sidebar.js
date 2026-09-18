@@ -13,12 +13,12 @@ const DND_MIME = "application/x-ow-mail";
 
 /** Maps folder `kind` to its Font Awesome icon class. Unlisted kinds fall back to a plain folder icon. */
 const SPECIAL_ICONS = {
-    inbox: "fa-inbox",
-    sent: "fa-paper-plane",
-    drafts: "fa-file-o",
-    archive: "fa-archive",
-    spam: "fa-ban",
-    trash: "fa-trash-o",
+    inbox: "inbox",
+    sent: "send",
+    drafts: "description",
+    archive: "archive",
+    spam: "block",
+    trash: "delete",
 };
 
 /**
@@ -95,12 +95,12 @@ export class Sidebar extends Component {
     }
 
     /**
-     * Return the Font Awesome class for a folder kind, e.g. `"fa-inbox"`.
-     * Falls back to `"fa-folder-o"` for custom/unknown kinds.
+     * Return the icon name for a folder kind, e.g. `"inbox"` (data-icon).
+     * Falls back to `"folder"` for custom/unknown kinds.
      * @param {string} kind
      */
     iconForKind(kind) {
-        return SPECIAL_ICONS[kind] || "fa-folder-o";
+        return SPECIAL_ICONS[kind] || "folder";
     }
 
     /**

@@ -6,7 +6,7 @@
              role="region" aria-label="Message list">
         <div class="o-ow-list-toolbar px-3 pt-2 pb-2 border-bottom">
             <div class="o-ow-search-row position-relative">
-                <i class="fa fa-search position-absolute top-50 start-0 translate-middle-y ms-3 text-muted"/>
+                <i class="oi position-absolute top-50 start-0 translate-middle-y ms-3 text-muted" data-icon="search"/>
                 <input type="text"
                        class="form-control rounded-pill ps-5 o-ow-search-input"
                        style="padding-right:4.5rem;"
@@ -18,12 +18,12 @@
                     <button t-if="this.local.search"
                             class="btn btn-sm btn-link text-muted p-0 me-1"
                             t-on-click="this.onClearSearch" title="Clear">
-                        <i class="fa fa-times"/>
+                        <i class="oi" data-icon="close"/>
                     </button>
                     <div class="dropdown d-inline-block" t-if="!this.local.search">
                         <button class="btn btn-sm btn-link text-muted p-0" data-bs-toggle="dropdown"
                                 title="Search operators" aria-expanded="false">
-                            <i class="fa fa-question-circle"/>
+                            <i class="oi" data-icon="help"/>
                         </button>
                         <ul class="dropdown-menu dropdown-menu-end p-2 small" style="min-width:280px;">
                             <li class="fw-bold small text-muted mb-1">Search operators</li>
@@ -41,16 +41,16 @@
                         <button class="btn btn-sm btn-link text-muted p-0" data-bs-toggle="dropdown"
                                 aria-expanded="false"
                                 t-att-title="this.activeFilterLabel()">
-                            <i class="fa fa-filter"/>
+                            <i class="oi" data-icon="filter_alt"/>
                         </button>
                         <ul class="dropdown-menu dropdown-menu-end p-1" style="min-width:220px;">
                             <t t-foreach="this.filters" t-as="f" t-key="f.id">
                                 <li>
                                     <button class="dropdown-item d-flex align-items-center gap-2"
                                             t-on-click="() => this.onFilter(f.id)">
-                                        <i class="fa fa-check" style="width:1em;"
+                                        <i class="oi" data-icon="check" style="width:1em;"
                                            t-att-style="this.isFilterActive(f.id) ? 'width:1em;' : 'width:1em;visibility:hidden;'"/>
-                                        <i class="fa" t-att-class="f.icon" style="width:1em;"/>
+                                        <i class="oi" t-att-data-icon="f.icon" style="width:1em;"/>
                                         <span t-out="f.label"/>
                                     </button>
                                 </li>
@@ -73,7 +73,7 @@
                         t-att-class="this.state.threadView ? 'btn-link text-primary' : 'btn-link text-muted'"
                         t-on-click="this.onToggleThreadView"
                         title="Toggle conversation view">
-                    <i class="fa fa-comments-o"/>
+                    <i class="oi" data-icon="forum"/>
                 </button>
                 <select class="form-select form-select-sm border-0 text-muted"
                         style="width:auto;font-size:0.8rem;"
@@ -84,7 +84,7 @@
                 </select>
                 <button class="btn btn-sm btn-link text-muted p-0" t-on-click="this.onToggleSortOrder"
                         title="Toggle sort order">
-                    <i class="fa" t-att-class="this.state.sortOrder === 'asc' ? 'fa-sort-amount-asc' : 'fa-sort-amount-desc'"/>
+                    <i class="oi" t-att-data-icon="this.state.sortOrder === 'asc' ? 'arrow_upward' : 'arrow_downward'"/>
                 </button>
             </div>
         </div>
@@ -92,24 +92,24 @@
              role="toolbar" aria-label="Bulk actions">
             <span class="fw-semibold small"><t t-out="this.checkedCount"/> selected</span>
             <button class="btn btn-sm btn-outline-secondary" t-on-click="this.onBulkArchive" title="Archive" aria-label="Archive">
-                <i class="fa fa-archive" aria-hidden="true"/>
+                <i class="oi" data-icon="archive" aria-hidden="true"/>
             </button>
             <button class="btn btn-sm btn-outline-danger" t-on-click="this.onBulkDelete" title="Delete" aria-label="Delete">
-                <i class="fa fa-trash" aria-hidden="true"/>
+                <i class="oi" data-icon="delete" aria-hidden="true"/>
             </button>
             <button class="btn btn-sm btn-outline-secondary" t-on-click="this.onBulkMarkRead" title="Mark read" aria-label="Mark read">
-                <i class="fa fa-envelope-open-o" aria-hidden="true"/>
+                <i class="oi" data-icon="drafts" aria-hidden="true"/>
             </button>
             <button class="btn btn-sm btn-outline-secondary" t-on-click="this.onBulkMarkUnread" title="Mark unread" aria-label="Mark unread">
-                <i class="fa fa-envelope" aria-hidden="true"/>
+                <i class="oi" data-icon="mail" aria-hidden="true"/>
             </button>
             <button class="btn btn-sm btn-outline-warning" t-on-click="this.onBulkToggleFlag" title="Star" aria-label="Star">
-                <i class="fa fa-star" aria-hidden="true"/>
+                <i class="oi" data-icon="star_f" aria-hidden="true"/>
             </button>
             <div class="dropdown" t-if="this.state.tags.length">
                 <button class="btn btn-sm btn-outline-secondary" data-bs-toggle="dropdown"
                         aria-expanded="false" title="Label" aria-label="Label">
-                    <i class="fa fa-tag" aria-hidden="true"/>
+                    <i class="oi" data-icon="tag" aria-hidden="true"/>
                 </button>
                 <ul class="dropdown-menu p-1" style="min-width:210px;">
                     <li class="px-2 py-1 small text-muted">Click to add · × to remove</li>
@@ -124,14 +124,14 @@
                                     t-att-title="'Remove ' + tag.name"
                                     t-att-aria-label="'Remove ' + tag.name"
                                     t-on-click="() => this.onBulkTag(tag.id, 'remove')">
-                                <i class="fa fa-times" aria-hidden="true"/>
+                                <i class="oi" data-icon="close" aria-hidden="true"/>
                             </button>
                         </li>
                     </t>
                 </ul>
             </div>
             <button class="btn btn-sm btn-outline-secondary" t-on-click="this.onBulkForward" title="Forward" aria-label="Forward">
-                <i class="fa fa-share" aria-hidden="true"/>
+                <i class="oi" data-icon="share" aria-hidden="true"/>
             </button>
             <select class="form-select form-select-sm" style="width:auto;" t-on-change="this.onBulkMove">
                 <option value="">Move to…</option>
@@ -140,7 +140,7 @@
                 </t>
             </select>
             <button class="btn btn-sm btn-link text-muted" t-on-click="this.clearChecked" title="Clear selection">
-                <i class="fa fa-times"/>
+                <i class="oi" data-icon="close"/>
             </button>
         </div>
         <div class="o-ow-list-body flex-grow-1 overflow-auto" t-ref="this.listBodyRef"
@@ -158,8 +158,8 @@
                         <input type="checkbox" class="form-check-input me-2 mt-0 o-ow-msg-check flex-shrink-0"
                                t-att-checked="this.isChecked(thread.messages[thread.messages.length - 1])"
                                t-on-click="(ev) => this.onToggleCheck(ev, thread.messages[thread.messages.length - 1])"/>
-                        <i t-if="thread.messages.length > 1" class="fa me-2 o-ow-thread-toggle mt-1"
-                           t-att-class="this.isThreadExpanded(thread.threadId) ? 'fa-chevron-down' : 'fa-chevron-right'"/>
+                        <i t-if="thread.messages.length > 1" class="oi me-2 o-ow-thread-toggle mt-1"
+                           t-att-data-icon="this.isThreadExpanded(thread.threadId) ? 'expand_more' : 'chevron_right'"/>
                         <AvatarInitials name="thread.from_name" email="thread.from_email"/>
                         <div class="flex-grow-1 ms-2 overflow-hidden">
                             <div class="d-flex">
@@ -179,31 +179,31 @@
                                 <button class="btn btn-sm btn-link p-0 o-ow-star"
                                         t-on-click="(ev) => this.onToggleFlag(ev, thread.messages[thread.messages.length - 1])"
                                         title="Star">
-                                    <i class="fa" t-att-class="thread.has_flagged ? 'fa-star text-warning' : 'fa-star-o text-muted'"/>
+                                    <i t-att-class="thread.has_flagged ? 'oi text-warning' : 'oi text-muted'" t-att-data-icon="thread.has_flagged ? 'star_f' : 'star'"/>
                                 </button>
                             </div>
-                            <i t-if="thread.has_attachments" class="fa fa-paperclip text-muted small"/>
+                            <i t-if="thread.has_attachments" class="oi text-muted small" data-icon="attach_file"/>
                         </div>
                         <div class="o-ow-hover-actions d-flex align-items-center gap-1">
                             <button class="btn btn-sm o-ow-hover-btn"
                                     title="Reply"
                                     t-on-click="(ev) => this.onQuickReply(ev, thread.messages[thread.messages.length - 1])">
-                                <i class="fa fa-reply"/>
+                                <i class="oi" data-icon="reply"/>
                             </button>
                             <button class="btn btn-sm o-ow-hover-btn"
                                     title="Forward"
                                     t-on-click="(ev) => this.onQuickForward(ev, thread.messages[thread.messages.length - 1])">
-                                <i class="fa fa-share"/>
+                                <i class="oi" data-icon="share"/>
                             </button>
                             <button class="btn btn-sm o-ow-hover-btn"
                                     title="Archive"
                                     t-on-click="(ev) => this.onArchive(ev, thread.messages[thread.messages.length - 1])">
-                                <i class="fa fa-archive"/>
+                                <i class="oi" data-icon="archive"/>
                             </button>
                             <button class="btn btn-sm o-ow-hover-btn o-ow-delete"
                                     title="Delete"
                                     t-on-click="(ev) => this.onDelete(ev, thread.messages[thread.messages.length - 1])">
-                                <i class="fa fa-trash"/>
+                                <i class="oi" data-icon="delete"/>
                             </button>
                         </div>
                     </div>
@@ -239,30 +239,30 @@
                                     <button class="btn btn-sm btn-link p-0 o-ow-star"
                                             t-on-click="(ev) => this.onToggleFlag(ev, m)"
                                             title="Star">
-                                        <i class="fa" t-att-class="m.flags_flagged ? 'fa-star text-warning' : 'fa-star-o text-muted'"/>
+                                        <i t-att-class="m.flags_flagged ? 'oi text-warning' : 'oi text-muted'" t-att-data-icon="m.flags_flagged ? 'star_f' : 'star'"/>
                                     </button>
-                                    <i t-if="m.has_attachments" class="fa fa-paperclip text-muted small"/>
+                                    <i t-if="m.has_attachments" class="oi text-muted small" data-icon="attach_file"/>
                                 </div>
                                 <div class="o-ow-hover-actions d-flex align-items-center gap-1">
                                     <button class="btn btn-sm o-ow-hover-btn"
                                             title="Reply"
                                             t-on-click="(ev) => this.onQuickReply(ev, m)">
-                                        <i class="fa fa-reply"/>
+                                        <i class="oi" data-icon="reply"/>
                                     </button>
                                     <button class="btn btn-sm o-ow-hover-btn"
                                             title="Forward"
                                             t-on-click="(ev) => this.onQuickForward(ev, m)">
-                                        <i class="fa fa-share"/>
+                                        <i class="oi" data-icon="share"/>
                                     </button>
                                     <button class="btn btn-sm o-ow-hover-btn"
                                             title="Archive"
                                             t-on-click="(ev) => this.onArchive(ev, m)">
-                                        <i class="fa fa-archive"/>
+                                        <i class="oi" data-icon="archive"/>
                                     </button>
                                     <button class="btn btn-sm o-ow-hover-btn o-ow-delete"
                                             title="Delete"
                                             t-on-click="(ev) => this.onDelete(ev, m)">
-                                        <i class="fa fa-trash"/>
+                                        <i class="oi" data-icon="delete"/>
                                     </button>
                                 </div>
                             </div>
@@ -313,30 +313,30 @@
                             <button class="btn btn-sm btn-link p-0 o-ow-star"
                                     t-on-click="(ev) => this.onToggleFlag(ev, m)"
                                     title="Star">
-                                <i class="fa" t-att-class="m.flags_flagged ? 'fa-star text-warning' : 'fa-star-o text-muted'"/>
+                                <i t-att-class="m.flags_flagged ? 'oi text-warning' : 'oi text-muted'" t-att-data-icon="m.flags_flagged ? 'star_f' : 'star'"/>
                             </button>
-                            <i t-if="m.has_attachments" class="fa fa-paperclip text-muted small"/>
+                            <i t-if="m.has_attachments" class="oi text-muted small" data-icon="attach_file"/>
                         </div>
                         <div class="o-ow-hover-actions d-flex align-items-center gap-1">
                             <button class="btn btn-sm o-ow-hover-btn"
                                     title="Reply"
                                     t-on-click="(ev) => this.onQuickReply(ev, m)">
-                                <i class="fa fa-reply"/>
+                                <i class="oi" data-icon="reply"/>
                             </button>
                             <button class="btn btn-sm o-ow-hover-btn"
                                     title="Forward"
                                     t-on-click="(ev) => this.onQuickForward(ev, m)">
-                                <i class="fa fa-share"/>
+                                <i class="oi" data-icon="share"/>
                             </button>
                             <button class="btn btn-sm o-ow-hover-btn"
                                     title="Archive"
                                     t-on-click="(ev) => this.onArchive(ev, m)">
-                                <i class="fa fa-archive"/>
+                                <i class="oi" data-icon="archive"/>
                             </button>
                             <button class="btn btn-sm o-ow-hover-btn o-ow-delete"
                                     title="Delete"
                                     t-on-click="(ev) => this.onDelete(ev, m)">
-                                <i class="fa fa-trash"/>
+                                <i class="oi" data-icon="delete"/>
                             </button>
                         </div>
                     </div>
@@ -347,15 +347,15 @@
         </div>
         <div t-if="this.state.totalMessages and this.state.prefs.infinite_scroll"
              class="o-ow-pager border-top px-3 py-2 d-flex align-items-center justify-content-center gap-2 small text-muted">
-            <i t-if="this.state.loadingMore" class="fa fa-circle-o-notch fa-spin me-1"/>
+            <i t-if="this.state.loadingMore" class="oi oi-spin me-1" data-icon="progress_activity"/>
             <span><t t-out="this.state.messages.length"/> / <t t-out="this.state.totalMessages"/> messages</span>
         </div>
         <div t-if="this.state.totalMessages and !this.state.prefs.infinite_scroll" class="o-ow-pager border-top px-3 py-2 d-flex align-items-center justify-content-center gap-2">
             <button class="btn btn-sm btn-outline-secondary border-0" t-att-disabled="this.state.page === 1" t-on-click="this.onFirstPage" title="First">
-                <i class="fa fa-angle-double-left"/>
+                <i class="oi" data-icon="keyboard_double_arrow_left"/>
             </button>
             <button class="btn btn-sm btn-outline-secondary border-0" t-att-disabled="this.state.page === 1" t-on-click="this.onPrevPage" title="Previous">
-                <i class="fa fa-angle-left"/>
+                <i class="oi" data-icon="chevron_left"/>
             </button>
             <span class="text-muted small">
                 Message <t t-out="this.rangeStart"/> to <t t-out="this.rangeEnd"/> of <t t-out="this.state.totalMessages"/>
@@ -368,10 +368,10 @@
                 </t>
             </select>
             <button class="btn btn-sm btn-outline-secondary border-0" t-att-disabled="this.state.page === this.totalPages" t-on-click="this.onNextPage" title="Next">
-                <i class="fa fa-angle-right"/>
+                <i class="oi" data-icon="chevron_right"/>
             </button>
             <button class="btn btn-sm btn-outline-secondary border-0" t-att-disabled="this.state.page === this.totalPages" t-on-click="this.onLastPage" title="Last">
-                <i class="fa fa-angle-double-right"/>
+                <i class="oi" data-icon="keyboard_double_arrow_right"/>
             </button>
         </div>
     </section>

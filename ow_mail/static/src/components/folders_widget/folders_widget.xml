@@ -5,27 +5,27 @@
     <div class="o-ow-folders-widget d-flex flex-column border rounded mt-3">
         <div class="o-ow-folders-toolbar d-flex align-items-center gap-2 p-2 border-bottom">
             <div class="position-relative flex-grow-1">
-                <i class="fa fa-search position-absolute top-50 start-0 translate-middle-y ms-2 text-muted"/>
+                <i class="oi position-absolute top-50 start-0 translate-middle-y ms-2 text-muted" data-icon="search"/>
                 <input type="text" class="form-control form-control-sm ps-4"
                        placeholder="Search…" t-custom-model="this.ui.search"/>
             </div>
             <button class="btn btn-sm btn-light" t-on-click="this.onNew" title="New folder">
-                <i class="fa fa-plus"/> <span>New</span>
+                <i class="oi" data-icon="add"/> <span>New</span>
             </button>
             <button class="btn btn-sm btn-light"
                     t-att-disabled="!this.selectedFolder or this.selectedFolder.kind !== 'custom'"
                     t-on-click="this.onRename" title="Rename selected folder">
-                <i class="fa fa-pencil"/> <span>Rename</span>
+                <i class="oi" data-icon="edit"/> <span>Rename</span>
             </button>
             <button class="btn btn-sm btn-light"
                     t-att-disabled="!this.selectedFolder or this.selectedFolder.kind !== 'custom'"
                     t-on-click="this.onDelete" title="Delete selected folder">
-                <i class="fa fa-trash"/> <span>Delete</span>
+                <i class="oi" data-icon="delete"/> <span>Delete</span>
             </button>
             <button class="btn btn-sm btn-light"
                     t-att-disabled="!this.selectedFolder"
                     t-on-click="this.onEmpty" title="Empty selected folder">
-                <i class="fa fa-eraser"/> <span>Empty</span>
+                <i class="oi" data-icon="ink_eraser"/> <span>Empty</span>
             </button>
         </div>
         <div class="o-ow-folder-tree"
@@ -34,7 +34,7 @@
              t-on-drop="this.onDropRoot">
             <t t-if="!this.account">
                 <div class="text-muted text-center p-4">
-                    <i class="fa fa-folder-open-o fa-3x mb-2 d-block text-secondary opacity-25"/>
+                    <i class="oi oi-3x mb-2 d-block text-secondary opacity-25" data-icon="folder_open"/>
                     Save the account and run a sync to load its folder tree.
                 </div>
             </t>
@@ -49,7 +49,7 @@
                          t-on-dragover="(ev) => this.onDragOver(ev, row.node)"
                          t-on-dragleave="(ev) => this.onDragLeave(ev, row.node)"
                          t-on-drop="(ev) => this.onDrop(ev, row.node)">
-                        <i class="fa me-2" t-att-class="this.iconForKind(row.node.kind)"/>
+                        <i class="oi me-2" t-att-data-icon="this.iconForKind(row.node.kind)"/>
                         <span class="flex-grow-1 text-truncate" t-out="row.node.name"/>
                         <span t-if="row.node.unread_count" class="badge bg-secondary me-2"
                               t-out="row.node.unread_count"/>

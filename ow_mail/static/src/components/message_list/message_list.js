@@ -41,11 +41,11 @@ export class MessageList extends Component {
      */
     get filters() {
         return [
-            { id: "all", label: _t("All"), icon: "fa-envelope-o" },
-            { id: "unread", label: _t("Unread"), icon: "fa-envelope" },
-            { id: "starred", label: _t("Flagged"), icon: "fa-flag-o" },
-            { id: "tome", label: _t("To me"), icon: "fa-paper-plane-o" },
-            { id: "hasattach", label: _t("Has files"), icon: "fa-paperclip" },
+            { id: "all", label: _t("All"), icon: "mail" },
+            { id: "unread", label: _t("Unread"), icon: "mail_f" },
+            { id: "starred", label: _t("Flagged"), icon: "flag" },
+            { id: "tome", label: _t("To me"), icon: "send" },
+            { id: "hasattach", label: _t("Has files"), icon: "attach_file" },
         ];
     }
 
@@ -80,10 +80,10 @@ export class MessageList extends Component {
      */
     get sortOptions() {
         return [
-            { id: "date", label: _t("Date"), icon: "fa-calendar" },
-            { id: "from", label: _t("From"), icon: "fa-user" },
-            { id: "subject", label: _t("Subject"), icon: "fa-tag" },
-            { id: "size", label: _t("Size"), icon: "fa-database" },
+            { id: "date", label: _t("Date"), icon: "calendar_today" },
+            { id: "from", label: _t("From"), icon: "person" },
+            { id: "subject", label: _t("Subject"), icon: "tag" },
+            { id: "size", label: _t("Size"), icon: "database" },
         ];
     }
 
