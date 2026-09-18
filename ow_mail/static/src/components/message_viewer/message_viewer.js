@@ -1,13 +1,15 @@
 /** @odoo-module **/
 
-import { Component, onPatched, useEffect, useRef, useState } from "@odoo/owl";
+import { Component, onPatched, proxy, usePlugin } from "@odoo/owl";
 import { useService } from "@web/core/utils/hooks";
 import { owColor } from "../../utils/colors";
 import { SafeModeBanner } from "../safe_mode_banner/safe_mode_banner";
 import { AvatarInitials } from "../avatar_initials/avatar_initials";
 import { MessageSourceDialog } from "../message_source/message_source";
 import { RecordModelPickerDialog } from "../record_picker/record_model_picker";
+import { useLayoutEffect, useRef } from "@web/owl2/utils";
 import { FormViewDialog } from "@web/views/view_dialogs/form_view_dialog";
+import { ActionManagerPlugin } from "@web/webclient/actions/action_plugin";
 
 const BLANK_PIXEL = "data:image/gif;base64,R0lGODlhAQABAAAAACw=";
 const XLINK_NS = "http://www.w3.org/1999/xlink";
@@ -246,14 +248,14 @@ export class MessageViewer extends Component {
      */
     setup() {
         this.mail = useService("ow_mail");
-        this.action = useService("action");
+        this.action = usePlugin(ActionManagerPlugin);
         this.dialog = useService("dialog");
-        this.state = useState(this.mail.state);
-        this.local = useState({ showRemote: false, expandedThread: {},
+        this.state = proxy(this.mail.state);
+        this.local = proxy({ showRemote: false, expandedThread: {},
                                 headExpanded: false });
         this.iframeRef = useRef("iframe");
 
-        useEffect(
+        useLayoutEffect(
             (msg, showRemote) => {
                 this.local.headExpanded = false;
                 if (!this.isThreadView) {
@@ -268,7 +270,7 @@ export class MessageViewer extends Component {
         // iframe grows to its content height. Re-measure when the message
         // or the viewport class changes (and once more after a beat, for
         // late-loading images).
-        useEffect(
+        useLayoutEffect(
             () => {
                 this._fitIframe();
                 const timer = setTimeout(() => this._fitIframe(), 700);
@@ -281,7 +283,7 @@ export class MessageViewer extends Component {
         // opens so screen readers announce it and keyboard users land in
         // the viewer pane. Global j/k hotkeys keep working from there.
         this.subjectRef = useRef("subjectHeading");
-        useEffect(
+        useLayoutEffect(
             (msg) => {
                 if (msg && this.subjectRef.el) {
                     this.subjectRef.el.focus({ preventScroll: false });
@@ -295,7 +297,7 @@ export class MessageViewer extends Component {
         // from thread A to thread B would keep A's expanded keys in state —
         // none of which match B's messages — so nothing renders until the
         // user manually clicks a header.
-        useEffect(
+        useLayoutEffect(
             (threadMsgs) => {
                 if (!threadMsgs || threadMsgs.length <= 1) return;
                 const latest = threadMsgs[threadMsgs.length - 1];

@@ -8,29 +8,29 @@
                 <input type="text"
                        class="form-control form-control-sm"
                        placeholder="Search contacts…"
-                       t-att-value="local.search"
-                       t-on-input="onSearchInput"/>
+                       t-att-value="this.local.search"
+                       t-on-input="this.onSearchInput"/>
                 <button class="btn btn-sm btn-primary"
                         title="New contact"
-                        t-on-click="onNew">
+                        t-on-click="this.onNew">
                     <i class="fa fa-plus"/>
                 </button>
             </div>
             <div class="flex-grow-1 overflow-auto">
-                <t t-if="state.contactsLoading">
+                <t t-if="this.state.contactsLoading">
                     <div class="text-center text-muted p-3">
                         <i class="fa fa-spinner fa-spin"/> Loading…
                     </div>
                 </t>
-                <t t-elif="!state.contacts.length">
+                <t t-elif="!this.state.contacts.length">
                     <div class="text-center text-muted p-3">
                         No contacts yet.
                     </div>
                 </t>
                 <t t-else="">
-                    <t t-foreach="state.contacts" t-as="c" t-key="c.id">
+                    <t t-foreach="this.state.contacts" t-as="c" t-key="c.id">
                         <div class="o-ow-contact-row d-flex flex-column px-3 py-2 border-bottom"
-                             t-att-class="{'active': state.selectedContactId === c.id}"
+                             t-att-class="{'active': this.state.selectedContactId === c.id}"
                              t-on-click="() => this.onSelect(c)">
                             <div class="d-flex align-items-center">
                                 <strong class="flex-grow-1 text-truncate" t-esc="c.name || c.email"/>
@@ -44,79 +44,79 @@
         </div>
 
         <div class="o-ow-contact-detail flex-grow-1 overflow-auto">
-            <t t-if="local.editing">
+            <t t-if="this.local.editing">
                 <div class="p-4">
-                    <h4 t-esc="local.editing === 'new' ? 'New contact' : 'Edit contact'"/>
+                    <h4 t-esc="this.local.editing === 'new' ? 'New contact' : 'Edit contact'"/>
                     <div class="mb-2">
                         <label class="form-label small mb-1">Name</label>
                         <input type="text" class="form-control form-control-sm"
-                               t-model="local.draft.name"/>
+                               t-custom-model="this.local.draft.name"/>
                     </div>
                     <div class="mb-2">
                         <label class="form-label small mb-1">Email</label>
                         <input type="email" class="form-control form-control-sm"
-                               t-model="local.draft.email"/>
+                               t-custom-model="this.local.draft.email"/>
                     </div>
                     <div class="mb-2">
                         <label class="form-label small mb-1">Company</label>
                         <input type="text" class="form-control form-control-sm"
-                               t-model="local.draft.company"/>
+                               t-custom-model="this.local.draft.company"/>
                     </div>
                     <div class="mb-2">
                         <label class="form-label small mb-1">Phone</label>
                         <input type="text" class="form-control form-control-sm"
-                               t-model="local.draft.phone"/>
+                               t-custom-model="this.local.draft.phone"/>
                     </div>
                     <div class="mb-3">
                         <label class="form-label small mb-1">Note</label>
                         <textarea class="form-control form-control-sm" rows="3"
-                                  t-model="local.draft.note"/>
+                                  t-custom-model="this.local.draft.note"/>
                     </div>
                     <div class="d-flex gap-2">
-                        <button class="btn btn-sm btn-primary" t-on-click="onSave">
+                        <button class="btn btn-sm btn-primary" t-on-click="this.onSave">
                             <i class="fa fa-save me-1"/> Save
                         </button>
-                        <button class="btn btn-sm btn-light" t-on-click="onCancelEdit">
+                        <button class="btn btn-sm btn-light" t-on-click="this.onCancelEdit">
                             Cancel
                         </button>
                     </div>
                 </div>
             </t>
-            <t t-elif="selected">
+            <t t-elif="this.selected">
                 <div class="p-4">
                     <div class="d-flex align-items-center mb-3 gap-2">
-                        <h4 class="flex-grow-1 mb-0" t-esc="selected.name || selected.email"/>
-                        <button class="btn btn-sm btn-primary" t-on-click="onCompose"
+                        <h4 class="flex-grow-1 mb-0" t-esc="this.selected.name || this.selected.email"/>
+                        <button class="btn btn-sm btn-primary" t-on-click="this.onCompose"
                                 title="Compose">
                             <i class="fa fa-pencil me-1"/> Compose
                         </button>
-                        <button class="btn btn-sm btn-light" t-on-click="onEdit"
+                        <button class="btn btn-sm btn-light" t-on-click="this.onEdit"
                                 title="Edit">
                             <i class="fa fa-pencil"/>
                         </button>
-                        <button class="btn btn-sm btn-light text-danger" t-on-click="onDelete"
+                        <button class="btn btn-sm btn-light text-danger" t-on-click="this.onDelete"
                                 title="Delete">
                             <i class="fa fa-trash"/>
                         </button>
                     </div>
                     <dl class="row">
                         <dt class="col-sm-3 text-muted">Email</dt>
-                        <dd class="col-sm-9" t-esc="selected.email"/>
-                        <t t-if="selected.company">
+                        <dd class="col-sm-9" t-esc="this.selected.email"/>
+                        <t t-if="this.selected.company">
                             <dt class="col-sm-3 text-muted">Company</dt>
-                            <dd class="col-sm-9" t-esc="selected.company"/>
+                            <dd class="col-sm-9" t-esc="this.selected.company"/>
                         </t>
-                        <t t-if="selected.phone">
+                        <t t-if="this.selected.phone">
                             <dt class="col-sm-3 text-muted">Phone</dt>
-                            <dd class="col-sm-9" t-esc="selected.phone"/>
+                            <dd class="col-sm-9" t-esc="this.selected.phone"/>
                         </t>
-                        <t t-if="selected.last_used">
+                        <t t-if="this.selected.last_used">
                             <dt class="col-sm-3 text-muted">Last used</dt>
-                            <dd class="col-sm-9" t-esc="selected.last_used"/>
+                            <dd class="col-sm-9" t-esc="this.selected.last_used"/>
                         </t>
-                        <t t-if="selected.note">
+                        <t t-if="this.selected.note">
                             <dt class="col-sm-3 text-muted">Note</dt>
-                            <dd class="col-sm-9" style="white-space: pre-wrap;" t-esc="selected.note"/>
+                            <dd class="col-sm-9" style="white-space: pre-wrap;" t-esc="this.selected.note"/>
                         </t>
                     </dl>
                 </div>

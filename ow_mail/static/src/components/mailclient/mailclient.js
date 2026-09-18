@@ -1,6 +1,6 @@
 /** @odoo-module **/
 
-import { Component, onWillStart, useState } from "@odoo/owl";
+import { Component, onWillStart, proxy, usePlugin } from "@odoo/owl";
 import { registry } from "@web/core/registry";
 import { useService } from "@web/core/utils/hooks";
 import { Sidebar } from "../sidebar/sidebar";
@@ -10,6 +10,7 @@ import { ComposeWindow } from "../compose_window/compose_window";
 import { Contacts } from "../contacts/contacts";
 import { ShortcutsDialog } from "../shortcuts_dialog/shortcuts_dialog";
 import { registerMailHotkeys } from "./hotkeys";
+import { ActionManagerPlugin } from "@web/webclient/actions/action_plugin";
 
 /** `localStorage` key used to persist the sidebar collapsed state across page loads. */
 const LS_KEY = "ow_mail.sidebar_collapsed";
@@ -40,9 +41,9 @@ export class Mailclient extends Component {
     setup() {
         this.mail = useService("ow_mail");
         this.dialog = useService("dialog");
-        this.action = useService("action");
-        this.state = useState(this.mail.state);
-        this.ui = useState({ sidebarCollapsed: localStorage.getItem(LS_KEY) === "1" });
+        this.action = usePlugin(ActionManagerPlugin);
+        this.state = proxy(this.mail.state);
+        this.ui = proxy({ sidebarCollapsed: localStorage.getItem(LS_KEY) === "1" });
         registerMailHotkeys(this);
         onWillStart(async () => {
             await this.mail.bootstrap();

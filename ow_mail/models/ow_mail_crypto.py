@@ -43,10 +43,10 @@ class OwMailCrypto(models.AbstractModel):
 
     def _get_fernet(self):
         ICP = self.env["ir.config_parameter"].sudo()
-        key = ICP.get_param(PARAM_KEY)
+        key = ICP.get_str(PARAM_KEY)
         if not key:
             key = base64.urlsafe_b64encode(os.urandom(32)).decode()
-            ICP.set_param(PARAM_KEY, key)
+            ICP.set_str(PARAM_KEY, key)
         return Fernet(key.encode())
 
     def encrypt(self, plaintext):

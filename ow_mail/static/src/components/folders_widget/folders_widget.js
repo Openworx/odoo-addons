@@ -1,6 +1,6 @@
 /** @odoo-module **/
 
-import { Component, onWillStart, useState } from "@odoo/owl";
+import { Component, onWillStart, proxy } from "@odoo/owl";
 import { registry } from "@web/core/registry";
 import { useService } from "@web/core/utils/hooks";
 
@@ -103,8 +103,8 @@ export class FoldersWidget extends Component {
      */
     setup() {
         this.mail = useService("ow_mail");
-        this.state = useState(this.mail.state);
-        this.ui = useState({
+        this.state = proxy(this.mail.state);
+        this.ui = proxy({
             selectedFolderId: null,
             search: "",
             dropTargetId: null,

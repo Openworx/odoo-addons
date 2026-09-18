@@ -1,9 +1,10 @@
 /** @odoo-module **/
 
-import { Component, useState } from "@odoo/owl";
+import { Component, proxy, usePlugin } from "@odoo/owl";
 import { Dialog } from "@web/core/dialog/dialog";
 import { useService } from "@web/core/utils/hooks";
 import { _t } from "@web/core/l10n/translation";
+import { ActionManagerPlugin } from "@web/webclient/actions/action_plugin";
 
 /**
  * In-client preferences dialog (gear button in the sidebar footer).
@@ -24,9 +25,9 @@ export class SettingsDialog extends Component {
 
     setup() {
         this.mail = useService("ow_mail");
-        this.action = useService("action");
-        this.state = useState(this.mail.state);
-        this.local = useState({
+        this.action = usePlugin(ActionManagerPlugin);
+        this.state = proxy(this.mail.state);
+        this.local = proxy({
             mark_read_delay: String(this.mail.state.prefs.mark_read_delay || 0),
             thread_view_default: this.mail.state.prefs.thread_view_default,
             stacked_threads: this.mail.state.prefs.stacked_threads,

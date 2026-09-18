@@ -3,18 +3,18 @@
 
 <t t-name="ow_mail.ComposeWindow">
     <div class="o-ow-compose card shadow"
-         t-att-class="{'o-ow-compose-min': props.win.minimized, 'o-ow-compose-modal': props.win.expanded}">
+         t-att-class="{'o-ow-compose-min': this.props.win.minimized, 'o-ow-compose-modal': this.props.win.expanded}">
         <!-- Backdrop for modal mode -->
-        <div t-if="props.win.expanded" class="o-ow-compose-backdrop" t-on-click="toggleExpand"/>
+        <div t-if="this.props.win.expanded" class="o-ow-compose-backdrop" t-on-click="this.toggleExpand"/>
 
         <div class="o-ow-compose-inner card d-flex flex-column position-relative"
              t-ref="inner"
-             t-att-class="{'shadow-lg': props.win.expanded}"
-             t-on-dragenter="onDragEnter"
-             t-on-dragover="onDragOver"
-             t-on-dragleave="onDragLeave"
-             t-on-drop="onDrop">
-            <div t-if="local.dragActive" class="o-ow-dropzone">
+             t-att-class="{'shadow-lg': this.props.win.expanded}"
+             t-on-dragenter="this.onDragEnter"
+             t-on-dragover="this.onDragOver"
+             t-on-dragleave="this.onDragLeave"
+             t-on-drop="this.onDrop">
+            <div t-if="this.local.dragActive" class="o-ow-dropzone">
                 <div class="o-ow-dropzone-inner">
                     <i class="fa fa-cloud-upload fa-3x mb-2"/>
                     <div>Drop files to attach</div>
@@ -23,48 +23,48 @@
             <!-- Header -->
             <div class="o-ow-compose-header card-header d-flex align-items-center py-1 px-3">
                 <strong class="flex-grow-1 text-truncate">New Message</strong>
-                <button class="btn btn-sm btn-link p-0 me-2 text-muted" t-on-click="toggleMin" title="Minimize">
+                <button class="btn btn-sm btn-link p-0 me-2 text-muted" t-on-click="this.toggleMin" title="Minimize">
                     <i class="fa fa-minus"/>
                 </button>
-                <button class="btn btn-sm btn-link p-0 me-2 text-muted" t-on-click="toggleExpand"
-                        t-att-title="props.win.expanded ? 'Restore' : 'Full screen'">
-                    <i class="fa" t-att-class="props.win.expanded ? 'fa-compress' : 'fa-expand'"/>
+                <button class="btn btn-sm btn-link p-0 me-2 text-muted" t-on-click="this.toggleExpand"
+                        t-att-title="this.props.win.expanded ? 'Restore' : 'Full screen'">
+                    <i class="fa" t-att-class="this.props.win.expanded ? 'fa-compress' : 'fa-expand'"/>
                 </button>
-                <button class="btn btn-sm btn-link p-0 text-muted" t-on-click="onClose" title="Close">
+                <button class="btn btn-sm btn-link p-0 text-muted" t-on-click="this.onClose" title="Close">
                     <i class="fa fa-times"/>
                 </button>
             </div>
 
-            <div class="card-body p-0 d-flex flex-column" t-if="!props.win.minimized">
+            <div class="card-body p-0 d-flex flex-column" t-if="!this.props.win.minimized">
                 <!-- Address fields -->
                 <div class="o-ow-compose-fields px-3 pt-2">
                     <div class="mb-1">
-                        <select class="form-select form-select-sm" t-model.number="props.win.accountId">
-                            <t t-foreach="state.accounts" t-as="a" t-key="a.id">
+                        <select class="form-select form-select-sm" t-custom-model.number="this.props.win.accountId">
+                            <t t-foreach="this.state.accounts" t-as="a" t-key="a.id">
                                 <option t-att-value="a.id" t-esc="a.email"/>
                             </t>
                         </select>
                     </div>
                     <div class="mb-1">
-                        <RecipientInput placeholder="'To'" value="props.win.to"
+                        <RecipientInput placeholder="'To'" value="this.props.win.to"
                                         onUpdate="(v) => this.onUpdateTo(v)"/>
                     </div>
                     <div class="mb-1">
-                        <RecipientInput placeholder="'Cc'" value="props.win.cc"
+                        <RecipientInput placeholder="'Cc'" value="this.props.win.cc"
                                         onUpdate="(v) => this.onUpdateCc(v)"/>
                     </div>
                     <div class="mb-1">
-                        <RecipientInput placeholder="'Bcc'" value="props.win.bcc"
+                        <RecipientInput placeholder="'Bcc'" value="this.props.win.bcc"
                                         onUpdate="(v) => this.onUpdateBcc(v)"/>
                     </div>
                     <input class="form-control form-control-sm mb-1" placeholder="Subject"
-                           t-model="props.win.subject" t-on-input="markDirty"/>
+                           t-custom-model="this.props.win.subject" t-on-input="this.markDirty"/>
                 </div>
 
                 <!-- Toolbar -->
                 <div class="o-ow-compose-toolbar d-flex align-items-center gap-1 px-3 py-1 border-top border-bottom">
                     <select class="form-select form-select-sm" style="width:auto;"
-                            t-on-change="onFormatBlock">
+                            t-on-change="this.onFormatBlock">
                         <option value="p">Paragraph</option>
                         <option value="h1">Heading 1</option>
                         <option value="h2">Heading 2</option>
@@ -80,15 +80,15 @@
                     <div class="vr mx-1"/>
                     <label class="btn btn-sm btn-light mb-0" title="Text color">
                         <i class="fa fa-font"/>
-                        <input type="color" class="d-none" t-on-input="onTextColor"/>
+                        <input type="color" class="d-none" t-on-input="this.onTextColor"/>
                     </label>
                     <label class="btn btn-sm btn-light mb-0" title="Highlight color">
                         <i class="fa fa-paint-brush"/>
-                        <input type="color" value="#ffff00" class="d-none" t-on-input="onHighlight"/>
+                        <input type="color" value="#ffff00" class="d-none" t-on-input="this.onHighlight"/>
                     </label>
                     <div class="vr mx-1"/>
                     <select class="form-select form-select-sm" style="width:auto;"
-                            t-on-change="onFontSize">
+                            t-on-change="this.onFontSize">
                         <option value="">Size</option>
                         <option value="1">8</option>
                         <option value="2">10</option>
@@ -123,16 +123,16 @@
                         <i class="fa fa-align-right"/>
                     </button>
                     <div class="vr mx-1"/>
-                    <button class="btn btn-sm btn-light" t-on-click="insertLink" title="Insert link">
+                    <button class="btn btn-sm btn-light" t-on-click="this.insertLink" title="Insert link">
                         <i class="fa fa-link"/>
                     </button>
                     <button class="btn btn-sm btn-light" t-on-click="() => this.exec('unlink')" title="Remove link">
                         <i class="fa fa-chain-broken"/>
                     </button>
                     <label class="btn btn-sm btn-light mb-0" title="Insert image"
-                           t-on-mousedown="onImageMousedown">
+                           t-on-mousedown="this.onImageMousedown">
                         <i class="fa fa-picture-o"/>
-                        <input type="file" accept="image/*" class="d-none" t-on-change="onInsertImage"/>
+                        <input type="file" accept="image/*" class="d-none" t-on-change="this.onInsertImage"/>
                     </label>
                     <button class="btn btn-sm btn-light" t-on-click="() => this.exec('insertHorizontalRule')" title="Horizontal rule">
                         <i class="fa fa-minus"/>
@@ -153,34 +153,34 @@
                 <!-- Body -->
                 <div class="o-ow-compose-body flex-grow-1 overflow-auto px-3 py-2"
                      contenteditable="true" t-ref="body"
-                     t-on-input="onBodyInput"
-                     t-on-click="onBodyClick"
-                     t-on-paste="onPaste"
-                     t-on-scroll="deselectImg"/>
+                     t-on-input="this.onBodyInput"
+                     t-on-click="this.onBodyClick"
+                     t-on-paste="this.onPaste"
+                     t-on-scroll="this.deselectImg"/>
 
                 <!-- Image-resize overlay (selection border, size toolbar, drag handle) -->
-                <t t-if="local.imgSel">
+                <t t-if="this.local.imgSel">
                     <div class="o-ow-img-outline"
-                         t-att-style="'top:' + local.imgSel.top + 'px; left:' + local.imgSel.left + 'px; width:' + local.imgSel.width + 'px; height:' + local.imgSel.height + 'px;'"/>
+                         t-att-style="'top:' + this.local.imgSel.top + 'px; left:' + this.local.imgSel.left + 'px; width:' + this.local.imgSel.width + 'px; height:' + this.local.imgSel.height + 'px;'"/>
                     <div class="o-ow-img-toolbar" role="toolbar" aria-label="Image size"
-                         t-att-style="'top:' + local.imgSel.barTop + 'px; left:' + local.imgSel.left + 'px;'">
+                         t-att-style="'top:' + this.local.imgSel.barTop + 'px; left:' + this.local.imgSel.left + 'px;'">
                         <button t-on-click="() => this.setImgWidth('25%')" aria-label="Width 25%">25%</button>
                         <button t-on-click="() => this.setImgWidth('50%')" aria-label="Width 50%">50%</button>
                         <button t-on-click="() => this.setImgWidth('75%')" aria-label="Width 75%">75%</button>
                         <button t-on-click="() => this.setImgWidth('100%')" aria-label="Width 100%">100%</button>
                         <button t-on-click="() => this.setImgWidth(null)" title="Original size"
                                 aria-label="Original size"><i class="fa fa-refresh"/></button>
-                        <button class="o-ow-img-remove" t-on-click="removeSelectedImg"
+                        <button class="o-ow-img-remove" t-on-click="this.removeSelectedImg"
                                 title="Remove image" aria-label="Remove image"><i class="fa fa-trash-o"/></button>
                     </div>
                     <span class="o-ow-img-handle" title="Drag to resize"
-                          t-att-style="'top:' + (local.imgSel.top + local.imgSel.height - 7) + 'px; left:' + (local.imgSel.left + local.imgSel.width - 7) + 'px;'"
-                          t-on-pointerdown="onImgHandleDown"/>
+                          t-att-style="'top:' + (this.local.imgSel.top + this.local.imgSel.height - 7) + 'px; left:' + (this.local.imgSel.left + this.local.imgSel.width - 7) + 'px;'"
+                          t-on-pointerdown="this.onImgHandleDown"/>
                 </t>
 
                 <!-- Attachments -->
-                <div class="o-ow-compose-attachments px-3 pb-1" t-if="props.win.attachments.length">
-                    <t t-foreach="props.win.attachments" t-as="a" t-key="a.id">
+                <div class="o-ow-compose-attachments px-3 pb-1" t-if="this.props.win.attachments.length">
+                    <t t-foreach="this.props.win.attachments" t-as="a" t-key="a.id">
                         <div class="o-ow-att-item d-flex align-items-center px-2 py-1 mb-1 rounded">
                             <span class="flex-grow-1 text-truncate small fw-semibold" t-esc="a.name"/>
                             <button class="btn btn-sm btn-link p-0 ms-2 text-muted"
@@ -194,22 +194,22 @@
             </div>
 
             <!-- Footer -->
-            <div class="card-footer d-flex align-items-center px-3 py-2" t-if="!props.win.minimized">
+            <div class="card-footer d-flex align-items-center px-3 py-2" t-if="!this.props.win.minimized">
                 <label class="btn btn-sm btn-light mb-0 me-1" title="Attach file">
                     <i class="fa fa-paperclip"/>
-                    <input type="file" multiple="multiple" class="d-none" t-on-change="onAttach"/>
+                    <input type="file" multiple="multiple" class="d-none" t-on-change="this.onAttach"/>
                 </label>
-                <button class="btn btn-sm btn-light me-1" t-on-click="onInsertSignature"
+                <button class="btn btn-sm btn-light me-1" t-on-click="this.onInsertSignature"
                         title="Insert signature">
                     <i class="fa fa-id-card-o"/>
                 </button>
                 <div class="flex-grow-1 text-center">
-                    <small class="text-muted o-ow-save-status" t-esc="saveStatus"/>
+                    <small class="text-muted o-ow-save-status" t-esc="this.saveStatus"/>
                 </div>
-                <button class="btn btn-sm btn-outline-secondary me-2" t-on-click="onDraft">
+                <button class="btn btn-sm btn-outline-secondary me-2" t-on-click="this.onDraft">
                     <i class="fa fa-floppy-o me-1"/> Draft
                 </button>
-                <button class="btn btn-sm btn-primary" t-on-click="onSend">
+                <button class="btn btn-sm btn-primary" t-on-click="this.onSend">
                     <i class="fa fa-paper-plane me-1"/> Send
                 </button>
             </div>

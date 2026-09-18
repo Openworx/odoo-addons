@@ -1,9 +1,10 @@
 /** @odoo-module **/
 
-import { Component, useState, useRef, onMounted, onWillDestroy } from "@odoo/owl";
+import { Component, proxy, onMounted, onWillDestroy } from "@odoo/owl";
 import { useService } from "@web/core/utils/hooks";
 import { _t } from "@web/core/l10n/translation";
 import { RecipientInput } from "./recipient_input";
+import { useRef } from "@web/owl2/utils";
 
 /** Milliseconds between silent draft autosaves of a dirty compose window. */
 const AUTOSAVE_INTERVAL_MS = 30000;
@@ -156,12 +157,12 @@ export class ComposeWindow extends Component {
      */
     setup() {
         this.mail = useService("ow_mail");
-        this.state = useState(this.mail.state);
+        this.state = proxy(this.mail.state);
         // imgSel: overlay-geometry (relative to the compose-inner card) for
         // the image-resize toolbar; the selected <img> itself lives in
         // this._selImg (plain DOM ref — never mutated with marker classes,
         // so the saved HTML stays clean).
-        this.local = useState({ dragActive: false, imgSel: null });
+        this.local = proxy({ dragActive: false, imgSel: null });
         this.bodyRef = useRef("body");
         this.innerRef = useRef("inner");
         this._selImg = null;

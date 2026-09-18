@@ -1,6 +1,6 @@
 /** @odoo-module **/
 
-import { Component, useState, onWillStart } from "@odoo/owl";
+import { Component, proxy, onWillStart } from "@odoo/owl";
 import { useService } from "@web/core/utils/hooks";
 
 /**
@@ -21,8 +21,8 @@ export class Contacts extends Component {
      */
     setup() {
         this.mail = useService("ow_mail");
-        this.state = useState(this.mail.state);
-        this.local = useState({
+        this.state = proxy(this.mail.state);
+        this.local = proxy({
             search: this.state.contactsSearch || "",
             editing: null,
             draft: this._emptyDraft(),

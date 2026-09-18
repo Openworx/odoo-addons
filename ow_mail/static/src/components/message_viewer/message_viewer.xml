@@ -4,7 +4,7 @@
 <t t-name="ow_mail.MessageViewer">
     <section class="o-ow-viewer flex-grow-1 d-flex flex-column"
              role="region" aria-label="Message">
-        <t t-if="!state.selectedMessage">
+        <t t-if="!this.state.selectedMessage">
             <div class="d-flex flex-grow-1 justify-content-center align-items-center text-muted">
                 <div class="text-center">
                     <i class="fa fa-envelope-o fa-3x mb-3"/>
@@ -13,7 +13,7 @@
             </div>
         </t>
         <t t-else="">
-            <div t-if="!isMobile" class="o-ow-viewer-toolbar border-bottom px-3 py-2 d-flex gap-2 flex-wrap"
+            <div t-if="!this.isMobile" class="o-ow-viewer-toolbar border-bottom px-3 py-2 d-flex gap-2 flex-wrap"
                  role="toolbar" aria-label="Message actions">
                 <button class="btn btn-sm btn-primary" t-on-click="() => this.onReply(false)">
                     <i class="fa fa-reply"/> Reply
@@ -21,21 +21,21 @@
                 <button class="btn btn-sm btn-light" t-on-click="() => this.onReply(true)">
                     <i class="fa fa-reply-all"/> Reply all
                 </button>
-                <button class="btn btn-sm btn-light" t-on-click="onForward">
+                <button class="btn btn-sm btn-light" t-on-click="this.onForward">
                     <i class="fa fa-mail-forward"/> Forward
                 </button>
                 <div class="border-start mx-1"/>
-                <button class="btn btn-sm btn-light" t-on-click="onToggleRead"
-                        t-att-title="state.selectedMessage.flags.seen ? 'Mark unread' : 'Mark read'">
-                    <i class="fa" t-att-class="state.selectedMessage.flags.seen ? 'fa-envelope' : 'fa-envelope-open-o'"/>
+                <button class="btn btn-sm btn-light" t-on-click="this.onToggleRead"
+                        t-att-title="this.state.selectedMessage.flags.seen ? 'Mark unread' : 'Mark read'">
+                    <i class="fa" t-att-class="this.state.selectedMessage.flags.seen ? 'fa-envelope' : 'fa-envelope-open-o'"/>
                 </button>
-                <button class="btn btn-sm btn-light" t-on-click="onToggleFlag"
-                        t-att-title="state.selectedMessage.flags.flagged ? 'Remove star' : 'Star'">
-                    <i class="fa" t-att-class="state.selectedMessage.flags.flagged ? 'fa-star text-warning' : 'fa-star-o'"/>
+                <button class="btn btn-sm btn-light" t-on-click="this.onToggleFlag"
+                        t-att-title="this.state.selectedMessage.flags.flagged ? 'Remove star' : 'Star'">
+                    <i class="fa" t-att-class="this.state.selectedMessage.flags.flagged ? 'fa-star text-warning' : 'fa-star-o'"/>
                 </button>
-                <select class="form-select form-select-sm" style="width:auto;" t-on-change="onMove">
+                <select class="form-select form-select-sm" style="width:auto;" t-on-change="this.onMove">
                     <option value="">Move to…</option>
-                    <t t-foreach="moveTargetFolders" t-as="f" t-key="f.id">
+                    <t t-foreach="this.moveTargetFolders" t-as="f" t-key="f.id">
                         <option t-att-value="f.id" t-esc="f.name"/>
                     </t>
                 </select>
@@ -46,7 +46,7 @@
                         <i class="fa fa-plus-square-o"/> Create
                     </button>
                     <ul class="dropdown-menu dropdown-menu-end">
-                        <t t-foreach="state.createMenu" t-as="entry" t-key="entry.key">
+                        <t t-foreach="this.state.createMenu" t-as="entry" t-key="entry.key">
                             <li>
                                 <button class="dropdown-item" t-on-click="() => this.onCreateFromMenu(entry)">
                                     <i t-att-class="'fa me-2 ' + entry.icon"/> <t t-esc="entry.label"/>
@@ -54,28 +54,28 @@
                             </li>
                         </t>
                         <li>
-                            <button class="dropdown-item" t-on-click="onCreateOther">
+                            <button class="dropdown-item" t-on-click="this.onCreateOther">
                                 <i class="fa fa-ellipsis-h me-2"/> Other…
                             </button>
                         </li>
                         <li><hr class="dropdown-divider"/></li>
                         <li>
-                            <button class="dropdown-item" t-on-click="onAttach">
+                            <button class="dropdown-item" t-on-click="this.onAttach">
                                 <i class="fa fa-chain me-2"/> Attach to existing record…
                             </button>
                         </li>
                     </ul>
                 </div>
                 <div class="border-start mx-1"/>
-                <button class="btn btn-sm btn-light" t-on-click="onPrint" title="Print">
+                <button class="btn btn-sm btn-light" t-on-click="this.onPrint" title="Print">
                     <i class="fa fa-print"/>
                 </button>
-                <button class="btn btn-sm btn-light" t-on-click="onViewSource" title="View original">
+                <button class="btn btn-sm btn-light" t-on-click="this.onViewSource" title="View original">
                     <i class="fa fa-code"/>
                 </button>
                 <button class="btn btn-sm btn-light"
-                        t-if="state.selectedMessage.partner_id"
-                        t-on-click="onOpenContact" title="Open contact">
+                        t-if="this.state.selectedMessage.partner_id"
+                        t-on-click="this.onOpenContact" title="Open contact">
                     <i class="fa fa-user"/>
                 </button>
                 <div class="dropdown">
@@ -85,21 +85,21 @@
                     </button>
                     <ul class="dropdown-menu dropdown-menu-end">
                         <li>
-                            <button class="dropdown-item" t-on-click="onSaveContact">
+                            <button class="dropdown-item" t-on-click="this.onSaveContact">
                                 <i class="fa fa-address-card-o me-2"/> Save to personal contacts
                             </button>
                         </li>
                         <li>
-                            <button class="dropdown-item" t-on-click="onSavePartner">
+                            <button class="dropdown-item" t-on-click="this.onSavePartner">
                                 <i class="fa fa-users me-2"/> Save as Odoo contact
                             </button>
                         </li>
                     </ul>
                 </div>
-                <button class="btn btn-sm btn-light" t-on-click="onArchive" title="Archive">
+                <button class="btn btn-sm btn-light" t-on-click="this.onArchive" title="Archive">
                     <i class="fa fa-archive"/>
                 </button>
-                <button class="btn btn-sm btn-danger" t-on-click="onDelete" title="Delete">
+                <button class="btn btn-sm btn-danger" t-on-click="this.onDelete" title="Delete">
                     <i class="fa fa-trash"/>
                 </button>
             </div>
@@ -110,9 +110,9 @@
                 <button class="btn btn-sm btn-primary" t-on-click="() => this.onReply(false)">
                     <i class="fa fa-reply"/> Reply
                 </button>
-                <button class="btn btn-sm btn-light" t-on-click="onToggleFlag"
-                        t-att-title="state.selectedMessage.flags.flagged ? 'Remove star' : 'Star'">
-                    <i class="fa" t-att-class="state.selectedMessage.flags.flagged ? 'fa-star text-warning' : 'fa-star-o'"/>
+                <button class="btn btn-sm btn-light" t-on-click="this.onToggleFlag"
+                        t-att-title="this.state.selectedMessage.flags.flagged ? 'Remove star' : 'Star'">
+                    <i class="fa" t-att-class="this.state.selectedMessage.flags.flagged ? 'fa-star text-warning' : 'fa-star-o'"/>
                 </button>
                 <div class="dropdown">
                     <button class="btn btn-sm btn-light dropdown-toggle" data-bs-toggle="dropdown"
@@ -120,7 +120,7 @@
                         <i class="fa fa-plus-square-o"/>
                     </button>
                     <ul class="dropdown-menu">
-                        <t t-foreach="state.createMenu" t-as="entry" t-key="entry.key">
+                        <t t-foreach="this.state.createMenu" t-as="entry" t-key="entry.key">
                             <li>
                                 <button class="dropdown-item" t-on-click="() => this.onCreateFromMenu(entry)">
                                     <i t-att-class="'fa me-2 ' + entry.icon"/> <t t-esc="entry.label"/>
@@ -128,13 +128,13 @@
                             </li>
                         </t>
                         <li>
-                            <button class="dropdown-item" t-on-click="onCreateOther">
+                            <button class="dropdown-item" t-on-click="this.onCreateOther">
                                 <i class="fa fa-ellipsis-h me-2"/> Other…
                             </button>
                         </li>
                         <li><hr class="dropdown-divider"/></li>
                         <li>
-                            <button class="dropdown-item" t-on-click="onAttach">
+                            <button class="dropdown-item" t-on-click="this.onAttach">
                                 <i class="fa fa-chain me-2"/> Attach to existing record…
                             </button>
                         </li>
@@ -150,45 +150,45 @@
                         <li><button class="dropdown-item" t-on-click="() => this.onReply(true)">
                             <i class="fa fa-reply-all me-2"/> Reply all
                         </button></li>
-                        <li><button class="dropdown-item" t-on-click="onForward">
+                        <li><button class="dropdown-item" t-on-click="this.onForward">
                             <i class="fa fa-mail-forward me-2"/> Forward
                         </button></li>
                         <li><hr class="dropdown-divider"/></li>
-                        <li><button class="dropdown-item" t-on-click="onToggleRead">
-                            <i class="fa me-2" t-att-class="state.selectedMessage.flags.seen ? 'fa-envelope' : 'fa-envelope-open-o'"/>
-                            <t t-if="state.selectedMessage.flags.seen">Mark unread</t>
+                        <li><button class="dropdown-item" t-on-click="this.onToggleRead">
+                            <i class="fa me-2" t-att-class="this.state.selectedMessage.flags.seen ? 'fa-envelope' : 'fa-envelope-open-o'"/>
+                            <t t-if="this.state.selectedMessage.flags.seen">Mark unread</t>
                             <t t-else="">Mark read</t>
                         </button></li>
-                        <li t-if="moveTargetFolders.length"><h6 class="dropdown-header">Move to…</h6></li>
-                        <t t-foreach="moveTargetFolders" t-as="f" t-key="f.id">
+                        <li t-if="this.moveTargetFolders.length"><h6 class="dropdown-header">Move to…</h6></li>
+                        <t t-foreach="this.moveTargetFolders" t-as="f" t-key="f.id">
                             <li><button class="dropdown-item" t-on-click="() => this.onMoveTo(f.id)">
                                 <i class="fa fa-folder-o me-2"/> <t t-esc="f.name"/>
                             </button></li>
                         </t>
                         <li><hr class="dropdown-divider"/></li>
-                        <li t-if="state.selectedMessage.partner_id">
-                            <button class="dropdown-item" t-on-click="onOpenContact">
+                        <li t-if="this.state.selectedMessage.partner_id">
+                            <button class="dropdown-item" t-on-click="this.onOpenContact">
                                 <i class="fa fa-user me-2"/> Open contact
                             </button>
                         </li>
-                        <li><button class="dropdown-item" t-on-click="onSaveContact">
+                        <li><button class="dropdown-item" t-on-click="this.onSaveContact">
                             <i class="fa fa-address-card-o me-2"/> Save to personal contacts
                         </button></li>
-                        <li><button class="dropdown-item" t-on-click="onSavePartner">
+                        <li><button class="dropdown-item" t-on-click="this.onSavePartner">
                             <i class="fa fa-users me-2"/> Save as Odoo contact
                         </button></li>
                         <li><hr class="dropdown-divider"/></li>
-                        <li><button class="dropdown-item" t-on-click="onPrint">
+                        <li><button class="dropdown-item" t-on-click="this.onPrint">
                             <i class="fa fa-print me-2"/> Print
                         </button></li>
-                        <li><button class="dropdown-item" t-on-click="onViewSource">
+                        <li><button class="dropdown-item" t-on-click="this.onViewSource">
                             <i class="fa fa-code me-2"/> View original
                         </button></li>
                         <li><hr class="dropdown-divider"/></li>
-                        <li><button class="dropdown-item" t-on-click="onArchive">
+                        <li><button class="dropdown-item" t-on-click="this.onArchive">
                             <i class="fa fa-archive me-2"/> Archive
                         </button></li>
-                        <li><button class="dropdown-item text-danger" t-on-click="onDelete">
+                        <li><button class="dropdown-item text-danger" t-on-click="this.onDelete">
                             <i class="fa fa-trash me-2"/> Delete
                         </button></li>
                     </ul>
@@ -196,17 +196,17 @@
             </div>
             <!-- Mobile: floating reply action — stays reachable after the
                  toolbar scrolls away in the single scroll context -->
-            <button t-if="isMobile" class="btn btn-primary o-ow-reply-fab shadow"
+            <button t-if="this.isMobile" class="btn btn-primary o-ow-reply-fab shadow"
                     t-on-click="() => this.onReply(false)" title="Reply" aria-label="Reply">
                 <i class="fa fa-reply"/>
             </button>
             <!-- Conversation thread view -->
-            <t t-if="isThreadView">
+            <t t-if="this.isThreadView">
                 <div class="o-ow-thread-subject px-3 py-2 border-bottom d-flex align-items-center flex-wrap gap-1">
-                    <h5 class="mb-0 flex-grow-1" t-esc="threadSubject"/>
-                    <span t-if="threadLinkedRecords.length" class="o-ow-linked d-flex align-items-center flex-wrap gap-1">
+                    <h5 class="mb-0 flex-grow-1" t-esc="this.threadSubject"/>
+                    <span t-if="this.threadLinkedRecords.length" class="o-ow-linked d-flex align-items-center flex-wrap gap-1">
                         <span class="small text-muted fw-normal me-1"><i class="fa fa-chain me-1"/>Linked:</span>
-                        <t t-foreach="threadLinkedRecords" t-as="lr" t-key="lr.model + ':' + lr.res_id">
+                        <t t-foreach="this.threadLinkedRecords" t-as="lr" t-key="lr.model + ':' + lr.res_id">
                             <button class="btn btn-sm btn-outline-secondary o-ow-linked-btn"
                                     t-on-click="() => this.onOpenLinked(lr)"
                                     t-att-title="'Open ' + lr.display_name">
@@ -214,34 +214,34 @@
                             </button>
                         </t>
                     </span>
-                    <span class="badge bg-secondary ms-2"><t t-esc="state.threadMessages.length"/> messages</span>
+                    <span class="badge bg-secondary ms-2"><t t-esc="this.state.threadMessages.length"/> messages</span>
                 </div>
                 <div class="o-ow-thread-body flex-grow-1 overflow-auto">
-                    <t t-foreach="state.threadMessages" t-as="tm" t-key="tm.folder_id + ':' + tm.uid">
+                    <t t-foreach="this.state.threadMessages" t-as="tm" t-key="tm.folder_id + ':' + tm.uid">
                         <div class="o-ow-thread-message border-bottom">
                             <div class="o-ow-thread-msg-header px-3 py-2 d-flex align-items-center"
-                                 t-att-class="{'o-ow-thread-msg-collapsed': !isThreadMsgExpanded(tm)}"
+                                 t-att-class="{'o-ow-thread-msg-collapsed': !this.isThreadMsgExpanded(tm)}"
                                  t-on-click="() => this.toggleThreadMsg(tm)">
                                 <AvatarInitials name="tm.from_name" email="tm.from_email"/>
                                 <div class="ms-2 flex-grow-1 overflow-hidden">
                                     <div class="d-flex align-items-center">
                                         <strong class="text-truncate" t-esc="tm.from_name"/>
-                                        <small class="text-muted ms-1" t-if="!isThreadMsgExpanded(tm)">
+                                        <small class="text-muted ms-1" t-if="!this.isThreadMsgExpanded(tm)">
                                             — <t t-esc="tm.to"/>
                                         </small>
                                     </div>
-                                    <t t-if="isThreadMsgExpanded(tm)">
+                                    <t t-if="this.isThreadMsgExpanded(tm)">
                                         <div class="small text-muted">
                                             To: <t t-esc="tm.to"/>
                                             <t t-if="tm.cc"> · Cc: <t t-esc="tm.cc"/></t>
                                         </div>
                                     </t>
                                 </div>
-                                <small class="text-muted ms-2 flex-shrink-0" t-esc="formatThreadDate(tm.date)"/>
+                                <small class="text-muted ms-2 flex-shrink-0" t-esc="this.formatThreadDate(tm.date)"/>
                                 <i class="fa ms-2 text-muted"
-                                   t-att-class="isThreadMsgExpanded(tm) ? 'fa-chevron-up' : 'fa-chevron-down'"/>
+                                   t-att-class="this.isThreadMsgExpanded(tm) ? 'fa-chevron-up' : 'fa-chevron-down'"/>
                             </div>
-                            <t t-if="isThreadMsgExpanded(tm)">
+                            <t t-if="this.isThreadMsgExpanded(tm)">
                                 <div class="o-ow-thread-msg-body px-3">
                                     <iframe t-att-data-thread-iframe="tm.folder_id + ':' + tm.uid"
                                             class="w-100" sandbox="allow-same-origin allow-modals allow-popups allow-popups-to-escape-sandbox"
@@ -277,16 +277,16 @@
             <!-- Single message view -->
             <t t-else="">
                 <div class="o-ow-viewer-head px-3 py-2">
-                    <h4 t-if="!isMobile" class="mb-2 d-flex align-items-center flex-wrap gap-1" tabindex="-1" t-ref="subjectHeading">
-                        <span t-esc="state.selectedMessage.subject"/>
-                        <button t-if="isDraft" class="btn btn-sm btn-link ms-2 p-0" t-on-click="onEditDraft"
+                    <h4 t-if="!this.isMobile" class="mb-2 d-flex align-items-center flex-wrap gap-1" tabindex="-1" t-custom-ref="subjectHeading">
+                        <span t-esc="this.state.selectedMessage.subject"/>
+                        <button t-if="this.isDraft" class="btn btn-sm btn-link ms-2 p-0" t-on-click="this.onEditDraft"
                                 title="Edit draft">
                             <i class="fa fa-pencil-square-o text-info"/>
                         </button>
-                        <span t-if="state.selectedMessage.linked_records and state.selectedMessage.linked_records.length"
+                        <span t-if="this.state.selectedMessage.linked_records and this.state.selectedMessage.linked_records.length"
                               class="o-ow-linked ms-auto d-flex align-items-center flex-wrap gap-1">
                             <span class="small text-muted fw-normal me-1"><i class="fa fa-chain me-1"/>Linked:</span>
-                            <t t-foreach="state.selectedMessage.linked_records" t-as="lr" t-key="lr.model + ':' + lr.res_id">
+                            <t t-foreach="this.state.selectedMessage.linked_records" t-as="lr" t-key="lr.model + ':' + lr.res_id">
                                 <button class="btn btn-sm btn-outline-secondary o-ow-linked-btn"
                                         t-on-click="() => this.onOpenLinked(lr)"
                                         t-att-title="'Open ' + lr.display_name">
@@ -295,101 +295,101 @@
                             </t>
                         </span>
                     </h4>
-                    <t t-if="isDraft">
+                    <t t-if="this.isDraft">
                         <div class="alert alert-info py-2 px-3 d-flex align-items-center mb-2">
                             <i class="fa fa-info-circle me-2"/>
                             <span>This is a draft message.</span>
-                            <button class="btn btn-sm btn-info ms-2" t-on-click="onEditDraft">Edit</button>
+                            <button class="btn btn-sm btn-info ms-2" t-on-click="this.onEditDraft">Edit</button>
                         </div>
                     </t>
-                    <div t-if="state.tags.length and !isDraft and !isMobile"
+                    <div t-if="this.state.tags.length and !this.isDraft and !this.isMobile"
                          class="d-flex align-items-center flex-wrap gap-1 mb-2 o-ow-viewer-tags">
                         <span class="small text-muted me-1">Tags:</span>
-                        <t t-foreach="state.tags" t-as="tag" t-key="tag.id">
+                        <t t-foreach="this.state.tags" t-as="tag" t-key="tag.id">
                             <button class="badge rounded-pill o-ow-tag-toggle"
-                                    t-att-class="{'o-ow-tag-on': messageHasTag(tag.id)}"
-                                    t-att-style="tagToggleStyle(tag)"
-                                    t-att-title="messageHasTag(tag.id) ? 'Remove tag' : 'Add tag'"
+                                    t-att-class="{'o-ow-tag-on': this.messageHasTag(tag.id)}"
+                                    t-att-style="this.tagToggleStyle(tag)"
+                                    t-att-title="this.messageHasTag(tag.id) ? 'Remove tag' : 'Add tag'"
                                     t-on-click="() => this.onToggleTag(tag)">
-                                <span t-if="!messageHasTag(tag.id)" class="o-ow-tag-dot me-1"
-                                      t-att-style="tagDotStyle(tag)"/>
+                                <span t-if="!this.messageHasTag(tag.id)" class="o-ow-tag-dot me-1"
+                                      t-att-style="this.tagDotStyle(tag)"/>
                                 <t t-esc="tag.name"/>
                             </button>
                         </t>
                     </div>
-                    <div t-if="!isMobile" class="d-flex align-items-center">
-                        <AvatarInitials name="state.selectedMessage.from_name"
-                                        email="state.selectedMessage.from_email"/>
+                    <div t-if="!this.isMobile" class="d-flex align-items-center">
+                        <AvatarInitials name="this.state.selectedMessage.from_name"
+                                        email="this.state.selectedMessage.from_email"/>
                         <div class="ms-2 flex-grow-1">
                             <div>
-                                <strong t-esc="state.selectedMessage.from_name"/>
-                                <span class="text-muted ms-1">&lt;<t t-esc="state.selectedMessage.from_email"/>&gt;</span>
-                                <span t-if="state.selectedMessage.partner_id"
+                                <strong t-esc="this.state.selectedMessage.from_name"/>
+                                <span class="text-muted ms-1">&lt;<t t-esc="this.state.selectedMessage.from_email"/>&gt;</span>
+                                <span t-if="this.state.selectedMessage.partner_id"
                                       class="badge rounded-pill o-ow-customer-badge ms-2"
                                       title="Sender is an Odoo contact">Customer</span>
                             </div>
                             <div class="small text-muted">
-                                To: <t t-esc="state.selectedMessage.to"/>
-                                <t t-if="state.selectedMessage.cc">
-                                    · Cc: <t t-esc="state.selectedMessage.cc"/>
+                                To: <t t-esc="this.state.selectedMessage.to"/>
+                                <t t-if="this.state.selectedMessage.cc">
+                                    · Cc: <t t-esc="this.state.selectedMessage.cc"/>
                                 </t>
                             </div>
                         </div>
-                        <small class="text-muted" t-esc="fmtHeadDate(state.selectedMessage.date)"/>
+                        <small class="text-muted" t-esc="this.fmtHeadDate(this.state.selectedMessage.date)"/>
                     </div>
                     <!-- Mobile: compact one-line header (subject lives in the
                          topbar); tap to expand recipients, full date and tags -->
-                    <div t-if="isMobile" class="o-ow-head-mobile" t-on-click="toggleHead"
+                    <div t-if="this.isMobile" class="o-ow-head-mobile" t-on-click="this.toggleHead"
                          role="button" aria-label="Toggle message details">
                         <div class="d-flex align-items-center">
-                            <AvatarInitials name="state.selectedMessage.from_name"
-                                            email="state.selectedMessage.from_email"/>
+                            <AvatarInitials name="this.state.selectedMessage.from_name"
+                                            email="this.state.selectedMessage.from_email"/>
                             <div class="ms-2 flex-grow-1 overflow-hidden">
                                 <div class="d-flex align-items-center">
                                     <strong class="text-truncate flex-grow-1"
-                                            t-esc="state.selectedMessage.from_name or state.selectedMessage.from_email"/>
+                                            t-esc="this.state.selectedMessage.from_name or this.state.selectedMessage.from_email"/>
                                     <small class="text-muted ms-2 flex-shrink-0"
-                                           t-esc="fmtHeadDate(state.selectedMessage.date)"/>
+                                           t-esc="this.fmtHeadDate(this.state.selectedMessage.date)"/>
                                     <i class="fa ms-2 text-muted flex-shrink-0"
-                                       t-att-class="local.headExpanded ? 'fa-chevron-up' : 'fa-chevron-down'"/>
+                                       t-att-class="this.local.headExpanded ? 'fa-chevron-up' : 'fa-chevron-down'"/>
                                 </div>
-                                <div t-if="!local.headExpanded" class="small text-muted text-truncate">
-                                    To: <t t-esc="state.selectedMessage.to"/>
+                                <div t-if="!this.local.headExpanded" class="small text-muted text-truncate">
+                                    To: <t t-esc="this.state.selectedMessage.to"/>
                                 </div>
                             </div>
                         </div>
-                        <div t-if="local.headExpanded" class="small mt-2">
+                        <div t-if="this.local.headExpanded" class="small mt-2">
                             <div><span class="text-muted">From:</span>
-                                <t t-esc="state.selectedMessage.from_name"/>
-                                <span class="text-muted">&lt;<t t-esc="state.selectedMessage.from_email"/>&gt;</span>
-                                <span t-if="state.selectedMessage.partner_id"
+                                <t t-esc="this.state.selectedMessage.from_name"/>
+                                <span class="text-muted">&lt;<t t-esc="this.state.selectedMessage.from_email"/>&gt;</span>
+                                <span t-if="this.state.selectedMessage.partner_id"
                                       class="badge rounded-pill o-ow-customer-badge ms-1">Customer</span>
                             </div>
-                            <div><span class="text-muted">To:</span> <t t-esc="state.selectedMessage.to"/></div>
-                            <div t-if="state.selectedMessage.cc">
-                                <span class="text-muted">Cc:</span> <t t-esc="state.selectedMessage.cc"/>
+                            <div><span class="text-muted">To:</span> <t t-esc="this.state.selectedMessage.to"/></div>
+                            <div t-if="this.state.selectedMessage.cc">
+                                <span class="text-muted">Cc:</span> <t t-esc="this.state.selectedMessage.cc"/>
                             </div>
                             <div><span class="text-muted">Date:</span>
-                                <t t-esc="fmtHeadDate(state.selectedMessage.date)"/></div>
-                            <div t-if="state.tags.length and !isDraft"
+                                <t t-esc="this.fmtHeadDate(this.state.selectedMessage.date)"/></div>
+                            <div t-if="this.state.tags.length and !this.isDraft"
                                  class="d-flex align-items-center flex-wrap gap-1 mt-1 o-ow-viewer-tags">
-                                <t t-foreach="state.tags" t-as="tag" t-key="tag.id">
+                                <t t-foreach="this.state.tags" t-as="tag" t-key="tag.id">
                                     <button class="badge rounded-pill o-ow-tag-toggle"
-                                            t-att-class="{'o-ow-tag-on': messageHasTag(tag.id)}"
-                                            t-att-style="tagToggleStyle(tag)"
+                                            t-att-class="{'o-ow-tag-on': this.messageHasTag(tag.id)}"
+                                            t-att-style="this.tagToggleStyle(tag)"
                                             t-on-click.stop="() => this.onToggleTag(tag)">
-                                        <span t-if="!messageHasTag(tag.id)" class="o-ow-tag-dot me-1"
-                                              t-att-style="tagDotStyle(tag)"/>
+                                        <span t-if="!this.messageHasTag(tag.id)" class="o-ow-tag-dot me-1"
+                                              t-att-style="this.tagDotStyle(tag)"/>
                                         <t t-esc="tag.name"/>
                                     </button>
                                 </t>
                             </div>
                         </div>
                     </div>
-                    <div t-if="isMobile and state.selectedMessage.linked_records and state.selectedMessage.linked_records.length"
+                    <div t-if="this.isMobile and this.state.selectedMessage.linked_records and this.state.selectedMessage.linked_records.length"
                          class="o-ow-linked d-flex align-items-center flex-wrap gap-1 mt-2">
                         <span class="small text-muted fw-normal me-1"><i class="fa fa-chain me-1"/>Linked:</span>
-                        <t t-foreach="state.selectedMessage.linked_records" t-as="lr" t-key="lr.model + ':' + lr.res_id">
+                        <t t-foreach="this.state.selectedMessage.linked_records" t-as="lr" t-key="lr.model + ':' + lr.res_id">
                             <button class="btn btn-sm btn-outline-secondary o-ow-linked-btn"
                                     t-on-click="() => this.onOpenLinked(lr)"
                                     t-att-title="'Open ' + lr.display_name">
@@ -398,38 +398,38 @@
                         </t>
                     </div>
                 </div>
-                <t t-if="state.selectedMessage.has_remote_content and !local.showRemote">
+                <t t-if="this.state.selectedMessage.has_remote_content and !this.local.showRemote">
                     <SafeModeBanner onShowOnce="() => this.onShowOnce()"
                                     onTrustSender="() => this.onTrustSender()"/>
                 </t>
-                <t t-if="state.selectedMessage.invite">
+                <t t-if="this.state.selectedMessage.invite">
                     <div class="o-ow-invite mx-3 my-2 p-3 border rounded">
                         <div class="d-flex align-items-start">
                             <i class="fa fa-calendar-o fa-2x me-3 text-primary"/>
                             <div class="flex-grow-1">
                                 <div class="fw-bold mb-1">
-                                    <t t-esc="state.selectedMessage.invite.summary or 'Invitation'"/>
+                                    <t t-esc="this.state.selectedMessage.invite.summary or 'Invitation'"/>
                                 </div>
-                                <div class="small text-muted" t-if="formatInviteWhen()">
+                                <div class="small text-muted" t-if="this.formatInviteWhen()">
                                     <i class="fa fa-clock-o me-1"/>
-                                    <t t-esc="formatInviteWhen()"/>
+                                    <t t-esc="this.formatInviteWhen()"/>
                                 </div>
-                                <div class="small text-muted" t-if="state.selectedMessage.invite.location">
+                                <div class="small text-muted" t-if="this.state.selectedMessage.invite.location">
                                     <i class="fa fa-map-marker me-1"/>
-                                    <t t-esc="state.selectedMessage.invite.location"/>
+                                    <t t-esc="this.state.selectedMessage.invite.location"/>
                                 </div>
-                                <div class="small text-muted" t-if="state.selectedMessage.invite.organizer_email">
+                                <div class="small text-muted" t-if="this.state.selectedMessage.invite.organizer_email">
                                     <i class="fa fa-user me-1"/>
-                                    <t t-esc="state.selectedMessage.invite.organizer_name or state.selectedMessage.invite.organizer_email"/>
-                                    <span class="ms-1">&lt;<t t-esc="state.selectedMessage.invite.organizer_email"/>&gt;</span>
+                                    <t t-esc="this.state.selectedMessage.invite.organizer_name or this.state.selectedMessage.invite.organizer_email"/>
+                                    <span class="ms-1">&lt;<t t-esc="this.state.selectedMessage.invite.organizer_email"/>&gt;</span>
                                 </div>
                             </div>
                             <div class="d-flex flex-column gap-1">
-                                <button class="btn btn-sm btn-primary" t-on-click="onAddToCalendar">
+                                <button class="btn btn-sm btn-primary" t-on-click="this.onAddToCalendar">
                                     <i class="fa fa-calendar-plus-o me-1"/> Add to Calendar
                                 </button>
-                                <a class="btn btn-sm btn-light" t-att-href="inviteIcsUrl()"
-                                   t-if="inviteIcsUrl()" title="Download .ics">
+                                <a class="btn btn-sm btn-light" t-att-href="this.inviteIcsUrl()"
+                                   t-if="this.inviteIcsUrl()" title="Download .ics">
                                     <i class="fa fa-download me-1"/> .ics
                                 </a>
                             </div>
@@ -439,15 +439,15 @@
                 <div class="o-ow-viewer-body flex-grow-1">
                     <!-- Mobile drops h-100 (its !important height would beat the
                          inline content-height that _fitIframe sets) -->
-                    <iframe t-ref="iframe" t-att-class="isMobile ? 'w-100' : 'w-100 h-100'"
+                    <iframe t-custom-ref="iframe" t-att-class="this.isMobile ? 'w-100' : 'w-100 h-100'"
                             sandbox="allow-same-origin allow-modals allow-popups allow-popups-to-escape-sandbox"
                             style="border:0;"/>
                 </div>
                 <div class="o-ow-viewer-attachments border-top p-2"
-                     t-if="state.selectedMessage.attachments.length">
+                     t-if="this.state.selectedMessage.attachments.length">
                     <div class="small text-muted mb-1">Attachments</div>
                     <div class="d-flex flex-wrap gap-2">
-                        <t t-foreach="state.selectedMessage.attachments" t-as="a" t-key="a.section">
+                        <t t-foreach="this.state.selectedMessage.attachments" t-as="a" t-key="a.section">
                             <div class="o-ow-att card p-2 d-flex flex-row align-items-center">
                                 <i class="fa fa-2x me-2"
                                    t-att-class="a.mimetype &amp;&amp; a.mimetype.startsWith('image/') ? 'fa-image' : a.mimetype === 'application/pdf' ? 'fa-file-pdf-o' : 'fa-file-o'"/>

@@ -2,13 +2,13 @@
 <templates xml:space="preserve">
 
 <t t-name="ow_mail.SettingsDialog">
-    <Dialog title="title" size="'md'">
-        <div class="o-ow-settings" t-att-class="themeClass">
+    <Dialog title="this.title" size="'md'">
+        <div class="o-ow-settings" t-att-class="this.themeClass">
             <div class="mb-3">
                 <label class="form-label fw-semibold" for="ow-settings-mark-read">Mark as read</label>
                 <select id="ow-settings-mark-read" class="form-select"
-                        t-model="local.mark_read_delay">
-                    <t t-foreach="delayOptions" t-as="opt" t-key="opt.value">
+                        t-custom-model="this.local.mark_read_delay">
+                    <t t-foreach="this.delayOptions" t-as="opt" t-key="opt.value">
                         <option t-att-value="opt.value" t-esc="opt.label"/>
                     </t>
                 </select>
@@ -18,8 +18,8 @@
             </div>
             <div class="mb-3">
                 <label class="form-label fw-semibold" for="ow-settings-theme">Theme</label>
-                <select id="ow-settings-theme" class="form-select" t-model="local.theme">
-                    <t t-foreach="themeOptions" t-as="opt" t-key="opt.value">
+                <select id="ow-settings-theme" class="form-select" t-custom-model="this.local.theme">
+                    <t t-foreach="this.themeOptions" t-as="opt" t-key="opt.value">
                         <option t-att-value="opt.value" t-esc="opt.label"/>
                     </t>
                 </select>
@@ -31,7 +31,7 @@
             </div>
             <div class="form-check mb-2">
                 <input class="form-check-input" type="checkbox" id="ow-settings-infinite-scroll"
-                       t-model="local.infinite_scroll"/>
+                       t-custom-model="this.local.infinite_scroll"/>
                 <label class="form-check-label" for="ow-settings-infinite-scroll">
                     Infinite scrolling in the message list
                 </label>
@@ -42,14 +42,14 @@
             </div>
             <div class="form-check mb-2">
                 <input class="form-check-input" type="checkbox" id="ow-settings-thread-default"
-                       t-model="local.thread_view_default"/>
+                       t-custom-model="this.local.thread_view_default"/>
                 <label class="form-check-label" for="ow-settings-thread-default">
                     Conversation view by default
                 </label>
             </div>
             <div class="form-check mb-3">
                 <input class="form-check-input" type="checkbox" id="ow-settings-stacked-threads"
-                       t-model="local.stacked_threads"/>
+                       t-custom-model="this.local.stacked_threads"/>
                 <label class="form-check-label" for="ow-settings-stacked-threads">
                     Stack conversations in the reading pane
                 </label>
@@ -60,17 +60,17 @@
             </div>
             <hr/>
             <div class="d-flex flex-column gap-2">
-                <button class="btn btn-light text-start" t-on-click="onOpenAccount"
-                        t-att-disabled="!state.accounts.length">
+                <button class="btn btn-light text-start" t-on-click="this.onOpenAccount"
+                        t-att-disabled="!this.state.accounts.length">
                     <i class="fa fa-id-card-o me-2"/>Signature &amp; account settings…
                 </button>
-                <button class="btn btn-light text-start" t-on-click="onShowShortcuts">
+                <button class="btn btn-light text-start" t-on-click="this.onShowShortcuts">
                     <i class="fa fa-keyboard-o me-2"/>Keyboard shortcuts…
                 </button>
             </div>
         </div>
         <t t-set-slot="footer">
-            <button class="btn btn-primary" t-on-click="onSave">Save</button>
+            <button class="btn btn-primary" t-on-click="this.onSave">Save</button>
             <button class="btn btn-secondary" t-on-click="() => this.props.close()">Discard</button>
         </t>
     </Dialog>

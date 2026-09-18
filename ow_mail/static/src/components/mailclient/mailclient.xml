@@ -4,37 +4,37 @@
 <t t-name="ow_mail.Mailclient">
     <div class="o-ow-mail d-flex flex-column h-100"
          t-att-class="{
-            'o-ow-sidebar-collapsed': ui.sidebarCollapsed,
-            'o-ow-vp-tablet': state.viewport === 'tablet',
-            'o-ow-vp-mobile': state.viewport === 'mobile',
-            'o-ow-mobile-viewer': state.viewport === 'mobile' &amp;&amp; !!state.selectedMessage &amp;&amp; state.view === 'mail',
-            'o-ow-mobile-contacts-detail': state.viewport === 'mobile' &amp;&amp; state.contactsDetailOpen &amp;&amp; state.view === 'contacts',
-            'o-ow-sidebar-overlay-open': state.sidebarOverlayOpen,
-            'o-ow-dark': state.darkMode,
+            'o-ow-sidebar-collapsed': this.ui.sidebarCollapsed,
+            'o-ow-vp-tablet': this.state.viewport === 'tablet',
+            'o-ow-vp-mobile': this.state.viewport === 'mobile',
+            'o-ow-mobile-viewer': this.state.viewport === 'mobile' &amp;&amp; !!this.state.selectedMessage &amp;&amp; this.state.view === 'mail',
+            'o-ow-mobile-contacts-detail': this.state.viewport === 'mobile' &amp;&amp; this.state.contactsDetailOpen &amp;&amp; this.state.view === 'contacts',
+            'o-ow-sidebar-overlay-open': this.state.sidebarOverlayOpen,
+            'o-ow-dark': this.state.darkMode,
          }">
         <div class="o-ow-topbar-mobile d-flex align-items-center gap-2 px-2 py-1 border-bottom"
-             t-if="state.viewport === 'mobile'">
-            <t t-if="isMobileDetail">
-                <button class="btn btn-sm btn-light" t-on-click="onBack" title="Back">
+             t-if="this.state.viewport === 'mobile'">
+            <t t-if="this.isMobileDetail">
+                <button class="btn btn-sm btn-light" t-on-click="this.onBack" title="Back">
                     <i class="fa fa-arrow-left"/>
                 </button>
             </t>
             <t t-else="">
-                <button class="btn btn-sm btn-light" t-on-click="openSidebar" title="Menu">
+                <button class="btn btn-sm btn-light" t-on-click="this.openSidebar" title="Menu">
                     <i class="fa fa-bars"/>
                 </button>
             </t>
-            <strong class="ms-2 text-truncate flex-grow-1" t-esc="mobileTitle"/>
+            <strong class="ms-2 text-truncate flex-grow-1" t-out="this.mobileTitle"/>
         </div>
         <div class="o-ow-body flex-grow-1 d-flex overflow-hidden">
-            <div t-if="state.viewport === 'mobile' &amp;&amp; state.sidebarOverlayOpen"
-                 class="o-ow-sidebar-backdrop" t-on-click="closeSidebar"/>
-            <Sidebar collapsed="ui.sidebarCollapsed"
+            <div t-if="this.state.viewport === 'mobile' &amp;&amp; this.state.sidebarOverlayOpen"
+                 class="o-ow-sidebar-backdrop" t-on-click="this.closeSidebar"/>
+            <Sidebar collapsed="this.ui.sidebarCollapsed"
                      toggleSidebar="() => this.toggleSidebar()"/>
-            <t t-if="state.view === 'contacts'">
+            <t t-if="this.state.view === 'contacts'">
                 <Contacts/>
             </t>
-            <t t-elif="needsOnboarding">
+            <t t-elif="this.needsOnboarding">
                 <div class="o-ow-onboarding flex-grow-1 d-flex justify-content-center align-items-center"
                      role="region" aria-label="Getting started">
                     <div class="text-center p-4" style="max-width: 420px;">
@@ -44,11 +44,11 @@
                             Connect your IMAP/SMTP mailbox to start reading and
                             sending mail right here in Odoo.
                         </p>
-                        <div t-if="onboardingError" class="alert alert-warning small text-start">
+                        <div t-if="this.onboardingError" class="alert alert-warning small text-start">
                             <i class="fa fa-exclamation-triangle me-1" aria-hidden="true"/>
-                            <t t-esc="onboardingError"/>
+                            <t t-out="this.onboardingError"/>
                         </div>
-                        <button class="btn btn-primary" t-on-click="onConnectMailbox">
+                        <button class="btn btn-primary" t-on-click="this.onConnectMailbox">
                             <i class="fa fa-plug me-1" aria-hidden="true"/> Connect Mailbox
                         </button>
                     </div>
@@ -60,7 +60,7 @@
             </t>
         </div>
         <div class="o-ow-compose-stack">
-            <t t-foreach="state.composeWindows" t-as="win" t-key="win.id">
+            <t t-foreach="this.state.composeWindows" t-as="win" t-key="win.id">
                 <ComposeWindow win="win"/>
             </t>
         </div>

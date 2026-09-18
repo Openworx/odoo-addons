@@ -21,12 +21,13 @@ class IrHttp(models.AbstractModel):
     _inherit = "ir.http"
 
     @classmethod
-    def _auth_method_ow_mail_user(cls):
+    def _auth_method_ow_mail_user(cls, routing: dict):
         """Authenticated internal user, or AccessDenied.
 
         Registered automatically: ``_authenticate_explicit`` resolves an
-        endpoint's ``auth`` string to ``_auth_method_<auth>``.
+        endpoint's ``auth`` string to ``_auth_method_<auth>``. Odoo 20 passes
+        the route's ``routing`` dict to every auth method.
         """
-        cls._auth_method_user()
+        cls._auth_method_user(routing)
         if not request.env.user._is_internal():
             raise AccessDenied()

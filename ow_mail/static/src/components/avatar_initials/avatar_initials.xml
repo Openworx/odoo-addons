@@ -2,8 +2,8 @@
 <templates xml:space="preserve">
 
 <t t-name="ow_mail.AvatarInitials">
-    <span class="o-ow-avatar" t-att-style="'background:' + color">
-        <t t-esc="initials"/>
+    <span class="o-ow-avatar" t-att-style="'background:' + this.color">
+        <t t-out="this.initials"/>
     </span>
 </t>
 

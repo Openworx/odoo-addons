@@ -16,7 +16,7 @@ Single home for the record integration:
 
 No hard dependencies: optional apps (crm, project, sale, helpdesk) are
 probed via the registry (``model in self.env``) and the user's ACLs
-(``ir.model.access._get_allowed_models``) at runtime.
+(``ir.access``, see ``_ow_mail_allowed_models``) at runtime.
 """
 import base64
 import email
@@ -79,13 +79,41 @@ class OwMailRecordLink(models.AbstractModel):
     _description = "OW Mail Record Integration Helper"
 
     # ------------------------------------------------------------------
+    # Access helper
+    # ------------------------------------------------------------------
+
+    _OW_MAIL_OPERATION_LETTER = {"read": "r", "write": "u", "create": "c", "unlink": "d"}
+
+    @api.model
+    def _ow_mail_allowed_models(self, mode="read"):
+        """Model names the current user has model-level *mode* access on.
+
+        Odoo 20 merged ``ir.model.access`` and ``ir.rule`` into ``ir.access``;
+        the old ``ir.model.access._get_allowed_models`` helper is gone. A
+        permission is an active ``ir.access`` row *with* a group; the user
+        has model-level access when one of their groups holds such a row
+        whose operation includes the requested letter (record-level domains
+        are applied later by ``search``/``check_access``).
+        """
+        letter = self._OW_MAIL_OPERATION_LETTER[mode]
+        group_ids = set(self.env.user._get_group_ids())
+        return {
+            model_name
+            for model_name, infos in self.env["ir.access"]._get_all_access().items()
+            if any(
+                info.group_id and info.group_id in group_ids and letter in info.operation
+                for info in infos
+            )
+        }
+
+    # ------------------------------------------------------------------
     # Menu / picker
     # ------------------------------------------------------------------
 
     @api.model
     def get_create_menu(self):
         """Curated dropdown entries: installed models the user may create."""
-        allowed = self.env["ir.model.access"]._get_allowed_models("create")
+        allowed = self._ow_mail_allowed_models("create")
         menu = []
         for entry in CREATE_MENU:
             model = entry["model"]
@@ -104,7 +132,7 @@ class OwMailRecordLink(models.AbstractModel):
         """Resolve a dropdown ``key`` to its raw CREATE_MENU entry —
         re-applying the installed + create-allowed filter so a crafted RPC
         with a valid key but missing rights is still rejected."""
-        allowed = self.env["ir.model.access"]._get_allowed_models("create")
+        allowed = self._ow_mail_allowed_models("create")
         for entry in CREATE_MENU:
             if (entry["key"] == key and entry["model"] in self.env
                     and entry["model"] in allowed):
@@ -119,7 +147,7 @@ class OwMailRecordLink(models.AbstractModel):
         wizard's Reference selection uses ``read`` (posting rights are
         enforced later by ``message_post``).
         """
-        allowed = self.env["ir.model.access"]._get_allowed_models(mode)
+        allowed = self._ow_mail_allowed_models(mode)
         rows = self.env["ir.model"].sudo().search_read(
             [("is_mail_thread", "=", True), ("transient", "=", False)],
             ["model", "name"], order="name")
@@ -392,7 +420,7 @@ class OwMailRecordLink(models.AbstractModel):
             seen.add(key)
             grouped.setdefault(row["model"], []).append(row["res_id"])
 
-        allowed = self.env["ir.model.access"]._get_allowed_models("read")
+        allowed = self._ow_mail_allowed_models("read")
         result = []
         for model_name, ids in grouped.items():
             if model_name not in self.env or model_name not in allowed:

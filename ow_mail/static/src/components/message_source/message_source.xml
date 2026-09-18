@@ -2,19 +2,19 @@
 <templates xml:space="preserve">
 
 <t t-name="ow_mail.MessageSourceDialog">
-    <Dialog title="title" size="'xl'">
-        <div t-att-class="themeClass">
-            <div t-if="state.loading" class="text-center p-3 text-muted">
+    <Dialog title="this.title" size="'xl'">
+        <div t-att-class="this.themeClass">
+            <div t-if="this.state.loading" class="text-center p-3 text-muted">
                 <i class="fa fa-spinner fa-spin me-2"/> Loading…
             </div>
-            <div t-elif="state.error" class="alert alert-danger mb-0" t-esc="state.error"/>
-            <pre t-else="" class="o-ow-source-pre mb-0" t-esc="state.text"/>
+            <div t-elif="this.state.error" class="alert alert-danger mb-0" t-out="this.state.error"/>
+            <pre t-else="" class="o-ow-source-pre mb-0" t-out="this.state.text"/>
         </div>
         <t t-set-slot="footer">
-            <button class="btn btn-light" t-on-click="openInTab">
+            <button class="btn btn-light" t-on-click="this.openInTab">
                 <i class="fa fa-external-link me-1"/> Open in new tab
             </button>
-            <button class="btn btn-secondary" t-on-click="() => props.close()">
+            <button class="btn btn-secondary" t-on-click="() => this.props.close()">
                 Close
             </button>
         </t>

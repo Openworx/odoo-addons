@@ -1,6 +1,6 @@
 /** @odoo-module **/
 
-import { Component, onWillStart, useState } from "@odoo/owl";
+import { Component, onWillStart, proxy } from "@odoo/owl";
 import { Dialog } from "@web/core/dialog/dialog";
 import { useService } from "@web/core/utils/hooks";
 
@@ -30,7 +30,7 @@ export class MessageSourceDialog extends Component {
      */
     setup() {
         this.mail = useService("ow_mail");
-        this.state = useState({ text: "", loading: true, error: "" });
+        this.state = proxy({ text: "", loading: true, error: "" });
         onWillStart(async () => {
             try {
                 const res = await fetch(

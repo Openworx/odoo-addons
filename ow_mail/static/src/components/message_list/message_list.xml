@@ -11,16 +11,16 @@
                        class="form-control rounded-pill ps-5 o-ow-search-input"
                        style="padding-right:4.5rem;"
                        placeholder="Search — from: subject: has:attachment before:YYYY-MM-DD …"
-                       t-model="local.search"
-                       t-on-keydown="onSearchKey"
-                       t-on-input="onSearchInput"/>
+                       t-custom-model="this.local.search"
+                       t-on-keydown="this.onSearchKey"
+                       t-on-input="this.onSearchInput"/>
                 <div class="position-absolute top-50 end-0 translate-middle-y me-2 d-flex align-items-center">
-                    <button t-if="local.search"
+                    <button t-if="this.local.search"
                             class="btn btn-sm btn-link text-muted p-0 me-1"
-                            t-on-click="onClearSearch" title="Clear">
+                            t-on-click="this.onClearSearch" title="Clear">
                         <i class="fa fa-times"/>
                     </button>
-                    <div class="dropdown d-inline-block" t-if="!local.search">
+                    <div class="dropdown d-inline-block" t-if="!this.local.search">
                         <button class="btn btn-sm btn-link text-muted p-0" data-bs-toggle="dropdown"
                                 title="Search operators" aria-expanded="false">
                             <i class="fa fa-question-circle"/>
@@ -40,16 +40,16 @@
                     <div class="dropdown d-inline-block ms-1">
                         <button class="btn btn-sm btn-link text-muted p-0" data-bs-toggle="dropdown"
                                 aria-expanded="false"
-                                t-att-title="activeFilterLabel()">
+                                t-att-title="this.activeFilterLabel()">
                             <i class="fa fa-filter"/>
                         </button>
                         <ul class="dropdown-menu dropdown-menu-end p-1" style="min-width:220px;">
-                            <t t-foreach="filters" t-as="f" t-key="f.id">
+                            <t t-foreach="this.filters" t-as="f" t-key="f.id">
                                 <li>
                                     <button class="dropdown-item d-flex align-items-center gap-2"
                                             t-on-click="() => this.onFilter(f.id)">
                                         <i class="fa fa-check" style="width:1em;"
-                                           t-att-style="isFilterActive(f.id) ? 'width:1em;' : 'width:1em;visibility:hidden;'"/>
+                                           t-att-style="this.isFilterActive(f.id) ? 'width:1em;' : 'width:1em;visibility:hidden;'"/>
                                         <i class="fa" t-att-class="f.icon" style="width:1em;"/>
                                         <span t-esc="f.label"/>
                                     </button>
@@ -62,62 +62,62 @@
         </div>
         <div class="o-ow-list-header px-3 py-2 border-bottom d-flex align-items-center">
             <input type="checkbox" class="form-check-input me-2 mt-0"
-                   t-att-checked="allChecked"
-                   t-on-change="onToggleAll"
+                   t-att-checked="this.allChecked"
+                   t-on-change="this.onToggleAll"
                    title="Select all"/>
             <strong>Messages</strong>
-            <span class="text-muted small ms-2" t-esc="state.totalMessages"/>
-            <span t-if="state.loading" class="spinner-border spinner-border-sm ms-2"/>
+            <span class="text-muted small ms-2" t-esc="this.state.totalMessages"/>
+            <span t-if="this.state.loading" class="spinner-border spinner-border-sm ms-2"/>
             <div class="ms-auto d-flex align-items-center gap-1">
                 <button class="btn btn-sm p-0 me-1"
-                        t-att-class="state.threadView ? 'btn-link text-primary' : 'btn-link text-muted'"
-                        t-on-click="onToggleThreadView"
+                        t-att-class="this.state.threadView ? 'btn-link text-primary' : 'btn-link text-muted'"
+                        t-on-click="this.onToggleThreadView"
                         title="Toggle conversation view">
                     <i class="fa fa-comments-o"/>
                 </button>
                 <select class="form-select form-select-sm border-0 text-muted"
                         style="width:auto;font-size:0.8rem;"
-                        t-on-change="onSortSelect">
-                    <t t-foreach="sortOptions" t-as="s" t-key="s.id">
-                        <option t-att-value="s.id" t-att-selected="state.sortBy === s.id" t-esc="s.label"/>
+                        t-on-change="this.onSortSelect">
+                    <t t-foreach="this.sortOptions" t-as="s" t-key="s.id">
+                        <option t-att-value="s.id" t-att-selected="this.state.sortBy === s.id" t-esc="s.label"/>
                     </t>
                 </select>
-                <button class="btn btn-sm btn-link text-muted p-0" t-on-click="onToggleSortOrder"
+                <button class="btn btn-sm btn-link text-muted p-0" t-on-click="this.onToggleSortOrder"
                         title="Toggle sort order">
-                    <i class="fa" t-att-class="state.sortOrder === 'asc' ? 'fa-sort-amount-asc' : 'fa-sort-amount-desc'"/>
+                    <i class="fa" t-att-class="this.state.sortOrder === 'asc' ? 'fa-sort-amount-asc' : 'fa-sort-amount-desc'"/>
                 </button>
             </div>
         </div>
-        <div t-if="checkedCount" class="o-ow-bulk-bar px-3 py-2 border-bottom d-flex align-items-center gap-2 flex-wrap"
+        <div t-if="this.checkedCount" class="o-ow-bulk-bar px-3 py-2 border-bottom d-flex align-items-center gap-2 flex-wrap"
              role="toolbar" aria-label="Bulk actions">
-            <span class="fw-semibold small"><t t-esc="checkedCount"/> selected</span>
-            <button class="btn btn-sm btn-outline-secondary" t-on-click="onBulkArchive" title="Archive" aria-label="Archive">
+            <span class="fw-semibold small"><t t-esc="this.checkedCount"/> selected</span>
+            <button class="btn btn-sm btn-outline-secondary" t-on-click="this.onBulkArchive" title="Archive" aria-label="Archive">
                 <i class="fa fa-archive" aria-hidden="true"/>
             </button>
-            <button class="btn btn-sm btn-outline-danger" t-on-click="onBulkDelete" title="Delete" aria-label="Delete">
+            <button class="btn btn-sm btn-outline-danger" t-on-click="this.onBulkDelete" title="Delete" aria-label="Delete">
                 <i class="fa fa-trash" aria-hidden="true"/>
             </button>
-            <button class="btn btn-sm btn-outline-secondary" t-on-click="onBulkMarkRead" title="Mark read" aria-label="Mark read">
+            <button class="btn btn-sm btn-outline-secondary" t-on-click="this.onBulkMarkRead" title="Mark read" aria-label="Mark read">
                 <i class="fa fa-envelope-open-o" aria-hidden="true"/>
             </button>
-            <button class="btn btn-sm btn-outline-secondary" t-on-click="onBulkMarkUnread" title="Mark unread" aria-label="Mark unread">
+            <button class="btn btn-sm btn-outline-secondary" t-on-click="this.onBulkMarkUnread" title="Mark unread" aria-label="Mark unread">
                 <i class="fa fa-envelope" aria-hidden="true"/>
             </button>
-            <button class="btn btn-sm btn-outline-warning" t-on-click="onBulkToggleFlag" title="Star" aria-label="Star">
+            <button class="btn btn-sm btn-outline-warning" t-on-click="this.onBulkToggleFlag" title="Star" aria-label="Star">
                 <i class="fa fa-star" aria-hidden="true"/>
             </button>
-            <div class="dropdown" t-if="state.tags.length">
+            <div class="dropdown" t-if="this.state.tags.length">
                 <button class="btn btn-sm btn-outline-secondary" data-bs-toggle="dropdown"
                         aria-expanded="false" title="Label" aria-label="Label">
                     <i class="fa fa-tag" aria-hidden="true"/>
                 </button>
                 <ul class="dropdown-menu p-1" style="min-width:210px;">
                     <li class="px-2 py-1 small text-muted">Click to add · × to remove</li>
-                    <t t-foreach="state.tags" t-as="tag" t-key="tag.id">
+                    <t t-foreach="this.state.tags" t-as="tag" t-key="tag.id">
                         <li class="d-flex align-items-center">
                             <button class="dropdown-item d-flex align-items-center gap-2 flex-grow-1"
                                     t-on-click="() => this.onBulkTag(tag.id, 'add')">
-                                <span class="o-ow-tag-dot flex-shrink-0" t-att-style="tagDotStyle(tag)"/>
+                                <span class="o-ow-tag-dot flex-shrink-0" t-att-style="this.tagDotStyle(tag)"/>
                                 <span class="text-truncate" t-esc="tag.name"/>
                             </button>
                             <button class="btn btn-sm btn-link text-muted p-0 mx-2 flex-shrink-0"
@@ -130,36 +130,36 @@
                     </t>
                 </ul>
             </div>
-            <button class="btn btn-sm btn-outline-secondary" t-on-click="onBulkForward" title="Forward" aria-label="Forward">
+            <button class="btn btn-sm btn-outline-secondary" t-on-click="this.onBulkForward" title="Forward" aria-label="Forward">
                 <i class="fa fa-share" aria-hidden="true"/>
             </button>
-            <select class="form-select form-select-sm" style="width:auto;" t-on-change="onBulkMove">
+            <select class="form-select form-select-sm" style="width:auto;" t-on-change="this.onBulkMove">
                 <option value="">Move to…</option>
-                <t t-foreach="moveTargetFolders" t-as="f" t-key="f.id">
+                <t t-foreach="this.moveTargetFolders" t-as="f" t-key="f.id">
                     <option t-att-value="f.id" t-esc="f.name"/>
                 </t>
             </select>
-            <button class="btn btn-sm btn-link text-muted" t-on-click="clearChecked" title="Clear selection">
+            <button class="btn btn-sm btn-link text-muted" t-on-click="this.clearChecked" title="Clear selection">
                 <i class="fa fa-times"/>
             </button>
         </div>
         <div class="o-ow-list-body flex-grow-1 overflow-auto" t-ref="listBody"
              role="listbox" aria-label="Messages">
-            <t t-if="!state.messages.length">
+            <t t-if="!this.state.messages.length">
                 <div class="text-muted text-center p-5">No messages</div>
             </t>
 
             <!-- Thread-grouped view -->
-            <t t-elif="state.threadView">
-                <t t-foreach="state.threads" t-as="thread" t-key="thread.threadId">
+            <t t-elif="this.state.threadView">
+                <t t-foreach="this.state.threads" t-as="thread" t-key="thread.threadId">
                     <div class="o-ow-list-item o-ow-thread-header px-3 py-2 border-bottom d-flex"
                          t-att-class="{'o-ow-unread': thread.has_unread}"
                          t-on-click="() => this.onToggleThread(thread)">
                         <input type="checkbox" class="form-check-input me-2 mt-0 o-ow-msg-check flex-shrink-0"
-                               t-att-checked="isChecked(thread.messages[thread.messages.length - 1])"
+                               t-att-checked="this.isChecked(thread.messages[thread.messages.length - 1])"
                                t-on-click="(ev) => this.onToggleCheck(ev, thread.messages[thread.messages.length - 1])"/>
                         <i t-if="thread.messages.length > 1" class="fa me-2 o-ow-thread-toggle mt-1"
-                           t-att-class="isThreadExpanded(thread.threadId) ? 'fa-chevron-down' : 'fa-chevron-right'"/>
+                           t-att-class="this.isThreadExpanded(thread.threadId) ? 'fa-chevron-down' : 'fa-chevron-right'"/>
                         <AvatarInitials name="thread.from_name" email="thread.from_email"/>
                         <div class="flex-grow-1 ms-2 overflow-hidden">
                             <div class="d-flex">
@@ -167,7 +167,7 @@
                                      t-att-class="{'fw-bold': thread.has_unread}">
                                     <t t-esc="thread.from_name"/>
                                 </div>
-                                <small class="text-muted ms-2" t-esc="formatDate(thread.latestDate)"/>
+                                <small class="text-muted ms-2" t-esc="this.formatDate(thread.latestDate)"/>
                             </div>
                             <div class="text-truncate"
                                  t-att-class="{'fw-semibold': thread.has_unread}" t-esc="thread.subject"/>
@@ -207,13 +207,13 @@
                             </button>
                         </div>
                     </div>
-                    <t t-if="isThreadExpanded(thread.threadId)">
-                        <t t-foreach="thread.messages" t-as="m" t-key="keyOf(m)">
+                    <t t-if="this.isThreadExpanded(thread.threadId)">
+                        <t t-foreach="thread.messages" t-as="m" t-key="this.keyOf(m)">
                             <div class="o-ow-list-item o-ow-thread-child px-3 py-2 border-bottom d-flex"
-                                 t-att-class="{'active': isSelected(m), 'o-ow-unread': !m.flags_seen}"
+                                 t-att-class="{'active': this.isSelected(m), 'o-ow-unread': !m.flags_seen}"
                                  t-on-click="() => this.onSelectThreadMessage(m)">
                                 <input type="checkbox" class="form-check-input me-2 mt-0 o-ow-msg-check flex-shrink-0"
-                                       t-att-checked="isChecked(m)"
+                                       t-att-checked="this.isChecked(m)"
                                        t-on-click="(ev) => this.onToggleCheck(ev, m)"/>
                                 <div style="width:10px;"/>
                                 <AvatarInitials name="m.from_name" email="m.from_email"/>
@@ -223,13 +223,13 @@
                                              t-att-class="{'fw-bold': !m.flags_seen}">
                                             <t t-esc="m.from_name"/>
                                         </div>
-                                        <small class="text-muted ms-2" t-esc="formatDate(m.date)"/>
+                                        <small class="text-muted ms-2" t-esc="this.formatDate(m.date)"/>
                                     </div>
                                     <div class="text-muted small text-truncate" t-esc="m.subject"/>
-                                    <div t-if="hasChips(m)" class="mt-1 d-flex flex-wrap gap-1 o-ow-chip-row">
-                                        <t t-foreach="tagsOf(m)" t-as="tag" t-key="tag.id">
+                                    <div t-if="this.hasChips(m)" class="mt-1 d-flex flex-wrap gap-1 o-ow-chip-row">
+                                        <t t-foreach="this.tagsOf(m)" t-as="tag" t-key="tag.id">
                                             <span class="badge rounded-pill o-ow-tag-chip"
-                                                  t-att-style="tagChipStyle(tag)" t-esc="tag.name"/>
+                                                  t-att-style="this.tagChipStyle(tag)" t-esc="tag.name"/>
                                         </t>
                                         <span t-if="m.partner_id" class="badge rounded-pill o-ow-customer-badge"
                                               title="Sender is an Odoo contact">Customer</span>
@@ -273,20 +273,20 @@
 
             <!-- Flat view (default) -->
             <t t-else="">
-                <t t-foreach="state.messages" t-as="m" t-key="keyOf(m)">
+                <t t-foreach="this.state.messages" t-as="m" t-key="this.keyOf(m)">
                     <div class="o-ow-list-item px-3 py-2 border-bottom d-flex"
                          draggable="true" role="option" tabindex="-1"
-                         t-att-aria-selected="isSelected(m) ? 'true' : 'false'"
+                         t-att-aria-selected="this.isSelected(m) ? 'true' : 'false'"
                          t-att-aria-label="(m.flags_seen ? '' : 'Unread. ') + (m.from_name || m.from_email) + ': ' + m.subject"
-                         t-att-class="{'active': isSelected(m), 'o-ow-unread': !m.flags_seen}"
+                         t-att-class="{'active': this.isSelected(m), 'o-ow-unread': !m.flags_seen}"
                          t-on-click="() => this.onSelect(m)"
                          t-on-dblclick="() => this.onDblClick(m)"
                          t-on-keydown="(ev) => this.onRowKey(ev, m)"
                          t-on-dragstart="(ev) => this.onDragStart(ev, m)"
-                         t-on-dragend="onDragEnd">
+                         t-on-dragend="this.onDragEnd">
                         <input type="checkbox" class="form-check-input me-2 mt-0 o-ow-msg-check flex-shrink-0"
                                aria-label="Select message"
-                               t-att-checked="isChecked(m)"
+                               t-att-checked="this.isChecked(m)"
                                t-on-click="(ev) => this.onToggleCheck(ev, m)"/>
                         <AvatarInitials name="m.from_name" email="m.from_email"/>
                         <div class="flex-grow-1 ms-2 overflow-hidden">
@@ -295,15 +295,15 @@
                                      t-att-class="{'fw-bold': !m.flags_seen}">
                                     <t t-esc="m.from_name"/>
                                 </div>
-                                <small class="text-muted ms-2" t-esc="formatDate(m.date)"/>
+                                <small class="text-muted ms-2" t-esc="this.formatDate(m.date)"/>
                             </div>
                             <div class="text-truncate"
                                  t-att-class="{'fw-semibold': !m.flags_seen}" t-esc="m.subject"/>
                             <div class="text-muted small text-truncate" t-esc="m.preview"/>
-                            <div t-if="hasChips(m)" class="mt-1 d-flex flex-wrap gap-1 o-ow-chip-row">
-                                <t t-foreach="tagsOf(m)" t-as="tag" t-key="tag.id">
+                            <div t-if="this.hasChips(m)" class="mt-1 d-flex flex-wrap gap-1 o-ow-chip-row">
+                                <t t-foreach="this.tagsOf(m)" t-as="tag" t-key="tag.id">
                                     <span class="badge rounded-pill o-ow-tag-chip"
-                                          t-att-style="tagChipStyle(tag)" t-esc="tag.name"/>
+                                          t-att-style="this.tagChipStyle(tag)" t-esc="tag.name"/>
                                 </t>
                                 <span t-if="m.partner_id" class="badge rounded-pill o-ow-customer-badge"
                                       title="Sender is an Odoo contact">Customer</span>
@@ -342,35 +342,35 @@
                     </div>
                 </t>
             </t>
-            <div t-if="state.prefs.infinite_scroll and state.messages.length and !state.listEnd"
+            <div t-if="this.state.prefs.infinite_scroll and this.state.messages.length and !this.state.listEnd"
                  t-ref="sentinel" class="o-ow-list-sentinel" aria-hidden="true"/>
         </div>
-        <div t-if="state.totalMessages and state.prefs.infinite_scroll"
+        <div t-if="this.state.totalMessages and this.state.prefs.infinite_scroll"
              class="o-ow-pager border-top px-3 py-2 d-flex align-items-center justify-content-center gap-2 small text-muted">
-            <i t-if="state.loadingMore" class="fa fa-circle-o-notch fa-spin me-1"/>
-            <span><t t-esc="state.messages.length"/> / <t t-esc="state.totalMessages"/> messages</span>
+            <i t-if="this.state.loadingMore" class="fa fa-circle-o-notch fa-spin me-1"/>
+            <span><t t-esc="this.state.messages.length"/> / <t t-esc="this.state.totalMessages"/> messages</span>
         </div>
-        <div t-if="state.totalMessages and !state.prefs.infinite_scroll" class="o-ow-pager border-top px-3 py-2 d-flex align-items-center justify-content-center gap-2">
-            <button class="btn btn-sm btn-outline-secondary border-0" t-att-disabled="state.page === 1" t-on-click="onFirstPage" title="First">
+        <div t-if="this.state.totalMessages and !this.state.prefs.infinite_scroll" class="o-ow-pager border-top px-3 py-2 d-flex align-items-center justify-content-center gap-2">
+            <button class="btn btn-sm btn-outline-secondary border-0" t-att-disabled="this.state.page === 1" t-on-click="this.onFirstPage" title="First">
                 <i class="fa fa-angle-double-left"/>
             </button>
-            <button class="btn btn-sm btn-outline-secondary border-0" t-att-disabled="state.page === 1" t-on-click="onPrevPage" title="Previous">
+            <button class="btn btn-sm btn-outline-secondary border-0" t-att-disabled="this.state.page === 1" t-on-click="this.onPrevPage" title="Previous">
                 <i class="fa fa-angle-left"/>
             </button>
             <span class="text-muted small">
-                Message <t t-esc="rangeStart"/> to <t t-esc="rangeEnd"/> of <t t-esc="state.totalMessages"/>
+                Message <t t-esc="this.rangeStart"/> to <t t-esc="this.rangeEnd"/> of <t t-esc="this.state.totalMessages"/>
             </span>
             <select class="form-select form-select-sm text-center"
                     style="width: auto;"
-                    t-on-change="onPageSelect">
-                <t t-foreach="pageList" t-as="p" t-key="p">
-                    <option t-att-value="p" t-att-selected="p === state.page" t-esc="p"/>
+                    t-on-change="this.onPageSelect">
+                <t t-foreach="this.pageList" t-as="p" t-key="p">
+                    <option t-att-value="p" t-att-selected="p === this.state.page" t-esc="p"/>
                 </t>
             </select>
-            <button class="btn btn-sm btn-outline-secondary border-0" t-att-disabled="state.page === totalPages" t-on-click="onNextPage" title="Next">
+            <button class="btn btn-sm btn-outline-secondary border-0" t-att-disabled="this.state.page === this.totalPages" t-on-click="this.onNextPage" title="Next">
                 <i class="fa fa-angle-right"/>
             </button>
-            <button class="btn btn-sm btn-outline-secondary border-0" t-att-disabled="state.page === totalPages" t-on-click="onLastPage" title="Last">
+            <button class="btn btn-sm btn-outline-secondary border-0" t-att-disabled="this.state.page === this.totalPages" t-on-click="this.onLastPage" title="Last">
                 <i class="fa fa-angle-double-right"/>
             </button>
         </div>

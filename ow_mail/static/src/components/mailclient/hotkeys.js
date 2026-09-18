@@ -1,7 +1,7 @@
 /** @odoo-module **/
 
-import { useEffect } from "@odoo/owl";
 import { useHotkey } from "@web/core/hotkeys/hotkey_hook";
+import { useLayoutEffect } from "@web/owl2/utils";
 
 /**
  * Return `true` when the keyboard event target is an element where the user
@@ -72,7 +72,7 @@ export function registerMailHotkeys(component) {
 
     // "/" and "?" are not in Odoo's hotkey whitelist (and "?" is a shifted
     // key on most layouts), so both use a raw keydown listener.
-    useEffect(
+    useLayoutEffect(
         () => {
             const handler = (ev) => {
                 if (ev.ctrlKey || ev.metaKey || ev.altKey) return;

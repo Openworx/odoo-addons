@@ -1,10 +1,12 @@
 /** @odoo-module **/
 
-import { Component, useEffect, useRef, useState } from "@odoo/owl";
+import { Component, proxy, usePlugin } from "@odoo/owl";
+import { NotificationPlugin } from "@web/core/notifications/notification_plugin";
 import { useService } from "@web/core/utils/hooks";
 import { _t } from "@web/core/l10n/translation";
 import { AvatarInitials } from "../avatar_initials/avatar_initials";
 import { owColor } from "../../utils/colors";
+import { useLayoutEffect, useRef } from "@web/owl2/utils";
 
 /**
  * Message list pane — displays a paginated, filterable, sortable list of
@@ -87,9 +89,9 @@ export class MessageList extends Component {
 
     setup() {
         this.mail = useService("ow_mail");
-        this.notification = useService("notification");
-        this.state = useState(this.mail.state);
-        this.local = useState({ search: this.state.selection.search || "", checked: {}, expandedThreads: {} });
+        this.notification = usePlugin(NotificationPlugin);
+        this.state = proxy(this.mail.state);
+        this.local = proxy({ search: this.state.selection.search || "", checked: {}, expandedThreads: {} });
         this.listBodyRef = useRef("listBody");
         this.sentinelRef = useRef("sentinel");
         // Infinite scroll: observe the sentinel at the bottom of the scroll
@@ -97,7 +99,7 @@ export class MessageList extends Component {
         // batch. The effect tracks the sentinel element itself — it exists
         // only while infinite mode is on and the end isn't reached, so the
         // observer's lifecycle follows the t-if for free.
-        useEffect(
+        useLayoutEffect(
             (sentinelEl) => {
                 if (!sentinelEl) return;
                 const observer = new IntersectionObserver(
@@ -115,7 +117,7 @@ export class MessageList extends Component {
         );
         // Keep the search box in sync when the service resets the query
         // (folder/tag switch clears the search — the input must follow).
-        useEffect(
+        useLayoutEffect(
             (search) => {
                 if ((search || "") !== this.local.search) {
                     this.local.search = search || "";

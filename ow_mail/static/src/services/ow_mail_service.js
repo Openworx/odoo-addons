@@ -4,7 +4,7 @@ import { registry } from "@web/core/registry";
 import { rpc } from "@web/core/network/rpc";
 import { _t } from "@web/core/l10n/translation";
 import { cookie } from "@web/core/browser/cookie";
-import { reactive } from "@odoo/owl";
+import { proxy } from "@odoo/owl";
 
 /**
  * Compose the stable `folder_id:uid` identity key for a message envelope.
@@ -162,7 +162,7 @@ export const owMailService = {
             try { localStorage.setItem(key, val); } catch {}
         }
 
-        const state = reactive({
+        const state = proxy({
             accounts: [],
             tags: [],
             bootstrapped: false,

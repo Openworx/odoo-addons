@@ -4,64 +4,64 @@
 <t t-name="ow_mail.Sidebar">
     <aside class="o-ow-sidebar d-flex flex-column border-end"
            role="navigation" aria-label="Mailboxes"
-           t-att-class="{'o-ow-sidebar-collapsed': props.collapsed || state.viewport === 'tablet'}">
+           t-att-class="{'o-ow-sidebar-collapsed': this.props.collapsed || this.state.viewport === 'tablet'}">
         <button class="o-ow-compose-btn btn btn-dark rounded-pill d-flex align-items-center justify-content-center gap-2 mx-2 mt-2 mb-1 py-2"
-                t-on-click="onCompose">
+                t-on-click="this.onCompose">
             <i class="fa fa-pencil" aria-hidden="true"/>
             <span>Compose</span>
         </button>
         <button class="o-ow-all-mailboxes btn btn-light text-start mx-2 mt-1"
                 title="All Mailboxes"
-                t-att-class="{'active': state.view === 'mail' &amp;&amp; !state.selection.accountId &amp;&amp; !state.selection.tagId &amp;&amp; !state.selection.smart}"
-                t-on-click="onAllMailboxes">
+                t-att-class="{'active': this.state.view === 'mail' &amp;&amp; !this.state.selection.accountId &amp;&amp; !this.state.selection.tagId &amp;&amp; !this.state.selection.smart}"
+                t-on-click="this.onAllMailboxes">
             <i class="fa fa-inbox me-2" aria-hidden="true"/><span>All Mailboxes</span>
         </button>
         <button class="o-ow-all-mailboxes o-ow-smart-starred btn btn-light text-start mx-2 mt-1"
                 title="Starred — all accounts"
-                t-att-class="{'active': state.view === 'mail' &amp;&amp; state.selection.smart === 'starred'}"
+                t-att-class="{'active': this.state.view === 'mail' &amp;&amp; this.state.selection.smart === 'starred'}"
                 t-on-click="() => this.onSmart('starred')">
             <i class="fa fa-star-o me-2" aria-hidden="true"/><span>Starred</span>
         </button>
         <button class="o-ow-all-mailboxes o-ow-smart-unread btn btn-light text-start mx-2 mt-1"
                 title="Unread — all accounts"
-                t-att-class="{'active': state.view === 'mail' &amp;&amp; state.selection.smart === 'unread'}"
+                t-att-class="{'active': this.state.view === 'mail' &amp;&amp; this.state.selection.smart === 'unread'}"
                 t-on-click="() => this.onSmart('unread')">
             <i class="fa fa-envelope me-2" aria-hidden="true"/><span>Unread</span>
         </button>
         <button class="o-ow-contacts-btn btn btn-light text-start mx-2 mt-1 mb-2"
                 title="Contacts"
-                t-att-class="{'active': state.view === 'contacts'}"
-                t-on-click="onContacts">
+                t-att-class="{'active': this.state.view === 'contacts'}"
+                t-on-click="this.onContacts">
             <i class="fa fa-address-book-o me-2" aria-hidden="true"/><span>Contacts</span>
         </button>
 
 <div class="o-ow-accounts flex-grow-1 overflow-auto px-1">
-            <t t-foreach="state.accounts" t-as="acc" t-key="acc.id">
+            <t t-foreach="this.state.accounts" t-as="acc" t-key="acc.id">
                 <div class="o-ow-account mb-2">
                     <div class="o-ow-account-header d-flex align-items-center px-2 py-1 gap-2"
-                         t-att-style="accountHeaderStyle(acc)">
-                        <span t-if="accountColor(acc)" class="o-ow-account-dot"
-                              t-att-style="accountDotStyle(acc)"/>
+                         t-att-style="this.accountHeaderStyle(acc)">
+                        <span t-if="this.accountColor(acc)" class="o-ow-account-dot"
+                              t-att-style="this.accountDotStyle(acc)"/>
                         <strong class="flex-grow-1 text-truncate" t-esc="acc.email"/>
                         <span t-if="acc.unread_count" class="o-ow-count"
                               t-att-title="acc.unread_count + ' unread'"
-                              t-esc="formatCount(acc.unread_count)"/>
+                              t-esc="this.formatCount(acc.unread_count)"/>
                         <button class="o-ow-account-sync btn btn-sm btn-link p-0 text-muted"
                                 title="Sync this mailbox"
                                 t-on-click.stop="() => this.onSyncAccount(acc.id)">
-                            <i class="fa fa-refresh" t-att-class="{'fa-spin': ui.syncingAccountId === acc.id}"/>
+                            <i class="fa fa-refresh" t-att-class="{'fa-spin': this.ui.syncingAccountId === acc.id}"/>
                         </button>
                     </div>
-                    <t t-foreach="folderTree(acc)" t-as="f" t-key="f.id">
+                    <t t-foreach="this.folderTree(acc)" t-as="f" t-key="f.id">
                         <div class="o-ow-folder d-flex align-items-center py-1"
-                             t-att-class="{'active': isActiveFolder(f.id), 'o-ow-drop-target': dnd.targetId === f.id}"
+                             t-att-class="{'active': this.isActiveFolder(f.id), 'o-ow-drop-target': this.dnd.targetId === f.id}"
                              t-att-style="'padding-left:' + (12 + f.depth * 14) + 'px; padding-right:12px;'"
-                             t-att-title="folderTooltip(acc, f)"
+                             t-att-title="this.folderTooltip(acc, f)"
                              t-on-click="() => this.onFolder(acc.id, f.id)"
                              t-on-dragover="(ev) => this.onDragOver(ev, f)"
                              t-on-dragleave="(ev) => this.onDragLeave(ev, f)"
                              t-on-drop="(ev) => this.onDrop(ev, f)">
-                            <i class="fa me-2" t-att-class="iconForKind(f.kind)"/>
+                            <i class="fa me-2" t-att-class="this.iconForKind(f.kind)"/>
                             <span class="flex-grow-1 text-truncate" t-esc="f.name"/>
                             <span t-if="f.unread_count" class="badge bg-secondary"
                                   t-esc="f.unread_count"/>
@@ -72,21 +72,21 @@
 
             <div class="o-ow-tags mt-2 pb-2">
                 <div class="px-2 py-1 text-muted small text-uppercase fw-semibold">Tags</div>
-                <t t-foreach="state.tags" t-as="tag" t-key="tag.id">
+                <t t-foreach="this.state.tags" t-as="tag" t-key="tag.id">
                     <div class="o-ow-tag-row d-flex align-items-center py-1 px-2 position-relative"
-                         t-att-class="{'active': state.selection.tagId === tag.id}"
+                         t-att-class="{'active': this.state.selection.tagId === tag.id}"
                          t-att-title="'Filter by ' + tag.name"
                          t-on-click="() => this.onTag(tag.id)">
                         <span class="o-ow-tag-dot me-2 flex-shrink-0" role="button"
                               title="Change color"
                               t-att-aria-label="'Change color of ' + tag.name"
-                              t-att-style="tagDotStyle(tag)"
+                              t-att-style="this.tagDotStyle(tag)"
                               t-on-click.stop="() => this.onTagDot(tag)"/>
-                        <t t-if="ui.renameTagId === tag.id">
+                        <t t-if="this.ui.renameTagId === tag.id">
                             <input type="text" class="form-control form-control-sm flex-grow-1"
-                                   t-model="ui.renameValue"
+                                   t-custom-model="this.ui.renameValue"
                                    t-att-aria-label="'Rename tag ' + tag.name"
-                                   t-on-click.stop="onPickerClick"
+                                   t-on-click.stop="this.onPickerClick"
                                    t-on-keydown.stop="(ev) => this.onRenameTagKey(ev, tag)"
                                    t-on-blur="() => this.onCommitRenameTag(tag)"/>
                         </t>
@@ -105,10 +105,10 @@
                                 t-on-click.stop="() => this.onDeleteTag(tag)">
                             <i class="fa fa-trash-o" aria-hidden="true"/>
                         </button>
-                        <t t-if="ui.colorPickerTagId === tag.id">
-                            <div class="o-ow-color-overlay" t-on-click.stop="closeColorPicker"/>
-                            <div class="o-ow-color-picker shadow-sm" t-on-click.stop="onPickerClick">
-                                <t t-foreach="palette" t-as="p" t-key="p.index">
+                        <t t-if="this.ui.colorPickerTagId === tag.id">
+                            <div class="o-ow-color-overlay" t-on-click.stop="this.closeColorPicker"/>
+                            <div class="o-ow-color-picker shadow-sm" t-on-click.stop="this.onPickerClick">
+                                <t t-foreach="this.palette" t-as="p" t-key="p.index">
                                     <span class="o-ow-color-swatch" role="button"
                                           t-att-class="{'active': (tag.color || 0) === p.index}"
                                           t-att-title="p.index === 0 ? 'No color' : ''"
@@ -123,10 +123,10 @@
                     <input type="text" class="form-control form-control-sm"
                            placeholder="New tag…"
                            t-ref="newTagInput"
-                           t-model="ui.newTagName"
-                           t-on-keydown="onNewTagKey"/>
+                           t-custom-model="this.ui.newTagName"
+                           t-on-keydown="this.onNewTagKey"/>
                     <button class="btn btn-sm btn-dark flex-shrink-0" title="Add tag"
-                            t-on-click="onCreateTag">
+                            t-on-click="this.onCreateTag">
                         <i class="fa fa-plus"/>
                     </button>
                 </div>
@@ -134,14 +134,14 @@
         </div>
 
         <div class="border-top px-2 py-2 mt-auto d-flex gap-1">
-            <button class="btn btn-sm btn-light flex-grow-1" t-on-click="onOpenSettings"
+            <button class="btn btn-sm btn-light flex-grow-1" t-on-click="this.onOpenSettings"
                     title="Mail settings" aria-label="Mail settings">
                 <i class="fa fa-cog" aria-hidden="true"/>
             </button>
-            <button class="btn btn-sm btn-light flex-grow-1" t-on-click="() => props.toggleSidebar()"
-                    t-att-title="props.collapsed ? 'Show sidebar' : 'Hide sidebar'"
-                    t-att-aria-label="props.collapsed ? 'Show sidebar' : 'Hide sidebar'">
-                <i class="fa" aria-hidden="true" t-att-class="props.collapsed ? 'fa-angle-double-right' : 'fa-angle-double-left'"/>
+            <button class="btn btn-sm btn-light flex-grow-1" t-on-click="() => this.props.toggleSidebar()"
+                    t-att-title="this.props.collapsed ? 'Show sidebar' : 'Hide sidebar'"
+                    t-att-aria-label="this.props.collapsed ? 'Show sidebar' : 'Hide sidebar'">
+                <i class="fa" aria-hidden="true" t-att-class="this.props.collapsed ? 'fa-angle-double-right' : 'fa-angle-double-left'"/>
             </button>
         </div>
     </aside>

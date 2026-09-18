@@ -1,6 +1,6 @@
 {
     "name": "OW Mail",
-    "version": "19.0.1.13.2",
+    "version": "20.0.1.13.2",
     "summary": "Mail client for Odoo backend (IMAP/SMTP, multi-account, tags, safe mode)",
     "description": """
 OW Mail — personal mail client inside Odoo.
@@ -36,8 +36,6 @@ Features:
         "python": ["cryptography", "lxml"],
     },
     "data": [
-        "security/ow_mail_security.xml",
-        "security/ir.model.access.csv",
         "data/ir_cron.xml",
         "views/ow_mail_account_views.xml",
         "views/ow_mail_tag_views.xml",
@@ -45,6 +43,7 @@ Features:
         "views/res_partner_views.xml",
         "views/ow_mail_attach_record_views.xml",
         "views/ow_mail_menus.xml",
+        "security/ir.access.csv",
     ],
     "assets": {
         "web.assets_backend": [

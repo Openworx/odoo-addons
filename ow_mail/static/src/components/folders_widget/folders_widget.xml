@@ -7,41 +7,41 @@
             <div class="position-relative flex-grow-1">
                 <i class="fa fa-search position-absolute top-50 start-0 translate-middle-y ms-2 text-muted"/>
                 <input type="text" class="form-control form-control-sm ps-4"
-                       placeholder="Search…" t-model="ui.search"/>
+                       placeholder="Search…" t-custom-model="this.ui.search"/>
             </div>
-            <button class="btn btn-sm btn-light" t-on-click="onNew" title="New folder">
+            <button class="btn btn-sm btn-light" t-on-click="this.onNew" title="New folder">
                 <i class="fa fa-plus"/> <span>New</span>
             </button>
             <button class="btn btn-sm btn-light"
-                    t-att-disabled="!selectedFolder or selectedFolder.kind !== 'custom'"
-                    t-on-click="onRename" title="Rename selected folder">
+                    t-att-disabled="!this.selectedFolder or this.selectedFolder.kind !== 'custom'"
+                    t-on-click="this.onRename" title="Rename selected folder">
                 <i class="fa fa-pencil"/> <span>Rename</span>
             </button>
             <button class="btn btn-sm btn-light"
-                    t-att-disabled="!selectedFolder or selectedFolder.kind !== 'custom'"
-                    t-on-click="onDelete" title="Delete selected folder">
+                    t-att-disabled="!this.selectedFolder or this.selectedFolder.kind !== 'custom'"
+                    t-on-click="this.onDelete" title="Delete selected folder">
                 <i class="fa fa-trash"/> <span>Delete</span>
             </button>
             <button class="btn btn-sm btn-light"
-                    t-att-disabled="!selectedFolder"
-                    t-on-click="onEmpty" title="Empty selected folder">
+                    t-att-disabled="!this.selectedFolder"
+                    t-on-click="this.onEmpty" title="Empty selected folder">
                 <i class="fa fa-eraser"/> <span>Empty</span>
             </button>
         </div>
         <div class="o-ow-folder-tree"
-             t-att-class="{'o-ow-drop-target': ui.dropTargetId === '__root__'}"
-             t-on-dragover="onDragOverRoot"
-             t-on-drop="onDropRoot">
-            <t t-if="!account">
+             t-att-class="{'o-ow-drop-target': this.ui.dropTargetId === '__root__'}"
+             t-on-dragover="this.onDragOverRoot"
+             t-on-drop="this.onDropRoot">
+            <t t-if="!this.account">
                 <div class="text-muted text-center p-4">
                     <i class="fa fa-folder-open-o fa-3x mb-2 d-block text-secondary opacity-25"/>
                     Save the account and run a sync to load its folder tree.
                 </div>
             </t>
             <t t-else="">
-                <t t-foreach="flatTree" t-as="row" t-key="row.node.id">
+                <t t-foreach="this.flatTree" t-as="row" t-key="row.node.id">
                     <div class="o-ow-folder-row d-flex align-items-center"
-                         t-att-class="{'active': ui.selectedFolderId === row.node.id, 'o-ow-drop-target': ui.dropTargetId === row.node.id}"
+                         t-att-class="{'active': this.ui.selectedFolderId === row.node.id, 'o-ow-drop-target': this.ui.dropTargetId === row.node.id}"
                          t-att-style="'padding-left: ' + (12 + row.depth * 18) + 'px;'"
                          t-att-draggable="row.node.kind === 'custom' ? 'true' : 'false'"
                          t-on-click="() => this.onSelectFolder(row.node)"
@@ -49,7 +49,7 @@
                          t-on-dragover="(ev) => this.onDragOver(ev, row.node)"
                          t-on-dragleave="(ev) => this.onDragLeave(ev, row.node)"
                          t-on-drop="(ev) => this.onDrop(ev, row.node)">
-                        <i class="fa me-2" t-att-class="iconForKind(row.node.kind)"/>
+                        <i class="fa me-2" t-att-class="this.iconForKind(row.node.kind)"/>
                         <span class="flex-grow-1 text-truncate" t-esc="row.node.name"/>
                         <span t-if="row.node.unread_count" class="badge bg-secondary me-2"
                               t-esc="row.node.unread_count"/>

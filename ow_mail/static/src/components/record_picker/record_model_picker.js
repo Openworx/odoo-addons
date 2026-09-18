@@ -1,6 +1,6 @@
 /** @odoo-module **/
 
-import { Component, useState } from "@odoo/owl";
+import { Component, proxy } from "@odoo/owl";
 import { Dialog } from "@web/core/dialog/dialog";
 import { useService } from "@web/core/utils/hooks";
 import { _t } from "@web/core/l10n/translation";
@@ -24,7 +24,7 @@ export class RecordModelPickerDialog extends Component {
 
     setup() {
         this.mail = useService("ow_mail");
-        this.local = useState({ filter: "" });
+        this.local = proxy({ filter: "" });
         this.title = _t("Create record from email");
     }
 

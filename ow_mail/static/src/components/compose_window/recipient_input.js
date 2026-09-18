@@ -1,7 +1,8 @@
 /** @odoo-module **/
 
-import { Component, useState, useRef } from "@odoo/owl";
+import { Component, proxy } from "@odoo/owl";
 import { useService } from "@web/core/utils/hooks";
+import { useRef } from "@web/owl2/utils";
 
 /**
  * Text input component that parses comma-separated `"Name" <email>` recipient
@@ -37,7 +38,7 @@ export class RecipientInput extends Component {
     setup() {
         this.mail = useService("ow_mail");
         this.inputRef = useRef("input");
-        this.local = useState({
+        this.local = proxy({
             suggestions: [],
             open: false,
             highlight: 0,
