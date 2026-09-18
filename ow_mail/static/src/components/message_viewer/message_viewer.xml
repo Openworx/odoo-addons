@@ -277,7 +277,7 @@
             <!-- Single message view -->
             <t t-else="">
                 <div class="o-ow-viewer-head px-3 py-2">
-                    <h4 t-if="!this.isMobile" class="mb-2 d-flex align-items-center flex-wrap gap-1" tabindex="-1" t-custom-ref="subjectHeading">
+                    <h4 t-if="!this.isMobile" class="mb-2 d-flex align-items-center flex-wrap gap-1" tabindex="-1" t-ref="this.subjectRef">
                         <span t-esc="this.state.selectedMessage.subject"/>
                         <button t-if="this.isDraft" class="btn btn-sm btn-link ms-2 p-0" t-on-click="this.onEditDraft"
                                 title="Edit draft">
@@ -439,7 +439,7 @@
                 <div class="o-ow-viewer-body flex-grow-1">
                     <!-- Mobile drops h-100 (its !important height would beat the
                          inline content-height that _fitIframe sets) -->
-                    <iframe t-custom-ref="iframe" t-att-class="this.isMobile ? 'w-100' : 'w-100 h-100'"
+                    <iframe t-ref="this.iframeRef" t-att-class="this.isMobile ? 'w-100' : 'w-100 h-100'"
                             sandbox="allow-same-origin allow-modals allow-popups allow-popups-to-escape-sandbox"
                             style="border:0;"/>
                 </div>

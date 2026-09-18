@@ -8,7 +8,7 @@
         <div t-if="this.props.win.expanded" class="o-ow-compose-backdrop" t-on-click="this.toggleExpand"/>
 
         <div class="o-ow-compose-inner card d-flex flex-column position-relative"
-             t-ref="inner"
+             t-ref="this.innerRef"
              t-att-class="{'shadow-lg': this.props.win.expanded}"
              t-on-dragenter="this.onDragEnter"
              t-on-dragover="this.onDragOver"
@@ -152,7 +152,7 @@
 
                 <!-- Body -->
                 <div class="o-ow-compose-body flex-grow-1 overflow-auto px-3 py-2"
-                     contenteditable="true" t-ref="body"
+                     contenteditable="true" t-ref="this.bodyRef"
                      t-on-input="this.onBodyInput"
                      t-on-click="this.onBodyClick"
                      t-on-paste="this.onPaste"

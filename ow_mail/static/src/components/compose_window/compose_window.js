@@ -1,10 +1,9 @@
 /** @odoo-module **/
 
-import { Component, proxy, onMounted, onWillDestroy } from "@odoo/owl";
+import { Component, onMounted, onWillDestroy, proxy, signal } from "@odoo/owl";
 import { useService } from "@web/core/utils/hooks";
 import { _t } from "@web/core/l10n/translation";
 import { RecipientInput } from "./recipient_input";
-import { useRef } from "@web/owl2/utils";
 
 /** Milliseconds between silent draft autosaves of a dirty compose window. */
 const AUTOSAVE_INTERVAL_MS = 30000;
@@ -163,15 +162,15 @@ export class ComposeWindow extends Component {
         // this._selImg (plain DOM ref — never mutated with marker classes,
         // so the saved HTML stays clean).
         this.local = proxy({ dragActive: false, imgSel: null });
-        this.bodyRef = useRef("body");
-        this.innerRef = useRef("inner");
+        this.bodyRef = signal.ref();
+        this.innerRef = signal.ref();
         this._selImg = null;
         this._imgDrag = null;
         this._savedRange = null;
         this._dragCount = 0;
         onMounted(() => {
-            if (this.bodyRef.el) {
-                this.bodyRef.el.innerHTML = _sanitizeComposeHtml(this.props.win.body);
+            if (this.bodyRef()) {
+                this.bodyRef().innerHTML = _sanitizeComposeHtml(this.props.win.body);
             }
         });
         // Silent periodic autosave — the service skips pristine/empty/busy
@@ -231,9 +230,9 @@ export class ComposeWindow extends Component {
      */
     _saveSelection() {
         const sel = window.getSelection();
-        if (!sel || !sel.rangeCount || !this.bodyRef.el) return;
+        if (!sel || !sel.rangeCount || !this.bodyRef()) return;
         const range = sel.getRangeAt(0);
-        if (this.bodyRef.el.contains(range.commonAncestorContainer)) {
+        if (this.bodyRef().contains(range.commonAncestorContainer)) {
             this._savedRange = range.cloneRange();
         }
     }
@@ -247,8 +246,8 @@ export class ComposeWindow extends Component {
      * `insertHTML`, `createLink`, `insertImage`).
      */
     _restoreSelection() {
-        if (!this.bodyRef.el) return;
-        this.bodyRef.el.focus();
+        if (!this.bodyRef()) return;
+        this.bodyRef().focus();
         if (this._savedRange) {
             const sel = window.getSelection();
             sel.removeAllRanges();
@@ -266,8 +265,8 @@ export class ComposeWindow extends Component {
      */
     /** Sync the contenteditable HTML into the window state + mark dirty. */
     _syncBody() {
-        if (!this.bodyRef.el) return;
-        this.props.win.body = this.bodyRef.el.innerHTML;
+        if (!this.bodyRef()) return;
+        this.props.win.body = this.bodyRef().innerHTML;
         this.markDirty();
     }
 
@@ -341,9 +340,9 @@ export class ComposeWindow extends Component {
      * @param {HTMLImageElement} img
      */
     _selectImg(img) {
-        if (!this.innerRef.el) return;
+        if (!this.innerRef()) return;
         this._selImg = img;
-        const inner = this.innerRef.el.getBoundingClientRect();
+        const inner = this.innerRef().getBoundingClientRect();
         const r = img.getBoundingClientRect();
         this.local.imgSel = {
             top: r.top - inner.top,
@@ -408,8 +407,8 @@ export class ComposeWindow extends Component {
     }
 
     _onImgDragMove(ev) {
-        if (!this._imgDrag || !this._selImg || !this.bodyRef.el) return;
-        const maxW = this.bodyRef.el.clientWidth - 8;
+        if (!this._imgDrag || !this._selImg || !this.bodyRef()) return;
+        const maxW = this.bodyRef().clientWidth - 8;
         const w = Math.min(maxW, Math.max(
             40, this._imgDrag.startWidth + (ev.clientX - this._imgDrag.startX)));
         this._selImg.style.width = `${Math.round(w)}px`;
@@ -418,12 +417,12 @@ export class ComposeWindow extends Component {
     }
 
     _onImgDragEnd() {
-        if (!this._imgDrag || !this._selImg || !this.bodyRef.el) {
+        if (!this._imgDrag || !this._selImg || !this.bodyRef()) {
             this._imgDrag = null;
             return;
         }
         this._imgDrag = null;
-        const bodyW = this.bodyRef.el.clientWidth || 1;
+        const bodyW = this.bodyRef().clientWidth || 1;
         const pct = Math.round(
             (this._selImg.getBoundingClientRect().width / bodyW) * 100);
         this.setImgWidth(pct >= 98 ? "100%" : `${Math.max(5, pct)}%`);
@@ -796,16 +795,16 @@ export class ComposeWindow extends Component {
         if (!acc || !acc.signature_html) {
             return;
         }
-        if (!this.bodyRef.el) {
+        if (!this.bodyRef()) {
             return;
         }
 
         // Move cursor to end
-        this.bodyRef.el.focus();
+        this.bodyRef().focus();
         const sel = window.getSelection();
         if (sel) {
             try {
-                sel.selectAllChildren(this.bodyRef.el);
+                sel.selectAllChildren(this.bodyRef());
                 sel.collapseToEnd();
             } catch (e) {}
         }

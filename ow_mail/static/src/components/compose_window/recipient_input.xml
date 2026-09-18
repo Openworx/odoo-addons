@@ -6,7 +6,7 @@
         <input class="form-control form-control-sm"
                t-att-placeholder="this.props.placeholder"
                t-att-value="this.props.value"
-               t-custom-ref="input"
+               t-ref="this.inputRef"
                t-on-input="this.onInput"
                t-on-focus="this.onFocus"
                t-on-blur="this.onBlur"

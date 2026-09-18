@@ -1,13 +1,12 @@
 /** @odoo-module **/
 
-import { Component, proxy } from "@odoo/owl";
+import { Component, proxy, signal } from "@odoo/owl";
 import { useService } from "@web/core/utils/hooks";
 import { _t } from "@web/core/l10n/translation";
 import { ConfirmationDialog } from "@web/core/confirmation_dialog/confirmation_dialog";
 import { SettingsDialog } from "../settings_dialog/settings_dialog";
 import { ShortcutsDialog } from "../shortcuts_dialog/shortcuts_dialog";
 import { owColor, OW_PALETTE, OW_COLOR_FALLBACK } from "../../utils/colors";
-import { useRef } from "@web/owl2/utils";
 
 /** MIME type used to identify drag-drop payloads originating from MessageList. */
 const DND_MIME = "application/x-ow-mail";
@@ -75,7 +74,7 @@ export class Sidebar extends Component {
             syncingAccountId: null, newTagName: "", colorPickerTagId: null,
             renameTagId: null, renameValue: "",
         });
-        this.newTagInput = useRef("newTagInput");
+        this.newTagInput = signal.ref();
     }
 
     /**
@@ -283,8 +282,8 @@ export class Sidebar extends Component {
         this.ui.newTagName = "";
         // Clear the DOM value directly as well — the t-model patch alone
         // leaves the typed text in the focused input.
-        if (this.newTagInput.el) {
-            this.newTagInput.el.value = "";
+        if (this.newTagInput()) {
+            this.newTagInput().value = "";
         }
         await this.mail.createTag(name);
     }

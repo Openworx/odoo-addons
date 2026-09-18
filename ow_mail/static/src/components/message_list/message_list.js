@@ -1,12 +1,12 @@
 /** @odoo-module **/
 
-import { Component, proxy, usePlugin } from "@odoo/owl";
+import { Component, proxy, signal, usePlugin } from "@odoo/owl";
 import { NotificationPlugin } from "@web/core/notifications/notification_plugin";
 import { useService } from "@web/core/utils/hooks";
 import { _t } from "@web/core/l10n/translation";
 import { AvatarInitials } from "../avatar_initials/avatar_initials";
 import { owColor } from "../../utils/colors";
-import { useLayoutEffect, useRef } from "@web/owl2/utils";
+import { useLayoutEffect } from "@web/owl2/utils";
 
 /**
  * Message list pane — displays a paginated, filterable, sortable list of
@@ -92,8 +92,8 @@ export class MessageList extends Component {
         this.notification = usePlugin(NotificationPlugin);
         this.state = proxy(this.mail.state);
         this.local = proxy({ search: this.state.selection.search || "", checked: {}, expandedThreads: {} });
-        this.listBodyRef = useRef("listBody");
-        this.sentinelRef = useRef("sentinel");
+        this.listBodyRef = signal.ref();
+        this.sentinelRef = signal.ref();
         // Infinite scroll: observe the sentinel at the bottom of the scroll
         // container; entering the 250px pre-fetch margin loads the next
         // batch. The effect tracks the sentinel element itself — it exists
@@ -108,12 +108,12 @@ export class MessageList extends Component {
                             this.mail.loadMore();
                         }
                     },
-                    { root: this.listBodyRef.el, rootMargin: "250px" }
+                    { root: this.listBodyRef(), rootMargin: "250px" }
                 );
                 observer.observe(sentinelEl);
                 return () => observer.disconnect();
             },
-            () => [this.sentinelRef.el]
+            () => [this.sentinelRef()]
         );
         // Keep the search box in sync when the service resets the query
         // (folder/tag switch clears the search — the input must follow).

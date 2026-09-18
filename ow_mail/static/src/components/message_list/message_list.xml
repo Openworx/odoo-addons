@@ -143,7 +143,7 @@
                 <i class="fa fa-times"/>
             </button>
         </div>
-        <div class="o-ow-list-body flex-grow-1 overflow-auto" t-ref="listBody"
+        <div class="o-ow-list-body flex-grow-1 overflow-auto" t-ref="this.listBodyRef"
              role="listbox" aria-label="Messages">
             <t t-if="!this.state.messages.length">
                 <div class="text-muted text-center p-5">No messages</div>
@@ -343,7 +343,7 @@
                 </t>
             </t>
             <div t-if="this.state.prefs.infinite_scroll and this.state.messages.length and !this.state.listEnd"
-                 t-ref="sentinel" class="o-ow-list-sentinel" aria-hidden="true"/>
+                 t-ref="this.sentinelRef" class="o-ow-list-sentinel" aria-hidden="true"/>
         </div>
         <div t-if="this.state.totalMessages and this.state.prefs.infinite_scroll"
              class="o-ow-pager border-top px-3 py-2 d-flex align-items-center justify-content-center gap-2 small text-muted">

@@ -1,13 +1,13 @@
 /** @odoo-module **/
 
-import { Component, onPatched, proxy, usePlugin } from "@odoo/owl";
+import { Component, onPatched, proxy, signal, usePlugin } from "@odoo/owl";
 import { useService } from "@web/core/utils/hooks";
 import { owColor } from "../../utils/colors";
 import { SafeModeBanner } from "../safe_mode_banner/safe_mode_banner";
 import { AvatarInitials } from "../avatar_initials/avatar_initials";
 import { MessageSourceDialog } from "../message_source/message_source";
 import { RecordModelPickerDialog } from "../record_picker/record_model_picker";
-import { useLayoutEffect, useRef } from "@web/owl2/utils";
+import { useLayoutEffect } from "@web/owl2/utils";
 import { FormViewDialog } from "@web/views/view_dialogs/form_view_dialog";
 import { ActionManagerPlugin } from "@web/webclient/actions/action_plugin";
 
@@ -253,7 +253,7 @@ export class MessageViewer extends Component {
         this.state = proxy(this.mail.state);
         this.local = proxy({ showRemote: false, expandedThread: {},
                                 headExpanded: false });
-        this.iframeRef = useRef("iframe");
+        this.iframeRef = signal.ref();
 
         useLayoutEffect(
             (msg, showRemote) => {
@@ -282,11 +282,11 @@ export class MessageViewer extends Component {
         // Accessibility: move focus to the subject heading when a message
         // opens so screen readers announce it and keyboard users land in
         // the viewer pane. Global j/k hotkeys keep working from there.
-        this.subjectRef = useRef("subjectHeading");
+        this.subjectRef = signal.ref();
         useLayoutEffect(
             (msg) => {
-                if (msg && this.subjectRef.el) {
-                    this.subjectRef.el.focus({ preventScroll: false });
+                if (msg && this.subjectRef()) {
+                    this.subjectRef().focus({ preventScroll: false });
                 }
             },
             () => [this.state.selectedMessage]
@@ -462,7 +462,7 @@ export class MessageViewer extends Component {
      *   for this session (set by `onShowOnce`).
      */
     renderBody(msg, showRemote) {
-        const iframe = this.iframeRef.el;
+        const iframe = this.iframeRef();
         if (!iframe || !msg) return;
         let html = msg.html || `<pre>${(msg.text || "").replace(/</g, "&lt;")}</pre>`;
         if (msg.has_remote_content && !showRemote && !msg.trusted) {
@@ -510,7 +510,7 @@ export class MessageViewer extends Component {
      * `h-100` + flex layout takes over.
      */
     _fitIframe() {
-        const iframe = this.iframeRef.el;
+        const iframe = this.iframeRef();
         if (!iframe) return;
         if (!this.isMobile) {
             iframe.style.height = "";
@@ -857,7 +857,7 @@ export class MessageViewer extends Component {
             return;
         }
 
-        const iframe = this.iframeRef.el;
+        const iframe = this.iframeRef();
         if (!iframe) {
             window.print();
             return;
