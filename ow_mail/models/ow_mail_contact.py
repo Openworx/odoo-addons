@@ -37,10 +37,12 @@ class OwMailContact(models.Model):
     partner_id = fields.Many2one("res.partner", ondelete="set null")
     last_used = fields.Datetime()
 
-    _sql_constraints = [
-        ("user_email_uniq", "unique(user_id, email)",
-         "This email is already in your contacts."),
-    ]
+    # Odoo 20: `_sql_constraints` is ignored; declare the constraint as a
+    # model attribute (name: ow_mail_contact_user_email_uniq).
+    _user_email_uniq = models.Constraint(
+        "UNIQUE (user_id, email)",
+        "This email is already in your contacts.",
+    )
 
     @api.model_create_multi
     def create(self, vals_list):

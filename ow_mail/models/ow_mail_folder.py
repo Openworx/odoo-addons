@@ -39,10 +39,12 @@ class OwMailFolder(models.Model):
         help="Highest UID processed by reply auto-filing — independent of "
              "last_seen_uid and advanced only after successful processing")
 
-    _sql_constraints = [
-        ("account_path_uniq", "unique(account_id, full_path)",
-         "Folder path must be unique per account."),
-    ]
+    # Odoo 20: `_sql_constraints` is ignored; declare the constraint as a
+    # model attribute (name: ow_mail_folder_account_path_uniq).
+    _account_path_uniq = models.Constraint(
+        "UNIQUE (account_id, full_path)",
+        "Folder path must be unique per account.",
+    )
 
     def refresh_counts(self, conn=None):
         """Update unread/total via IMAP STATUS. `conn` reuses an existing session."""

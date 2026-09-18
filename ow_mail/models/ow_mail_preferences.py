@@ -33,10 +33,12 @@ class OwMailPreferences(models.Model):
         [("system", "System"), ("light", "Light"), ("dark", "Dark")],
         default="system", required=True)
 
-    _sql_constraints = [
-        ("user_uniq", "unique(user_id)",
-         "Each user has a single OW Mail preferences record."),
-    ]
+    # Odoo 20: `_sql_constraints` is ignored; declare the constraint as a
+    # model attribute (name: ow_mail_preferences_user_uniq).
+    _user_uniq = models.Constraint(
+        "UNIQUE (user_id)",
+        "Each user has a single OW Mail preferences record.",
+    )
 
     @api.model
     def _get_for_user(self):

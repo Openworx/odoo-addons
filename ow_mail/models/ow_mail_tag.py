@@ -61,9 +61,12 @@ class OwMailTag(models.Model):
                               default=lambda self: self.env.user, ondelete="cascade")
     imap_keyword = fields.Char(help="IMAP keyword flag used for this tag.")
 
-    _sql_constraints = [
-        ("user_name_uniq", "unique(user_id, name)", "Tag name must be unique per user."),
-    ]
+    # Odoo 20: `_sql_constraints` is ignored; declare the constraint as a
+    # model attribute (name: ow_mail_tag_user_name_uniq).
+    _user_name_uniq = models.Constraint(
+        "UNIQUE (user_id, name)",
+        "Tag name must be unique per user.",
+    )
 
     @api.constrains("imap_keyword")
     def _check_imap_keyword(self):

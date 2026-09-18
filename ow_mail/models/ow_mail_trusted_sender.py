@@ -21,6 +21,9 @@ class OwMailTrustedSender(models.Model):
     email = fields.Char(required=True, help="Full email address or bare domain to trust.")
     note = fields.Char()
 
-    _sql_constraints = [
-        ("user_email_uniq", "unique(user_id, email)", "Already trusted."),
-    ]
+    # Odoo 20: `_sql_constraints` is ignored; declare the constraint as a
+    # model attribute (name: ow_mail_trusted_sender_user_email_uniq).
+    _user_email_uniq = models.Constraint(
+        "UNIQUE (user_id, email)",
+        "Already trusted.",
+    )
