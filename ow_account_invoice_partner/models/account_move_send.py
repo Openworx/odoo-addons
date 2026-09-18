@@ -69,8 +69,8 @@ class AccountMoveSend(models.AbstractModel):
 class AccountMove(models.Model):
     _inherit = 'account.move'
 
-    def _notify_get_recipients(self, message, msg_vals=False, **kwargs):
-        recipients = super()._notify_get_recipients(message, msg_vals=msg_vals, **kwargs)
+    def _notify_get_recipients(self, message, **kwargs):
+        recipients = super()._notify_get_recipients(message, **kwargs)
         superseded = self.env.context.get('ow_invoice_mail_superseded_partner_ids')
         if not superseded:
             return recipients
