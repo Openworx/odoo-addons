@@ -9,7 +9,7 @@
                 <select id="ow-settings-mark-read" class="form-select"
                         t-custom-model="this.local.mark_read_delay">
                     <t t-foreach="this.delayOptions" t-as="opt" t-key="opt.value">
-                        <option t-att-value="opt.value" t-esc="opt.label"/>
+                        <option t-att-value="opt.value" t-out="opt.label"/>
                     </t>
                 </select>
                 <div class="form-text">
@@ -20,7 +20,7 @@
                 <label class="form-label fw-semibold" for="ow-settings-theme">Theme</label>
                 <select id="ow-settings-theme" class="form-select" t-custom-model="this.local.theme">
                     <t t-foreach="this.themeOptions" t-as="opt" t-key="opt.value">
-                        <option t-att-value="opt.value" t-esc="opt.label"/>
+                        <option t-att-value="opt.value" t-out="opt.label"/>
                     </t>
                 </select>
                 <div class="form-text">

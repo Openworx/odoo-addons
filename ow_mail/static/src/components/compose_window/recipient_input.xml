@@ -19,12 +19,12 @@
                         t-att-class="{'active': s_index === this.local.highlight}"
                         t-on-mousedown.prevent="() => this.pick(s)">
                     <span class="flex-grow-1 text-truncate">
-                        <strong t-esc="s.name || s.email"/>
+                        <strong t-out="s.name || s.email"/>
                         <span t-if="s.name &amp;&amp; s.name !== s.email" class="text-muted">
-                            <t t-esc="' &lt;' + s.email + '&gt;'"/>
+                            <t t-out="' &lt;' + s.email + '&gt;'"/>
                         </span>
                         <span t-if="s.company" class="text-muted">
-                            <t t-esc="' · ' + s.company"/>
+                            <t t-out="' · ' + s.company"/>
                         </span>
                     </span>
                     <span t-if="s.source === 'partner'"

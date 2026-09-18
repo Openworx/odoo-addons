@@ -50,9 +50,9 @@
                          t-on-dragleave="(ev) => this.onDragLeave(ev, row.node)"
                          t-on-drop="(ev) => this.onDrop(ev, row.node)">
                         <i class="fa me-2" t-att-class="this.iconForKind(row.node.kind)"/>
-                        <span class="flex-grow-1 text-truncate" t-esc="row.node.name"/>
+                        <span class="flex-grow-1 text-truncate" t-out="row.node.name"/>
                         <span t-if="row.node.unread_count" class="badge bg-secondary me-2"
-                              t-esc="row.node.unread_count"/>
+                              t-out="row.node.unread_count"/>
                         <div class="form-check form-switch m-0 me-2" t-on-click.stop="">
                             <input class="form-check-input" type="checkbox"
                                    t-att-checked="row.node.subscribed"

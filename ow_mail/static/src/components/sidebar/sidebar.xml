@@ -42,10 +42,10 @@
                          t-att-style="this.accountHeaderStyle(acc)">
                         <span t-if="this.accountColor(acc)" class="o-ow-account-dot"
                               t-att-style="this.accountDotStyle(acc)"/>
-                        <strong class="flex-grow-1 text-truncate" t-esc="acc.email"/>
+                        <strong class="flex-grow-1 text-truncate" t-out="acc.email"/>
                         <span t-if="acc.unread_count" class="o-ow-count"
                               t-att-title="acc.unread_count + ' unread'"
-                              t-esc="this.formatCount(acc.unread_count)"/>
+                              t-out="this.formatCount(acc.unread_count)"/>
                         <button class="o-ow-account-sync btn btn-sm btn-link p-0 text-muted"
                                 title="Sync this mailbox"
                                 t-on-click.stop="() => this.onSyncAccount(acc.id)">
@@ -62,9 +62,9 @@
                              t-on-dragleave="(ev) => this.onDragLeave(ev, f)"
                              t-on-drop="(ev) => this.onDrop(ev, f)">
                             <i class="fa me-2" t-att-class="this.iconForKind(f.kind)"/>
-                            <span class="flex-grow-1 text-truncate" t-esc="f.name"/>
+                            <span class="flex-grow-1 text-truncate" t-out="f.name"/>
                             <span t-if="f.unread_count" class="badge bg-secondary"
-                                  t-esc="f.unread_count"/>
+                                  t-out="f.unread_count"/>
                         </div>
                     </t>
                 </div>
@@ -91,7 +91,7 @@
                                    t-on-blur="() => this.onCommitRenameTag(tag)"/>
                         </t>
                         <t t-else="">
-                            <span class="flex-grow-1 text-truncate" t-esc="tag.name"/>
+                            <span class="flex-grow-1 text-truncate" t-out="tag.name"/>
                         </t>
                         <button class="btn btn-sm btn-link p-0 text-muted o-ow-tag-delete me-1"
                                 title="Rename tag"

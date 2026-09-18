@@ -41,7 +41,7 @@
                     <div class="mb-1">
                         <select class="form-select form-select-sm" t-custom-model.number="this.props.win.accountId">
                             <t t-foreach="this.state.accounts" t-as="a" t-key="a.id">
-                                <option t-att-value="a.id" t-esc="a.email"/>
+                                <option t-att-value="a.id" t-out="a.email"/>
                             </t>
                         </select>
                     </div>
@@ -182,7 +182,7 @@
                 <div class="o-ow-compose-attachments px-3 pb-1" t-if="this.props.win.attachments.length">
                     <t t-foreach="this.props.win.attachments" t-as="a" t-key="a.id">
                         <div class="o-ow-att-item d-flex align-items-center px-2 py-1 mb-1 rounded">
-                            <span class="flex-grow-1 text-truncate small fw-semibold" t-esc="a.name"/>
+                            <span class="flex-grow-1 text-truncate small fw-semibold" t-out="a.name"/>
                             <button class="btn btn-sm btn-link p-0 ms-2 text-muted"
                                     t-on-click="() => this.removeAttachment(a.id)"
                                     title="Remove attachment">
@@ -204,7 +204,7 @@
                     <i class="fa fa-id-card-o"/>
                 </button>
                 <div class="flex-grow-1 text-center">
-                    <small class="text-muted o-ow-save-status" t-esc="this.saveStatus"/>
+                    <small class="text-muted o-ow-save-status" t-out="this.saveStatus"/>
                 </div>
                 <button class="btn btn-sm btn-outline-secondary me-2" t-on-click="this.onDraft">
                     <i class="fa fa-floppy-o me-1"/> Draft

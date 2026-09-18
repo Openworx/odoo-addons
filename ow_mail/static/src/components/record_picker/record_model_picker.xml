@@ -10,8 +10,8 @@
             <t t-foreach="this.filteredModels" t-as="m" t-key="m.model">
                 <button class="list-group-item list-group-item-action w-100 text-start border-0 py-2"
                         t-on-click="() => this.onPick(m.model)">
-                    <span t-esc="m.name"/>
-                    <span class="text-muted small ms-2" t-esc="m.model"/>
+                    <span t-out="m.name"/>
+                    <span class="text-muted small ms-2" t-out="m.model"/>
                 </button>
             </t>
             <div t-if="!this.filteredModels.length" class="text-muted small p-2">

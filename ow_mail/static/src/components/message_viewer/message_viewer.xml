@@ -36,7 +36,7 @@
                 <select class="form-select form-select-sm" style="width:auto;" t-on-change="this.onMove">
                     <option value="">Move to…</option>
                     <t t-foreach="this.moveTargetFolders" t-as="f" t-key="f.id">
-                        <option t-att-value="f.id" t-esc="f.name"/>
+                        <option t-att-value="f.id" t-out="f.name"/>
                     </t>
                 </select>
                 <div class="flex-grow-1"/>
@@ -49,7 +49,7 @@
                         <t t-foreach="this.state.createMenu" t-as="entry" t-key="entry.key">
                             <li>
                                 <button class="dropdown-item" t-on-click="() => this.onCreateFromMenu(entry)">
-                                    <i t-att-class="'fa me-2 ' + entry.icon"/> <t t-esc="entry.label"/>
+                                    <i t-att-class="'fa me-2 ' + entry.icon"/> <t t-out="entry.label"/>
                                 </button>
                             </li>
                         </t>
@@ -123,7 +123,7 @@
                         <t t-foreach="this.state.createMenu" t-as="entry" t-key="entry.key">
                             <li>
                                 <button class="dropdown-item" t-on-click="() => this.onCreateFromMenu(entry)">
-                                    <i t-att-class="'fa me-2 ' + entry.icon"/> <t t-esc="entry.label"/>
+                                    <i t-att-class="'fa me-2 ' + entry.icon"/> <t t-out="entry.label"/>
                                 </button>
                             </li>
                         </t>
@@ -162,7 +162,7 @@
                         <li t-if="this.moveTargetFolders.length"><h6 class="dropdown-header">Move to…</h6></li>
                         <t t-foreach="this.moveTargetFolders" t-as="f" t-key="f.id">
                             <li><button class="dropdown-item" t-on-click="() => this.onMoveTo(f.id)">
-                                <i class="fa fa-folder-o me-2"/> <t t-esc="f.name"/>
+                                <i class="fa fa-folder-o me-2"/> <t t-out="f.name"/>
                             </button></li>
                         </t>
                         <li><hr class="dropdown-divider"/></li>
@@ -203,18 +203,18 @@
             <!-- Conversation thread view -->
             <t t-if="this.isThreadView">
                 <div class="o-ow-thread-subject px-3 py-2 border-bottom d-flex align-items-center flex-wrap gap-1">
-                    <h5 class="mb-0 flex-grow-1" t-esc="this.threadSubject"/>
+                    <h5 class="mb-0 flex-grow-1" t-out="this.threadSubject"/>
                     <span t-if="this.threadLinkedRecords.length" class="o-ow-linked d-flex align-items-center flex-wrap gap-1">
                         <span class="small text-muted fw-normal me-1"><i class="fa fa-chain me-1"/>Linked:</span>
                         <t t-foreach="this.threadLinkedRecords" t-as="lr" t-key="lr.model + ':' + lr.res_id">
                             <button class="btn btn-sm btn-outline-secondary o-ow-linked-btn"
                                     t-on-click="() => this.onOpenLinked(lr)"
                                     t-att-title="'Open ' + lr.display_name">
-                                <t t-esc="lr.display_name"/>
+                                <t t-out="lr.display_name"/>
                             </button>
                         </t>
                     </span>
-                    <span class="badge bg-secondary ms-2"><t t-esc="this.state.threadMessages.length"/> messages</span>
+                    <span class="badge bg-secondary ms-2"><t t-out="this.state.threadMessages.length"/> messages</span>
                 </div>
                 <div class="o-ow-thread-body flex-grow-1 overflow-auto">
                     <t t-foreach="this.state.threadMessages" t-as="tm" t-key="tm.folder_id + ':' + tm.uid">
@@ -225,19 +225,19 @@
                                 <AvatarInitials name="tm.from_name" email="tm.from_email"/>
                                 <div class="ms-2 flex-grow-1 overflow-hidden">
                                     <div class="d-flex align-items-center">
-                                        <strong class="text-truncate" t-esc="tm.from_name"/>
+                                        <strong class="text-truncate" t-out="tm.from_name"/>
                                         <small class="text-muted ms-1" t-if="!this.isThreadMsgExpanded(tm)">
-                                            — <t t-esc="tm.to"/>
+                                            — <t t-out="tm.to"/>
                                         </small>
                                     </div>
                                     <t t-if="this.isThreadMsgExpanded(tm)">
                                         <div class="small text-muted">
-                                            To: <t t-esc="tm.to"/>
-                                            <t t-if="tm.cc"> · Cc: <t t-esc="tm.cc"/></t>
+                                            To: <t t-out="tm.to"/>
+                                            <t t-if="tm.cc"> · Cc: <t t-out="tm.cc"/></t>
                                         </div>
                                     </t>
                                 </div>
-                                <small class="text-muted ms-2 flex-shrink-0" t-esc="this.formatThreadDate(tm.date)"/>
+                                <small class="text-muted ms-2 flex-shrink-0" t-out="this.formatThreadDate(tm.date)"/>
                                 <i class="fa ms-2 text-muted"
                                    t-att-class="this.isThreadMsgExpanded(tm) ? 'fa-chevron-up' : 'fa-chevron-down'"/>
                             </div>
@@ -255,8 +255,8 @@
                                                 <i class="fa fa-2x me-2"
                                                    t-att-class="a.mimetype &amp;&amp; a.mimetype.startsWith('image/') ? 'fa-image' : a.mimetype === 'application/pdf' ? 'fa-file-pdf-o' : 'fa-file-o'"/>
                                                 <div class="me-2">
-                                                    <div class="small fw-bold text-truncate" style="max-width:180px;" t-esc="a.name"/>
-                                                    <div class="text-muted small"><t t-esc="a.mimetype"/></div>
+                                                    <div class="small fw-bold text-truncate" style="max-width:180px;" t-out="a.name"/>
+                                                    <div class="text-muted small"><t t-out="a.mimetype"/></div>
                                                 </div>
                                                 <a class="btn btn-sm btn-light" t-att-href="a.url" target="_blank" title="Open">
                                                     <i class="fa fa-external-link"/>
@@ -278,7 +278,7 @@
             <t t-else="">
                 <div class="o-ow-viewer-head px-3 py-2">
                     <h4 t-if="!this.isMobile" class="mb-2 d-flex align-items-center flex-wrap gap-1" tabindex="-1" t-ref="this.subjectRef">
-                        <span t-esc="this.state.selectedMessage.subject"/>
+                        <span t-out="this.state.selectedMessage.subject"/>
                         <button t-if="this.isDraft" class="btn btn-sm btn-link ms-2 p-0" t-on-click="this.onEditDraft"
                                 title="Edit draft">
                             <i class="fa fa-pencil-square-o text-info"/>
@@ -290,7 +290,7 @@
                                 <button class="btn btn-sm btn-outline-secondary o-ow-linked-btn"
                                         t-on-click="() => this.onOpenLinked(lr)"
                                         t-att-title="'Open ' + lr.display_name">
-                                    <t t-esc="lr.display_name"/>
+                                    <t t-out="lr.display_name"/>
                                 </button>
                             </t>
                         </span>
@@ -313,7 +313,7 @@
                                     t-on-click="() => this.onToggleTag(tag)">
                                 <span t-if="!this.messageHasTag(tag.id)" class="o-ow-tag-dot me-1"
                                       t-att-style="this.tagDotStyle(tag)"/>
-                                <t t-esc="tag.name"/>
+                                <t t-out="tag.name"/>
                             </button>
                         </t>
                     </div>
@@ -322,20 +322,20 @@
                                         email="this.state.selectedMessage.from_email"/>
                         <div class="ms-2 flex-grow-1">
                             <div>
-                                <strong t-esc="this.state.selectedMessage.from_name"/>
-                                <span class="text-muted ms-1">&lt;<t t-esc="this.state.selectedMessage.from_email"/>&gt;</span>
+                                <strong t-out="this.state.selectedMessage.from_name"/>
+                                <span class="text-muted ms-1">&lt;<t t-out="this.state.selectedMessage.from_email"/>&gt;</span>
                                 <span t-if="this.state.selectedMessage.partner_id"
                                       class="badge rounded-pill o-ow-customer-badge ms-2"
                                       title="Sender is an Odoo contact">Customer</span>
                             </div>
                             <div class="small text-muted">
-                                To: <t t-esc="this.state.selectedMessage.to"/>
+                                To: <t t-out="this.state.selectedMessage.to"/>
                                 <t t-if="this.state.selectedMessage.cc">
-                                    · Cc: <t t-esc="this.state.selectedMessage.cc"/>
+                                    · Cc: <t t-out="this.state.selectedMessage.cc"/>
                                 </t>
                             </div>
                         </div>
-                        <small class="text-muted" t-esc="this.fmtHeadDate(this.state.selectedMessage.date)"/>
+                        <small class="text-muted" t-out="this.fmtHeadDate(this.state.selectedMessage.date)"/>
                     </div>
                     <!-- Mobile: compact one-line header (subject lives in the
                          topbar); tap to expand recipients, full date and tags -->
@@ -347,30 +347,30 @@
                             <div class="ms-2 flex-grow-1 overflow-hidden">
                                 <div class="d-flex align-items-center">
                                     <strong class="text-truncate flex-grow-1"
-                                            t-esc="this.state.selectedMessage.from_name or this.state.selectedMessage.from_email"/>
+                                            t-out="this.state.selectedMessage.from_name or this.state.selectedMessage.from_email"/>
                                     <small class="text-muted ms-2 flex-shrink-0"
-                                           t-esc="this.fmtHeadDate(this.state.selectedMessage.date)"/>
+                                           t-out="this.fmtHeadDate(this.state.selectedMessage.date)"/>
                                     <i class="fa ms-2 text-muted flex-shrink-0"
                                        t-att-class="this.local.headExpanded ? 'fa-chevron-up' : 'fa-chevron-down'"/>
                                 </div>
                                 <div t-if="!this.local.headExpanded" class="small text-muted text-truncate">
-                                    To: <t t-esc="this.state.selectedMessage.to"/>
+                                    To: <t t-out="this.state.selectedMessage.to"/>
                                 </div>
                             </div>
                         </div>
                         <div t-if="this.local.headExpanded" class="small mt-2">
                             <div><span class="text-muted">From:</span>
-                                <t t-esc="this.state.selectedMessage.from_name"/>
-                                <span class="text-muted">&lt;<t t-esc="this.state.selectedMessage.from_email"/>&gt;</span>
+                                <t t-out="this.state.selectedMessage.from_name"/>
+                                <span class="text-muted">&lt;<t t-out="this.state.selectedMessage.from_email"/>&gt;</span>
                                 <span t-if="this.state.selectedMessage.partner_id"
                                       class="badge rounded-pill o-ow-customer-badge ms-1">Customer</span>
                             </div>
-                            <div><span class="text-muted">To:</span> <t t-esc="this.state.selectedMessage.to"/></div>
+                            <div><span class="text-muted">To:</span> <t t-out="this.state.selectedMessage.to"/></div>
                             <div t-if="this.state.selectedMessage.cc">
-                                <span class="text-muted">Cc:</span> <t t-esc="this.state.selectedMessage.cc"/>
+                                <span class="text-muted">Cc:</span> <t t-out="this.state.selectedMessage.cc"/>
                             </div>
                             <div><span class="text-muted">Date:</span>
-                                <t t-esc="this.fmtHeadDate(this.state.selectedMessage.date)"/></div>
+                                <t t-out="this.fmtHeadDate(this.state.selectedMessage.date)"/></div>
                             <div t-if="this.state.tags.length and !this.isDraft"
                                  class="d-flex align-items-center flex-wrap gap-1 mt-1 o-ow-viewer-tags">
                                 <t t-foreach="this.state.tags" t-as="tag" t-key="tag.id">
@@ -380,7 +380,7 @@
                                             t-on-click.stop="() => this.onToggleTag(tag)">
                                         <span t-if="!this.messageHasTag(tag.id)" class="o-ow-tag-dot me-1"
                                               t-att-style="this.tagDotStyle(tag)"/>
-                                        <t t-esc="tag.name"/>
+                                        <t t-out="tag.name"/>
                                     </button>
                                 </t>
                             </div>
@@ -393,7 +393,7 @@
                             <button class="btn btn-sm btn-outline-secondary o-ow-linked-btn"
                                     t-on-click="() => this.onOpenLinked(lr)"
                                     t-att-title="'Open ' + lr.display_name">
-                                <t t-esc="lr.display_name"/>
+                                <t t-out="lr.display_name"/>
                             </button>
                         </t>
                     </div>
@@ -408,20 +408,20 @@
                             <i class="fa fa-calendar-o fa-2x me-3 text-primary"/>
                             <div class="flex-grow-1">
                                 <div class="fw-bold mb-1">
-                                    <t t-esc="this.state.selectedMessage.invite.summary or 'Invitation'"/>
+                                    <t t-out="this.state.selectedMessage.invite.summary or 'Invitation'"/>
                                 </div>
                                 <div class="small text-muted" t-if="this.formatInviteWhen()">
                                     <i class="fa fa-clock-o me-1"/>
-                                    <t t-esc="this.formatInviteWhen()"/>
+                                    <t t-out="this.formatInviteWhen()"/>
                                 </div>
                                 <div class="small text-muted" t-if="this.state.selectedMessage.invite.location">
                                     <i class="fa fa-map-marker me-1"/>
-                                    <t t-esc="this.state.selectedMessage.invite.location"/>
+                                    <t t-out="this.state.selectedMessage.invite.location"/>
                                 </div>
                                 <div class="small text-muted" t-if="this.state.selectedMessage.invite.organizer_email">
                                     <i class="fa fa-user me-1"/>
-                                    <t t-esc="this.state.selectedMessage.invite.organizer_name or this.state.selectedMessage.invite.organizer_email"/>
-                                    <span class="ms-1">&lt;<t t-esc="this.state.selectedMessage.invite.organizer_email"/>&gt;</span>
+                                    <t t-out="this.state.selectedMessage.invite.organizer_name or this.state.selectedMessage.invite.organizer_email"/>
+                                    <span class="ms-1">&lt;<t t-out="this.state.selectedMessage.invite.organizer_email"/>&gt;</span>
                                 </div>
                             </div>
                             <div class="d-flex flex-column gap-1">
@@ -452,8 +452,8 @@
                                 <i class="fa fa-2x me-2"
                                    t-att-class="a.mimetype &amp;&amp; a.mimetype.startsWith('image/') ? 'fa-image' : a.mimetype === 'application/pdf' ? 'fa-file-pdf-o' : 'fa-file-o'"/>
                                 <div class="me-2">
-                                    <div class="small fw-bold text-truncate" style="max-width:180px;" t-esc="a.name"/>
-                                    <div class="text-muted small"><t t-esc="a.mimetype"/></div>
+                                    <div class="small fw-bold text-truncate" style="max-width:180px;" t-out="a.name"/>
+                                    <div class="text-muted small"><t t-out="a.mimetype"/></div>
                                 </div>
                                 <a class="btn btn-sm btn-light" t-att-href="a.url" target="_blank" title="Open">
                                     <i class="fa fa-external-link"/>

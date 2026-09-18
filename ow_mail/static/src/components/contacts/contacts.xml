@@ -33,10 +33,10 @@
                              t-att-class="{'active': this.state.selectedContactId === c.id}"
                              t-on-click="() => this.onSelect(c)">
                             <div class="d-flex align-items-center">
-                                <strong class="flex-grow-1 text-truncate" t-esc="c.name || c.email"/>
+                                <strong class="flex-grow-1 text-truncate" t-out="c.name || c.email"/>
                             </div>
-                            <small class="text-muted text-truncate" t-esc="c.email"/>
-                            <small t-if="c.company" class="text-muted text-truncate" t-esc="c.company"/>
+                            <small class="text-muted text-truncate" t-out="c.email"/>
+                            <small t-if="c.company" class="text-muted text-truncate" t-out="c.company"/>
                         </div>
                     </t>
                 </t>
@@ -46,7 +46,7 @@
         <div class="o-ow-contact-detail flex-grow-1 overflow-auto">
             <t t-if="this.local.editing">
                 <div class="p-4">
-                    <h4 t-esc="this.local.editing === 'new' ? 'New contact' : 'Edit contact'"/>
+                    <h4 t-out="this.local.editing === 'new' ? 'New contact' : 'Edit contact'"/>
                     <div class="mb-2">
                         <label class="form-label small mb-1">Name</label>
                         <input type="text" class="form-control form-control-sm"
@@ -85,7 +85,7 @@
             <t t-elif="this.selected">
                 <div class="p-4">
                     <div class="d-flex align-items-center mb-3 gap-2">
-                        <h4 class="flex-grow-1 mb-0" t-esc="this.selected.name || this.selected.email"/>
+                        <h4 class="flex-grow-1 mb-0" t-out="this.selected.name || this.selected.email"/>
                         <button class="btn btn-sm btn-primary" t-on-click="this.onCompose"
                                 title="Compose">
                             <i class="fa fa-pencil me-1"/> Compose
@@ -101,22 +101,22 @@
                     </div>
                     <dl class="row">
                         <dt class="col-sm-3 text-muted">Email</dt>
-                        <dd class="col-sm-9" t-esc="this.selected.email"/>
+                        <dd class="col-sm-9" t-out="this.selected.email"/>
                         <t t-if="this.selected.company">
                             <dt class="col-sm-3 text-muted">Company</dt>
-                            <dd class="col-sm-9" t-esc="this.selected.company"/>
+                            <dd class="col-sm-9" t-out="this.selected.company"/>
                         </t>
                         <t t-if="this.selected.phone">
                             <dt class="col-sm-3 text-muted">Phone</dt>
-                            <dd class="col-sm-9" t-esc="this.selected.phone"/>
+                            <dd class="col-sm-9" t-out="this.selected.phone"/>
                         </t>
                         <t t-if="this.selected.last_used">
                             <dt class="col-sm-3 text-muted">Last used</dt>
-                            <dd class="col-sm-9" t-esc="this.selected.last_used"/>
+                            <dd class="col-sm-9" t-out="this.selected.last_used"/>
                         </t>
                         <t t-if="this.selected.note">
                             <dt class="col-sm-3 text-muted">Note</dt>
-                            <dd class="col-sm-9" style="white-space: pre-wrap;" t-esc="this.selected.note"/>
+                            <dd class="col-sm-9" style="white-space: pre-wrap;" t-out="this.selected.note"/>
                         </t>
                     </dl>
                 </div>
