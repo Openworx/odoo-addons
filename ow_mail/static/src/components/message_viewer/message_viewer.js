@@ -9,7 +9,7 @@ import { MessageSourceDialog } from "../message_source/message_source";
 import { RecordModelPickerDialog } from "../record_picker/record_model_picker";
 import { useLayoutEffect } from "@web/owl2/utils";
 import { FormViewDialog } from "@web/views/view_dialogs/form_view_dialog";
-import { ActionManagerPlugin } from "@web/webclient/actions/action_plugin";
+import { ActionPlugin } from "@web/webclient/actions/action_plugin";
 
 const BLANK_PIXEL = "data:image/gif;base64,R0lGODlhAQABAAAAACw=";
 const XLINK_NS = "http://www.w3.org/1999/xlink";
@@ -248,7 +248,7 @@ export class MessageViewer extends Component {
      */
     setup() {
         this.mail = useService("ow_mail");
-        this.action = usePlugin(ActionManagerPlugin);
+        this.action = usePlugin(ActionPlugin);
         this.dialog = useService("dialog");
         this.state = proxy(this.mail.state);
         this.local = proxy({ showRemote: false, expandedThread: {},
