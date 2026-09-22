@@ -1,0 +1,9 @@
+id,name,model_id,group_id/id,operation,domain
+access_oauth_config_admin,ow.mcp.oauth.config.admin,ow.mcp.oauth.config,ow_mcp_server.group_mcp_admin,cru,
+access_oauth_client_admin,ow.mcp.oauth.client.admin,ow.mcp.oauth.client,ow_mcp_server.group_mcp_admin,crud,
+access_oauth_authcode_admin,ow.mcp.oauth.authorization_code.admin,ow.mcp.oauth.authorization_code,ow_mcp_server.group_mcp_admin,crud,
+access_oauth_access_token_admin,ow.mcp.oauth.access_token.admin,ow.mcp.oauth.access_token,ow_mcp_server.group_mcp_admin,crud,
+access_oauth_refresh_token_admin,ow.mcp.oauth.refresh_token.admin,ow.mcp.oauth.refresh_token,ow_mcp_server.group_mcp_admin,crud,
+access_oauth_consent_admin,ow.mcp.oauth.consent.admin,ow.mcp.oauth.consent,ow_mcp_server.group_mcp_admin,crud,
+access_oauth_event_admin,ow.mcp.oauth.event.admin,ow.mcp.oauth.event,ow_mcp_server.group_mcp_admin,rd,
+access_oauth_dcr_attempt_admin,ow.mcp.oauth.dcr_attempt.admin,ow.mcp.oauth.dcr_attempt,ow_mcp_server.group_mcp_admin,rd,

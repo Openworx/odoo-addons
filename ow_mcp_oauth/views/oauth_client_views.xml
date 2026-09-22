@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="view_oauth_client_list" model="ir.ui.view">
+        <field name="name">ow.mcp.oauth.client.list</field>
+        <field name="model">ow.mcp.oauth.client</field>
+        <field name="arch" type="xml">
+            <list string="OAuth Clients">
+                <field name="client_id"/>
+                <field name="client_name"/>
+                <field name="token_endpoint_auth_method"/>
+                <field name="scope"/>
+                <field name="is_dynamic"/>
+                <field name="last_used_at"/>
+                <field name="active" widget="boolean_toggle"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_oauth_client_form" model="ir.ui.view">
+        <field name="name">ow.mcp.oauth.client.form</field>
+        <field name="model">ow.mcp.oauth.client</field>
+        <field name="arch" type="xml">
+            <form string="OAuth Client">
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="client_id" readonly="1"/>
+                            <field name="client_name"/>
+                            <field name="token_endpoint_auth_method"/>
+                            <field name="scope"/>
+                            <field name="active"/>
+                            <field name="is_dynamic" readonly="1"/>
+                        </group>
+                        <group>
+                            <field name="grant_types"/>
+                            <field name="response_types"/>
+                            <field name="client_id_issued_at"/>
+                            <field name="client_secret_expires_at"/>
+                            <field name="last_used_at" readonly="1"/>
+                            <field name="software_id"/>
+                            <field name="software_version"/>
+                        </group>
+                    </group>
+                    <group string="Redirect URIs">
+                        <field name="redirect_uris" nolabel="1"
+                               placeholder='["https://claude.ai/api/mcp/auth_callback"]'/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_oauth_client" model="ir.actions.act_window">
+        <field name="name">OAuth Clients</field>
+        <field name="res_model">ow.mcp.oauth.client</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+</odoo>
