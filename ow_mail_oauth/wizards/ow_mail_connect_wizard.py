@@ -5,7 +5,7 @@ a draft account with the provider's fixed servers and immediately sends the
 browser to the OAuth consent screen; the callback then tests the connection
 and syncs the folder tree (see ``controllers/main.py``).
 """
-from odoo import _, api, fields, models
+from odoo import api, fields, models
 from odoo.exceptions import UserError
 
 _PRESETS = {
@@ -54,7 +54,7 @@ class OwMailConnectWizard(models.TransientModel):
         preset = _PRESETS.get(self.provider)
         if not preset:
             if not self.password:
-                raise UserError(_("Please fill in the password."))
+                raise UserError(self.env._("Please fill in the password."))
             return super().action_connect()
         account = self.env["ow.mail.account"].create({
             "name": self.name,

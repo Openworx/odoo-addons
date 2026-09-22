@@ -623,7 +623,8 @@ class OwMailAccount(models.Model):
             full_path = f"{parent_full_path}{delim}{name}" if parent_full_path else name
             typ, data = conn.create(_mbox(full_path))
             if typ != "OK":
-                raise UserError(self.env._("IMAP CREATE failed: %s") % (data or b"").decode("utf-8", "replace"))
+                detail = (data or b"").decode("utf-8", "replace")
+                raise UserError(self.env._("IMAP CREATE failed: %s", detail))
             try:
                 conn.subscribe(_mbox(full_path))
             except Exception:
@@ -648,7 +649,8 @@ class OwMailAccount(models.Model):
         try:
             typ, data = conn.rename(_mbox(old_full_path), _mbox(new_full_path))
             if typ != "OK":
-                raise UserError(self.env._("IMAP RENAME failed: %s") % (data or b"").decode("utf-8", "replace"))
+                detail = (data or b"").decode("utf-8", "replace")
+                raise UserError(self.env._("IMAP RENAME failed: %s", detail))
         finally:
             try:
                 conn.logout()
@@ -669,7 +671,8 @@ class OwMailAccount(models.Model):
                 return new_full_path
             typ, data = conn.rename(_mbox(old_full_path), _mbox(new_full_path))
             if typ != "OK":
-                raise UserError(self.env._("IMAP RENAME failed: %s") % (data or b"").decode("utf-8", "replace"))
+                detail = (data or b"").decode("utf-8", "replace")
+                raise UserError(self.env._("IMAP RENAME failed: %s", detail))
         finally:
             try:
                 conn.logout()
@@ -697,7 +700,8 @@ class OwMailAccount(models.Model):
                 return new_full_path
             typ, data = conn.rename(_mbox(old_full_path), _mbox(new_full_path))
             if typ != "OK":
-                raise UserError(self.env._("IMAP RENAME failed: %s") % (data or b"").decode("utf-8", "replace"))
+                detail = (data or b"").decode("utf-8", "replace")
+                raise UserError(self.env._("IMAP RENAME failed: %s", detail))
         finally:
             try:
                 conn.logout()
@@ -723,7 +727,8 @@ class OwMailAccount(models.Model):
                 pass
             typ, data = conn.delete(_mbox(full_path))
             if typ != "OK":
-                raise UserError(self.env._("IMAP DELETE failed: %s") % (data or b"").decode("utf-8", "replace"))
+                detail = (data or b"").decode("utf-8", "replace")
+                raise UserError(self.env._("IMAP DELETE failed: %s", detail))
         finally:
             try:
                 conn.logout()
@@ -745,9 +750,10 @@ class OwMailAccount(models.Model):
             else:
                 typ, data = conn.unsubscribe(_mbox(full_path))
             if typ != "OK":
-                raise UserError(self.env._("IMAP %s failed: %s") % (
-                    "SUBSCRIBE" if subscribed else "UNSUBSCRIBE",
-                    (data or b"").decode("utf-8", "replace")))
+                detail = (data or b"").decode("utf-8", "replace")
+                raise UserError(self.env._(
+                    "IMAP %s failed: %s",
+                    "SUBSCRIBE" if subscribed else "UNSUBSCRIBE", detail))
         finally:
             try:
                 conn.logout()
@@ -1073,8 +1079,8 @@ class OwMailAccount(models.Model):
                 drafts_mbox, "(\\Draft)",
                 imaplib.Time2Internaldate(datetime.now(timezone.utc)), msg.as_bytes())
             if typ != "OK":
-                raise UserError(self.env._("IMAP APPEND to Drafts failed: %s")
-                                % (data or [b""])[0].decode("utf-8", "replace"))
+                detail = (data or [b""])[0].decode("utf-8", "replace")
+                raise UserError(self.env._("IMAP APPEND to Drafts failed: %s", detail))
             new_uid = self._parse_appenduid(data)
             if new_uid is None:
                 # UIDPLUS not supported/reported — find the copy we just

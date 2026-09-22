@@ -107,23 +107,23 @@ class TestOauthDispatch(TransactionCase):
             acc.with_user(stranger).read(["name"])
         # …de eigenaar zelf mag de connect-action starten…
         Config = self.env["ir.config_parameter"].sudo()
-        Config.set_param("google_gmail_client_id", "cid")
-        Config.set_param("google_gmail_client_secret", "sec")
+        Config.set_str("google_gmail_client_id", "cid")
+        Config.set_str("google_gmail_client_secret", "sec")
         action = acc.action_connect_oauth()
         self.assertEqual(action["type"], "ir.actions.act_url")
         self.assertIn("accounts.google.com", action["url"])
 
     def test_authorize_uri_requires_configuration(self):
         acc = self._gmail_account()
-        self.env["ir.config_parameter"].sudo().set_param(
+        self.env["ir.config_parameter"].sudo().set_str(
             "google_gmail_client_id", "")
         with self.assertRaises(UserError):
             acc._ow_oauth_authorize_uri()
 
     def test_authorize_uri_shape(self):
         Config = self.env["ir.config_parameter"].sudo()
-        Config.set_param("google_gmail_client_id", "cid")
-        Config.set_param("google_gmail_client_secret", "sec")
+        Config.set_str("google_gmail_client_id", "cid")
+        Config.set_str("google_gmail_client_secret", "sec")
         acc = self._gmail_account()
         uri = acc._ow_oauth_authorize_uri()
         self.assertIn("accounts.google.com", uri)
@@ -132,8 +132,8 @@ class TestOauthDispatch(TransactionCase):
 
     def test_exchange_writes_tokens(self):
         Config = self.env["ir.config_parameter"].sudo()
-        Config.set_param("google_gmail_client_id", "cid")
-        Config.set_param("google_gmail_client_secret", "sec")
+        Config.set_str("google_gmail_client_id", "cid")
+        Config.set_str("google_gmail_client_secret", "sec")
         acc = self._gmail_account().sudo()
         response = MagicMock(ok=True)
         response.json.return_value = {
@@ -152,8 +152,8 @@ class TestOauthDispatch(TransactionCase):
 
     def test_wizard_preset_creates_oauth_account(self):
         Config = self.env["ir.config_parameter"].sudo()
-        Config.set_param("microsoft_outlook_client_id", "cid")
-        Config.set_param("microsoft_outlook_client_secret", "sec")
+        Config.set_str("microsoft_outlook_client_id", "cid")
+        Config.set_str("microsoft_outlook_client_secret", "sec")
         wiz = self.env["ow.mail.connect.wizard"].with_user(self.user).create({
             "name": "Werk", "email": "x@ow.test", "provider": "outlook",
         })

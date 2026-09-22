@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 19.0+e\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-08-21 15:17+0000\n"
+"POT-Creation-Date: 2026-09-22 17:53+0000\n"
 "PO-Revision-Date: 2026-06-02 20:47+0200\n"
 "Last-Translator: Thomas Pot | Open2bizz <info@open2bizz.nl>\n"
 "Language-Team: \n"
@@ -17,6 +17,36 @@ msgstr ""
 "l\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Poedit 3.9\n"
+
+#. module: ow_mail
+#: model:ir.module.module,description:base.module_ow_mail
+msgid ""
+"\n"
+"OW Mail — personal mail client inside Odoo.\n"
+"\n"
+"Features:\n"
+"* Multi-account IMAP/SMTP (SSL & STARTTLS)\n"
+"* Plain text and sanitized HTML rendering\n"
+"* Inline image and PDF viewer\n"
+"* HTML signatures\n"
+"* Tags (with optional IMAP keyword round-trip)\n"
+"* Safe Mode: remote-content blocking with per-sender trust\n"
+"* Floating compose window with draft autosave\n"
+"* Create Odoo records from an email (contact, task, lead, ticket, …) with a "
+"prefilled dialog\n"
+"* Attach an email to any record; linked records shown next to the message\n"
+"* Auto-file replies on linked records (opt-in per mailbox)\n"
+"* Dark mode: light/dark/follow the Odoo theme, per user\n"
+"* Optional infinite scrolling in the message list\n"
+"* Mobile-friendly reading view with single scroll and floating reply\n"
+"\n"
+"* Message preview snippets in the list view\n"
+"* Starred / Unread smart folders across accounts\n"
+"* Bulk tagging; tag rename/delete syncs IMAP keywords\n"
+"* In-client settings (mark-read delay, conversation view default)\n"
+"* Keyboard-shortcut cheatsheet (?) and improved accessibility\n"
+"* Unread badge in the browser tab title\n"
+msgstr ""
 
 #. module: ow_mail
 #. odoo-javascript
@@ -596,15 +626,20 @@ msgid "Discard"
 msgstr "Verwerpen"
 
 #. module: ow_mail
+#: model:ir.model.fields,field_description:ow_mail.field_ir_http__display_name
+#: model:ir.model.fields,field_description:ow_mail.field_mail_message__display_name
 #: model:ir.model.fields,field_description:ow_mail.field_ow_mail_account__display_name
 #: model:ir.model.fields,field_description:ow_mail.field_ow_mail_attach_record__display_name
 #: model:ir.model.fields,field_description:ow_mail.field_ow_mail_compose__display_name
 #: model:ir.model.fields,field_description:ow_mail.field_ow_mail_connect_wizard__display_name
 #: model:ir.model.fields,field_description:ow_mail.field_ow_mail_contact__display_name
+#: model:ir.model.fields,field_description:ow_mail.field_ow_mail_crypto__display_name
 #: model:ir.model.fields,field_description:ow_mail.field_ow_mail_folder__display_name
 #: model:ir.model.fields,field_description:ow_mail.field_ow_mail_preferences__display_name
+#: model:ir.model.fields,field_description:ow_mail.field_ow_mail_record_link__display_name
 #: model:ir.model.fields,field_description:ow_mail.field_ow_mail_tag__display_name
 #: model:ir.model.fields,field_description:ow_mail.field_ow_mail_trusted_sender__display_name
+#: model:ir.model.fields,field_description:ow_mail.field_res_partner__display_name
 msgid "Display Name"
 msgstr "Schermnaam"
 
@@ -855,6 +890,11 @@ msgid "Getting started"
 msgstr "Aan de slag"
 
 #. module: ow_mail
+#: model:ir.model,name:ow_mail.model_ir_http
+msgid "HTTP Routing"
+msgstr "HTTP-routering"
+
+#. module: ow_mail
 #: model:ir.model.fields,field_description:ow_mail.field_ow_mail_attach_record__has_attachments
 msgid "Has Attachments"
 msgstr "Bevat bijlagen"
@@ -894,7 +934,9 @@ msgstr "Helpdesk Ticket"
 msgid ""
 "Highest UID processed by reply auto-filing — independent of last_seen_uid "
 "and advanced only after successful processing"
-msgstr "Hoogste UID die door het auto-archiveren van antwoorden is verwerkt — losstaand van last_seen_uid en pas opgeschoven na succesvolle verwerking."
+msgstr ""
+"Hoogste UID die door het auto-archiveren van antwoorden is verwerkt — "
+"losstaand van last_seen_uid en pas opgeschoven na succesvolle verwerking."
 
 #. module: ow_mail
 #: model:ir.model.fields,help:ow_mail.field_ow_mail_folder__last_seen_uid
@@ -920,15 +962,20 @@ msgid "I"
 msgstr "I"
 
 #. module: ow_mail
+#: model:ir.model.fields,field_description:ow_mail.field_ir_http__id
+#: model:ir.model.fields,field_description:ow_mail.field_mail_message__id
 #: model:ir.model.fields,field_description:ow_mail.field_ow_mail_account__id
 #: model:ir.model.fields,field_description:ow_mail.field_ow_mail_attach_record__id
 #: model:ir.model.fields,field_description:ow_mail.field_ow_mail_compose__id
 #: model:ir.model.fields,field_description:ow_mail.field_ow_mail_connect_wizard__id
 #: model:ir.model.fields,field_description:ow_mail.field_ow_mail_contact__id
+#: model:ir.model.fields,field_description:ow_mail.field_ow_mail_crypto__id
 #: model:ir.model.fields,field_description:ow_mail.field_ow_mail_folder__id
 #: model:ir.model.fields,field_description:ow_mail.field_ow_mail_preferences__id
+#: model:ir.model.fields,field_description:ow_mail.field_ow_mail_record_link__id
 #: model:ir.model.fields,field_description:ow_mail.field_ow_mail_tag__id
 #: model:ir.model.fields,field_description:ow_mail.field_ow_mail_trusted_sender__id
+#: model:ir.model.fields,field_description:ow_mail.field_res_partner__id
 msgid "ID"
 msgstr "ID"
 
@@ -1248,7 +1295,9 @@ msgstr "Laden…"
 msgid ""
 "Loads more messages automatically while you scroll,\n"
 "                    instead of pages of 50."
-msgstr "Laadt automatisch meer berichten tijdens het scrollen, in plaats van pagina's van 50."
+msgstr ""
+"Laadt automatisch meer berichten tijdens het scrollen, in plaats van "
+"pagina's van 50."
 
 #. module: ow_mail
 #: model:ir.model.fields,field_description:ow_mail.field_ow_mail_account__smtp_same_as_imap
@@ -1270,6 +1319,12 @@ msgstr "E-mailaccounts"
 #: code:addons/ow_mail/static/src/components/settings_dialog/settings_dialog.js:0
 msgid "Mail Settings"
 msgstr "Mailinstellingen"
+
+#. module: ow_mail
+#: model:ir.module.module,summary:base.module_ow_mail
+msgid ""
+"Mail client for Odoo backend (IMAP/SMTP, multi-account, tags, safe mode)"
+msgstr ""
 
 #. module: ow_mail
 #. odoo-javascript
@@ -1528,6 +1583,7 @@ msgstr "Genummerde lijst"
 #. odoo-python
 #: code:addons/ow_mail/models/ow_mail_account.py:0
 #: model:ir.actions.client,name:ow_mail.action_ow_mail_mailclient
+#: model:ir.module.module,shortdesc:base.module_ow_mail
 #: model:ir.ui.menu,name:ow_mail.menu_ow_mail_root
 msgid "OW Mail"
 msgstr "OW Mail"
@@ -2390,7 +2446,10 @@ msgstr "Origineel bekijken"
 msgid ""
 "When a new inbox message is a reply in a thread that was already attached to "
 "an Odoo record, post it automatically to that record's chatter."
-msgstr "Als een nieuw inboxbericht een antwoord is in een conversatie die al aan een Odoo-record gekoppeld is, wordt het automatisch in de chatter van dat record geplaatst."
+msgstr ""
+"Als een nieuw inboxbericht een antwoord is in een conversatie die al aan een "
+"Odoo-record gekoppeld is, wordt het automatisch in de chatter van dat record "
+"geplaatst."
 
 #. module: ow_mail
 #. odoo-javascript

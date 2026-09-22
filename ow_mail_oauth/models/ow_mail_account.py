@@ -20,9 +20,9 @@ import logging
 import time
 
 import requests
-from werkzeug.urls import url_encode, url_join
+from urllib.parse import urlencode, urljoin
 
-from odoo import _, api, fields, models
+from odoo import api, fields, models
 from odoo.exceptions import AccessError, UserError
 from odoo.tools import hmac as hmac_tool
 
@@ -98,7 +98,7 @@ class OwMailAccount(models.Model):
         login = self.imap_login or self.email
         if self.auth_type == "gmail":
             if not rec.google_gmail_refresh_token:
-                raise UserError(_(
+                raise UserError(self.env._(
                     "This account is not connected to Google yet. "
                     "Open the account and use 'Connect' first."))
             return rec._generate_oauth2_string(
@@ -121,7 +121,7 @@ class OwMailAccount(models.Model):
         self.ensure_one()
         path = ("/ow_mail_oauth/gmail/confirm" if self.auth_type == "gmail"
                 else "/ow_mail_oauth/outlook/confirm")
-        return url_join(self.get_base_url(), path)
+        return urljoin(self.get_base_url(), path)
 
     def _ow_oauth_authorize_uri(self):
         """Build the provider authorization URL with OUR callback route.
@@ -136,13 +136,13 @@ class OwMailAccount(models.Model):
             "csrf_token": self._ow_oauth_csrf_token(),
         })
         if self.auth_type == "gmail":
-            client_id = Config.get_param("google_gmail_client_id")
-            if not client_id or not Config.get_param(
+            client_id = Config.get_str("google_gmail_client_id")
+            if not client_id or not Config.get_str(
                     "google_gmail_client_secret"):
-                raise UserError(_(
+                raise UserError(self.env._(
                     "Gmail OAuth is not configured. Ask your administrator "
                     "to set the Gmail credentials in the general settings."))
-            return "https://accounts.google.com/o/oauth2/v2/auth?%s" % url_encode({
+            return "https://accounts.google.com/o/oauth2/v2/auth?%s" % urlencode({
                 "client_id": client_id,
                 "redirect_uri": self._ow_oauth_redirect_uri(),
                 "response_type": "code",
@@ -154,15 +154,15 @@ class OwMailAccount(models.Model):
                 "state": state,
             })
         if self.auth_type == "outlook":
-            client_id = Config.get_param("microsoft_outlook_client_id")
-            if not client_id or not Config.get_param(
+            client_id = Config.get_str("microsoft_outlook_client_id")
+            if not client_id or not Config.get_str(
                     "microsoft_outlook_client_secret"):
-                raise UserError(_(
+                raise UserError(self.env._(
                     "Microsoft 365 OAuth is not configured. Ask your "
                     "administrator to set the Outlook credentials in the "
                     "general settings."))
-            return url_join(
-                self._get_microsoft_endpoint(), "authorize?%s" % url_encode({
+            return urljoin(
+                self._get_microsoft_endpoint(), "authorize?%s" % urlencode({
                     "client_id": client_id,
                     "response_type": "code",
                     "redirect_uri": self._ow_oauth_redirect_uri(),
@@ -171,7 +171,7 @@ class OwMailAccount(models.Model):
                     "login_hint": self.email or "",
                     "state": state,
                 }))
-        raise UserError(_("Select a Gmail or Microsoft 365 authentication "
+        raise UserError(self.env._("Select a Gmail or Microsoft 365 authentication "
                           "type first."))
 
     def action_connect_oauth(self):
@@ -183,7 +183,7 @@ class OwMailAccount(models.Model):
         self.ensure_one()
         if (self.user_id.id != self.env.user.id
                 and not self.env.user.has_group("base.group_system")):
-            raise AccessError(_(
+            raise AccessError(self.env._(
                 "Only the account owner can connect this mailbox."))
         return {
             "type": "ir.actions.act_url",
@@ -205,8 +205,8 @@ class OwMailAccount(models.Model):
             response = requests.post(
                 "https://oauth2.googleapis.com/token",
                 data={
-                    "client_id": Config.get_param("google_gmail_client_id"),
-                    "client_secret": Config.get_param(
+                    "client_id": Config.get_str("google_gmail_client_id"),
+                    "client_secret": Config.get_str(
                         "google_gmail_client_secret"),
                     "grant_type": "authorization_code",
                     "redirect_uri": self._ow_oauth_redirect_uri(),
@@ -228,11 +228,11 @@ class OwMailAccount(models.Model):
             self.write(vals)
         elif self.auth_type == "outlook":
             response = requests.post(
-                url_join(self._get_microsoft_endpoint(), "token"),
+                urljoin(self._get_microsoft_endpoint(), "token"),
                 data={
-                    "client_id": Config.get_param(
+                    "client_id": Config.get_str(
                         "microsoft_outlook_client_id"),
-                    "client_secret": Config.get_param(
+                    "client_secret": Config.get_str(
                         "microsoft_outlook_client_secret"),
                     "scope": "offline_access %s" % self._OUTLOOK_SCOPE,
                     "redirect_uri": self._ow_oauth_redirect_uri(),
@@ -249,7 +249,7 @@ class OwMailAccount(models.Model):
                     int(time.time()) + int(payload["expires_in"]),
             })
         else:
-            raise UserError(_("This account does not use OAuth."))
+            raise UserError(self.env._("This account does not use OAuth."))
         return True
 
     @api.model
@@ -262,6 +262,6 @@ class OwMailAccount(models.Model):
                 detail = ""
             _logger.warning("ow_mail_oauth: token request failed (%s): %s",
                             response.status_code, detail or response.text[:200])
-            raise UserError(_(
+            raise UserError(self.env._(
                 "An error occurred when fetching the OAuth token. %s", detail))
         return response.json()

@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 19.0-20260630\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-08-21 15:17+0000\n"
+"POT-Creation-Date: 2026-09-22 17:53+0000\n"
 "PO-Revision-Date: 2026-08-21 15:17+0000\n"
 "Last-Translator: \n"
 "Language-Team: \n"
@@ -15,6 +15,36 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: \n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#. module: ow_mail
+#: model:ir.module.module,description:base.module_ow_mail
+msgid ""
+"\n"
+"OW Mail — personal mail client inside Odoo.\n"
+"\n"
+"Features:\n"
+"* Multi-account IMAP/SMTP (SSL & STARTTLS)\n"
+"* Plain text and sanitized HTML rendering\n"
+"* Inline image and PDF viewer\n"
+"* HTML signatures\n"
+"* Tags (with optional IMAP keyword round-trip)\n"
+"* Safe Mode: remote-content blocking with per-sender trust\n"
+"* Floating compose window with draft autosave\n"
+"* Create Odoo records from an email (contact, task, lead, ticket, …) with a "
+"prefilled dialog\n"
+"* Attach an email to any record; linked records shown next to the message\n"
+"* Auto-file replies on linked records (opt-in per mailbox)\n"
+"* Dark mode: light/dark/follow the Odoo theme, per user\n"
+"* Optional infinite scrolling in the message list\n"
+"* Mobile-friendly reading view with single scroll and floating reply\n"
+"\n"
+"* Message preview snippets in the list view\n"
+"* Starred / Unread smart folders across accounts\n"
+"* Bulk tagging; tag rename/delete syncs IMAP keywords\n"
+"* In-client settings (mark-read delay, conversation view default)\n"
+"* Keyboard-shortcut cheatsheet (?) and improved accessibility\n"
+"* Unread badge in the browser tab title\n"
+msgstr ""
 
 #. module: ow_mail
 #. odoo-javascript
@@ -586,8 +616,8 @@ msgstr "Eliminar etiqueta"
 #. odoo-javascript
 #: code:addons/ow_mail/static/src/components/sidebar/sidebar.js:0
 msgid ""
-"Delete the tag \"%s\"? The label is also removed from tagged messages on the"
-" mail server."
+"Delete the tag \"%s\"? The label is also removed from tagged messages on the "
+"mail server."
 msgstr ""
 "¿Eliminar la etiqueta \"%s\"? La etiqueta también se quita de los mensajes "
 "etiquetados en el servidor de correo."
@@ -599,15 +629,20 @@ msgid "Discard"
 msgstr "Descartar"
 
 #. module: ow_mail
+#: model:ir.model.fields,field_description:ow_mail.field_ir_http__display_name
+#: model:ir.model.fields,field_description:ow_mail.field_mail_message__display_name
 #: model:ir.model.fields,field_description:ow_mail.field_ow_mail_account__display_name
 #: model:ir.model.fields,field_description:ow_mail.field_ow_mail_attach_record__display_name
 #: model:ir.model.fields,field_description:ow_mail.field_ow_mail_compose__display_name
 #: model:ir.model.fields,field_description:ow_mail.field_ow_mail_connect_wizard__display_name
 #: model:ir.model.fields,field_description:ow_mail.field_ow_mail_contact__display_name
+#: model:ir.model.fields,field_description:ow_mail.field_ow_mail_crypto__display_name
 #: model:ir.model.fields,field_description:ow_mail.field_ow_mail_folder__display_name
 #: model:ir.model.fields,field_description:ow_mail.field_ow_mail_preferences__display_name
+#: model:ir.model.fields,field_description:ow_mail.field_ow_mail_record_link__display_name
 #: model:ir.model.fields,field_description:ow_mail.field_ow_mail_tag__display_name
 #: model:ir.model.fields,field_description:ow_mail.field_ow_mail_trusted_sender__display_name
+#: model:ir.model.fields,field_description:ow_mail.field_res_partner__display_name
 msgid "Display Name"
 msgstr "Nombre mostrado"
 
@@ -858,6 +893,11 @@ msgid "Getting started"
 msgstr "Primeros pasos"
 
 #. module: ow_mail
+#: model:ir.model,name:ow_mail.model_ir_http
+msgid "HTTP Routing"
+msgstr "Enrutamiento HTTP"
+
+#. module: ow_mail
 #: model:ir.model.fields,field_description:ow_mail.field_ow_mail_attach_record__has_attachments
 msgid "Has Attachments"
 msgstr "Tiene adjuntos"
@@ -925,15 +965,20 @@ msgid "I"
 msgstr "I"
 
 #. module: ow_mail
+#: model:ir.model.fields,field_description:ow_mail.field_ir_http__id
+#: model:ir.model.fields,field_description:ow_mail.field_mail_message__id
 #: model:ir.model.fields,field_description:ow_mail.field_ow_mail_account__id
 #: model:ir.model.fields,field_description:ow_mail.field_ow_mail_attach_record__id
 #: model:ir.model.fields,field_description:ow_mail.field_ow_mail_compose__id
 #: model:ir.model.fields,field_description:ow_mail.field_ow_mail_connect_wizard__id
 #: model:ir.model.fields,field_description:ow_mail.field_ow_mail_contact__id
+#: model:ir.model.fields,field_description:ow_mail.field_ow_mail_crypto__id
 #: model:ir.model.fields,field_description:ow_mail.field_ow_mail_folder__id
 #: model:ir.model.fields,field_description:ow_mail.field_ow_mail_preferences__id
+#: model:ir.model.fields,field_description:ow_mail.field_ow_mail_record_link__id
 #: model:ir.model.fields,field_description:ow_mail.field_ow_mail_tag__id
 #: model:ir.model.fields,field_description:ow_mail.field_ow_mail_trusted_sender__id
+#: model:ir.model.fields,field_description:ow_mail.field_res_partner__id
 msgid "ID"
 msgstr "ID"
 
@@ -1280,6 +1325,12 @@ msgid "Mail Settings"
 msgstr "Ajustes de correo"
 
 #. module: ow_mail
+#: model:ir.module.module,summary:base.module_ow_mail
+msgid ""
+"Mail client for Odoo backend (IMAP/SMTP, multi-account, tags, safe mode)"
+msgstr ""
+
+#. module: ow_mail
 #. odoo-javascript
 #: code:addons/ow_mail/static/src/components/sidebar/sidebar.xml:0
 msgid "Mail settings"
@@ -1537,6 +1588,7 @@ msgstr "Lista numerada"
 #. odoo-python
 #: code:addons/ow_mail/models/ow_mail_account.py:0
 #: model:ir.actions.client,name:ow_mail.action_ow_mail_mailclient
+#: model:ir.module.module,shortdesc:base.module_ow_mail
 #: model:ir.ui.menu,name:ow_mail.menu_ow_mail_root
 msgid "OW Mail"
 msgstr "OW Mail"
@@ -2398,8 +2450,8 @@ msgstr "Ver original"
 #. module: ow_mail
 #: model:ir.model.fields,help:ow_mail.field_ow_mail_account__auto_link_replies
 msgid ""
-"When a new inbox message is a reply in a thread that was already attached to"
-" an Odoo record, post it automatically to that record's chatter."
+"When a new inbox message is a reply in a thread that was already attached to "
+"an Odoo record, post it automatically to that record's chatter."
 msgstr ""
 "Cuando un mensaje nuevo de la bandeja de entrada es una respuesta de un hilo "
 "que ya estaba adjuntado a un registro de Odoo, publicarlo automáticamente en "

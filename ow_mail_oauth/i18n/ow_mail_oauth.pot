@@ -4,16 +4,45 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: Odoo Server 18.0-20260810\n"
+"Project-Id-Version: Odoo Server 20.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-08-18 11:18+0000\n"
-"PO-Revision-Date: 2026-08-18 11:18+0000\n"
+"POT-Creation-Date: 2026-09-22 17:55+0000\n"
+"PO-Revision-Date: 2026-09-22 17:55+0000\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: \n"
 "Plural-Forms: \n"
+
+#. module: ow_mail_oauth
+#: model:ir.module.module,description:base.module_ow_mail_oauth
+msgid ""
+"\n"
+"OW Mail OAuth — connect Gmail and Microsoft 365 mailboxes to OW Mail.\n"
+"\n"
+"Status: BETA. The module is fully unit-tested, but the end-to-end\n"
+"OAuth flow depends on your provider app registration — feedback from\n"
+"real-world Gmail / Microsoft 365 tenants is welcome.\n"
+"\n"
+"Bridge module: adds an OAuth2 authentication type to ``ow.mail.account``\n"
+"on top of Odoo's standard ``google_gmail`` and ``microsoft_outlook``\n"
+"modules. Token storage, refresh and the XOAUTH2 SASL string come from\n"
+"those mixins; this module adds:\n"
+"\n"
+"* An ``auth_type`` selection on the mail account (password / Gmail /\n"
+"  Microsoft 365) — existing accounts keep password authentication.\n"
+"* XOAUTH2 authentication in the IMAP and SMTP connections.\n"
+"* A per-user connect flow (authorize URL + callback) so regular users\n"
+"  can link their own mailbox — the standard Odoo flow is admin-only.\n"
+"* Provider presets in the Connect Mailbox wizard.\n"
+"\n"
+"Prerequisites (see README.md): a Google Cloud project and/or an\n"
+"Azure/Entra app registration, with the client id/secret configured in\n"
+"Settings → General Settings (the fields added by the standard modules),\n"
+"and the Odoo instance reachable over HTTPS for the OAuth callbacks:\n"
+"``/ow_mail_oauth/gmail/confirm`` and ``/ow_mail_oauth/outlook/confirm``.\n"
+msgstr ""
 
 #. module: ow_mail_oauth
 #: model:ir.model.fields,field_description:ow_mail_oauth.field_ow_mail_account__google_gmail_access_token
@@ -23,6 +52,11 @@ msgstr ""
 #. module: ow_mail_oauth
 #: model:ir.model.fields,field_description:ow_mail_oauth.field_ow_mail_account__google_gmail_access_token_expiration
 msgid "Access Token Expiration Timestamp"
+msgstr ""
+
+#. module: ow_mail_oauth
+#: model:ir.model.fields,field_description:ow_mail_oauth.field_ow_mail_account__active
+msgid "Active"
 msgstr ""
 
 #. module: ow_mail_oauth
@@ -42,11 +76,6 @@ msgid "Authentication URI"
 msgstr ""
 
 #. module: ow_mail_oauth
-#: model:ir.model.fields,field_description:ow_mail_oauth.field_ow_mail_account__google_gmail_authorization_code
-msgid "Authorization Code"
-msgstr ""
-
-#. module: ow_mail_oauth
 #: model_terms:ir.ui.view,arch_db:ow_mail_oauth.view_ow_mail_account_form_oauth
 msgid "Connect with Google"
 msgstr ""
@@ -59,6 +88,12 @@ msgstr ""
 #. module: ow_mail_oauth
 #: model_terms:ir.ui.view,arch_db:ow_mail_oauth.view_ow_mail_account_form_oauth
 msgid "Connected"
+msgstr ""
+
+#. module: ow_mail_oauth
+#: model:ir.model.fields,field_description:ow_mail_oauth.field_ow_mail_account__display_name
+#: model:ir.model.fields,field_description:ow_mail_oauth.field_ow_mail_connect_wizard__display_name
+msgid "Display Name"
 msgstr ""
 
 #. module: ow_mail_oauth
@@ -88,8 +123,9 @@ msgid ""
 msgstr ""
 
 #. module: ow_mail_oauth
-#: model:ir.model.fields,field_description:ow_mail_oauth.field_ow_mail_account__is_microsoft_outlook_configured
-msgid "Is Outlook Credential Configured"
+#: model:ir.model.fields,field_description:ow_mail_oauth.field_ow_mail_account__id
+#: model:ir.model.fields,field_description:ow_mail_oauth.field_ow_mail_connect_wizard__id
+msgid "ID"
 msgstr ""
 
 #. module: ow_mail_oauth
@@ -116,6 +152,13 @@ msgid "OAuth Connected"
 msgstr ""
 
 #. module: ow_mail_oauth
+#: model:ir.module.module,summary:base.module_ow_mail_oauth
+msgid ""
+"OAuth2 (XOAUTH2) authentication for OW Mail accounts: Gmail and Microsoft "
+"365 (beta)"
+msgstr ""
+
+#. module: ow_mail_oauth
 #: model:ir.model,name:ow_mail_oauth.model_ow_mail_account
 msgid "OW Mail Account"
 msgstr ""
@@ -123,6 +166,11 @@ msgstr ""
 #. module: ow_mail_oauth
 #: model:ir.model,name:ow_mail_oauth.model_ow_mail_connect_wizard
 msgid "OW Mail Connect Wizard"
+msgstr ""
+
+#. module: ow_mail_oauth
+#: model:ir.module.module,shortdesc:base.module_ow_mail_oauth
+msgid "OW Mail OAuth (Gmail / Microsoft 365)"
 msgstr ""
 
 #. module: ow_mail_oauth
