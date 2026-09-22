@@ -40,8 +40,11 @@ class TestDispatchSavepoint(TransactionCase):
         })
 
     def test_failing_call_returns_error_envelope(self):
+        # MCP tool errors travel as a result with isError; the real message
+        # stays server-side (only a trace id is returned).
         resp = self._call('_test_bad')
-        self.assertIn('error', resp)
+        self.assertTrue(resp['result']['isError'])
+        self.assertIn('trace id', resp['result']['content'][0]['text'])
         self.assertEqual(resp['id'], 1)
 
     def test_subsequent_call_still_succeeds(self):
@@ -49,7 +52,7 @@ class TestDispatchSavepoint(TransactionCase):
         # InFailedSqlTransaction because the first call's DB error left
         # the transaction in an aborted state.
         failed = self._call('_test_bad', msg_id=1)
-        self.assertIn('error', failed)
+        self.assertTrue(failed['result']['isError'])
         ok = self._call('_test_good', msg_id=2)
         self.assertIn('result', ok)
         self.assertEqual(ok['result']['structuredContent'], {'ok': True})

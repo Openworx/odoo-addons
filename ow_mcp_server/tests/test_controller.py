@@ -2,6 +2,7 @@ import base64
 import json
 from datetime import datetime, timedelta
 
+from odoo.addons.ow_mcp_server.protocol.dispatcher import TOOL_SCHEMAS
 from odoo.tests import HttpCase, tagged
 
 from odoo.addons.ow_mcp_server.protocol import authfail
@@ -100,7 +101,7 @@ class TestMcpController(HttpCase):
         )
         self.assertEqual(r.status_code, 200)
         names = {t['name'] for t in r.json()['result']['tools']}
-        self.assertEqual(len(names), 6)
+        self.assertEqual(len(names), len(TOOL_SCHEMAS))
 
     def test_tools_call_list_models_end_to_end(self):
         r = self._post({

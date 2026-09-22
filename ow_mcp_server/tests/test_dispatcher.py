@@ -39,7 +39,7 @@ class TestDispatcher(TransactionCase):
             dispatch(self.env, {'method': 'notifications/initialized'})
         )
 
-    def test_tools_list_has_six(self):
+    def test_tools_list_names(self):
         out = dispatch(self.env, {
             'method': 'tools/list', 'id': 3, 'params': {},
         })
@@ -47,6 +47,8 @@ class TestDispatcher(TransactionCase):
         self.assertEqual(names, {
             'list_models', 'search_records', 'get_record',
             'create_record', 'update_record', 'delete_record',
+            'search_count', 'read_group', 'get_model_schema',
+            'get_user_context', 'list_modules',
         })
 
     def test_schemas_validate_required(self):
@@ -59,12 +61,14 @@ class TestDispatcher(TransactionCase):
         })
         self.assertEqual(out['error']['code'], jsonrpc.METHOD_NOT_FOUND)
 
-    def test_unknown_tool_returns_method_not_found(self):
+    def test_unknown_tool_returns_tool_error(self):
+        # MCP: a failed tools/call is a result with isError, not a JSON-RPC error.
         out = dispatch(self.env, {
             'method': 'tools/call', 'id': 5,
             'params': {'name': 'imaginary_tool', 'arguments': {}},
         })
-        self.assertEqual(out['error']['code'], jsonrpc.METHOD_NOT_FOUND)
+        self.assertTrue(out['result']['isError'])
+        self.assertIn('Unknown tool', out['result']['content'][0]['text'])
 
     def test_tools_call_routes_to_handler(self):
         out = dispatch(self.env, {
@@ -77,13 +81,15 @@ class TestDispatcher(TransactionCase):
         names = {m['model'] for m in out['result']['structuredContent']['models']}
         self.assertIn('res.partner', names)
 
-    def test_access_error_becomes_permission_denied(self):
+    def test_access_error_becomes_tool_error(self):
+        # MCP: an AccessError inside tools/call is a result with isError.
         out = dispatch(self.env, {
             'method': 'tools/call', 'id': 7,
             'params': {'name': 'search_records',
                        'arguments': {'model': 'ir.config_parameter'}},
         })
-        self.assertEqual(out['error']['code'], jsonrpc.PERMISSION_DENIED)
+        self.assertTrue(out['result']['isError'])
+        self.assertNotIn('error', out)
 
     # ---- C3: notifications never receive a response ----
 
