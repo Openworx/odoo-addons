@@ -1,6 +1,6 @@
 /** @odoo-module **/
 
-import { Component, onWillStart, proxy, usePlugin } from "@odoo/owl";
+import { Component, onWillStart, proxy, usePlugin, useProps } from "@odoo/owl";
 import { registry } from "@web/core/registry";
 import { useService } from "@web/core/utils/hooks";
 import { Sidebar } from "../sidebar/sidebar";
@@ -27,6 +27,7 @@ const LS_KEY = "ow_mail.sidebar_collapsed";
  * manager mounts it when the user opens the mail menu item.
  */
 export class Mailclient extends Component {
+    props = useProps();
     static template = "ow_mail.Mailclient";
     static components = { Sidebar, MessageList, MessageViewer, ComposeWindow, Contacts };
 
