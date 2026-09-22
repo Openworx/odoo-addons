@@ -1,0 +1,5 @@
+id,name,model_id,group_id/id,operation,domain
+access_mcp_config_admin,ow.mcp.config.admin,ow.mcp.config,ow_mcp_server.group_mcp_admin,crud,
+access_mcp_access_admin,ow.mcp.model.access.admin,ow.mcp.model.access,ow_mcp_server.group_mcp_admin,crud,
+access_mcp_access_user,ow.mcp.model.access.user,ow.mcp.model.access,ow_mcp_server.group_mcp_user,r,
+access_mcp_audit_log_admin,ow.mcp.audit.log.admin,ow.mcp.audit.log,ow_mcp_server.group_mcp_admin,rd,
