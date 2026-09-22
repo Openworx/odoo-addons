@@ -1,6 +1,6 @@
 /** @odoo-module **/
 
-import { Component, proxy } from "@odoo/owl";
+import { Component, proxy, t, useProps } from "@odoo/owl";
 import { Dialog } from "@web/core/dialog/dialog";
 import { useService } from "@web/core/utils/hooks";
 import { _t } from "@web/core/l10n/translation";
@@ -16,11 +16,11 @@ import { _t } from "@web/core/l10n/translation";
 export class RecordModelPickerDialog extends Component {
     static template = "ow_mail.RecordModelPickerDialog";
     static components = { Dialog };
-    static props = {
-        models: Array, // [{model, name}]
-        onConfirm: Function,
-        close: Function,
-    };
+    props = useProps({
+        models: t.array(),
+        onConfirm: t.function(),
+        close: t.function(),
+    });
 
     setup() {
         this.mail = useService("ow_mail");

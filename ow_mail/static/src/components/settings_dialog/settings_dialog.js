@@ -1,6 +1,6 @@
 /** @odoo-module **/
 
-import { Component, proxy, usePlugin } from "@odoo/owl";
+import { Component, proxy, t, usePlugin, useProps } from "@odoo/owl";
 import { Dialog } from "@web/core/dialog/dialog";
 import { useService } from "@web/core/utils/hooks";
 import { _t } from "@web/core/l10n/translation";
@@ -18,10 +18,10 @@ import { ActionPlugin } from "@web/webclient/actions/action_plugin";
 export class SettingsDialog extends Component {
     static template = "ow_mail.SettingsDialog";
     static components = { Dialog };
-    static props = {
-        close: Function,
-        openShortcuts: { type: Function, optional: true },
-    };
+    props = useProps({
+        close: t.function(),
+        openShortcuts: t.function().optional(),
+    });
 
     setup() {
         this.mail = useService("ow_mail");

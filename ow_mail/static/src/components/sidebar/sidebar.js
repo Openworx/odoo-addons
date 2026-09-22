@@ -1,6 +1,6 @@
 /** @odoo-module **/
 
-import { Component, proxy, signal } from "@odoo/owl";
+import { Component, proxy, signal, t, useProps } from "@odoo/owl";
 import { useService } from "@web/core/utils/hooks";
 import { _t } from "@web/core/l10n/translation";
 import { ConfirmationDialog } from "@web/core/confirmation_dialog/confirmation_dialog";
@@ -54,10 +54,10 @@ const ACCOUNT_PALETTE = [
  */
 export class Sidebar extends Component {
     static template = "ow_mail.Sidebar";
-    static props = {
-        collapsed: { type: Boolean, optional: true },
-        toggleSidebar: { type: Function, optional: true },
-    };
+    props = useProps({
+        collapsed: t.boolean().optional(),
+        toggleSidebar: t.function().optional(),
+    });
 
     /**
      * Wire up the central mail service, expose `state` and `dnd` as reactive

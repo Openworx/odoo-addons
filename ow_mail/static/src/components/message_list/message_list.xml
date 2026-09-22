@@ -11,7 +11,7 @@
                        class="form-control rounded-pill ps-5 o-ow-search-input"
                        style="padding-right:4.5rem;"
                        placeholder="Search — from: subject: has:attachment before:YYYY-MM-DD …"
-                       t-custom-model="this.local.search"
+                       t-model.proxy="this.local.search"
                        t-on-keydown="this.onSearchKey"
                        t-on-input="this.onSearchInput"/>
                 <div class="position-absolute top-50 end-0 translate-middle-y me-2 d-flex align-items-center">

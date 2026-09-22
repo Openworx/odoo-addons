@@ -1,8 +1,11 @@
 /** @odoo-module **/
 
-import { Component } from "@odoo/owl";
+import { Component, t, useProps } from "@odoo/owl";
 
 export class SafeModeBanner extends Component {
     static template = "ow_mail.SafeModeBanner";
-    static props = { onShowOnce: Function, onTrustSender: Function };
+    props = useProps({
+        onShowOnce: t.function(),
+        onTrustSender: t.function(),
+    });
 }

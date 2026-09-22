@@ -1,6 +1,6 @@
 /** @odoo-module **/
 
-import { Component, proxy, signal } from "@odoo/owl";
+import { Component, proxy, signal, t, useProps } from "@odoo/owl";
 import { useService } from "@web/core/utils/hooks";
 
 /**
@@ -18,11 +18,11 @@ import { useService } from "@web/core/utils/hooks";
  */
 export class RecipientInput extends Component {
     static template = "ow_mail.RecipientInput";
-    static props = {
-        placeholder: String,
-        value: String,
-        onUpdate: Function,
-    };
+    props = useProps({
+        placeholder: t.string(),
+        value: t.string(),
+        onUpdate: t.function(),
+    });
 
     /**
      * OWL lifecycle setup hook.

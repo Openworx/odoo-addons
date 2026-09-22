@@ -5,7 +5,7 @@
     <Dialog title="this.title" size="'md'">
         <div t-att-class="this.themeClass">
         <input type="text" class="form-control mb-2" placeholder="Filter models…"
-               t-custom-model="this.local.filter" autofocus="autofocus"/>
+               t-model.proxy="this.local.filter" autofocus="autofocus"/>
         <div class="o-ow-model-picker-list overflow-auto" style="max-height: 50vh;">
             <t t-foreach="this.filteredModels" t-as="m" t-key="m.model">
                 <button class="list-group-item list-group-item-action w-100 text-start border-0 py-2"

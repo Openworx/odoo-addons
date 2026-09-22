@@ -1,6 +1,6 @@
 /** @odoo-module **/
 
-import { Component, onWillStart, proxy } from "@odoo/owl";
+import { Component, onWillStart, proxy, t, useProps } from "@odoo/owl";
 import { registry } from "@web/core/registry";
 import { useService } from "@web/core/utils/hooks";
 
@@ -91,9 +91,7 @@ function buildTree(folders) {
  */
 export class FoldersWidget extends Component {
     static template = "ow_mail.FoldersWidget";
-    static props = {
-        "*": true,
-    };
+    props = useProps();
 
     /**
      * Bootstrap the service if it hasn't loaded yet (the widget can be

@@ -7,7 +7,7 @@
             <div class="position-relative flex-grow-1">
                 <i class="oi position-absolute top-50 start-0 translate-middle-y ms-2 text-muted" data-icon="search"/>
                 <input type="text" class="form-control form-control-sm ps-4"
-                       placeholder="Search…" t-custom-model="this.ui.search"/>
+                       placeholder="Search…" t-model.proxy="this.ui.search"/>
             </div>
             <button class="btn btn-sm btn-light" t-on-click="this.onNew" title="New folder">
                 <i class="oi" data-icon="add"/> <span>New</span>

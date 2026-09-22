@@ -1,6 +1,6 @@
 /** @odoo-module **/
 
-import { Component } from "@odoo/owl";
+import { Component, t, useProps } from "@odoo/owl";
 
 /** Color palette for initials badges. One of 8 colors is chosen deterministically from the email hash. */
 const PALETTE = ["#F59E0B", "#EF4444", "#10B981", "#3B82F6", "#8B5CF6", "#EC4899", "#14B8A6", "#F97316"];
@@ -14,7 +14,10 @@ const PALETTE = ["#F59E0B", "#EF4444", "#10B981", "#3B82F6", "#8B5CF6", "#EC4899
  */
 export class AvatarInitials extends Component {
     static template = "ow_mail.AvatarInitials";
-    static props = { name: String, email: { type: String, optional: true } };
+    props = useProps({
+        name: t.string(),
+        email: t.string().optional(),
+    });
 
     /**
      * Up to two initials from the display name or email.

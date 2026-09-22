@@ -7,7 +7,7 @@
             <div class="mb-3">
                 <label class="form-label fw-semibold" for="ow-settings-mark-read">Mark as read</label>
                 <select id="ow-settings-mark-read" class="form-select"
-                        t-custom-model="this.local.mark_read_delay">
+                        t-model.proxy="this.local.mark_read_delay">
                     <t t-foreach="this.delayOptions" t-as="opt" t-key="opt.value">
                         <option t-att-value="opt.value" t-out="opt.label"/>
                     </t>
@@ -18,7 +18,7 @@
             </div>
             <div class="mb-3">
                 <label class="form-label fw-semibold" for="ow-settings-theme">Theme</label>
-                <select id="ow-settings-theme" class="form-select" t-custom-model="this.local.theme">
+                <select id="ow-settings-theme" class="form-select" t-model.proxy="this.local.theme">
                     <t t-foreach="this.themeOptions" t-as="opt" t-key="opt.value">
                         <option t-att-value="opt.value" t-out="opt.label"/>
                     </t>
@@ -31,7 +31,7 @@
             </div>
             <div class="form-check mb-2">
                 <input class="form-check-input" type="checkbox" id="ow-settings-infinite-scroll"
-                       t-custom-model="this.local.infinite_scroll"/>
+                       t-model.proxy="this.local.infinite_scroll"/>
                 <label class="form-check-label" for="ow-settings-infinite-scroll">
                     Infinite scrolling in the message list
                 </label>
@@ -42,14 +42,14 @@
             </div>
             <div class="form-check mb-2">
                 <input class="form-check-input" type="checkbox" id="ow-settings-thread-default"
-                       t-custom-model="this.local.thread_view_default"/>
+                       t-model.proxy="this.local.thread_view_default"/>
                 <label class="form-check-label" for="ow-settings-thread-default">
                     Conversation view by default
                 </label>
             </div>
             <div class="form-check mb-3">
                 <input class="form-check-input" type="checkbox" id="ow-settings-stacked-threads"
-                       t-custom-model="this.local.stacked_threads"/>
+                       t-model.proxy="this.local.stacked_threads"/>
                 <label class="form-check-label" for="ow-settings-stacked-threads">
                     Stack conversations in the reading pane
                 </label>

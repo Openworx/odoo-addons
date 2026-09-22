@@ -1,6 +1,6 @@
 /** @odoo-module **/
 
-import { Component, onWillStart, proxy } from "@odoo/owl";
+import { Component, onWillStart, proxy, t, useProps } from "@odoo/owl";
 import { Dialog } from "@web/core/dialog/dialog";
 import { useService } from "@web/core/utils/hooks";
 
@@ -16,12 +16,12 @@ import { useService } from "@web/core/utils/hooks";
 export class MessageSourceDialog extends Component {
     static template = "ow_mail.MessageSourceDialog";
     static components = { Dialog };
-    static props = {
-        folderId: Number,
-        uid: Number,
-        subject: { type: String, optional: true },
-        close: Function,
-    };
+    props = useProps({
+        folderId: t.number(),
+        uid: t.number(),
+        subject: t.string().optional(),
+        close: t.function(),
+    });
 
     /**
      * Fetch the raw message source before the dialog renders.

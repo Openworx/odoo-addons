@@ -18,7 +18,6 @@ No hard dependencies: optional apps (crm, project, sale, helpdesk) are
 probed via the registry (``model in self.env``) and the user's ACLs
 (``ir.access``, see ``_ow_mail_allowed_models``) at runtime.
 """
-import base64
 import email
 import logging
 import re
@@ -382,7 +381,7 @@ class OwMailRecordLink(models.AbstractModel):
                 part.get_filename()) or "attachment"
             attachment = self.env["ir.attachment"].create({
                 "name": filename,
-                "datas": base64.b64encode(payload),
+                "raw": payload,
                 "res_model": model_name,
                 "res_id": res_id,
             })

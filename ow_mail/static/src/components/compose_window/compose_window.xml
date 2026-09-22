@@ -39,7 +39,7 @@
                 <!-- Address fields -->
                 <div class="o-ow-compose-fields px-3 pt-2">
                     <div class="mb-1">
-                        <select class="form-select form-select-sm" t-custom-model.number="this.props.win.accountId">
+                        <select class="form-select form-select-sm" t-model.proxy.number="this.props.win.accountId">
                             <t t-foreach="this.state.accounts" t-as="a" t-key="a.id">
                                 <option t-att-value="a.id" t-out="a.email"/>
                             </t>
@@ -58,7 +58,7 @@
                                         onUpdate="(v) => this.onUpdateBcc(v)"/>
                     </div>
                     <input class="form-control form-control-sm mb-1" placeholder="Subject"
-                           t-custom-model="this.props.win.subject" t-on-input="this.markDirty"/>
+                           t-model.proxy="this.props.win.subject" t-on-input="this.markDirty"/>
                 </div>
 
                 <!-- Toolbar -->

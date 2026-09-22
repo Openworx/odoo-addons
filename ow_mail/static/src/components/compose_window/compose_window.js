@@ -1,6 +1,6 @@
 /** @odoo-module **/
 
-import { Component, onMounted, onWillDestroy, proxy, signal } from "@odoo/owl";
+import { Component, onMounted, onWillDestroy, proxy, signal, t, useProps } from "@odoo/owl";
 import { useService } from "@web/core/utils/hooks";
 import { _t } from "@web/core/l10n/translation";
 import { RecipientInput } from "./recipient_input";
@@ -114,7 +114,9 @@ function _sanitizeComposeHtml(html) {
 export class ComposeWindow extends Component {
     static template = "ow_mail.ComposeWindow";
     static components = { RecipientInput };
-    static props = { win: Object };
+    props = useProps({
+        win: t.object(),
+    });
 
     /**
      * Update the "To" recipient string from a `RecipientInput` update event.
