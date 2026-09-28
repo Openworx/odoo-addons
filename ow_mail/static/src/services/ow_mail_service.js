@@ -1910,8 +1910,39 @@ export const owMailService = {
             // State refresh is driven by the paired ow_mail/refresh event
         });
         // --- Silent mailbox refresh driven by the server cron ---
+        // Coalesce refreshes: the bus replays every missed `ow_mail/refresh`
+        // in one burst when a tab reconnects after sleeping. Running one
+        // bootstrap() per event floods the server (hundreds of RPC in seconds).
+        // Debounce to a single refresh, with at most one in flight and one
+        // pending queued behind it.
+        let _refreshTimer = null;
+        let _refreshing = false;
+        let _refreshAgain = false;
+        const REFRESH_DEBOUNCE_MS = 2000;
+        function scheduleRefresh() {
+            clearTimeout(_refreshTimer);
+            _refreshTimer = setTimeout(async () => {
+                _refreshTimer = null;
+                if (_refreshing) {
+                    _refreshAgain = true;
+                    return;
+                }
+                _refreshing = true;
+                try {
+                    await bootstrap();
+                } catch {
+                    // Transient failure: the next cron refresh will retry.
+                } finally {
+                    _refreshing = false;
+                }
+                if (_refreshAgain) {
+                    _refreshAgain = false;
+                    scheduleRefresh();
+                }
+            }, REFRESH_DEBOUNCE_MS);
+        }
         bus_service.subscribe("ow_mail/refresh", () => {
-            bootstrap();
+            scheduleRefresh();
         });
         // Request browser notification permission on first load
         if (typeof Notification !== "undefined" && Notification.permission === "default") {
