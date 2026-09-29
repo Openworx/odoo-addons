@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="res_config_settings_view_form" model="ir.ui.view">
+        <field name="name">res.config.settings.view.form.inherit.ow_ai</field>
+        <field name="model">res.config.settings</field>
+        <field name="inherit_id" ref="base_setup.res_config_settings_view_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//form" position="inside">
+                <app data-string="OW AI" string="OW AI" name="ow_ai" groups="ow_ai.group_ai_manager">
+                    <block title="AI Provider" name="ow_ai_provider_setting_container">
+                        <setting id="ow_ai_api_key_setting"
+                                 string="API Key"
+                                 help="Optional for endpoints without authentication. Stored server-side only; never sent back to the browser.">
+                            <field name="ow_ai_api_key" password="True" placeholder="sk-… (optional)"/>
+                            <div class="content-group">
+                                <field name="ow_ai_api_key_state" widget="badge"/>
+                                <field name="ow_ai_api_key_hint"/>
+                            </div>
+                            <div class="content-group">
+                                <button name="action_ow_ai_clear_api_key" type="object"
+                                        string="Clear key" class="btn-link" icon="east"/>
+                                <button name="action_ow_ai_test_connection" type="object"
+                                        string="Test connection" class="btn-link" icon="east"/>
+                            </div>
+                        </setting>
+                        <setting id="ow_ai_base_url_setting" string="Base URL"
+                                 help="OpenAI-compatible endpoint, e.g. https://openrouter.ai/api/v1, https://hostyourai.com/api/v1, https://api.openai.com/v1, http://ollama:11434/v1">
+                            <field name="ow_ai_base_url"/>
+                        </setting>
+                        <setting id="ow_ai_default_model_setting" string="Default Model"
+                                 help="Model id at that endpoint, e.g. openai/gpt-6-luna (OpenRouter), hyai/loes-large (HostYourAI), qwen2.5:3b (Ollama)">
+                            <field name="ow_ai_default_model"/>
+                        </setting>
+                    </block>
+                    <block title="Limits" name="ow_ai_limits_setting_container">
+                        <setting id="ow_ai_max_rounds_setting" string="Max Rounds">
+                            <field name="ow_ai_max_rounds"/>
+                        </setting>
+                        <setting id="ow_ai_max_tool_calls_per_round_setting"
+                                 string="Max Tool Calls per Round">
+                            <field name="ow_ai_max_tool_calls_per_round"/>
+                        </setting>
+                        <setting id="ow_ai_timeout_setting" string="Timeout (s)">
+                            <field name="ow_ai_timeout"/>
+                        </setting>
+                        <setting id="ow_ai_job_stale_minutes_setting"
+                                 string="Job Stale After (minutes)">
+                            <field name="ow_ai_job_stale_minutes"/>
+                        </setting>
+                        <setting id="ow_ai_max_tool_result_chars_setting"
+                                 string="Max Tool Result Characters">
+                            <field name="ow_ai_max_tool_result_chars"/>
+                        </setting>
+                        <setting id="ow_ai_max_history_chars_setting"
+                                 string="Max History Characters">
+                            <field name="ow_ai_max_history_chars"/>
+                        </setting>
+                    </block>
+                </app>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="action_ow_ai_config_settings" model="ir.actions.act_window">
+        <field name="name">Settings</field>
+        <field name="res_model">res.config.settings</field>
+        <field name="view_mode">form</field>
+        <field name="context">{'module': 'ow_ai'}</field>
+    </record>
+</odoo>

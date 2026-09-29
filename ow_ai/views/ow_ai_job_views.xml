@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="ow_ai_job_view_list" model="ir.ui.view">
+        <field name="name">ow.ai.job.view.list</field>
+        <field name="model">ow.ai.job</field>
+        <field name="arch" type="xml">
+            <list string="AI Jobs" create="false" edit="false">
+                <field name="session_id"/>
+                <field name="kind"/>
+                <field name="user_id"/>
+                <field name="state" widget="badge"
+                       decoration-danger="state == 'failed'"
+                       decoration-success="state == 'done'"
+                       decoration-info="state == 'running'"/>
+                <field name="attempt"/>
+                <field name="scheduled_at"/>
+                <field name="claimed_at"/>
+                <field name="finished_at"/>
+                <field name="error" groups="base.group_system"/>
+                <field name="can_retry" column_invisible="True"/>
+                <button name="action_retry" type="object" string="Retry" icon="refresh"
+                        groups="ow_ai.group_ai_manager" invisible="not can_retry"/>
+                <button name="action_cancel" type="object" string="Cancel" icon="close"
+                        groups="ow_ai.group_ai_manager" invisible="state not in ('pending', 'failed')"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="ow_ai_job_view_form" model="ir.ui.view">
+        <field name="name">ow.ai.job.view.form</field>
+        <field name="model">ow.ai.job</field>
+        <field name="arch" type="xml">
+            <form string="AI Job" create="false" edit="false">
+                <header>
+                    <field name="can_retry" invisible="1"/>
+                    <button name="action_retry" type="object" string="Retry"
+                            groups="ow_ai.group_ai_manager" invisible="not can_retry"/>
+                    <button name="action_cancel" type="object" string="Cancel"
+                            groups="ow_ai.group_ai_manager" invisible="state not in ('pending', 'failed')"/>
+                    <field name="state" widget="statusbar" statusbar_visible="pending,running,done,failed,cancelled"/>
+                </header>
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="session_id"/>
+                            <field name="kind"/>
+                            <field name="user_id"/>
+                            <field name="attempt"/>
+                        </group>
+                        <group>
+                            <field name="scheduled_at"/>
+                            <field name="claimed_at"/>
+                            <field name="claimed_by"/>
+                            <field name="finished_at"/>
+                        </group>
+                    </group>
+                    <group string="Error" groups="base.group_system">
+                        <field name="error" nolabel="1"/>
+                    </group>
+                    <group string="Payload" groups="base.group_system">
+                        <field name="context" widget="code" options="{'mode': 'json'}" nolabel="1"/>
+                        <field name="payload" widget="code" options="{'mode': 'json'}" nolabel="1"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="ow_ai_job_view_search" model="ir.ui.view">
+        <field name="name">ow.ai.job.view.search</field>
+        <field name="model">ow.ai.job</field>
+        <field name="arch" type="xml">
+            <search string="AI Jobs">
+                <field name="session_id"/>
+                <field name="user_id"/>
+                <filter string="Pending" name="pending" domain="[('state', '=', 'pending')]"/>
+                <filter string="Running" name="running" domain="[('state', '=', 'running')]"/>
+                <filter string="Failed" name="failed" domain="[('state', '=', 'failed')]"/>
+                <separator/>
+                <group>
+                    <filter string="Kind" name="group_kind" context="{'group_by': 'kind'}"/>
+                    <filter string="State" name="group_state" context="{'group_by': 'state'}"/>
+                    <filter string="User" name="group_user" context="{'group_by': 'user_id'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="ow_ai_job_action" model="ir.actions.act_window">
+        <field name="name">Jobs</field>
+        <field name="res_model">ow.ai.job</field>
+        <field name="view_mode">list,form</field>
+        <field name="search_view_id" ref="ow_ai_job_view_search"/>
+    </record>
+</odoo>

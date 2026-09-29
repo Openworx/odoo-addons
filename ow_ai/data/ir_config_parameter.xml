@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Defaults for missing settings only, on install and on every update:
+         see ir.config_parameter._ow_ai_set_default_params. -->
+    <function model="ir.config_parameter" name="_ow_ai_set_default_params"/>
+</odoo>

@@ -1,0 +1,203 @@
+// AI chat (`ow_ai_chat` channels): card, steps, status, answers.
+// Colors come from Bootstrap/Odoo variables; `ow_ai_chat.dark.scss` adjusts
+// the custom properties for the dark theme.
+
+:root {
+    --o-ow-ai-accent: #{rgba($o-action, .45)};
+    --o-ow-ai-accent-subtle: #{rgba($o-action, .08)};
+    --o-ow-ai-accent-hover: #{rgba($o-action, .05)};
+    --o-ow-ai-user-bubble-bg: #{rgba($o-action, .08)};
+    --o-ow-ai-code-bg: #{$gray-100};
+    --o-ow-ai-table-head-bg: #{$gray-100};
+    --o-ow-ai-shimmer-base: #{$gray-500};
+    --o-ow-ai-shimmer-highlight: #{$gray-900};
+}
+
+// -- the live card ------------------------------------------------------------
+
+.o_ow_ai_user_input_request {
+    background-color: $o-view-background-color;
+    border-color: var(--o-ow-ai-accent) !important;
+    box-shadow: $box-shadow-sm;
+
+    &:focus-visible {
+        outline: 2px solid var(--o-ow-ai-accent);
+        outline-offset: 1px;
+    }
+
+    &.o_ow_ai_busy {
+        opacity: .75;
+    }
+
+    .o_ow_ai_user_input_request_body > :last-child {
+        margin-bottom: 0;
+    }
+
+    .o_ow_ai_option {
+        cursor: pointer;
+        border: 1px solid transparent;
+
+        &:hover {
+            background-color: var(--o-ow-ai-accent-hover);
+        }
+
+        &.o_ow_ai_option_selected {
+            background-color: var(--o-ow-ai-accent-subtle);
+            border-color: var(--o-ow-ai-accent);
+        }
+    }
+
+    .o_ow_ai_option_key {
+        min-width: 1.5em;
+        font-weight: normal;
+    }
+}
+
+// the card as kept in the chat history (no buttons)
+.o_ow_ai_input_card {
+    border-left: 3px solid var(--o-ow-ai-accent);
+    padding-left: map-get($spacers, 2);
+
+    > :last-child {
+        margin-bottom: 0;
+    }
+}
+
+// -- steps ----------------------------------------------------------------------
+
+.o_ow_ai_steps_header {
+    color: $text-muted;
+    text-decoration: none;
+
+    &:hover {
+        color: $body-color;
+    }
+}
+
+.o_ow_ai_steps_list {
+    border-left: 2px solid $border-color;
+    color: $text-muted;
+
+    .o_ow_ai_step {
+        > :last-child,
+        .o_ow_ai_agent_step > :last-child {
+            margin-bottom: 0;
+        }
+    }
+}
+
+.o_ow_ai_tool_summary_row {
+    min-width: 0;
+
+    .o_ow_ai_tool_summary_toggle {
+        --btn-font-weight: normal;
+        text-decoration: none;
+        font-size: inherit;
+    }
+
+    .o_ow_ai_tool_params pre {
+        max-height: 16rem;
+        overflow: auto;
+    }
+}
+
+// -- status line ----------------------------------------------------------------
+
+.o_ow_ai_shimmer {
+    background: linear-gradient(
+        90deg,
+        var(--o-ow-ai-shimmer-base) 0%,
+        var(--o-ow-ai-shimmer-highlight) 50%,
+        var(--o-ow-ai-shimmer-base) 100%
+    );
+    background-size: 200% 100%;
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    animation: o_ow_ai_shimmer 1.8s linear infinite;
+}
+
+@keyframes o_ow_ai_shimmer {
+    from {
+        background-position: 100% 0;
+    }
+    to {
+        background-position: -100% 0;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .o_ow_ai_shimmer {
+        animation: none;
+        background: none;
+        color: $text-muted;
+    }
+}
+
+// -- messages -------------------------------------------------------------------
+
+// the user's messages on the right, in the Discuss app too (mail only does it
+// in chat windows)
+.o-mail-Message.o_ow_ai_user_message {
+    flex-direction: row-reverse;
+
+    .o-mail-Message-core,
+    .o-mail-Message-textContent {
+        flex-direction: row-reverse;
+    }
+
+    .o-mail-Message-header {
+        justify-content: flex-end;
+    }
+
+    .o-mail-Message-author {
+        display: none;
+    }
+
+    .o-mail-Message-body:not(.o-note) {
+        background-color: var(--o-ow-ai-user-bubble-bg);
+        border-radius: $border-radius-lg;
+    }
+}
+
+.o_ow_ai_agent_answer {
+    .o_ow_ai_table {
+        width: auto;
+        max-width: 100%;
+        margin: map-get($spacers, 1) 0;
+        font-size: .95em;
+
+        th {
+            background-color: var(--o-ow-ai-table-head-bg);
+        }
+    }
+
+    .o_ow_ai_quote {
+        border-left: 3px solid $border-color;
+        padding-left: map-get($spacers, 2);
+        color: $text-muted;
+    }
+}
+
+.o_ow_ai_pre,
+.o_ow_ai_agent_answer pre {
+    background-color: var(--o-ow-ai-code-bg);
+    border: 1px solid $border-color;
+    border-radius: $border-radius;
+    padding: map-get($spacers, 2);
+    font-size: .85em;
+    white-space: pre-wrap;
+    word-break: break-word;
+}
+
+// -- chat intro -------------------------------------------------------------------
+
+.o_ow_ai_chat_intro_avatar {
+    width: 40px;
+    height: 40px;
+
+    .o-mail-ChatWindow & {
+        width: 28px;
+        height: 28px;
+    }
+}

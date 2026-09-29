@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+
+<t t-inherit="mail.Composer" t-inherit-mode="extension">
+    <xpath expr="//FileUploader" position="attributes">
+        <attribute name="acceptedFileExtensions">this.owAiAcceptedFileTypes</attribute>
+        <attribute name="allowedMIMETypes">this.owAiAllowedMimeTypes</attribute>
+    </xpath>
+    <!-- the Discuss app does not pass `disabled` (chat windows do) -->
+    <xpath expr="//textarea[hasclass('o-mail-Composer-input')]" position="attributes">
+        <attribute name="t-att-disabled" add="or this.isOwAiLocked" separator=" "/>
+    </xpath>
+    <!-- the thread shows the assistant's own status instead of "… is typing" -->
+    <xpath expr="//*[hasclass('o-discuss-Typing')]" position="attributes">
+        <attribute name="t-if" add="and !this.isOwAiChat" separator=" "/>
+    </xpath>
+</t>
+
+</templates>

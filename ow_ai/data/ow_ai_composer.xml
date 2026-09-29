@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+        <record id="composer_systray" model="ow.ai.composer">
+            <field name="name">Ask AI (systray)</field>
+            <field name="interface_key">systray</field>
+            <field name="agent_id" ref="ow_ai.agent_default"/>
+            <field name="is_system_default" eval="True"/>
+        </record>
+        <record id="composer_systray_button_1" model="ow.ai.prompt.button">
+            <field name="name">What can you help me with?</field>
+            <field name="prompt">What can you help me with?</field>
+            <field name="sequence">10</field>
+            <field name="composer_id" ref="composer_systray"/>
+        </record>
+        <record id="composer_systray_button_2" model="ow.ai.prompt.button">
+            <field name="name">Summarize my open tasks for today</field>
+            <field name="prompt">Summarize my open tasks for today.</field>
+            <field name="sequence">20</field>
+            <field name="composer_id" ref="composer_systray"/>
+        </record>
+        <record id="composer_systray_button_3" model="ow.ai.prompt.button">
+            <field name="name">Show the top customers this year</field>
+            <field name="prompt">Show the top customers this year.</field>
+            <field name="sequence">30</field>
+            <field name="composer_id" ref="composer_systray"/>
+        </record>
+
+        <record id="composer_record_chat" model="ow.ai.composer">
+            <field name="name">Chat about a record</field>
+            <field name="interface_key">record_chat</field>
+            <field name="agent_id" ref="ow_ai.agent_default"/>
+            <field name="default_prompt">The user is looking at a specific record; use its data in your answer.</field>
+        </record>
+        <record id="composer_record_chat_button_1" model="ow.ai.prompt.button">
+            <field name="name">Summarize this record</field>
+            <field name="prompt">Summarize this record.</field>
+            <field name="sequence">10</field>
+            <field name="composer_id" ref="composer_record_chat"/>
+        </record>
+        <record id="composer_record_chat_button_2" model="ow.ai.prompt.button">
+            <field name="name">What should I do next with this record?</field>
+            <field name="prompt">What should I do next with this record?</field>
+            <field name="sequence">20</field>
+            <field name="composer_id" ref="composer_record_chat"/>
+        </record>
+    </data>
+</odoo>

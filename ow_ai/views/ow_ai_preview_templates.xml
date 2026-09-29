@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="preview_create" name="AI Create Records Preview">
+        <div class="o_ow_ai_preview">
+            <p t-if="explanation" t-out="explanation"/>
+            <p>
+                <t t-out="len(records)"/> <t t-out="model_label"/> record(s) will be created:
+            </p>
+            <table t-foreach="records" t-as="record" class="table table-sm o_ow_ai_preview">
+                <tbody>
+                    <tr t-foreach="record" t-as="row">
+                        <th t-out="row['label']"/>
+                        <td t-out="row['value']"/>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </template>
+
+    <template id="preview_update" name="AI Update Records Preview">
+        <div class="o_ow_ai_preview">
+            <p t-if="explanation" t-out="explanation"/>
+            <p>
+                <t t-out="total_count"/> <t t-out="model_label"/> record(s) will be updated:
+            </p>
+            <div t-foreach="records" t-as="record">
+                <p><strong t-out="record['display_name']"/></p>
+                <table class="table table-sm o_ow_ai_preview">
+                    <thead>
+                        <tr><th>Field</th><th>Old value</th><th>New value</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr t-foreach="record['changes']" t-as="change">
+                            <th t-out="change['label']"/>
+                            <td t-out="change['old']"/>
+                            <td t-out="change['new']"/>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <p t-if="more_count">…and <t t-out="more_count"/> more record(s) not shown.</p>
+        </div>
+    </template>
+</odoo>

@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+
+<t t-name="ow_ai.ToggleIndicator">
+    <span class="o_ow_ai_toggle form-check form-switch mb-0 ms-auto ps-5 pe-none" aria-hidden="true">
+        <input type="checkbox" class="form-check-input" tabindex="-1" t-att-checked="this.props.checked"/>
+    </span>
+</t>
+
+</templates>

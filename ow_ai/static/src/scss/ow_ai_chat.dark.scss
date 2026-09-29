@@ -1,0 +1,12 @@
+// Dark theme adjustments of `ow_ai_chat.scss` (`web.assets_web_dark`). Only
+// fixed black/white tints: the gray scale itself depends on the dark theme.
+:root {
+    --o-ow-ai-accent: #{rgba($o-action, .6)};
+    --o-ow-ai-accent-subtle: #{rgba($o-action, .2)};
+    --o-ow-ai-accent-hover: #{rgba($o-action, .12)};
+    --o-ow-ai-user-bubble-bg: #{rgba($o-action, .22)};
+    --o-ow-ai-code-bg: #{rgba($black, .25)};
+    --o-ow-ai-table-head-bg: #{rgba($white, .06)};
+    --o-ow-ai-shimmer-base: #{rgba($white, .45)};
+    --o-ow-ai-shimmer-highlight: #{rgba($white, .95)};
+}

@@ -1,0 +1,2370 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# 	* ow_ai
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 20.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-09-29 15:31+0000\n"
+"PO-Revision-Date: 2026-09-29 15:32+0000\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"Language: de_DE\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#. module: ow_ai
+#. odoo-python
+#: code:addons/ow_ai/models/ow_ai_agent.py:0
+msgid "%s (copy)"
+msgstr "%s (Kopie)"
+
+#. module: ow_ai
+#: model:ir.model.constraint,message:ow_ai.constraint_ow_ai_session_loop_state_round_consistency
+msgid ""
+"A session that is not ready must have a positive round, a round limit at "
+"least as high, and a requesting user."
+msgstr ""
+"Eine Sitzung, die nicht bereit ist, muss eine positive Runde, ein mindestens"
+" ebenso hohes Rundenlimit und einen anfragenden Benutzer haben."
+
+#. module: ow_ai
+#: model:ir.model.constraint,message:ow_ai.constraint_ow_ai_session_loop_state_waiting_consistency
+msgid ""
+"A session waiting on the user must have a resume token and a pending tool "
+"call."
+msgstr ""
+"Eine Sitzung, die auf den Benutzer wartet, muss ein Fortsetzungstoken und "
+"einen ausstehenden Werkzeugaufruf haben."
+
+#. module: ow_ai
+#: model:res.groups.privilege,name:ow_ai.privilege_ai
+msgid "AI"
+msgstr "KI"
+
+#. module: ow_ai
+#: model:ir.model,name:ow_ai.model_ow_ai_agent
+#: model_terms:ir.ui.view,arch_db:ow_ai.ow_ai_agent_view_form
+msgid "AI Agent"
+msgstr "KI-Agent"
+
+#. module: ow_ai
+#: model:ir.model.fields,field_description:ow_ai.field_res_partner__ow_ai_agent_partner
+#: model:ir.model.fields,field_description:ow_ai.field_res_users__ow_ai_agent_partner
+msgid "AI Agent Contact"
+msgstr "KI-Agent-Kontakt"
+
+#. module: ow_ai
+#: model_terms:ir.ui.view,arch_db:ow_ai.ow_ai_agent_view_kanban
+#: model_terms:ir.ui.view,arch_db:ow_ai.ow_ai_agent_view_list
+msgid "AI Agents"
+msgstr "KI-Agenten"
+
+#. module: ow_ai
+#: model:ir.module.module,shortdesc:base.module_ow_ai
+msgid "OW AI Assistant"
+msgstr "OW AI Assistant"
+
+#. module: ow_ai
+#: model:ir.model.fields.selection,name:ow_ai.selection__discuss_channel__channel_type__ow_ai_chat
+msgid "AI Chat"
+msgstr "KI-Chat"
+
+#. module: ow_ai
+#: model:ir.model,name:ow_ai.model_ow_ai_composer
+msgid "AI Composer Configuration"
+msgstr "Konfiguration des KI-Standard-Prompts"
+
+#. module: ow_ai
+#: model:ir.model,name:ow_ai.model_ow_ai_prompt_button
+msgid "AI Composer Prompt Button"
+msgstr "KI-Prompt-Schaltfläche"
+
+#. module: ow_ai
+#: model:ir.model,name:ow_ai.model_ow_ai_job
+#: model_terms:ir.ui.view,arch_db:ow_ai.ow_ai_job_view_form
+msgid "AI Job"
+msgstr "KI-Auftrag"
+
+#. module: ow_ai
+#: model_terms:ir.ui.view,arch_db:ow_ai.ow_ai_job_view_list
+#: model_terms:ir.ui.view,arch_db:ow_ai.ow_ai_job_view_search
+msgid "AI Jobs"
+msgstr "KI-Aufträge"
+
+#. module: ow_ai
+#: model:res.groups,name:ow_ai.group_ai_manager
+msgid "AI Manager"
+msgstr "KI-Manager"
+
+#. module: ow_ai
+#: model_terms:ir.ui.view,arch_db:ow_ai.res_config_settings_view_form
+msgid "AI Provider"
+msgstr "KI-Anbieter"
+
+#. module: ow_ai
+#: model:ir.model,name:ow_ai.model_ow_ai_session
+#: model_terms:ir.ui.view,arch_db:ow_ai.ow_ai_session_view_form
+msgid "AI Session"
+msgstr "KI-Sitzung"
+
+#. module: ow_ai
+#: model:ir.model,name:ow_ai.model_ow_ai_session_event
+msgid "AI Session Event"
+msgstr "KI-Sitzungsereignis"
+
+#. module: ow_ai
+#: model_terms:ir.ui.view,arch_db:ow_ai.ow_ai_session_view_list
+#: model_terms:ir.ui.view,arch_db:ow_ai.ow_ai_session_view_search
+msgid "AI Sessions"
+msgstr "KI-Sitzungen"
+
+#. module: ow_ai
+#: model:ir.model,name:ow_ai.model_ow_ai_skill
+#: model_terms:ir.ui.view,arch_db:ow_ai.ow_ai_skill_view_form
+msgid "AI Skill"
+msgstr "KI-Fähigkeit"
+
+#. module: ow_ai
+#: model_terms:ir.ui.view,arch_db:ow_ai.ow_ai_skill_view_list
+msgid "AI Skills"
+msgstr "KI-Fähigkeiten"
+
+#. module: ow_ai
+#: model:ir.model,name:ow_ai.model_ow_ai_tool
+#: model_terms:ir.ui.view,arch_db:ow_ai.ow_ai_tool_view_form
+msgid "AI Tool"
+msgstr "KI-Werkzeug"
+
+#. module: ow_ai
+#: model_terms:ir.ui.view,arch_db:ow_ai.ow_ai_tool_view_list
+msgid "AI Tools"
+msgstr "KI-Werkzeuge"
+
+#. module: ow_ai
+#: model_terms:ir.ui.view,arch_db:ow_ai.ow_ai_usage_view_graph
+#: model_terms:ir.ui.view,arch_db:ow_ai.ow_ai_usage_view_list
+#: model_terms:ir.ui.view,arch_db:ow_ai.ow_ai_usage_view_pivot
+#: model_terms:ir.ui.view,arch_db:ow_ai.ow_ai_usage_view_search
+msgid "AI Usage"
+msgstr "KI-Nutzung"
+
+#. module: ow_ai
+#: model:ir.model,name:ow_ai.model_ow_ai_usage
+msgid "AI Usage Log"
+msgstr "KI-Nutzungsprotokoll"
+
+#. module: ow_ai
+#: model:res.groups,name:ow_ai.group_ai_user
+msgid "AI User"
+msgstr "KI-Benutzer"
+
+#. module: ow_ai
+#. odoo-javascript
+#: code:addons/ow_ai/static/src/discuss/composer_actions_patch.js:0
+msgid "AI chat settings"
+msgstr "KI-Chat-Einstellungen"
+
+#. module: ow_ai
+#. odoo-python
+#: code:addons/ow_ai/models/discuss_channel.py:0
+#: code:addons/ow_ai/models/discuss_channel_member.py:0
+msgid "AI chats cannot have additional members."
+msgstr "KI-Chats können keine weiteren Mitglieder haben."
+
+#. module: ow_ai
+#: model:ir.actions.server,name:ow_ai.ir_cron_job_runner_ir_actions_server
+msgid "AI: run agent jobs"
+msgstr "KI: Agentenaufträge ausführen"
+
+#. module: ow_ai
+#: model:ir.actions.server,name:ow_ai.ir_cron_job_sweeper_ir_actions_server
+msgid "AI: sweep stale jobs"
+msgstr "KI: veraltete Aufträge bereinigen"
+
+#. module: ow_ai
+#: model:ir.model.fields,field_description:ow_ai.field_res_config_settings__ow_ai_api_key
+#: model_terms:ir.ui.view,arch_db:ow_ai.res_config_settings_view_form
+msgid "API Key"
+msgstr "API-Schlüssel"
+
+#. module: ow_ai
+#: model:ir.model.fields,field_description:ow_ai.field_res_config_settings__ow_ai_api_key_hint
+msgid "API Key Hint"
+msgstr "API-Schlüssel-Hinweis"
+
+#. module: ow_ai
+#: model:ir.model.fields,field_description:ow_ai.field_res_config_settings__ow_ai_api_key_state
+msgid "API Key Status"
+msgstr "API-Schlüssel-Status"
+
+#. module: ow_ai
+#: model_terms:ir.ui.view,arch_db:ow_ai.ow_ai_session_view_form
+msgid "Abort pending"
+msgstr "Warten abbrechen"
+
+#. module: ow_ai
+#: model:ir.model.fields,field_description:ow_ai.field_ow_ai_agent__active
+#: model:ir.model.fields,field_description:ow_ai.field_ow_ai_composer__active
+#: model:ir.model.fields,field_description:ow_ai.field_ow_ai_session__active
+#: model:ir.model.fields,field_description:ow_ai.field_ow_ai_skill__active
+#: model:ir.model.fields,field_description:ow_ai.field_ow_ai_tool__active
+msgid "Active"
+msgstr "Aktiv"
+
+#. module: ow_ai
+#: model:ir.model.fields,field_description:ow_ai.field_ow_ai_composer__agent_id
+#: model:ir.model.fields,field_description:ow_ai.field_ow_ai_session__agent_id
+#: model:ir.model.fields,field_description:ow_ai.field_ow_ai_skill__agent_ids
+#: model:ir.model.fields,field_description:ow_ai.field_ow_ai_usage__agent_id
+#: model_terms:ir.ui.view,arch_db:ow_ai.ow_ai_session_view_search
+#: model_terms:ir.ui.view,arch_db:ow_ai.ow_ai_usage_view_search
+msgid "Agent"
+msgstr "Agent"
+
+#. module: ow_ai
+#: model_terms:ir.ui.view,arch_db:ow_ai.ow_ai_agent_view_form
+msgid "Agent name"
+msgstr "Name des Agenten"
+
+#. module: ow_ai
+#: model:ir.model.fields.selection,name:ow_ai.selection__ow_ai_job__kind__agent_round
+msgid "Agent round"
+msgstr "Agentenrunde"
+
+#. module: ow_ai
+#: model:ir.module.module,summary:base.module_ow_ai
+msgid ""
+"Agentic AI assistant for Odoo Community on any OpenAI-compatible provider"
+msgstr ""
+"Agentischer KI-Assistent für Odoo Community mit jedem OpenAI-kompatiblen "
+"Anbieter"
+
+#. module: ow_ai
+#: model:ir.actions.act_window,name:ow_ai.ow_ai_agent_action
+#: model:ir.ui.menu,name:ow_ai.menu_ai_agents
+msgid "Agents"
+msgstr "Agenten"
+
+#. module: ow_ai
+#: model:ow.ai.tool,thinking_text:ow_ai.tool_read_group
+msgid "Aggregating data"
+msgstr "Daten werden aggregiert"
+
+#. module: ow_ai
+#. odoo-python
+#: code:addons/ow_ai/models/discuss_channel.py:0
+msgid "An AI agent can only be set on a channel of type: %(types)s."
+msgstr ""
+"Ein KI-Agent kann nur für einen Kanal dieses Typs festgelegt werden: "
+"%(types)s."
+
+#. module: ow_ai
+#. odoo-python
+#: code:addons/ow_ai/models/ow_ai_agent.py:0
+msgid "An AI agent's contact is created by the assistant itself."
+msgstr "Der Kontakt eines KI-Agenten wird vom Assistenten selbst angelegt."
+
+#. module: ow_ai
+#. odoo-python
+#: code:addons/ow_ai/models/ow_ai_agent.py:0
+msgid ""
+"An AI agent's contact is created by the assistant itself; its name and image"
+" belong to the contact."
+msgstr ""
+"Der Kontakt eines KI-Agenten wird vom Assistenten selbst angelegt; sein Name"
+" und Bild gehören zum Kontakt."
+
+#. module: ow_ai
+#. odoo-python
+#: code:addons/ow_ai/models/ow_ai_agent.py:0
+msgid "An AI chat channel must have exactly 2 members."
+msgstr "Ein KI-Chatkanal muss genau 2 Mitglieder haben."
+
+#. module: ow_ai
+#: model_terms:ir.ui.view,arch_db:ow_ai.ow_ai_session_view_search
+msgid "Archived"
+msgstr "Archiviert"
+
+#. module: ow_ai
+#. odoo-javascript
+#: code:addons/ow_ai/static/src/web/systray_action.xml:0
+msgid "Ask AI"
+msgstr "KI fragen"
+
+#. module: ow_ai
+#. odoo-javascript
+#: code:addons/ow_ai/static/src/web/form_controller_patch.js:0
+msgid "Ask AI about this record"
+msgstr "KI zu diesem Datensatz fragen"
+
+#. module: ow_ai
+#. odoo-javascript
+#: code:addons/ow_ai/static/src/web/command_palette.js:0
+msgid "Ask AI: %s"
+msgstr "KI fragen: %s"
+
+#. module: ow_ai
+#: model:ow.ai.tool,name:ow_ai.tool_ask_user_question
+msgid "Ask User Question"
+msgstr "Benutzer eine Frage stellen"
+
+#. module: ow_ai
+#. odoo-javascript
+#: code:addons/ow_ai/static/src/discuss/messaging_menu_model_patch.js:0
+msgid "Ask the assistant about your data, or have it do the work."
+msgstr ""
+"Fragen Sie den Assistenten zu Ihren Daten oder lassen Sie ihn die Arbeit "
+"erledigen."
+
+#. module: ow_ai
+#: model:ow.ai.tool,description:ow_ai.tool_ask_user_question
+msgid ""
+"Ask the user a short clarifying question when a request is ambiguous or a "
+"choice must be made before you can continue. Offer 2 to 4 concrete options; "
+"ask only one question at a time and wait for the answer before doing "
+"anything else."
+msgstr ""
+"Stellen Sie dem Benutzer eine kurze Rückfrage, wenn eine Anfrage mehrdeutig "
+"ist oder eine Entscheidung getroffen werden muss, bevor Sie fortfahren "
+"können. Bieten Sie 2 bis 4 konkrete Optionen an; stellen Sie jeweils nur "
+"eine Frage und warten Sie auf die Antwort, bevor Sie etwas anderes tun."
+
+#. module: ow_ai
+#. odoo-javascript
+#: code:addons/ow_ai/static/src/discuss/ow_ai_chat_intro.xml:0
+#: model:ir.model.fields.selection,name:ow_ai.selection__ow_ai_session_event__role__assistant
+msgid "Assistant"
+msgstr "Assistent"
+
+#. module: ow_ai
+#. odoo-python
+#: code:addons/ow_ai/models/mail_message.py:0
+msgid "Attached files: %(names)s"
+msgstr "Angehängte Dateien: %(names)s"
+
+#. module: ow_ai
+#: model:ir.model,name:ow_ai.model_ir_attachment
+msgid "Attachment"
+msgstr "Dateianhang"
+
+#. module: ow_ai
+#: model:ir.model.fields,field_description:ow_ai.field_ow_ai_job__attempt
+msgid "Attempt"
+msgstr "Versuch"
+
+#. module: ow_ai
+#: model:ir.model.fields,field_description:ow_ai.field_ow_ai_session__auto_confirm
+msgid "Auto Confirm"
+msgstr "Automatisch bestätigen"
+
+#. module: ow_ai
+#. odoo-javascript
+#: code:addons/ow_ai/static/src/discuss/composer_actions_patch.js:0
+msgid "Auto-approve actions"
+msgstr "Aktionen automatisch genehmigen"
+
+#. module: ow_ai
+#: model:ir.model.fields,field_description:ow_ai.field_ow_ai_agent__avatar_128
+msgid "Avatar 128"
+msgstr "Avatar 128"
+
+#. module: ow_ai
+#: model:ir.model,name:ow_ai.model_base
+msgid "Base"
+msgstr "Basis"
+
+#. module: ow_ai
+#: model:ir.model.fields,field_description:ow_ai.field_res_config_settings__ow_ai_base_url
+#: model_terms:ir.ui.view,arch_db:ow_ai.res_config_settings_view_form
+msgid "Base URL"
+msgstr "Basis-URL"
+
+#. module: ow_ai
+#: model:ir.model.fields.selection,name:ow_ai.selection__ow_ai_tool__kind__builtin
+msgid "Built-in"
+msgstr "Integriert"
+
+#. module: ow_ai
+#: model:ir.model.fields,field_description:ow_ai.field_ow_ai_tool__builtin_key
+msgid "Builtin Key"
+msgstr "Integrierter Schlüssel"
+
+#. module: ow_ai
+#: model:ir.model.fields,field_description:ow_ai.field_ow_ai_usage__cached_tokens
+msgid "Cached Tokens"
+msgstr "Zwischengespeicherte Tokens"
+
+#. module: ow_ai
+#: model:ir.model.fields,field_description:ow_ai.field_ow_ai_job__can_retry
+msgid "Can Retry"
+msgstr "Kann wiederholt werden"
+
+#. module: ow_ai
+#: model_terms:ir.ui.view,arch_db:ow_ai.ow_ai_job_view_form
+#: model_terms:ir.ui.view,arch_db:ow_ai.ow_ai_job_view_list
+msgid "Cancel"
+msgstr "Abbrechen"
+
+#. module: ow_ai
+#: model:ir.model.fields.selection,name:ow_ai.selection__ow_ai_job__state__cancelled
+msgid "Cancelled"
+msgstr "Abgebrochen"
+
+#. module: ow_ai
+#: model:ow.ai.skill,description:ow_ai.skill_update_records
+msgid ""
+"Change the values of existing records after showing the user exactly what "
+"will change (old value to new value) and getting their confirmation."
+msgstr ""
+"Die Werte vorhandener Datensätze ändern, nachdem dem Benutzer genau gezeigt "
+"wurde, was sich ändert (alter Wert zu neuem Wert), und er dies bestätigt "
+"hat."
+
+#. module: ow_ai
+#: model:ow.ai.tool,description:ow_ai.tool_update_records
+msgid ""
+"Change the values of records that already exist. Always call get_fields "
+"first, and search beforehand for the exact records you mean to change, so "
+"the domain you pass here targets only those; a domain that would match every"
+" record on the model (an empty domain, or an always-true condition such as "
+"an id filter every record satisfies) is refused, on purpose. \"updates\" is "
+"a list of {\"model_name\", \"domain\", \"changes\"} groups (max 50; usually "
+"you only need one), each matching at most 200 records; each \"changes\" item"
+" is {\"field\": technical field name, \"value\": the new value, "
+"\"x2m_commands\": null or a JSON string for many2many/one2many fields only}."
+" Use \"value\" for every field except many2many/one2many ones, where "
+"\"x2m_commands\" must instead be a JSON string such as {\"link\": [ids to "
+"add]}, {\"unlink\": [ids to remove]}, {\"set\": [ids that should be the only"
+" ones linked]} or {\"clear\": true} (only existing records can be linked; "
+"never invent an id). Write a short, plain-language explanation of the "
+"change, and when a field being changed represents a status or stage, also "
+"explain what changing it will do. This tool always shows the user a preview "
+"of the old and new value of every affected record first and only writes to "
+"the database once they confirm; do not tell the user something was updated "
+"until you see the confirmed result."
+msgstr ""
+"Ändern Sie die Werte bereits vorhandener Datensätze. Rufen Sie immer zuerst "
+"get_fields auf und suchen Sie vorher genau die Datensätze, die Sie ändern "
+"möchten, damit die Domain, die Sie hier übergeben, nur diese trifft; eine "
+"Domain, die auf jeden Datensatz des Modells zutreffen würde (eine leere "
+"Domain oder eine immer wahre Bedingung, etwa ein ID-Filter, den jeder "
+"Datensatz erfüllt), wird absichtlich abgelehnt. \"updates\" ist eine Liste "
+"von {\"model_name\", \"domain\", \"changes\"}-Gruppen (max. 50; meist "
+"brauchen Sie nur eine), die jeweils höchstens 200 Datensätze treffen; jedes "
+"\"changes\"-Element ist {\"field\": technischer Feldname, \"value\": der "
+"neue Wert, \"x2m_commands\": null oder ein JSON-String, nur für "
+"many2many/one2many-Felder}. Verwenden Sie \"value\" für jedes Feld außer "
+"many2many/one2many-Feldern, bei denen stattdessen \"x2m_commands\" ein JSON-"
+"String sein muss, etwa {\"link\": [hinzuzufügende IDs]}, {\"unlink\": [zu "
+"entfernende IDs]}, {\"set\": [IDs, die als einzige verknüpft sein sollen]} "
+"oder {\"clear\": true} (nur vorhandene Datensätze können verknüpft werden; "
+"erfinden Sie nie eine ID). Schreiben Sie eine kurze, leicht verständliche "
+"Erklärung der Änderung, und wenn ein geändertes Feld einen Status oder eine "
+"Phase darstellt, erklären Sie auch, was die Änderung bewirkt. Dieses "
+"Werkzeug zeigt dem Benutzer immer zuerst eine Vorschau des alten und neuen "
+"Werts jedes betroffenen Datensatzes und schreibt erst in die Datenbank, wenn"
+" er bestätigt; sagen Sie dem Benutzer nicht, dass etwas aktualisiert wurde, "
+"bevor Sie das bestätigte Ergebnis sehen."
+
+#. module: ow_ai
+#: model:ir.model.fields,help:ow_ai.field_ow_ai_tool__is_write
+msgid "Changes data"
+msgstr "Ändert Daten"
+
+#. module: ow_ai
+#: model:ir.model.fields,field_description:ow_ai.field_ow_ai_session__channel_id
+msgid "Channel"
+msgstr "Kanal"
+
+#. module: ow_ai
+#: model:ir.model,name:ow_ai.model_discuss_channel_member
+msgid "Channel Member"
+msgstr "Kanalmitglied"
+
+#. module: ow_ai
+#: model:ir.model.fields.selection,name:ow_ai.selection__ow_ai_job__kind__channel_title
+msgid "Channel title"
+msgstr "Kanaltitel"
+
+#. module: ow_ai
+#: model:ir.model.fields.selection,name:ow_ai.selection__ow_ai_usage__kind__chat
+msgid "Chat"
+msgstr "Chat"
+
+#. module: ow_ai
+#: model:ir.model.fields.selection,name:ow_ai.selection__ow_ai_composer__interface_key__record_chat
+msgid "Chat about a record"
+msgstr "Chat zu einem Datensatz"
+
+#. module: ow_ai
+#: model:ir.model.fields,help:ow_ai.field_discuss_channel__channel_type
+msgid ""
+"Chat is private and unique between 2 persons. Group is private among invited"
+" persons. Channel can be freely joined (depending on its configuration)."
+msgstr ""
+"Der Chat ist privat und nur zwischen 2 Personen. Die Gruppe ist privat für "
+"die eingeladenen Personen. Einem Kanal kann frei beigetreten werden "
+"(abhängig von seiner Konfiguration)."
+
+#. module: ow_ai
+#: model:ir.model.fields.selection,name:ow_ai.selection__ow_ai_usage__kind__title
+msgid "Chat title"
+msgstr "Chat-Titel"
+
+#. module: ow_ai
+#: model:ir.model.fields,field_description:ow_ai.field_ow_ai_job__claimed_at
+msgid "Claimed At"
+msgstr "Übernommen am"
+
+#. module: ow_ai
+#: model:ir.model.fields,field_description:ow_ai.field_ow_ai_job__claimed_by
+msgid "Claimed By"
+msgstr "Übernommen von"
+
+#. module: ow_ai
+#: model_terms:ir.ui.view,arch_db:ow_ai.res_config_settings_view_form
+msgid "Clear key"
+msgstr "Schlüssel löschen"
+
+#. module: ow_ai
+#: model:ir.model.fields,field_description:ow_ai.field_ow_ai_usage__company_id
+#: model_terms:ir.ui.view,arch_db:ow_ai.ow_ai_usage_view_search
+msgid "Company"
+msgstr "Unternehmen"
+
+#. module: ow_ai
+#: model_terms:ir.ui.view,arch_db:ow_ai.ow_ai_usage_view_list
+msgid "Completion"
+msgstr "Vervollständigung"
+
+#. module: ow_ai
+#: model:ir.model.fields,field_description:ow_ai.field_ow_ai_usage__completion_tokens
+msgid "Completion Tokens"
+msgstr "Vervollständigungs-Tokens"
+
+#. module: ow_ai
+#: model:ir.model.fields,field_description:ow_ai.field_ow_ai_prompt_button__composer_id
+#: model:ir.model.fields,field_description:ow_ai.field_ow_ai_session__composer_id
+msgid "Composer"
+msgstr "Standard-Prompt"
+
+#. module: ow_ai
+#: model_terms:ir.ui.view,arch_db:ow_ai.ow_ai_composer_view_form
+msgid "Composer name"
+msgstr "Name des Standard-Prompts"
+
+#. module: ow_ai
+#: model:ow.ai.tool,name:ow_ai.tool_compute_date
+msgid "Compute Date"
+msgstr "Datum berechnen"
+
+#. module: ow_ai
+#: model:ow.ai.tool,thinking_text:ow_ai.tool_compute_date
+msgid "Computing date"
+msgstr "Datum wird berechnet"
+
+#. module: ow_ai
+#: model:ir.model,name:ow_ai.model_res_config_settings
+msgid "Config Settings"
+msgstr "Konfigurationseinstellungen"
+
+#. module: ow_ai
+#: model:ir.ui.menu,name:ow_ai.menu_ai_configuration
+msgid "Configuration"
+msgstr "Konfiguration"
+
+#. module: ow_ai
+#: model:ir.model,name:ow_ai.model_res_partner
+msgid "Contact"
+msgstr "Kontakt"
+
+#. module: ow_ai
+#: model:ir.model.fields,field_description:ow_ai.field_ow_ai_job__context
+msgid "Context"
+msgstr "Kontext"
+
+#. module: ow_ai
+#: model:ir.model.fields,field_description:ow_ai.field_discuss_channel__channel_type
+msgid "Conversation Type"
+msgstr "Art der Unterhaltung"
+
+#. module: ow_ai
+#: model:ir.model.fields,field_description:ow_ai.field_ow_ai_usage__cost
+#: model_terms:ir.ui.view,arch_db:ow_ai.ow_ai_session_view_form
+#: model_terms:ir.ui.view,arch_db:ow_ai.ow_ai_usage_view_list
+msgid "Cost"
+msgstr "Kosten"
+
+#. module: ow_ai
+#: model:ow.ai.skill,name:ow_ai.skill_create_records
+#: model:ow.ai.tool,name:ow_ai.tool_create_records
+msgid "Create Records"
+msgstr "Datensätze erstellen"
+
+#. module: ow_ai
+#: model:ow.ai.skill,description:ow_ai.skill_create_records
+msgid ""
+"Create new records (contacts, tasks, leads, and anything else the user has "
+"access to) after showing the user exactly what will be created and getting "
+"their confirmation."
+msgstr ""
+"Neue Datensätze erstellen (Kontakte, Aufgaben, Leads und alles andere, "
+"worauf der Benutzer Zugriff hat), nachdem dem Benutzer genau gezeigt wurde, "
+"was erstellt wird, und er dies bestätigt hat."
+
+#. module: ow_ai
+#: model:ow.ai.tool,description:ow_ai.tool_create_records
+msgid ""
+"Create one or more new records on a model. Always call get_fields on the "
+"model first so you use its real field names, types and required fields; "
+"never guess a field name or invent an id. Write a short, plain-language "
+"explanation of what you are about to create and why, so the user can review "
+"it before anything happens. \"values\" is a list of records to create (max "
+"20); each record's \"field_values\" is a list of {\"field\": technical field"
+" name, \"value\": the value to set, \"x2m_link_ids\": an id or list of ids} "
+"entries. Use \"value\" for every field except many2many/one2many ones: for a"
+" many2one, \"value\" is the target record's id (search for it first, e.g. "
+"with search or read_records, rather than guessing it); for "
+"many2many/one2many fields leave \"value\" empty and put the ids of the "
+"existing records to link in \"x2m_link_ids\" instead (this tool can only "
+"link existing records, it cannot create related records in the same call). "
+"This tool always shows the user a preview of exactly what will be created "
+"first and only writes to the database once they confirm; do not tell the "
+"user something was created until you see the confirmed result."
+msgstr ""
+"Erstellen Sie einen oder mehrere neue Datensätze in einem Modell. Rufen Sie "
+"immer zuerst get_fields für das Modell auf, damit Sie dessen echte "
+"Feldnamen, Typen und Pflichtfelder verwenden; raten Sie nie einen Feldnamen "
+"und erfinden Sie nie eine ID. Schreiben Sie eine kurze, leicht verständliche"
+" Erklärung dessen, was Sie erstellen wollen und warum, damit der Benutzer es"
+" prüfen kann, bevor etwas geschieht. \"values\" ist eine Liste der zu "
+"erstellenden Datensätze (max. 20); die \"field_values\" jedes Datensatzes "
+"sind eine Liste von {\"field\": technischer Feldname, \"value\": der zu "
+"setzende Wert, \"x2m_link_ids\": eine ID oder eine Liste von IDs}-Einträgen."
+" Verwenden Sie \"value\" für jedes Feld außer many2many/one2many-Feldern: "
+"Bei einem many2one ist \"value\" die ID des Zieldatensatzes (suchen Sie sie "
+"zuerst, z. B. mit search oder read_records, statt sie zu raten); lassen Sie "
+"bei many2many/one2many-Feldern \"value\" leer und tragen Sie stattdessen die"
+" IDs der zu verknüpfenden vorhandenen Datensätze in \"x2m_link_ids\" ein "
+"(dieses Werkzeug kann nur vorhandene Datensätze verknüpfen, keine "
+"verknüpften Datensätze im selben Aufruf erstellen). Dieses Werkzeug zeigt "
+"dem Benutzer immer zuerst eine Vorschau dessen, was genau erstellt wird, und"
+" schreibt erst in die Datenbank, wenn er bestätigt; sagen Sie dem Benutzer "
+"nicht, dass etwas erstellt wurde, bevor Sie das bestätigte Ergebnis sehen."
+
+#. module: ow_ai
+#: model:ir.model.fields,field_description:ow_ai.field_ow_ai_agent__create_uid
+#: model:ir.model.fields,field_description:ow_ai.field_ow_ai_composer__create_uid
+#: model:ir.model.fields,field_description:ow_ai.field_ow_ai_job__create_uid
+#: model:ir.model.fields,field_description:ow_ai.field_ow_ai_prompt_button__create_uid
+#: model:ir.model.fields,field_description:ow_ai.field_ow_ai_session__create_uid
+#: model:ir.model.fields,field_description:ow_ai.field_ow_ai_session_event__create_uid
+#: model:ir.model.fields,field_description:ow_ai.field_ow_ai_skill__create_uid
+#: model:ir.model.fields,field_description:ow_ai.field_ow_ai_tool__create_uid
+#: model:ir.model.fields,field_description:ow_ai.field_ow_ai_usage__create_uid
+msgid "Created by"
+msgstr "Erstellt von"
+
+#. module: ow_ai
+#: model:ir.model.fields,field_description:ow_ai.field_ow_ai_agent__create_date
+#: model:ir.model.fields,field_description:ow_ai.field_ow_ai_composer__create_date
+#: model:ir.model.fields,field_description:ow_ai.field_ow_ai_job__create_date
+#: model:ir.model.fields,field_description:ow_ai.field_ow_ai_prompt_button__create_date
+#: model:ir.model.fields,field_description:ow_ai.field_ow_ai_session__create_date
+#: model:ir.model.fields,field_description:ow_ai.field_ow_ai_session_event__create_date
+#: model:ir.model.fields,field_description:ow_ai.field_ow_ai_skill__create_date
+#: model:ir.model.fields,field_description:ow_ai.field_ow_ai_tool__create_date
+#: model:ir.model.fields,field_description:ow_ai.field_ow_ai_usage__create_date
+msgid "Created on"
+msgstr "Erstellt am"
+
+#. module: ow_ai
+#: model:ir.model.fields,field_description:ow_ai.field_res_config_settings__ow_ai_default_model
+#: model_terms:ir.ui.view,arch_db:ow_ai.res_config_settings_view_form
+msgid "Default Model"
+msgstr "Standardmodell"
+
+#. module: ow_ai
+#: model_terms:ir.ui.view,arch_db:ow_ai.ow_ai_agent_view_form
+msgid "Default Model (Settings)"
+msgstr "Standardmodell (Einstellungen)"
+
+#. module: ow_ai
+#: model:ir.model.fields,field_description:ow_ai.field_ow_ai_composer__default_prompt
+#: model_terms:ir.ui.view,arch_db:ow_ai.ow_ai_composer_view_form
+msgid "Default Prompt"
+msgstr "Standard-Prompt"
+
+#. module: ow_ai
+#: model:ir.actions.act_window,name:ow_ai.ow_ai_composer_action
+#: model:ir.ui.menu,name:ow_ai.menu_ai_composers
+#: model_terms:ir.ui.view,arch_db:ow_ai.ow_ai_composer_view_list
+msgid "Default Prompts"
+msgstr "Standard-Prompts"
+
+#. module: ow_ai
+#. odoo-javascript
+#: code:addons/ow_ai/static/src/discuss/thread_actions_patch.js:0
+msgid "Delete"
+msgstr "Löschen"
+
+#. module: ow_ai
+#. odoo-javascript
+#: code:addons/ow_ai/static/src/discuss/thread_actions_patch.js:0
+msgid "Delete Chat"
+msgstr "Chat löschen"
+
+#. module: ow_ai
+#. odoo-javascript
+#: code:addons/ow_ai/static/src/discuss/thread_actions_patch.js:0
+msgid "Delete this chat and all its messages? This cannot be undone."
+msgstr ""
+"Diesen Chat und alle seine Nachrichten löschen? Dies kann nicht rückgängig "
+"gemacht werden."
+
+#. module: ow_ai
+#: model:ir.model.fields,field_description:ow_ai.field_ow_ai_skill__description
+#: model:ir.model.fields,field_description:ow_ai.field_ow_ai_tool__description
+#: model_terms:ir.ui.view,arch_db:ow_ai.ow_ai_skill_view_form
+#: model_terms:ir.ui.view,arch_db:ow_ai.ow_ai_tool_view_form
+msgid "Description"
+msgstr "Beschreibung"
+
+#. module: ow_ai
+#: model:ir.model.fields.selection,name:ow_ai.selection__ow_ai_usage__kind__direct
+msgid "Direct response"
+msgstr "Direkte Antwort"
+
+#. module: ow_ai
+#: model:ir.model,name:ow_ai.model_discuss_channel
+msgid "Discussion Channel"
+msgstr "Diskussionskanal"
+
+#. module: ow_ai
+#: model:ir.model.fields,field_description:ow_ai.field_discuss_channel__display_name
+#: model:ir.model.fields,field_description:ow_ai.field_discuss_channel_member__display_name
+#: model:ir.model.fields,field_description:ow_ai.field_ir_attachment__display_name
+#: model:ir.model.fields,field_description:ow_ai.field_mail_message__display_name
+#: model:ir.model.fields,field_description:ow_ai.field_ow_ai_agent__display_name
+#: model:ir.model.fields,field_description:ow_ai.field_ow_ai_composer__display_name
+#: model:ir.model.fields,field_description:ow_ai.field_ow_ai_job__display_name
+#: model:ir.model.fields,field_description:ow_ai.field_ow_ai_prompt_button__display_name
+#: model:ir.model.fields,field_description:ow_ai.field_ow_ai_session__display_name
+#: model:ir.model.fields,field_description:ow_ai.field_ow_ai_session_event__display_name
+#: model:ir.model.fields,field_description:ow_ai.field_ow_ai_skill__display_name
+#: model:ir.model.fields,field_description:ow_ai.field_ow_ai_tool__display_name
+#: model:ir.model.fields,field_description:ow_ai.field_ow_ai_usage__display_name
+#: model:ir.model.fields,field_description:ow_ai.field_res_config_settings__display_name
+#: model:ir.model.fields,field_description:ow_ai.field_res_partner__display_name
+#: model:ir.model.fields,field_description:ow_ai.field_res_users__display_name
+msgid "Display Name"
+msgstr "Anzeigename"
+
+#. module: ow_ai
+#: model:ir.model.fields.selection,name:ow_ai.selection__ow_ai_job__state__done
+msgid "Done"
+msgstr "Erledigt"
+
+#. module: ow_ai
+#: model:ir.model.fields.selection,name:ow_ai.selection__ow_ai_usage__kind__embedding
+msgid "Embedding"
+msgstr "Embedding"
+
+#. module: ow_ai
+#: model:ir.model.fields,field_description:ow_ai.field_ow_ai_job__error
+#: model:ir.model.fields.selection,name:ow_ai.selection__ow_ai_usage__status__error
+#: model_terms:ir.ui.view,arch_db:ow_ai.ow_ai_job_view_form
+msgid "Error"
+msgstr "Fehler"
+
+#. module: ow_ai
+#: model:ir.model.fields,field_description:ow_ai.field_ow_ai_usage__error_code
+msgid "Error Code"
+msgstr "Fehlercode"
+
+#. module: ow_ai
+#: model_terms:ir.ui.view,arch_db:ow_ai.ow_ai_session_view_search
+#: model_terms:ir.ui.view,arch_db:ow_ai.ow_ai_usage_view_search
+msgid "Errors"
+msgstr "Fehler"
+
+#. module: ow_ai
+#: model:ir.model.fields,field_description:ow_ai.field_ow_ai_session__event_ids
+msgid "Event"
+msgstr "Ereignis"
+
+#. module: ow_ai
+#: model_terms:ir.ui.view,arch_db:ow_ai.ow_ai_session_view_form
+msgid "Events"
+msgstr "Ereignisse"
+
+#. module: ow_ai
+#: model:ir.model.fields.selection,name:ow_ai.selection__ow_ai_skill__skill_type__executable
+msgid "Executable"
+msgstr "Ausführbar"
+
+#. module: ow_ai
+#: model:ir.model.fields,help:ow_ai.field_ow_ai_composer__default_prompt
+msgid "Extra instructions for this interface"
+msgstr "Zusätzliche Anweisungen für diese Oberfläche"
+
+#. module: ow_ai
+#: model:ir.model.fields.selection,name:ow_ai.selection__ow_ai_job__state__failed
+#: model_terms:ir.ui.view,arch_db:ow_ai.ow_ai_job_view_search
+msgid "Failed"
+msgstr "Fehlgeschlagen"
+
+#. module: ow_ai
+#: model_terms:ir.ui.view,arch_db:ow_ai.preview_update
+msgid "Field"
+msgstr "Feld"
+
+#. module: ow_ai
+#: model:ir.model.fields,field_description:ow_ai.field_ow_ai_job__finished_at
+msgid "Finished At"
+msgstr "Beendet am"
+
+#. module: ow_ai
+#: model:ir.model.fields,help:ow_ai.field_ow_ai_tool__tool_name
+msgid "Function name sent to the model"
+msgstr "An das Modell gesendeter Funktionsname"
+
+#. module: ow_ai
+#: model:ow.ai.tool,name:ow_ai.tool_get_fields
+msgid "Get Fields"
+msgstr "Felder abrufen"
+
+#. module: ow_ai
+#: model:ow.ai.tool,name:ow_ai.tool_get_models
+msgid "Get Models"
+msgstr "Modelle abrufen"
+
+#. module: ow_ai
+#: model:ow.ai.tool,description:ow_ai.tool_read_group
+msgid ""
+"Group and aggregate records, e.g. \"count of orders per country\" or \"total"
+" amount per month\". groupby items are a field name, or "
+"\"field:granularity\" for date/datetime fields (granularity one of year, "
+"quarter, month, week, day). aggregates items are \"field:function\" "
+"(function one of sum, avg, min, max, count, count_distinct) or the special "
+"\"__count\" for a plain row count. Use compute_date beforehand for any "
+"relative date boundaries in the domain. Prefer this over search when the "
+"user wants totals, counts or breakdowns rather than a list of individual "
+"records."
+msgstr ""
+"Gruppieren und aggregieren Sie Datensätze, z. B. \"Anzahl der Bestellungen "
+"pro Land\" oder \"Gesamtbetrag pro Monat\". groupby-Elemente sind ein "
+"Feldname oder \"field:granularity\" für date/datetime-Felder (granularity "
+"ist eines von year, quarter, month, week, day). aggregates-Elemente sind "
+"\"field:function\" (function ist eines von sum, avg, min, max, count, "
+"count_distinct) oder das spezielle \"__count\" für eine einfache "
+"Zeilenzählung. Verwenden Sie vorher compute_date für relative Datumsgrenzen "
+"in der Domain. Ziehen Sie dies search vor, wenn der Benutzer Summen, "
+"Anzahlen oder Aufschlüsselungen statt einer Liste einzelner Datensätze "
+"möchte."
+
+#. module: ow_ai
+#: model:ir.model.fields.selection,name:ow_ai.selection__ow_ai_skill__skill_type__guidance
+msgid "Guidance"
+msgstr "Anleitung"
+
+#. module: ow_ai
+#: model:ir.model.fields,field_description:ow_ai.field_discuss_channel__id
+#: model:ir.model.fields,field_description:ow_ai.field_discuss_channel_member__id
+#: model:ir.model.fields,field_description:ow_ai.field_ir_attachment__id
+#: model:ir.model.fields,field_description:ow_ai.field_mail_message__id
+#: model:ir.model.fields,field_description:ow_ai.field_ow_ai_agent__id
+#: model:ir.model.fields,field_description:ow_ai.field_ow_ai_composer__id
+#: model:ir.model.fields,field_description:ow_ai.field_ow_ai_job__id
+#: model:ir.model.fields,field_description:ow_ai.field_ow_ai_prompt_button__id
+#: model:ir.model.fields,field_description:ow_ai.field_ow_ai_session__id
+#: model:ir.model.fields,field_description:ow_ai.field_ow_ai_session_event__id
+#: model:ir.model.fields,field_description:ow_ai.field_ow_ai_skill__id
+#: model:ir.model.fields,field_description:ow_ai.field_ow_ai_tool__id
+#: model:ir.model.fields,field_description:ow_ai.field_ow_ai_usage__id
+#: model:ir.model.fields,field_description:ow_ai.field_res_config_settings__id
+#: model:ir.model.fields,field_description:ow_ai.field_res_partner__id
+#: model:ir.model.fields,field_description:ow_ai.field_res_users__id
+msgid "ID"
+msgstr "ID"
+
+#. module: ow_ai
+#: model:ir.model.fields,field_description:ow_ai.field_ow_ai_agent__image_128
+msgid "Image"
+msgstr "Bild"
+
+#. module: ow_ai
+#: model:ir.model.fields,help:ow_ai.field_ow_ai_skill__instructions
+msgid "Injected into the conversation when the skill is loaded"
+msgstr "Wird in die Unterhaltung eingefügt, wenn die Fähigkeit geladen wird"
+
+#. module: ow_ai
+#: model:ow.ai.tool,thinking_text:ow_ai.tool_get_fields
+msgid "Inspecting fields"
+msgstr "Felder werden geprüft"
+
+#. module: ow_ai
+#: model:ir.model.fields,field_description:ow_ai.field_ow_ai_skill__instructions
+#: model_terms:ir.ui.view,arch_db:ow_ai.ow_ai_agent_view_form
+#: model_terms:ir.ui.view,arch_db:ow_ai.ow_ai_skill_view_form
+msgid "Instructions"
+msgstr "Anweisungen"
+
+#. module: ow_ai
+#: model:ir.model.fields,field_description:ow_ai.field_ow_ai_composer__interface_key
+msgid "Interface Key"
+msgstr "Oberfläche"
+
+#. module: ow_ai
+#. odoo-python
+#: code:addons/ow_ai/models/ow_ai_tool.py:0
+msgid "Invalid JSON schema: %(error)s"
+msgstr "Ungültiges JSON-Schema: %(error)s"
+
+#. module: ow_ai
+#. odoo-python
+#: code:addons/ow_ai/engine/user_input.py:0
+msgid "Invalid answer"
+msgstr "Ungültige Antwort"
+
+#. module: ow_ai
+#. odoo-python
+#: code:addons/ow_ai/engine/user_input.py:0
+msgid "Invalid choice"
+msgstr "Ungültige Auswahl"
+
+#. module: ow_ai
+#. odoo-python
+#: code:addons/ow_ai/models/ow_ai_tool.py:0
+msgid "Invalid tool schema: %(error)s"
+msgstr "Ungültiges Werkzeugschema: %(error)s"
+
+#. module: ow_ai
+#: model:ir.model.fields,field_description:ow_ai.field_ow_ai_skill__is_native
+#: model:ir.model.fields,field_description:ow_ai.field_ow_ai_tool__is_native
+msgid "Is Native"
+msgstr "Ist nativ"
+
+#. module: ow_ai
+#: model:ir.model.fields,field_description:ow_ai.field_ow_ai_agent__is_system_agent
+msgid "Is System Agent"
+msgstr "Ist Systemagent"
+
+#. module: ow_ai
+#: model:ir.model.fields,field_description:ow_ai.field_ow_ai_composer__is_system_default
+msgid "Is System Default"
+msgstr "Ist Systemstandard"
+
+#. module: ow_ai
+#: model:ir.model.fields,field_description:ow_ai.field_ow_ai_tool__is_write
+msgid "Is Write"
+msgstr "Ist Schreibvorgang"
+
+#. module: ow_ai
+#: model:ir.model.fields,help:ow_ai.field_ow_ai_tool__schema
+msgid "JSON schema of the parameters object"
+msgstr "JSON-Schema des Parameterobjekts"
+
+#. module: ow_ai
+#: model:ir.model.fields,field_description:ow_ai.field_ow_ai_session__job_ids
+msgid "Job"
+msgstr "Auftrag"
+
+#. module: ow_ai
+#: model:ir.model.fields,field_description:ow_ai.field_res_config_settings__ow_ai_job_stale_minutes
+#: model_terms:ir.ui.view,arch_db:ow_ai.res_config_settings_view_form
+msgid "Job Stale After (minutes)"
+msgstr "Auftrag veraltet nach (Minuten)"
+
+#. module: ow_ai
+#: model:ir.actions.act_window,name:ow_ai.ow_ai_job_action
+#: model:ir.ui.menu,name:ow_ai.menu_ai_jobs
+#: model_terms:ir.ui.view,arch_db:ow_ai.ow_ai_session_view_form
+msgid "Jobs"
+msgstr "Aufträge"
+
+#. module: ow_ai
+#: model:ir.model.fields,field_description:ow_ai.field_ow_ai_job__kind
+#: model:ir.model.fields,field_description:ow_ai.field_ow_ai_tool__kind
+#: model:ir.model.fields,field_description:ow_ai.field_ow_ai_usage__kind
+#: model_terms:ir.ui.view,arch_db:ow_ai.ow_ai_job_view_search
+#: model_terms:ir.ui.view,arch_db:ow_ai.ow_ai_usage_view_search
+msgid "Kind"
+msgstr "Art"
+
+#. module: ow_ai
+#: model:ir.model.fields,field_description:ow_ai.field_ow_ai_session__last_error
+msgid "Last Error"
+msgstr "Letzter Fehler"
+
+#. module: ow_ai
+#: model_terms:ir.ui.view,arch_db:ow_ai.ow_ai_usage_view_search
+msgid "Last Month"
+msgstr "Letzter Monat"
+
+#. module: ow_ai
+#: model:ir.model.fields,field_description:ow_ai.field_ow_ai_agent__write_uid
+#: model:ir.model.fields,field_description:ow_ai.field_ow_ai_composer__write_uid
+#: model:ir.model.fields,field_description:ow_ai.field_ow_ai_job__write_uid
+#: model:ir.model.fields,field_description:ow_ai.field_ow_ai_prompt_button__write_uid
+#: model:ir.model.fields,field_description:ow_ai.field_ow_ai_session__write_uid
+#: model:ir.model.fields,field_description:ow_ai.field_ow_ai_session_event__write_uid
+#: model:ir.model.fields,field_description:ow_ai.field_ow_ai_skill__write_uid
+#: model:ir.model.fields,field_description:ow_ai.field_ow_ai_tool__write_uid
+#: model:ir.model.fields,field_description:ow_ai.field_ow_ai_usage__write_uid
+msgid "Last Updated by"
+msgstr "Zuletzt aktualisiert von"
+
+#. module: ow_ai
+#: model:ir.model.fields,field_description:ow_ai.field_ow_ai_agent__write_date
+#: model:ir.model.fields,field_description:ow_ai.field_ow_ai_composer__write_date
+#: model:ir.model.fields,field_description:ow_ai.field_ow_ai_job__write_date
+#: model:ir.model.fields,field_description:ow_ai.field_ow_ai_prompt_button__write_date
+#: model:ir.model.fields,field_description:ow_ai.field_ow_ai_session__write_date
+#: model:ir.model.fields,field_description:ow_ai.field_ow_ai_session_event__write_date
+#: model:ir.model.fields,field_description:ow_ai.field_ow_ai_skill__write_date
+#: model:ir.model.fields,field_description:ow_ai.field_ow_ai_tool__write_date
+#: model:ir.model.fields,field_description:ow_ai.field_ow_ai_usage__write_date
+msgid "Last Updated on"
+msgstr "Zuletzt aktualisiert am"
+
+#. module: ow_ai
+#: model:ir.model.fields,field_description:ow_ai.field_ow_ai_usage__latency_ms
+msgid "Latency Ms"
+msgstr "Latenz (ms)"
+
+#. module: ow_ai
+#: model_terms:ir.ui.view,arch_db:ow_ai.res_config_settings_view_form
+msgid "Limits"
+msgstr "Grenzwerte"
+
+#. module: ow_ai
+#: model:ow.ai.tool,description:ow_ai.tool_get_models
+msgid ""
+"List the Odoo models this assistant is allowed to query, with their label "
+"and, when it has one, the main menu path a human would use to find it. Call "
+"this first when you are not sure which model holds the data the user is "
+"asking about; it takes no arguments. Once you have a model name, call "
+"get_fields before searching it so you use real field names instead of "
+"guessing them."
+msgstr ""
+"Listet die Odoo-Modelle auf, die dieser Assistent abfragen darf, mit ihrer "
+"Bezeichnung und, falls vorhanden, dem Hauptmenüpfad, über den ein Mensch sie"
+" finden würde. Rufen Sie dies zuerst auf, wenn Sie nicht sicher sind, "
+"welches Modell die Daten enthält, nach denen der Benutzer fragt; es hat "
+"keine Argumente. Sobald Sie einen Modellnamen haben, rufen Sie get_fields "
+"auf, bevor Sie darin suchen, damit Sie echte Feldnamen verwenden, statt sie "
+"zu raten."
+
+#. module: ow_ai
+#: model:ow.ai.tool,description:ow_ai.tool_get_fields
+msgid ""
+"List the fields of a model: technical name, label, type (with the related "
+"model in parentheses for relational fields), flags (req = required, ro = "
+"read-only, search = searchable, sort = sortable) and, for selection fields, "
+"the allowed key=label pairs. Always call this before "
+"search/read_records/read_group on a model you have not inspected yet in this"
+" conversation, so you use the exact field names the model actually has."
+msgstr ""
+"Listet die Felder eines Modells auf: technischer Name, Bezeichnung, Typ (bei"
+" relationalen Feldern mit dem verknüpften Modell in Klammern), Kennzeichen "
+"(req = erforderlich, ro = schreibgeschützt, search = durchsuchbar, sort = "
+"sortierbar) und bei Auswahlfeldern die zulässigen key=label-Paare. Rufen Sie"
+" dies immer vor search/read_records/read_group für ein Modell auf, das Sie "
+"in dieser Unterhaltung noch nicht untersucht haben, damit Sie die exakten "
+"Feldnamen verwenden, die das Modell tatsächlich hat."
+
+#. module: ow_ai
+#: model:ow.ai.tool,name:ow_ai.tool_load_skills
+msgid "Load Skills"
+msgstr "Fähigkeiten laden"
+
+#. module: ow_ai
+#: model:ow.ai.tool,description:ow_ai.tool_load_skills
+msgid ""
+"Load the instructions and tools of one or more skills by id, making them "
+"available for the rest of this conversation. Skills are only loaded "
+"progressively, on demand: only the tools of a skill you have actually loaded"
+" are usable, so call this before using any tool that belongs to a skill you "
+"have not loaded yet."
+msgstr ""
+"Lädt die Anweisungen und Werkzeuge einer oder mehrerer Fähigkeiten anhand "
+"ihrer ID und stellt sie für den Rest dieser Unterhaltung bereit. Fähigkeiten"
+" werden nur schrittweise bei Bedarf geladen: Nur die Werkzeuge einer "
+"tatsächlich geladenen Fähigkeit sind nutzbar. Rufen Sie dies daher auf, "
+"bevor Sie ein Werkzeug verwenden, das zu einer noch nicht geladenen "
+"Fähigkeit gehört."
+
+#. module: ow_ai
+#. odoo-javascript
+#: code:addons/ow_ai/static/src/discuss/ow_ai_tool_summary.xml:0
+msgid "Loading"
+msgstr "Wird geladen"
+
+#. module: ow_ai
+#. odoo-javascript
+#: code:addons/ow_ai/static/src/discuss/message_actions_patch.js:0
+msgid "Log as note"
+msgstr "Als Notiz hinterlassen"
+
+#. module: ow_ai
+#. odoo-javascript
+#: code:addons/ow_ai/static/src/discuss/message_actions_patch.js:0
+msgid "Log note"
+msgstr "Notiz hinterlassen"
+
+#. module: ow_ai
+#: model:ow.ai.skill,description:ow_ai.skill_search_database
+msgid ""
+"Look up, count and summarise records stored in this Odoo database: contacts,"
+" orders, invoices, tasks, and anything else the user has access to."
+msgstr ""
+"In dieser Odoo-Datenbank gespeicherte Datensätze nachschlagen, zählen und "
+"zusammenfassen: Kontakte, Bestellungen, Rechnungen, Aufgaben und alles "
+"andere, worauf der Benutzer Zugriff hat."
+
+#. module: ow_ai
+#: model:ow.ai.tool,thinking_text:ow_ai.tool_get_models
+msgid "Looking up available models"
+msgstr "Verfügbare Modelle werden gesucht"
+
+#. module: ow_ai
+#: model:ir.model.fields,field_description:ow_ai.field_ow_ai_session__loop_state
+msgid "Loop State"
+msgstr "Schleifenstatus"
+
+#. module: ow_ai
+#: model:ir.model.fields,field_description:ow_ai.field_res_config_settings__ow_ai_max_history_chars
+#: model_terms:ir.ui.view,arch_db:ow_ai.res_config_settings_view_form
+msgid "Max History Characters"
+msgstr "Max. Zeichen im Verlauf"
+
+#. module: ow_ai
+#: model:ir.model.fields,field_description:ow_ai.field_res_config_settings__ow_ai_max_rounds
+#: model_terms:ir.ui.view,arch_db:ow_ai.res_config_settings_view_form
+msgid "Max Rounds"
+msgstr "Max. Runden"
+
+#. module: ow_ai
+#: model:ir.model.fields,field_description:ow_ai.field_res_config_settings__ow_ai_max_tool_calls_per_round
+#: model_terms:ir.ui.view,arch_db:ow_ai.res_config_settings_view_form
+msgid "Max Tool Calls per Round"
+msgstr "Max. Werkzeugaufrufe pro Runde"
+
+#. module: ow_ai
+#: model:ir.model.fields,field_description:ow_ai.field_res_config_settings__ow_ai_max_tool_result_chars
+#: model_terms:ir.ui.view,arch_db:ow_ai.res_config_settings_view_form
+msgid "Max Tool Result Characters"
+msgstr "Max. Zeichen im Werkzeugergebnis"
+
+#. module: ow_ai
+#: model:ir.model,name:ow_ai.model_mail_message
+msgid "Message"
+msgstr "Nachricht"
+
+#. module: ow_ai
+#: model:ir.model.fields,field_description:ow_ai.field_ow_ai_session_event__metadata
+msgid "Metadata"
+msgstr "Metadaten"
+
+#. module: ow_ai
+#: model_terms:ir.ui.view,arch_db:ow_ai.ow_ai_session_view_search
+msgid "Mine"
+msgstr "Meine"
+
+#. module: ow_ai
+#: model:ir.model.fields,field_description:ow_ai.field_ow_ai_agent__model
+#: model:ir.model.fields,field_description:ow_ai.field_ow_ai_composer__model_id
+#: model:ir.model.fields,field_description:ow_ai.field_ow_ai_usage__model
+#: model_terms:ir.ui.view,arch_db:ow_ai.ow_ai_usage_view_search
+msgid "Model"
+msgstr "Modell"
+
+#. module: ow_ai
+#: model:ir.model.fields,field_description:ow_ai.field_ow_ai_composer__model_name
+#: model:ir.model.fields,field_description:ow_ai.field_ow_ai_tool__model_name
+msgid "Model Name"
+msgstr "Modellname"
+
+#. module: ow_ai
+#: model:ir.model.fields,field_description:ow_ai.field_ow_ai_agent__model_options
+#: model_terms:ir.ui.view,arch_db:ow_ai.ow_ai_agent_view_form
+msgid "Model Options"
+msgstr "Modelloptionen"
+
+#. module: ow_ai
+#: model:ir.model.fields,help:ow_ai.field_res_config_settings__ow_ai_default_model
+#: model_terms:ir.ui.view,arch_db:ow_ai.res_config_settings_view_form
+msgid ""
+"Model id at that endpoint, e.g. openai/gpt-6-luna (OpenRouter), hyai/loes-"
+"large (HostYourAI), qwen2.5:3b (Ollama)"
+msgstr ""
+"Modell-ID an diesem Endpunkt, z. B. openai/gpt-6-luna (OpenRouter), "
+"hyai/loes-large (HostYourAI), qwen2.5:3b (Ollama)"
+
+#. module: ow_ai
+#: model:ir.model.fields,help:ow_ai.field_ow_ai_agent__model
+msgid ""
+"Model id at the configured endpoint, e.g. openai/gpt-6-luna. Empty = Default"
+" Model from Settings."
+msgstr ""
+"Modell-ID am konfigurierten Endpunkt, z. B. openai/gpt-6-luna. Leer = "
+"Standardmodell aus den Einstellungen."
+
+#. module: ow_ai
+#. odoo-python
+#: code:addons/ow_ai/models/ow_ai_agent.py:0
+msgid "Model option '%(key)s' has the wrong type."
+msgstr "Die Modelloption '%(key)s' hat den falschen Typ."
+
+#. module: ow_ai
+#. odoo-python
+#: code:addons/ow_ai/models/ow_ai_agent.py:0
+msgid "Model options must be a JSON object."
+msgstr "Modelloptionen müssen ein JSON-Objekt sein."
+
+#. module: ow_ai
+#: model:ir.model.fields,field_description:ow_ai.field_ow_ai_agent__name
+#: model:ir.model.fields,field_description:ow_ai.field_ow_ai_composer__name
+#: model:ir.model.fields,field_description:ow_ai.field_ow_ai_prompt_button__name
+#: model:ir.model.fields,field_description:ow_ai.field_ow_ai_skill__name
+#: model:ir.model.fields,field_description:ow_ai.field_ow_ai_tool__name
+msgid "Name"
+msgstr "Name"
+
+#. module: ow_ai
+#: model_terms:ir.ui.view,arch_db:ow_ai.ow_ai_skill_view_form
+#: model_terms:ir.ui.view,arch_db:ow_ai.ow_ai_tool_view_form
+msgid "Native"
+msgstr "Nativ"
+
+#. module: ow_ai
+#. odoo-python
+#: code:addons/ow_ai/models/ow_ai_skill.py:0
+msgid "Native skills cannot be deleted."
+msgstr "Native Fähigkeiten können nicht gelöscht werden."
+
+#. module: ow_ai
+#. odoo-python
+#: code:addons/ow_ai/models/ow_ai_skill.py:0
+msgid "Native skills cannot have this field changed."
+msgstr "Bei nativen Fähigkeiten kann dieses Feld nicht geändert werden."
+
+#. module: ow_ai
+#. odoo-python
+#: code:addons/ow_ai/models/ow_ai_tool.py:0
+msgid "Native tools cannot be deleted."
+msgstr "Native Werkzeuge können nicht gelöscht werden."
+
+#. module: ow_ai
+#. odoo-python
+#: code:addons/ow_ai/models/ow_ai_tool.py:0
+msgid "Native tools cannot have this field changed."
+msgstr "Bei nativen Werkzeugen kann dieses Feld nicht geändert werden."
+
+#. module: ow_ai
+#. odoo-javascript
+#: code:addons/ow_ai/static/src/discuss/messaging_menu_model_patch.js:0
+msgid "New AI chat"
+msgstr "Neuer KI-Chat"
+
+#. module: ow_ai
+#. odoo-javascript
+#: code:addons/ow_ai/static/src/discuss/messaging_menu_model_patch.js:0
+msgid "New chat"
+msgstr "Neuer Chat"
+
+#. module: ow_ai
+#: model_terms:ir.ui.view,arch_db:ow_ai.preview_update
+msgid "New value"
+msgstr "Neuer Wert"
+
+#. module: ow_ai
+#. odoo-javascript
+#: code:addons/ow_ai/static/src/discuss/ow_ai_user_input_request.js:0
+#: model:res.groups.privilege,placeholder:ow_ai.privilege_ai
+msgid "No"
+msgstr "Nein"
+
+#. module: ow_ai
+#. odoo-javascript
+#: code:addons/ow_ai/static/src/discuss/messaging_menu_model_patch.js:0
+msgid "No AI chat yet"
+msgstr "Noch kein KI-Chat"
+
+#. module: ow_ai
+#: model:ir.model.fields.selection,name:ow_ai.selection__res_config_settings__ow_ai_api_key_state__missing
+msgid "Not set"
+msgstr "Nicht gesetzt"
+
+#. module: ow_ai
+#: model:ir.model.fields.selection,name:ow_ai.selection__ow_ai_usage__status__ok
+msgid "OK"
+msgstr "OK"
+
+#. module: ow_ai
+#. odoo-javascript
+#: code:addons/ow_ai/static/src/discuss/messaging_menu_model_patch.js:0
+#: code:addons/ow_ai/static/src/web/command_palette.js:0
+#: model:ir.ui.menu,name:ow_ai.menu_ai_root
+#: model_terms:ir.ui.view,arch_db:ow_ai.res_config_settings_view_form
+msgid "OW AI"
+msgstr "OW AI"
+
+#. module: ow_ai
+#: model_terms:ir.ui.view,arch_db:ow_ai.preview_update
+msgid "Old value"
+msgstr "Alter Wert"
+
+#. module: ow_ai
+#. odoo-python
+#: code:addons/ow_ai/models/discuss_channel.py:0
+msgid "Only AI chats can be deleted this way."
+msgstr "Nur KI-Chats können auf diese Weise gelöscht werden."
+
+#. module: ow_ai
+#. odoo-python
+#: code:addons/ow_ai/models/ow_ai_job.py:0
+#: code:addons/ow_ai/models/ow_ai_session.py:0
+msgid "Only AI managers can do this."
+msgstr "Nur KI-Manager können dies tun."
+
+#. module: ow_ai
+#. odoo-python
+#: code:addons/ow_ai/models/res_config_settings.py:0
+msgid "Only administrators can manage the AI settings."
+msgstr "Nur Administratoren können die KI-Einstellungen verwalten."
+
+#. module: ow_ai
+#. odoo-python
+#: code:addons/ow_ai/engine/tool_batch.py:0
+msgid "Only the person who made this request can answer it."
+msgstr "Nur die Person, die diese Anfrage gestellt hat, kann sie beantworten."
+
+#. module: ow_ai
+#. odoo-javascript
+#: code:addons/ow_ai/static/src/web/command_palette.js:0
+msgid "Open AI chat"
+msgstr "KI-Chat öffnen"
+
+#. module: ow_ai
+#: model_terms:ir.ui.view,arch_db:ow_ai.ow_ai_session_view_form
+msgid "Open chat"
+msgstr "Chat öffnen"
+
+#. module: ow_ai
+#: model:ir.model.fields,help:ow_ai.field_res_config_settings__ow_ai_base_url
+#: model_terms:ir.ui.view,arch_db:ow_ai.res_config_settings_view_form
+msgid ""
+"OpenAI-compatible endpoint, e.g. https://openrouter.ai/api/v1, "
+"https://hostyourai.com/api/v1, https://api.openai.com/v1, "
+"http://ollama:11434/v1"
+msgstr ""
+"OpenAI-kompatibler Endpunkt, z. B. https://openrouter.ai/api/v1, "
+"https://hostyourai.com/api/v1, https://api.openai.com/v1, "
+"http://ollama:11434/v1"
+
+#. module: ow_ai
+#: model:ir.model.fields,help:ow_ai.field_res_config_settings__ow_ai_api_key
+#: model_terms:ir.ui.view,arch_db:ow_ai.res_config_settings_view_form
+msgid ""
+"Optional for endpoints without authentication. Stored server-side only; "
+"never sent back to the browser."
+msgstr ""
+"Optional für Endpunkte ohne Authentifizierung. Wird nur serverseitig "
+"gespeichert und nie an den Browser zurückgesendet."
+
+#. module: ow_ai
+#: model:ir.model.fields,help:ow_ai.field_ow_ai_agent__model_options
+msgid ""
+"Optional request options: temperature, max_tokens, reasoning; passed through"
+" as-is, the endpoint must support them"
+msgstr ""
+"Optionale Anfrageoptionen: temperature, max_tokens, reasoning; werden "
+"unverändert weitergegeben, der Endpunkt muss sie unterstützen"
+
+#. module: ow_ai
+#. odoo-javascript
+#: code:addons/ow_ai/static/src/discuss/ow_ai_user_input_request.xml:0
+msgid "Or type your own answer…"
+msgstr "Oder geben Sie Ihre eigene Antwort ein…"
+
+#. module: ow_ai
+#: model:ir.model.fields,field_description:ow_ai.field_discuss_channel__ow_ai_agent_id
+msgid "Ow Ai Agent"
+msgstr "OW AI-Agent"
+
+#. module: ow_ai
+#: model:ir.model.fields,field_description:ow_ai.field_discuss_channel__ow_ai_session_ids
+msgid "Ow Ai Session"
+msgstr "OW AI-Sitzung"
+
+#. module: ow_ai
+#: model:ir.model.fields,field_description:ow_ai.field_ow_ai_agent__partner_id
+msgid "Partner"
+msgstr "Partner"
+
+#. module: ow_ai
+#: model:ir.model.fields,field_description:ow_ai.field_ow_ai_job__payload
+#: model_terms:ir.ui.view,arch_db:ow_ai.ow_ai_job_view_form
+msgid "Payload"
+msgstr "Nutzdaten"
+
+#. module: ow_ai
+#: model:ir.model.fields.selection,name:ow_ai.selection__ow_ai_job__state__pending
+#: model_terms:ir.ui.view,arch_db:ow_ai.ow_ai_job_view_search
+msgid "Pending"
+msgstr "Ausstehend"
+
+#. module: ow_ai
+#: model:ir.model.fields,field_description:ow_ai.field_ow_ai_session__pending_tool_call
+msgid "Pending Tool Call"
+msgstr "Ausstehender Werkzeugaufruf"
+
+#. module: ow_ai
+#. odoo-python
+#: code:addons/ow_ai/engine/user_input.py:0
+msgid "Please choose an option or type an answer."
+msgstr "Bitte wählen Sie eine Option oder geben Sie eine Antwort ein."
+
+#. module: ow_ai
+#: model:ow.ai.tool,thinking_text:ow_ai.tool_create_records
+msgid "Preparing to create records"
+msgstr "Erstellung der Datensätze wird vorbereitet"
+
+#. module: ow_ai
+#: model:ow.ai.tool,thinking_text:ow_ai.tool_update_records
+msgid "Preparing to update records"
+msgstr "Aktualisierung der Datensätze wird vorbereitet"
+
+#. module: ow_ai
+#: model:ir.model.fields,field_description:ow_ai.field_ow_ai_prompt_button__prompt
+#: model_terms:ir.ui.view,arch_db:ow_ai.ow_ai_usage_view_list
+msgid "Prompt"
+msgstr "Prompt"
+
+#. module: ow_ai
+#: model:ir.model.fields,field_description:ow_ai.field_ow_ai_composer__prompt_button_ids
+msgid "Prompt Button"
+msgstr "Prompt-Schaltfläche"
+
+#. module: ow_ai
+#: model_terms:ir.ui.view,arch_db:ow_ai.ow_ai_composer_view_form
+msgid "Prompt Buttons"
+msgstr "Prompt-Schaltflächen"
+
+#. module: ow_ai
+#: model:ir.model.fields,field_description:ow_ai.field_ow_ai_usage__prompt_tokens
+msgid "Prompt Tokens"
+msgstr "Prompt-Tokens"
+
+#. module: ow_ai
+#: model:ow.ai.tool,name:ow_ai.tool_read_group
+msgid "Read Group"
+msgstr "Gruppiert lesen"
+
+#. module: ow_ai
+#: model:ow.ai.tool,name:ow_ai.tool_read_records
+msgid "Read Records"
+msgstr "Datensätze lesen"
+
+#. module: ow_ai
+#: model:ow.ai.tool,description:ow_ai.tool_read_records
+msgid ""
+"Read a specific, already-known list of record ids on a model (up to 50 at a "
+"time). Never guess ids: get them from a previous search or from the record "
+"the user is currently looking at. Ids that no longer exist, or that you are "
+"not allowed to read, are reported in missing_ids instead of causing an "
+"error. Set include_files to true (for 5 or fewer records) to also receive "
+"their linked images/PDF attachments as inline content."
+msgstr ""
+"Liest eine bestimmte, bereits bekannte Liste von Datensatz-IDs eines Modells"
+" (bis zu 50 auf einmal). Raten Sie nie IDs: Entnehmen Sie sie einer "
+"vorherigen Suche oder dem Datensatz, den der Benutzer gerade ansieht. IDs, "
+"die nicht mehr existieren oder die Sie nicht lesen dürfen, werden in "
+"missing_ids gemeldet, statt einen Fehler zu verursachen. Setzen Sie "
+"include_files auf true (bei 5 oder weniger Datensätzen), um auch deren "
+"verknüpfte Bilder/PDF-Anhänge als Inline-Inhalt zu erhalten."
+
+#. module: ow_ai
+#: model:ow.ai.tool,thinking_text:ow_ai.tool_read_records
+msgid "Reading records"
+msgstr "Datensätze werden gelesen"
+
+#. module: ow_ai
+#: model:ir.model.fields.selection,name:ow_ai.selection__ow_ai_session__loop_state__ready
+#: model_terms:ir.ui.view,arch_db:ow_ai.ow_ai_session_view_search
+msgid "Ready"
+msgstr "Bereit"
+
+#. module: ow_ai
+#: model:ir.ui.menu,name:ow_ai.menu_ai_reports
+msgid "Reports"
+msgstr "Berichte"
+
+#. module: ow_ai
+#: model:ir.model.fields,field_description:ow_ai.field_ow_ai_usage__request_id
+msgid "Request"
+msgstr "Anfrage"
+
+#. module: ow_ai
+#: model:ir.model.fields,field_description:ow_ai.field_ow_ai_session__request_context
+msgid "Request Context"
+msgstr "Anfragekontext"
+
+#. module: ow_ai
+#: model:ir.model.fields,field_description:ow_ai.field_ow_ai_session__request_round
+msgid "Request Round"
+msgstr "Anfragerunde"
+
+#. module: ow_ai
+#: model:ir.model.fields,field_description:ow_ai.field_ow_ai_session__request_round_limit
+msgid "Request Round Limit"
+msgstr "Rundenlimit der Anfrage"
+
+#. module: ow_ai
+#: model:ir.model.fields,field_description:ow_ai.field_ow_ai_session__request_turn
+msgid "Request Turn"
+msgstr "Anfragedurchgang"
+
+#. module: ow_ai
+#: model:ir.model.fields,field_description:ow_ai.field_ow_ai_session__request_user_id
+msgid "Request User"
+msgstr "Anfragender Benutzer"
+
+#. module: ow_ai
+#: model:ir.model.fields,field_description:ow_ai.field_ow_ai_tool__requires_confirmation
+msgid "Requires Confirmation"
+msgstr "Erfordert Bestätigung"
+
+#. module: ow_ai
+#: model:ir.model.fields,field_description:ow_ai.field_ow_ai_session__res_id
+msgid "Res"
+msgstr "Datensatz-ID"
+
+#. module: ow_ai
+#: model:ir.model.fields,field_description:ow_ai.field_ow_ai_session__res_model
+msgid "Res Model"
+msgstr "Datensatzmodell"
+
+#. module: ow_ai
+#: model:ir.model.fields,help:ow_ai.field_ow_ai_tool__model_name
+msgid "Restrict this tool to sessions about this model"
+msgstr "Dieses Werkzeug auf Sitzungen zu diesem Modell beschränken"
+
+#. module: ow_ai
+#: model:ir.model.fields,field_description:ow_ai.field_ow_ai_session__resume_token
+msgid "Resume Token"
+msgstr "Fortsetzungstoken"
+
+#. module: ow_ai
+#. odoo-javascript
+#: code:addons/ow_ai/static/src/discuss/ow_ai_thread_status.xml:0
+#: model_terms:ir.ui.view,arch_db:ow_ai.ow_ai_job_view_form
+#: model_terms:ir.ui.view,arch_db:ow_ai.ow_ai_job_view_list
+msgid "Retry"
+msgstr "Wiederholen"
+
+#. module: ow_ai
+#: model:ir.model.fields,field_description:ow_ai.field_ow_ai_session_event__role
+msgid "Role"
+msgstr "Rolle"
+
+#. module: ow_ai
+#: model:ir.model.fields.selection,name:ow_ai.selection__ow_ai_job__state__running
+#: model_terms:ir.ui.view,arch_db:ow_ai.ow_ai_job_view_search
+msgid "Running"
+msgstr "Läuft"
+
+#. module: ow_ai
+#: model:ir.model.fields,field_description:ow_ai.field_ow_ai_job__scheduled_at
+msgid "Scheduled At"
+msgstr "Geplant am"
+
+#. module: ow_ai
+#: model:ir.model.fields,field_description:ow_ai.field_ow_ai_tool__schema
+#: model_terms:ir.ui.view,arch_db:ow_ai.ow_ai_tool_view_form
+msgid "Schema"
+msgstr "Schema"
+
+#. module: ow_ai
+#: model:ir.model.fields,field_description:ow_ai.field_ow_ai_tool__schema_summary
+msgid "Schema Summary"
+msgstr "Schema-Zusammenfassung"
+
+#. module: ow_ai
+#: model:ow.ai.tool,name:ow_ai.tool_search
+msgid "Search"
+msgstr "Suchen"
+
+#. module: ow_ai
+#: model:ow.ai.skill,name:ow_ai.skill_search_database
+msgid "Search Database"
+msgstr "Datenbank durchsuchen"
+
+#. module: ow_ai
+#: model:ow.ai.tool,description:ow_ai.tool_search
+msgid ""
+"Search a model and return a page of matching records. The domain is a "
+"standard Odoo domain, given as a Python/JSON list of [\"field\", "
+"\"operator\", value] triples, e.g. [[\"state\", \"=\", \"done\"], "
+"[\"amount_total\", \">\", 100]]; combine conditions with the prefix "
+"operators \"&\" (and, the default between consecutive conditions), \"|\" "
+"(or) and \"!\" (not), e.g. [\"|\", [\"city\", \"=\", \"Rotterdam\"], "
+"[\"city\", \"=\", \"Amsterdam\"]]. Supported operators include =, !=, >, >=,"
+" <, <=, in, not in, like, ilike and child_of. For relative dates (e.g. "
+"\"created last week\"), call compute_date first and use its value in the "
+"domain rather than guessing a date. Results are paginated (limit is clamped "
+"between 1 and 200, default 50); check has_more and increase offset to get "
+"the next page. Omit fields to get a sensible default set, or pass an "
+"explicit list from get_fields."
+msgstr ""
+"Durchsucht ein Modell und gibt eine Seite passender Datensätze zurück. Die "
+"Domain ist eine Standard-Odoo-Domain, angegeben als Python/JSON-Liste von "
+"[\"field\", \"operator\", value]-Tripeln, z. B. [[\"state\", \"=\", "
+"\"done\"], [\"amount_total\", \">\", 100]]; kombinieren Sie Bedingungen mit "
+"den Präfixoperatoren \"&\" (und, der Standard zwischen aufeinanderfolgenden "
+"Bedingungen), \"|\" (oder) und \"!\" (nicht), z. B. [\"|\", [\"city\", "
+"\"=\", \"Rotterdam\"], [\"city\", \"=\", \"Amsterdam\"]]. Unterstützte "
+"Operatoren sind unter anderem =, !=, >, >=, <, <=, in, not in, like, ilike "
+"und child_of. Rufen Sie für relative Datumsangaben (z. B. \"letzte Woche "
+"erstellt\") zuerst compute_date auf und verwenden Sie dessen Wert in der "
+"Domain, statt ein Datum zu raten. Die Ergebnisse sind seitenweise aufgeteilt"
+" (limit wird auf 1 bis 200 begrenzt, Standard 50); prüfen Sie has_more und "
+"erhöhen Sie offset, um die nächste Seite zu erhalten. Lassen Sie fields weg,"
+" um einen sinnvollen Standardsatz zu erhalten, oder übergeben Sie eine "
+"explizite Liste aus get_fields."
+
+#. module: ow_ai
+#: model:ow.ai.tool,thinking_text:ow_ai.tool_search
+msgid "Searching"
+msgstr "Suche läuft"
+
+#. module: ow_ai
+#. odoo-javascript
+#: code:addons/ow_ai/static/src/discuss/ow_ai_user_input_request.xml:0
+msgid "Send"
+msgstr "Senden"
+
+#. module: ow_ai
+#. odoo-javascript
+#: code:addons/ow_ai/static/src/discuss/message_actions_patch.js:0
+msgid "Send as message"
+msgstr "Als Nachricht senden"
+
+#. module: ow_ai
+#. odoo-javascript
+#: code:addons/ow_ai/static/src/discuss/message_actions_patch.js:0
+msgid "Send message"
+msgstr "Nachricht senden"
+
+#. module: ow_ai
+#. odoo-javascript
+#: code:addons/ow_ai/static/src/discuss/ow_ai_user_input_request.xml:0
+msgid "Sending"
+msgstr "Wird gesendet"
+
+#. module: ow_ai
+#: model:ir.model.fields,field_description:ow_ai.field_ow_ai_agent__sequence
+#: model:ir.model.fields,field_description:ow_ai.field_ow_ai_prompt_button__sequence
+#: model:ir.model.fields,field_description:ow_ai.field_ow_ai_session_event__sequence
+#: model:ir.model.fields,field_description:ow_ai.field_ow_ai_skill__sequence
+msgid "Sequence"
+msgstr "Sequenz"
+
+#. module: ow_ai
+#: model:ir.model.fields,field_description:ow_ai.field_ow_ai_tool__server_action_id
+#: model:ir.model.fields.selection,name:ow_ai.selection__ow_ai_tool__kind__server_action
+msgid "Server Action"
+msgstr "Serveraktion"
+
+#. module: ow_ai
+#. odoo-python
+#: code:addons/ow_ai/models/ow_ai_tool.py:0
+msgid "Server-action tools are not available in this version."
+msgstr ""
+"Werkzeuge auf Basis von Serveraktionen sind in dieser Version nicht "
+"verfügbar."
+
+#. module: ow_ai
+#: model:ir.model.fields,field_description:ow_ai.field_ow_ai_job__session_id
+#: model:ir.model.fields,field_description:ow_ai.field_ow_ai_session_event__session_id
+#: model:ir.model.fields,field_description:ow_ai.field_ow_ai_usage__session_id
+msgid "Session"
+msgstr "Sitzung"
+
+#. module: ow_ai
+#: model:ir.model.fields,field_description:ow_ai.field_ow_ai_agent__session_count
+msgid "Session Count"
+msgstr "Anzahl Sitzungen"
+
+#. module: ow_ai
+#: model_terms:ir.ui.view,arch_db:ow_ai.ow_ai_session_view_form
+msgid "Session Event"
+msgstr "Sitzungsereignis"
+
+#. module: ow_ai
+#: model:ir.actions.act_window,name:ow_ai.ow_ai_session_action
+#: model:ir.actions.act_window,name:ow_ai.ow_ai_session_action_from_agent
+#: model:ir.ui.menu,name:ow_ai.menu_ai_sessions
+#: model_terms:ir.ui.view,arch_db:ow_ai.ow_ai_agent_view_form
+msgid "Sessions"
+msgstr "Sitzungen"
+
+#. module: ow_ai
+#: model:ir.model.fields.selection,name:ow_ai.selection__res_config_settings__ow_ai_api_key_state__param
+msgid "Set in settings"
+msgstr "In den Einstellungen gesetzt"
+
+#. module: ow_ai
+#: model:ir.model.fields.selection,name:ow_ai.selection__res_config_settings__ow_ai_api_key_state__env
+msgid "Set via environment variable"
+msgstr "Über Umgebungsvariable gesetzt"
+
+#. module: ow_ai
+#: model:ir.model.fields.selection,name:ow_ai.selection__res_config_settings__ow_ai_api_key_state__conf
+msgid "Set via odoo.conf"
+msgstr "Über odoo.conf gesetzt"
+
+#. module: ow_ai
+#: model:ir.actions.act_window,name:ow_ai.action_ow_ai_config_settings
+#: model:ir.ui.menu,name:ow_ai.menu_ai_settings
+msgid "Settings"
+msgstr "Einstellungen"
+
+#. module: ow_ai
+#: model:ir.model.fields,field_description:ow_ai.field_ow_ai_session__show_agent_steps
+msgid "Show Agent Steps"
+msgstr "Agentenschritte anzeigen"
+
+#. module: ow_ai
+#. odoo-javascript
+#: code:addons/ow_ai/static/src/discuss/composer_actions_patch.js:0
+msgid "Show steps"
+msgstr "Schritte anzeigen"
+
+#. module: ow_ai
+#: model:ow.ai.prompt.button,name:ow_ai.composer_systray_button_3
+msgid "Show the top customers this year"
+msgstr "Top-Kunden dieses Jahres anzeigen"
+
+#. module: ow_ai
+#: model:ow.ai.prompt.button,prompt:ow_ai.composer_systray_button_3
+msgid "Show the top customers this year."
+msgstr "Zeigen Sie die Top-Kunden dieses Jahres an."
+
+#. module: ow_ai
+#: model:ir.model.fields,help:ow_ai.field_ow_ai_skill__description
+msgid "Shown to the model so it can decide when to load this skill"
+msgstr ""
+"Wird dem Modell angezeigt, damit es entscheiden kann, wann diese Fähigkeit "
+"geladen wird"
+
+#. module: ow_ai
+#: model:ir.model.fields,help:ow_ai.field_ow_ai_tool__thinking_text
+msgid "Shown while the tool runs, e.g. 'Searching the database'"
+msgstr ""
+"Wird angezeigt, während das Werkzeug läuft, z. B. 'Datenbank wird "
+"durchsucht'"
+
+#. module: ow_ai
+#: model:ir.model.fields,field_description:ow_ai.field_ow_ai_agent__skill_ids
+msgid "Skill"
+msgstr "Fähigkeit"
+
+#. module: ow_ai
+#: model:ir.model.fields,field_description:ow_ai.field_ow_ai_skill__skill_type
+msgid "Skill Type"
+msgstr "Fähigkeitstyp"
+
+#. module: ow_ai
+#: model_terms:ir.ui.view,arch_db:ow_ai.ow_ai_skill_view_form
+msgid "Skill name"
+msgstr "Name der Fähigkeit"
+
+#. module: ow_ai
+#: model:ir.actions.act_window,name:ow_ai.ow_ai_skill_action
+#: model:ir.ui.menu,name:ow_ai.menu_ai_skills
+msgid "Skills"
+msgstr "Fähigkeiten"
+
+#. module: ow_ai
+#. odoo-javascript
+#: code:addons/ow_ai/static/src/discuss/ow_ai_user_input_request.xml:0
+msgid "Skip"
+msgstr "Überspringen"
+
+#. module: ow_ai
+#: model:ir.model.fields,field_description:ow_ai.field_ow_ai_job__state
+#: model:ir.model.fields,field_description:ow_ai.field_ow_ai_session__state
+#: model_terms:ir.ui.view,arch_db:ow_ai.ow_ai_job_view_search
+#: model_terms:ir.ui.view,arch_db:ow_ai.ow_ai_session_view_search
+msgid "State"
+msgstr "Status"
+
+#. module: ow_ai
+#: model:ir.model.fields,field_description:ow_ai.field_ow_ai_usage__status
+msgid "Status"
+msgstr "Status"
+
+#. module: ow_ai
+#. odoo-javascript
+#: code:addons/ow_ai/static/src/discuss/ow_ai_steps_group.xml:0
+msgid "Steps taken"
+msgstr "Durchgeführte Schritte"
+
+#. module: ow_ai
+#: model:ir.model.fields,field_description:ow_ai.field_ow_ai_agent__subtitle
+#: model_terms:ir.ui.view,arch_db:ow_ai.ow_ai_agent_view_form
+msgid "Subtitle"
+msgstr "Untertitel"
+
+#. module: ow_ai
+#: model:ow.ai.prompt.button,name:ow_ai.composer_systray_button_2
+msgid "Summarize my open tasks for today"
+msgstr "Meine offenen Aufgaben für heute zusammenfassen"
+
+#. module: ow_ai
+#: model:ow.ai.prompt.button,prompt:ow_ai.composer_systray_button_2
+msgid "Summarize my open tasks for today."
+msgstr "Fassen Sie meine offenen Aufgaben für heute zusammen."
+
+#. module: ow_ai
+#: model:ow.ai.prompt.button,name:ow_ai.composer_record_chat_button_1
+msgid "Summarize this record"
+msgstr "Diesen Datensatz zusammenfassen"
+
+#. module: ow_ai
+#: model:ow.ai.prompt.button,prompt:ow_ai.composer_record_chat_button_1
+msgid "Summarize this record."
+msgstr "Fassen Sie diesen Datensatz zusammen."
+
+#. module: ow_ai
+#: model:ir.model.fields,field_description:ow_ai.field_ow_ai_session_event__summary
+msgid "Summary"
+msgstr "Zusammenfassung"
+
+#. module: ow_ai
+#: model_terms:ir.ui.view,arch_db:ow_ai.ow_ai_agent_view_form
+msgid "System Agent"
+msgstr "Systemagent"
+
+#. module: ow_ai
+#: model:ir.model.fields,field_description:ow_ai.field_ow_ai_agent__system_prompt
+msgid "System Prompt"
+msgstr "System-Prompt"
+
+#. module: ow_ai
+#. odoo-python
+#: code:addons/ow_ai/models/ow_ai_agent.py:0
+msgid "System agents cannot be deleted."
+msgstr "Systemagenten können nicht gelöscht werden."
+
+#. module: ow_ai
+#: model:ir.model.fields.selection,name:ow_ai.selection__ow_ai_composer__interface_key__systray
+msgid "Systray \"Ask AI\""
+msgstr "Systray \"KI fragen\""
+
+#. module: ow_ai
+#: model_terms:ir.ui.view,arch_db:ow_ai.res_config_settings_view_form
+msgid "Test connection"
+msgstr "Verbindung testen"
+
+#. module: ow_ai
+#: model_terms:ir.ui.view,arch_db:ow_ai.ow_ai_agent_view_form
+msgid "Test in chat"
+msgstr "Im Chat testen"
+
+#. module: ow_ai
+#. odoo-javascript
+#: code:addons/ow_ai/static/src/web/ow_ai_chat_launcher_service.js:0
+msgid "The AI chat could not be found."
+msgstr "Der KI-Chat wurde nicht gefunden."
+
+#. module: ow_ai
+#. odoo-javascript
+#: code:addons/ow_ai/static/src/web/ow_ai_chat_launcher_service.js:0
+msgid "The AI chat could not be opened."
+msgstr "Der KI-Chat konnte nicht geöffnet werden."
+
+#. module: ow_ai
+#. odoo-javascript
+#: code:addons/ow_ai/static/src/core/common/thread_model_patch.js:0
+msgid "The assistant could not be reached."
+msgstr "Der Assistent konnte nicht erreicht werden."
+
+#. module: ow_ai
+#. odoo-javascript
+#: code:addons/ow_ai/static/src/discuss/composer_patch.js:0
+msgid "The assistant is answering…"
+msgstr "Der Assistent antwortet…"
+
+#. module: ow_ai
+#. odoo-javascript
+#. odoo-python
+#: code:addons/ow_ai/engine/loop.py:0
+#: code:addons/ow_ai/static/src/core/common/thread_model_patch.js:0
+msgid "The assistant is still answering. Please wait."
+msgstr "Der Assistent antwortet noch. Bitte warten Sie."
+
+#. module: ow_ai
+#. odoo-javascript
+#: code:addons/ow_ai/static/src/discuss/thread_actions_patch.js:0
+msgid "The chat could not be deleted."
+msgstr "Der Chat konnte nicht gelöscht werden."
+
+#. module: ow_ai
+#. odoo-javascript
+#: code:addons/ow_ai/static/src/discuss/composer_actions_patch.js:0
+msgid "The chat settings could not be saved."
+msgstr "Die Chat-Einstellungen konnten nicht gespeichert werden."
+
+#. module: ow_ai
+#. odoo-javascript
+#: code:addons/ow_ai/static/src/discuss/ow_ai_tool_summary.js:0
+msgid "The details of this step could not be loaded."
+msgstr "Die Details dieses Schritts konnten nicht geladen werden."
+
+#. module: ow_ai
+#. odoo-python
+#: code:addons/ow_ai/models/ow_ai_agent.py:0
+msgid "The partner of an AI agent cannot be changed."
+msgstr "Der Partner eines KI-Agenten kann nicht geändert werden."
+
+#. module: ow_ai
+#. odoo-javascript
+#: code:addons/ow_ai/static/src/core/common/ow_ai_session_model.js:0
+msgid "The result of the assistant's action could not be sent."
+msgstr "Das Ergebnis der Aktion des Assistenten konnte nicht gesendet werden."
+
+#. module: ow_ai
+#: model:ow.ai.composer,default_prompt:ow_ai.composer_record_chat
+msgid "The user is looking at a specific record; use its data in your answer."
+msgstr ""
+"Der Benutzer sieht sich einen bestimmten Datensatz an; verwenden Sie dessen "
+"Daten in Ihrer Antwort."
+
+#. module: ow_ai
+#: model:ir.model.constraint,message:ow_ai.constraint_ow_ai_composer_unique_interface_model
+msgid "There is already an active composer for this interface and model."
+msgstr ""
+"Es gibt bereits einen aktiven Standard-Prompt für diese Oberfläche und "
+"dieses Modell."
+
+#. module: ow_ai
+#: model:ir.model.fields,field_description:ow_ai.field_ow_ai_tool__thinking_text
+msgid "Thinking Text"
+msgstr "Denktext"
+
+#. module: ow_ai
+#. odoo-javascript
+#: code:addons/ow_ai/static/src/discuss/ow_ai_thread_status.xml:0
+msgid "Thinking…"
+msgstr "Denkt nach…"
+
+#. module: ow_ai
+#: model_terms:ir.ui.view,arch_db:ow_ai.ow_ai_usage_view_search
+msgid "This Month"
+msgstr "Diesen Monat"
+
+#. module: ow_ai
+#. odoo-python
+#: code:addons/ow_ai/engine/user_input.py:0
+msgid "This choice is not available."
+msgstr "Diese Auswahl ist nicht verfügbar."
+
+#. module: ow_ai
+#. odoo-python
+#: code:addons/ow_ai/models/ow_ai_job.py:0
+msgid "This job can no longer be retried"
+msgstr "Dieser Auftrag kann nicht mehr wiederholt werden"
+
+#. module: ow_ai
+#. odoo-python
+#: code:addons/ow_ai/engine/user_input.py:0
+msgid "This question does not accept a free-text answer."
+msgstr "Diese Frage akzeptiert keine Freitextantwort."
+
+#. module: ow_ai
+#. odoo-javascript
+#: code:addons/ow_ai/static/src/discuss/ow_ai_user_input_request.js:0
+msgid "This request is no longer waiting for an answer."
+msgstr "Diese Anfrage wartet nicht mehr auf eine Antwort."
+
+#. module: ow_ai
+#. odoo-python
+#: code:addons/ow_ai/models/ow_ai_session.py:0
+msgid "This session has no chat channel."
+msgstr "Diese Sitzung hat keinen Chatkanal."
+
+#. module: ow_ai
+#: model:ir.model.constraint,message:ow_ai.constraint_ow_ai_tool_tool_name_unique
+msgid "This tool name is already used by another active tool."
+msgstr ""
+"Dieser Werkzeugname wird bereits von einem anderen aktiven Werkzeug "
+"verwendet."
+
+#. module: ow_ai
+#: model:ir.model.fields,field_description:ow_ai.field_res_config_settings__ow_ai_timeout
+#: model_terms:ir.ui.view,arch_db:ow_ai.res_config_settings_view_form
+msgid "Timeout (s)"
+msgstr "Zeitlimit (s)"
+
+#. module: ow_ai
+#: model:ir.model.fields,field_description:ow_ai.field_ow_ai_skill__tool_ids
+msgid "Tool"
+msgstr "Werkzeug"
+
+#. module: ow_ai
+#: model:ir.model.fields,field_description:ow_ai.field_ow_ai_tool__tool_name
+msgid "Tool Name"
+msgstr "Werkzeugname"
+
+#. module: ow_ai
+#: model_terms:ir.ui.view,arch_db:ow_ai.ow_ai_tool_view_form
+msgid "Tool name"
+msgstr "Werkzeugname"
+
+#. module: ow_ai
+#. odoo-python
+#: code:addons/ow_ai/models/ow_ai_tool.py:0
+msgid ""
+"Tool name '%(name)s' must contain only letters, digits and underscores (max "
+"64 characters)."
+msgstr ""
+"Der Werkzeugname '%(name)s' darf nur Buchstaben, Ziffern und Unterstriche "
+"enthalten (max. 64 Zeichen)."
+
+#. module: ow_ai
+#: model:ir.actions.act_window,name:ow_ai.ow_ai_tool_action
+#: model:ir.ui.menu,name:ow_ai.menu_ai_tools
+msgid "Tools"
+msgstr "Werkzeuge"
+
+#. module: ow_ai
+#: model_terms:ir.ui.view,arch_db:ow_ai.ow_ai_session_view_form
+#: model_terms:ir.ui.view,arch_db:ow_ai.ow_ai_usage_view_list
+msgid "Total"
+msgstr "Gesamt"
+
+#. module: ow_ai
+#: model:ir.model.fields,field_description:ow_ai.field_ow_ai_usage__total_tokens
+msgid "Total Tokens"
+msgstr "Tokens gesamt"
+
+#. module: ow_ai
+#: model:ir.model.fields,field_description:ow_ai.field_ow_ai_session__turn_client_notifications
+msgid "Turn Client Notifications"
+msgstr "Client-Benachrichtigungen des Durchgangs"
+
+#. module: ow_ai
+#: model:ir.model.fields,field_description:ow_ai.field_ow_ai_session__turn_notifications
+msgid "Turn Notifications"
+msgstr "Benachrichtigungen des Durchgangs"
+
+#. module: ow_ai
+#: model:ow.ai.tool,description:ow_ai.tool_compute_date
+msgid ""
+"Turn a relative date expression (\"yesterday\", \"last month\", \"next "
+"Friday at 5pm\", \"the first Monday of last month\") into the exact string "
+"to use for field_name in a domain, computed in the user's own timezone. "
+"Always use this instead of computing or guessing dates yourself; the model "
+"does not reliably know today's date, the user's timezone, or how many days "
+"are in a given month. operations are applied in order: {\"type\": "
+"\"navigate\", \"period\": \"day|week|month|quarter|year|hour|minute\", "
+"\"offset\": -1, \"boundary\": \"start|end|none\"} shifts by whole periods "
+"and optionally snaps to the start/end of the resulting period (weeks start "
+"on Monday); {\"type\": \"find_previous\"|\"find_next\", \"weekday\": 0-6 "
+"(Monday=0)} jumps to the nearest such weekday, not counting today. An "
+"optional pin then fixes the day of month (an integer, or {\"weekday\": 0-6, "
+"\"occurrence\": 1-5 or -1 for \"last\"}) and/or the time of day (\"HH:MM\" "
+"or \"HH:MM:SS\"). The returned value is 'YYYY-MM-DD' for a Date field or "
+"'YYYY-MM-DD HH:MM:SS' in UTC for a Datetime field."
+msgstr ""
+"Wandelt einen relativen Datumsausdruck (\"gestern\", \"letzten Monat\", "
+"\"nächsten Freitag um 17 Uhr\", \"der erste Montag des letzten Monats\") in "
+"die exakte Zeichenkette um, die für field_name in einer Domain zu verwenden "
+"ist, berechnet in der Zeitzone des Benutzers. Verwenden Sie dies immer, "
+"statt Datumsangaben selbst zu berechnen oder zu raten; das Modell kennt das "
+"heutige Datum, die Zeitzone des Benutzers oder die Anzahl der Tage eines "
+"bestimmten Monats nicht zuverlässig. operations werden der Reihe nach "
+"angewendet: {\"type\": \"navigate\", \"period\": "
+"\"day|week|month|quarter|year|hour|minute\", \"offset\": -1, \"boundary\": "
+"\"start|end|none\"} verschiebt um ganze Zeiträume und springt optional an "
+"den Anfang/das Ende des resultierenden Zeitraums (Wochen beginnen am "
+"Montag); {\"type\": \"find_previous\"|\"find_next\", \"weekday\": 0-6 "
+"(Montag=0)} springt zum nächstgelegenen solchen Wochentag, heute nicht "
+"mitgerechnet. Ein optionaler pin legt anschließend den Tag im Monat (eine "
+"ganze Zahl oder {\"weekday\": 0-6, \"occurrence\": 1-5 oder -1 für "
+"\"letzter\"}) und/oder die Uhrzeit (\"HH:MM\" oder \"HH:MM:SS\") fest. Der "
+"zurückgegebene Wert ist 'YYYY-MM-DD' für ein Date-Feld oder 'YYYY-MM-DD "
+"HH:MM:SS' in UTC für ein Datetime-Feld."
+
+#. module: ow_ai
+#: model:ir.model.fields,help:ow_ai.field_ow_ai_usage__cost
+msgid "USD as reported by the provider (0 when it reports no cost)"
+msgstr "USD laut Angabe des Anbieters (0, wenn er keine Kosten meldet)"
+
+#. module: ow_ai
+#. odoo-python
+#: code:addons/ow_ai/models/ow_ai_tool.py:0
+msgid "Unknown built-in tool key '%(key)s'."
+msgstr "Unbekannter Schlüssel für integriertes Werkzeug '%(key)s'."
+
+#. module: ow_ai
+#. odoo-python
+#: code:addons/ow_ai/models/ow_ai_agent.py:0
+msgid "Unknown model option '%(key)s'."
+msgstr "Unbekannte Modelloption '%(key)s'."
+
+#. module: ow_ai
+#. odoo-javascript
+#: code:addons/ow_ai/static/src/discuss/messaging_menu_model_patch.js:0
+msgid "Unread"
+msgstr "Ungelesen"
+
+#. module: ow_ai
+#: model:ow.ai.skill,name:ow_ai.skill_update_records
+#: model:ow.ai.tool,name:ow_ai.tool_update_records
+msgid "Update Records"
+msgstr "Datensätze aktualisieren"
+
+#. module: ow_ai
+#: model:ir.actions.act_window,name:ow_ai.ow_ai_usage_action
+#: model:ir.actions.act_window,name:ow_ai.ow_ai_usage_action_from_agent
+#: model:ir.model.fields,field_description:ow_ai.field_ow_ai_session__usage_ids
+#: model:ir.model.fields,field_description:ow_ai.field_ow_ai_session_event__usage_id
+#: model:ir.ui.menu,name:ow_ai.menu_ai_usage
+#: model_terms:ir.ui.view,arch_db:ow_ai.ow_ai_agent_view_form
+#: model_terms:ir.ui.view,arch_db:ow_ai.ow_ai_session_view_form
+msgid "Usage"
+msgstr "Nutzung"
+
+#. module: ow_ai
+#: model:ir.model.fields,field_description:ow_ai.field_ow_ai_agent__usage_count
+msgid "Usage Count"
+msgstr "Anzahl Nutzungen"
+
+#. module: ow_ai
+#. odoo-javascript
+#: code:addons/ow_ai/static/src/discuss/message_actions_patch.js:0
+msgid "Use this"
+msgstr "Dies verwenden"
+
+#. module: ow_ai
+#: model:ow.ai.skill,instructions:ow_ai.skill_search_database
+msgid ""
+"Use this workflow to answer questions about data in this database:\n"
+"1. If you do not already know the exact model, call get_models to find it.\n"
+"2. Call get_fields on that model before searching it, so you use its real field and selection values instead of guessing.\n"
+"3. For anything relative to \"now\" (today, this week, last month, next Friday, …), call compute_date and put its returned value, unchanged, as the third element of your condition, e.g. [[\"invoice_date\", \">=\", \"2026-07-01\"]]; never compute or guess a date yourself.\n"
+"4. Use search for a list of individual records, or read_group when the user wants a count, total, breakdown or ranking rather than a list. Use read_records once you already have specific ids, e.g. from a previous search or from the record the user is looking at.\n"
+"5. For a ranking such as \"top 5 customers by revenue\", aggregate the underlying transactions (e.g. posted customer invoices, or confirmed sales orders) with read_group: group them by the related record (e.g. the customer), sum their amount, and pass order \"<field>:sum desc\" with the limit you need. Do not try to rank by sorting a list of contacts or products on a computed total.\n"
+"\n"
+"Domain rules: a domain is a list of [\"field\", \"operator\", value] triples, e.g. [[\"state\", \"=\", \"done\"]]. Consecutive conditions are implicitly AND-ed; use the prefix operators \"&\", \"|\" and \"!\" for explicit and/or/not, e.g. [\"|\", [\"city\", \"=\", \"Utrecht\"], [\"city\", \"=\", \"Almere\"]]. Supported operators: =, !=, >, >=, <, <=, in, not in, like, ilike, child_of. Only fields that get_fields flags \"sort\" can be used in order or in groupby.\n"
+"\n"
+"When answering:\n"
+"- Never invent a record id, amount or date; only report what a tool returned.\n"
+"- Refer to records by name, not by technical id, and mention the count you found (e.g. \"3 of 12 matching contacts\").\n"
+"- Format monetary amounts with their currency symbol, not the bare field value.\n"
+"- Use plain language, not technical field or model names, unless the user is clearly asking about the technical structure.\n"
+"- Present lists of more than a couple of records as a short table or bullet list, not one long sentence.\n"
+"- Every company-scoped model is already filtered to the companies the user can see; do not try to add your own company filter unless the user asks for a specific one.\n"
+"- When you mention a specific record, you may link to it as /odoo/<model>/<id> so the user can open it directly."
+msgstr ""
+"Verwenden Sie diesen Ablauf, um Fragen zu Daten in dieser Datenbank zu beantworten:\n"
+"1. Wenn Sie das genaue Modell noch nicht kennen, rufen Sie get_models auf, um es zu finden.\n"
+"2. Rufen Sie get_fields für dieses Modell auf, bevor Sie darin suchen, damit Sie dessen echte Feld- und Auswahlwerte verwenden, statt sie zu raten.\n"
+"3. Rufen Sie für alles, was relativ zu \"jetzt\" ist (heute, diese Woche, letzten Monat, nächsten Freitag, …), compute_date auf und setzen Sie den zurückgegebenen Wert unverändert als drittes Element Ihrer Bedingung ein, z. B. [[\"invoice_date\", \">=\", \"2026-07-01\"]]; berechnen oder raten Sie nie selbst ein Datum.\n"
+"4. Verwenden Sie search für eine Liste einzelner Datensätze oder read_group, wenn der Benutzer eine Anzahl, eine Summe, eine Aufschlüsselung oder eine Rangliste statt einer Liste möchte. Verwenden Sie read_records, sobald Sie bereits bestimmte IDs haben, z. B. aus einer vorherigen Suche oder von dem Datensatz, den der Benutzer ansieht.\n"
+"5. Aggregieren Sie für eine Rangliste wie \"Top 5 Kunden nach Umsatz\" die zugrunde liegenden Transaktionen (z. B. gebuchte Kundenrechnungen oder bestätigte Verkaufsaufträge) mit read_group: Gruppieren Sie sie nach dem verknüpften Datensatz (z. B. dem Kunden), summieren Sie ihren Betrag und übergeben Sie order \"<field>:sum desc\" mit dem benötigten Limit. Versuchen Sie nicht, eine Rangliste zu erstellen, indem Sie eine Liste von Kontakten oder Produkten nach einer berechneten Summe sortieren.\n"
+"\n"
+"Domain-Regeln: Eine Domain ist eine Liste von [\"field\", \"operator\", value]-Tripeln, z. B. [[\"state\", \"=\", \"done\"]]. Aufeinanderfolgende Bedingungen werden implizit mit AND verknüpft; verwenden Sie die Präfixoperatoren \"&\", \"|\" und \"!\" für explizites und/oder/nicht, z. B. [\"|\", [\"city\", \"=\", \"Utrecht\"], [\"city\", \"=\", \"Almere\"]]. Unterstützte Operatoren: =, !=, >, >=, <, <=, in, not in, like, ilike, child_of. Nur Felder, die get_fields mit \"sort\" kennzeichnet, können in order oder in groupby verwendet werden.\n"
+"\n"
+"Beim Antworten:\n"
+"- Erfinden Sie nie eine Datensatz-ID, einen Betrag oder ein Datum; geben Sie nur wieder, was ein Werkzeug zurückgegeben hat.\n"
+"- Bezeichnen Sie Datensätze mit ihrem Namen, nicht mit ihrer technischen ID, und nennen Sie die gefundene Anzahl (z. B. \"3 von 12 passenden Kontakten\").\n"
+"- Formatieren Sie Geldbeträge mit ihrem Währungssymbol, nicht als reinen Feldwert.\n"
+"- Verwenden Sie einfache Sprache statt technischer Feld- oder Modellnamen, es sei denn, der Benutzer fragt eindeutig nach der technischen Struktur.\n"
+"- Stellen Sie Listen mit mehr als ein paar Datensätzen als kurze Tabelle oder Aufzählung dar, nicht als einen langen Satz.\n"
+"- Jedes unternehmensbezogene Modell ist bereits auf die Unternehmen gefiltert, die der Benutzer sehen kann; fügen Sie keinen eigenen Unternehmensfilter hinzu, es sei denn, der Benutzer fragt nach einem bestimmten Unternehmen.\n"
+"- Wenn Sie einen bestimmten Datensatz erwähnen, können Sie ihn als /odoo/<model>/<id> verlinken, damit der Benutzer ihn direkt öffnen kann."
+
+#. module: ow_ai
+#: model:ow.ai.skill,instructions:ow_ai.skill_create_records
+msgid ""
+"Use this workflow to create new records:\n"
+"1. If you do not already know the exact model, call get_models to find it.\n"
+"2. Call get_fields on that model so you use its real field names, types and required fields; never guess a field name.\n"
+"3. For any field that refers to another record (a many2one, or a many2many/one2many to link), search first to find the right id; never invent one. For a relative date (e.g. \"due next Friday\"), call compute_date rather than computing it yourself.\n"
+"4. Call create_records with a short, plain-language explanation of what you are about to create and why. The user is shown a preview and must confirm before anything is written.\n"
+"5. If the user declines, ask what should be different instead of retrying the same values. If they confirm, summarise what was created in plain language and, when helpful, link to the new record(s) as /odoo/<model>/<id>.\n"
+"\n"
+"Never claim a record was created before you have the confirmed result. If create_records reports a missing required field or an invalid value, fix it and try again rather than giving up."
+msgstr ""
+"Verwenden Sie diesen Ablauf, um neue Datensätze zu erstellen:\n"
+"1. Wenn Sie das genaue Modell noch nicht kennen, rufen Sie get_models auf, um es zu finden.\n"
+"2. Rufen Sie get_fields für dieses Modell auf, damit Sie dessen echte Feldnamen, Typen und Pflichtfelder verwenden; raten Sie nie einen Feldnamen.\n"
+"3. Suchen Sie für jedes Feld, das auf einen anderen Datensatz verweist (ein many2one oder ein zu verknüpfendes many2many/one2many), zuerst die richtige ID; erfinden Sie nie eine. Rufen Sie für ein relatives Datum (z. B. \"fällig nächsten Freitag\") compute_date auf, statt es selbst zu berechnen.\n"
+"4. Rufen Sie create_records mit einer kurzen, leicht verständlichen Erklärung dessen auf, was Sie erstellen wollen und warum. Dem Benutzer wird eine Vorschau angezeigt, und er muss bestätigen, bevor etwas geschrieben wird.\n"
+"5. Wenn der Benutzer ablehnt, fragen Sie, was anders sein soll, statt dieselben Werte erneut zu versuchen. Wenn er bestätigt, fassen Sie in einfacher Sprache zusammen, was erstellt wurde, und verlinken Sie, wenn hilfreich, den bzw. die neuen Datensätze als /odoo/<model>/<id>.\n"
+"\n"
+"Behaupten Sie nie, dass ein Datensatz erstellt wurde, bevor Sie das bestätigte Ergebnis haben. Wenn create_records ein fehlendes Pflichtfeld oder einen ungültigen Wert meldet, korrigieren Sie dies und versuchen Sie es erneut, statt aufzugeben."
+
+#. module: ow_ai
+#: model:ow.ai.skill,instructions:ow_ai.skill_update_records
+msgid ""
+"Use this workflow to update existing records:\n"
+"1. If you do not already know the exact model, call get_models to find it.\n"
+"2. Call get_fields on that model so you use its real field names, types, and allowed selection values; never guess one.\n"
+"3. Search for the specific records to change and use a domain that targets only those; a domain that would match every record on the model is refused on purpose, so always narrow it down (e.g. by id, or by a specific filter you already checked with search). For a relative date, call compute_date rather than computing it yourself.\n"
+"4. Call update_records with a short, plain-language explanation of the change. When a field you are changing represents a status or stage, also explain what changing it will do (e.g. what happens once an order is confirmed). The user is shown a preview of the old and new value of every affected record and must confirm before anything is written.\n"
+"5. If the user declines, ask what should be different instead of retrying the same change. If they confirm, summarise what was updated in plain language and, when helpful, link to the record(s) as /odoo/<model>/<id>.\n"
+"\n"
+"Never claim a record was updated before you have the confirmed result. If update_records reports too many matching records or an invalid value, narrow the domain or fix the value and try again rather than giving up."
+msgstr ""
+"Verwenden Sie diesen Ablauf, um vorhandene Datensätze zu aktualisieren:\n"
+"1. Wenn Sie das genaue Modell noch nicht kennen, rufen Sie get_models auf, um es zu finden.\n"
+"2. Rufen Sie get_fields für dieses Modell auf, damit Sie dessen echte Feldnamen, Typen und zulässige Auswahlwerte verwenden; raten Sie nie einen davon.\n"
+"3. Suchen Sie die bestimmten Datensätze, die geändert werden sollen, und verwenden Sie eine Domain, die nur diese trifft; eine Domain, die auf jeden Datensatz des Modells zutreffen würde, wird absichtlich abgelehnt, schränken Sie sie also immer ein (z. B. nach ID oder mit einem bestimmten Filter, den Sie bereits mit search geprüft haben). Rufen Sie für ein relatives Datum compute_date auf, statt es selbst zu berechnen.\n"
+"4. Rufen Sie update_records mit einer kurzen, leicht verständlichen Erklärung der Änderung auf. Wenn ein Feld, das Sie ändern, einen Status oder eine Phase darstellt, erklären Sie auch, was die Änderung bewirkt (z. B. was passiert, sobald ein Auftrag bestätigt ist). Dem Benutzer wird eine Vorschau des alten und neuen Werts jedes betroffenen Datensatzes angezeigt, und er muss bestätigen, bevor etwas geschrieben wird.\n"
+"5. Wenn der Benutzer ablehnt, fragen Sie, was anders sein soll, statt dieselbe Änderung erneut zu versuchen. Wenn er bestätigt, fassen Sie in einfacher Sprache zusammen, was aktualisiert wurde, und verlinken Sie, wenn hilfreich, den bzw. die Datensätze als /odoo/<model>/<id>.\n"
+"\n"
+"Behaupten Sie nie, dass ein Datensatz aktualisiert wurde, bevor Sie das bestätigte Ergebnis haben. Wenn update_records zu viele passende Datensätze oder einen ungültigen Wert meldet, schränken Sie die Domain ein oder korrigieren Sie den Wert und versuchen Sie es erneut, statt aufzugeben."
+
+#. module: ow_ai
+#: model:ir.model,name:ow_ai.model_res_users
+#: model:ir.model.fields,field_description:ow_ai.field_ow_ai_job__user_id
+#: model:ir.model.fields,field_description:ow_ai.field_ow_ai_usage__user_id
+#: model:ir.model.fields.selection,name:ow_ai.selection__ow_ai_session_event__role__user
+#: model_terms:ir.ui.view,arch_db:ow_ai.ow_ai_job_view_search
+#: model_terms:ir.ui.view,arch_db:ow_ai.ow_ai_session_view_search
+#: model_terms:ir.ui.view,arch_db:ow_ai.ow_ai_usage_view_search
+msgid "User"
+msgstr "Benutzer"
+
+#. module: ow_ai
+#: model:ir.model.fields.selection,name:ow_ai.selection__ow_ai_session__loop_state__waiting_answer
+msgid "Waiting for answer"
+msgstr "Wartet auf Antwort"
+
+#. module: ow_ai
+#: model:ir.model.fields.selection,name:ow_ai.selection__ow_ai_session__loop_state__waiting_child
+msgid "Waiting for child session"
+msgstr "Wartet auf untergeordnete Sitzung"
+
+#. module: ow_ai
+#: model:ir.model.fields.selection,name:ow_ai.selection__ow_ai_session__loop_state__waiting_client_result
+msgid "Waiting for client result"
+msgstr "Wartet auf Client-Ergebnis"
+
+#. module: ow_ai
+#: model:ir.model.fields.selection,name:ow_ai.selection__ow_ai_session__loop_state__waiting_confirmation
+msgid "Waiting for confirmation"
+msgstr "Wartet auf Bestätigung"
+
+#. module: ow_ai
+#: model:ir.model.fields.selection,name:ow_ai.selection__ow_ai_session__loop_state__waiting_model
+#: model_terms:ir.ui.view,arch_db:ow_ai.ow_ai_session_view_search
+msgid "Waiting for model"
+msgstr "Wartet auf Modell"
+
+#. module: ow_ai
+#. odoo-javascript
+#: code:addons/ow_ai/static/src/discuss/ow_ai_thread_status.xml:0
+msgid "Waiting for this page…"
+msgstr "Wartet auf diese Seite…"
+
+#. module: ow_ai
+#: model_terms:ir.ui.view,arch_db:ow_ai.ow_ai_session_view_search
+msgid "Waiting for user"
+msgstr "Wartet auf Benutzer"
+
+#. module: ow_ai
+#: model:ow.ai.prompt.button,name:ow_ai.composer_systray_button_1
+#: model:ow.ai.prompt.button,prompt:ow_ai.composer_systray_button_1
+msgid "What can you help me with?"
+msgstr "Wobei können Sie mir helfen?"
+
+#. module: ow_ai
+#: model:ow.ai.prompt.button,name:ow_ai.composer_record_chat_button_2
+#: model:ow.ai.prompt.button,prompt:ow_ai.composer_record_chat_button_2
+msgid "What should I do next with this record?"
+msgstr "Was sollte ich als Nächstes mit diesem Datensatz tun?"
+
+#. module: ow_ai
+#. odoo-javascript
+#: code:addons/ow_ai/static/src/discuss/ow_ai_user_input_request.js:0
+msgid "Yes, always approve in this chat"
+msgstr "Ja, in diesem Chat immer genehmigen"
+
+#. module: ow_ai
+#. odoo-javascript
+#: code:addons/ow_ai/static/src/discuss/ow_ai_user_input_request.js:0
+msgid "Yes, do it"
+msgstr "Ja, ausführen"
+
+#. module: ow_ai
+#. odoo-python
+#: code:addons/ow_ai/models/discuss_channel.py:0
+msgid "You are not a member of this AI chat."
+msgstr "Sie sind kein Mitglied dieses KI-Chats."
+
+#. module: ow_ai
+#. odoo-python
+#: code:addons/ow_ai/controllers/session.py:0
+#: code:addons/ow_ai/models/ow_ai_agent.py:0
+msgid "You do not have access to the AI assistant."
+msgstr "Sie haben keinen Zugriff auf den KI-Assistenten."
+
+#. module: ow_ai
+#. odoo-python
+#: code:addons/ow_ai/models/ow_ai_session.py:0
+msgid "You do not have access to this conversation."
+msgstr "Sie haben keinen Zugriff auf diese Unterhaltung."
+
+#. module: ow_ai
+#. odoo-python
+#: code:addons/ow_ai/controllers/session.py:0
+msgid "You may only advance the chat on your own message."
+msgstr "Sie können den Chat nur mit Ihrer eigenen Nachricht fortsetzen."
+
+#. module: ow_ai
+#. odoo-javascript
+#: code:addons/ow_ai/static/src/discuss/ow_ai_user_input_request.js:0
+msgid "Your answer could not be sent."
+msgstr "Ihre Antwort konnte nicht gesendet werden."
+
+#. module: ow_ai
+#: model:ow.ai.agent,subtitle:ow_ai.agent_default
+msgid "Your assistant for Odoo data"
+msgstr "Ihr Assistent für Odoo-Daten"
+
+#. module: ow_ai
+#: model_terms:ir.ui.view,arch_db:ow_ai.preview_update
+msgid "more record(s) not shown."
+msgstr "weitere Datensätze nicht angezeigt."
+
+#. module: ow_ai
+#: model_terms:ir.ui.view,arch_db:ow_ai.preview_create
+msgid "record(s) will be created:"
+msgstr "Datensätze werden erstellt:"
+
+#. module: ow_ai
+#: model_terms:ir.ui.view,arch_db:ow_ai.preview_update
+msgid "record(s) will be updated:"
+msgstr "Datensätze werden aktualisiert:"
+
+#. module: ow_ai
+#: model_terms:ir.ui.view,arch_db:ow_ai.res_config_settings_view_form
+msgid "sk-… (optional)"
+msgstr "sk-… (optional)"
+
+#. module: ow_ai
+#: model_terms:ir.ui.view,arch_db:ow_ai.preview_update
+msgid "…and"
+msgstr "…und"

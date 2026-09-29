@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+
+<t t-inherit="mail.Thread" t-inherit-mode="extension">
+    <xpath expr="//t[@t-set='messages']" position="after">
+        <t t-set="owAiLayout" t-value="this.owAiLayout(messages)"/>
+        <t t-set="messages" t-value="owAiLayout.messages"/>
+    </xpath>
+    <xpath expr="//NotificationMessage" position="before">
+        <t t-set="owAiSteps" t-value="owAiLayout.groups.get(msg.id)"/>
+        <OwAiStepsGroup t-if="owAiSteps" messages="owAiSteps.messages" open="owAiSteps.open"/>
+    </xpath>
+    <xpath expr="//NotificationMessage" position="attributes">
+        <attribute name="t-if" add="and !owAiSteps" separator=" "/>
+    </xpath>
+    <xpath expr="//Message" position="attributes">
+        <attribute name="t-elif" add="and !owAiSteps" separator=" "/>
+    </xpath>
+    <xpath expr="//t[@t-foreach='messages']" position="after">
+        <t t-if="this.isOwAiChat">
+            <OwAiUserInputRequest t-if="this.owAiUserInputRequest" t-key="this.owAiUserInputRequest.resumeToken" request="this.owAiUserInputRequest" thread="this.props.thread"/>
+            <OwAiThreadStatus channel="this.channel"/>
+        </t>
+    </xpath>
+</t>
+
+<t t-inherit="mail.Thread.startMessage" t-inherit-mode="extension">
+    <xpath expr="//div[hasclass('pt-4')]" position="attributes">
+        <attribute name="t-if">!this.isOwAiChat</attribute>
+    </xpath>
+    <xpath expr="//div[hasclass('pt-4')]" position="after">
+        <OwAiChatIntro t-else="" thread="this.props.thread"/>
+    </xpath>
+</t>
+
+</templates>

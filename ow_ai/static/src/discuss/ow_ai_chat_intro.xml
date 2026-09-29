@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+
+<t t-name="ow_ai.ChatIntro">
+    <div class="o_ow_ai_chat_intro pt-4" t-att-class="{ 'px-3': this.env.inChatWindow, 'px-2': !this.env.inChatWindow }">
+        <div class="d-flex align-items-center gap-2 mt-2 mb-1">
+            <img t-if="this.avatarUrl" class="o_ow_ai_chat_intro_avatar rounded-3 object-fit-cover flex-shrink-0" t-att-src="this.avatarUrl" alt="Assistant"/>
+            <div class="min-w-0">
+                <div role="heading" aria-level="1" class="o_ow_ai_chat_intro_name fw-bold text-break" t-att-class="{ 'fs-4': this.env.inChatWindow, 'fs-2': !this.env.inChatWindow }" t-out="this.name"/>
+                <div t-if="this.agent?.subtitle" class="o_ow_ai_chat_intro_subtitle text-muted small text-break" t-out="this.agent.subtitle"/>
+            </div>
+        </div>
+        <div t-if="this.promptButtons.length" class="o_ow_ai_prompt_buttons d-flex flex-wrap gap-1 mt-2">
+            <button t-foreach="this.promptButtons" t-as="button" t-key="button_index" type="button"
+                class="o_ow_ai_prompt_button btn btn-sm btn-secondary rounded-pill text-start"
+                t-att-title="button.prompt"
+                t-on-click="() => this.onClickPrompt(button)"
+                t-out="button.name or button.prompt"/>
+        </div>
+    </div>
+</t>
+
+</templates>

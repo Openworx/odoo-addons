@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="ow_ai_usage_view_list" model="ir.ui.view">
+        <field name="name">ow.ai.usage.view.list</field>
+        <field name="model">ow.ai.usage</field>
+        <field name="arch" type="xml">
+            <list string="AI Usage" create="false" edit="false">
+                <field name="create_date"/>
+                <field name="kind"/>
+                <field name="model"/>
+                <field name="user_id"/>
+                <field name="agent_id"/>
+                <field name="prompt_tokens" sum="Prompt"/>
+                <field name="completion_tokens" sum="Completion"/>
+                <field name="total_tokens" sum="Total"/>
+                <field name="cost" sum="Cost" digits="[16, 6]"/>
+                <field name="status" widget="badge" decoration-danger="status == 'error'"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="ow_ai_usage_view_pivot" model="ir.ui.view">
+        <field name="name">ow.ai.usage.view.pivot</field>
+        <field name="model">ow.ai.usage</field>
+        <field name="arch" type="xml">
+            <pivot string="AI Usage">
+                <field name="model" type="row"/>
+                <field name="create_date" interval="month" type="col"/>
+                <field name="cost" type="measure"/>
+                <field name="total_tokens" type="measure"/>
+            </pivot>
+        </field>
+    </record>
+
+    <record id="ow_ai_usage_view_graph" model="ir.ui.view">
+        <field name="name">ow.ai.usage.view.graph</field>
+        <field name="model">ow.ai.usage</field>
+        <field name="arch" type="xml">
+            <graph string="AI Usage">
+                <field name="create_date" interval="month"/>
+                <field name="cost" type="measure"/>
+            </graph>
+        </field>
+    </record>
+
+    <record id="ow_ai_usage_view_search" model="ir.ui.view">
+        <field name="name">ow.ai.usage.view.search</field>
+        <field name="model">ow.ai.usage</field>
+        <field name="arch" type="xml">
+            <search string="AI Usage">
+                <field name="model"/>
+                <field name="user_id"/>
+                <field name="agent_id"/>
+                <filter string="This Month" name="this_month"
+                        domain="[('create_date', '&gt;=', context_today().strftime('%Y-%m-01'))]"/>
+                <filter string="Last Month" name="last_month"
+                        domain="[('create_date', '&gt;=', (context_today() - relativedelta(months=1)).strftime('%Y-%m-01')),
+                                 ('create_date', '&lt;', context_today().strftime('%Y-%m-01'))]"/>
+                <filter string="Errors" name="errors" domain="[('status', '=', 'error')]"/>
+                <separator/>
+                <group>
+                    <filter string="Model" name="group_model" context="{'group_by': 'model'}"/>
+                    <filter string="User" name="group_user" context="{'group_by': 'user_id'}"/>
+                    <filter string="Agent" name="group_agent" context="{'group_by': 'agent_id'}"/>
+                    <filter string="Kind" name="group_kind" context="{'group_by': 'kind'}"/>
+                    <filter string="Company" name="group_company" context="{'group_by': 'company_id'}" groups="base.group_multi_company"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="ow_ai_usage_action" model="ir.actions.act_window">
+        <field name="name">Usage</field>
+        <field name="res_model">ow.ai.usage</field>
+        <field name="view_mode">list,pivot,graph</field>
+        <field name="search_view_id" ref="ow_ai_usage_view_search"/>
+        <field name="context">{'search_default_this_month': 1}</field>
+    </record>
+
+    <record id="ow_ai_usage_action_from_agent" model="ir.actions.act_window">
+        <field name="name">Usage</field>
+        <field name="res_model">ow.ai.usage</field>
+        <field name="view_mode">list,pivot,graph</field>
+        <field name="domain">[('agent_id', '=', active_id)]</field>
+    </record>
+</odoo>
