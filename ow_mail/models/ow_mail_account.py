@@ -418,7 +418,7 @@ class OwMailAccount(models.Model):
             try:
                 conn = acc._imap_connect()
                 try:
-                    acc.folder_ids.refresh_counts(conn=conn)
+                    changed = acc.folder_ids.refresh_counts(conn=conn)
                     if acc.inbox_folder_id:
                         # New-mail detection for inbox
                         if acc.notify_new_mail:
@@ -429,7 +429,12 @@ class OwMailAccount(models.Model):
                 finally:
                     conn.logout()
                 self.env.cr.commit()
-                touched_partner_ids.add(acc.user_id.partner_id.id)
+                # Notify only when a folder count actually changed. An
+                # unconditional refresh every run piles up in bus.bus and is
+                # replayed in bulk to tabs that reconnect after sleeping, where
+                # the client runs one bootstrap() per event -> request flood.
+                if changed:
+                    touched_partner_ids.add(acc.user_id.partner_id.id)
             except Exception as e:
                 _logger.debug("ow_mail refresh_counts failed for account %s: %s", acc.id, e)
 
