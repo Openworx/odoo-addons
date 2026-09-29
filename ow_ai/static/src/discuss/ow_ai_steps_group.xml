@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+
+<t t-name="ow_ai.StepsGroup">
+    <div class="o_ow_ai_steps mx-2 my-1" t-att-class="{ 'o_ow_ai_steps_open': this.isOpen }">
+        <button type="button" class="o_ow_ai_steps_header btn btn-link text-reset d-flex align-items-center gap-1 px-1 py-0 small"
+            t-att-aria-expanded="this.isOpen ? 'true' : 'false'"
+            t-on-click="this.toggle"
+        >
+            <i class="fa fa-fw text-muted" t-att-class="this.isOpen ? 'fa-chevron-down' : 'fa-chevron-right'"/>
+            <span>Steps taken</span>
+            <span class="o_ow_ai_steps_count badge rounded-pill text-bg-light border" t-out="this.props.messages.length"/>
+        </button>
+        <div t-if="this.isOpen" class="o_ow_ai_steps_list d-flex flex-column gap-1 mt-1 ms-2 ps-2 small">
+            <t t-foreach="this.props.messages" t-as="message" t-key="message.id">
+                <OwAiToolSummary t-if="message.owAiIsToolSummary" message="message"/>
+                <div t-else="" class="o_ow_ai_step text-break" t-out="message.richBody"/>
+            </t>
+        </div>
+    </div>
+</t>
+
+</templates>

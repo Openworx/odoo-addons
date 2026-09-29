@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+
+<t t-inherit="mail.MessagingMenu.content" t-inherit-mode="extension">
+    <!-- desktop: the "AI" filter after mail's (mobile shows it with the tabs, `_tabs`) -->
+    <xpath expr="//button[hasclass('o-mail-MessagingMenu-headerFilter')][contains(@t-on-click, &quot;= 'channel'&quot;)]" position="after">
+        <button t-if="owAiTab" class="o-mail-MessagingMenu-headerFilter o_ow_ai_messaging_menu_tab btn btn-link o-px-1_5 py-1 m-1 lh-1" t-att-class="isOwAiTabActive ? 'fw-bold o-active shadow-sm' : 'text-muted'" type="button" role="tab" t-on-click="onClickOwAiTab">
+            OW AI<span t-if="owAiTab.counter" class="o_ow_ai_messaging_menu_tab_counter badge rounded-pill o-discuss-badge ms-1" t-esc="owAiTab.counter"/>
+        </button>
+    </xpath>
+    <!-- desktop: "New chat" instead of "New Message" while the AI tab is active -->
+    <xpath expr="//button[@t-on-click.stop='onClickNewMessage']" position="attributes">
+        <attribute name="t-if" add="and !isOwAiTabActive" separator=" "/>
+    </xpath>
+    <xpath expr="//button[@t-on-click.stop='onClickNewMessage']" position="after">
+        <button t-if="isOwAiTabActive" class="o_ow_ai_new_chat btn btn-link px-2 py-1" t-on-click.stop="onClickOwAiNewChat">
+            New chat
+        </button>
+    </xpath>
+    <!-- the AI tab's own empty state, instead of mail's "No conversation yet..." (once loaded) -->
+    <xpath expr="//div[contains(@t-if, '!hasPreviews')]" position="attributes">
+        <attribute name="t-if" add="and !isOwAiTabActive" separator=" "/>
+    </xpath>
+    <xpath expr="//div[contains(@t-if, '!hasPreviews')]" position="after">
+        <div t-if="isOwAiTabActive and store.channels.status !== 'fetching' and !threads.length and !store.discuss.searchTerm" class="o_ow_ai_messaging_menu_empty d-flex flex-column align-items-center gap-2 py-4 px-2 text-center text-muted">
+            <span class="fw-bold">No AI chat yet</span>
+            <span class="small">Ask the assistant about your data, or have it do the work.</span>
+            <button class="o_ow_ai_new_chat btn btn-primary btn-sm" t-on-click.stop="onClickOwAiNewChat">
+                <i class="fa fa-plus me-1" role="img" aria-hidden="true"/>New chat
+            </button>
+        </div>
+    </xpath>
+</t>
+
+</templates>

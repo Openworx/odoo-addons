@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+
+<!-- the thread shows the assistant's own status instead of "… is typing" -->
+<t t-inherit="mail.ChatWindow.memberTyping" t-inherit-mode="extension">
+    <xpath expr="//div[@t-if='thread.hasOtherMembersTyping']" position="attributes">
+        <attribute name="t-if" add="and !thread.isOwAiChat" separator=" "/>
+    </xpath>
+</t>
+
+</templates>

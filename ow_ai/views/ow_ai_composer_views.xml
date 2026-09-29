@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="ow_ai_composer_view_list" model="ir.ui.view">
+        <field name="name">ow.ai.composer.view.list</field>
+        <field name="model">ow.ai.composer</field>
+        <field name="arch" type="xml">
+            <list string="Default Prompts">
+                <field name="name"/>
+                <field name="interface_key"/>
+                <field name="model_name"/>
+                <field name="agent_id"/>
+                <field name="active" column_invisible="True"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="ow_ai_composer_view_form" model="ir.ui.view">
+        <field name="name">ow.ai.composer.view.form</field>
+        <field name="model">ow.ai.composer</field>
+        <field name="arch" type="xml">
+            <form string="Default Prompt">
+                <sheet>
+                    <div class="oe_title">
+                        <field name="name" placeholder="Composer name"/>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="interface_key"/>
+                            <field name="model_id"/>
+                            <field name="agent_id"/>
+                        </group>
+                        <group>
+                            <field name="is_system_default" readonly="1"/>
+                            <field name="active"/>
+                        </group>
+                    </group>
+                    <group string="Default Prompt">
+                        <field name="default_prompt" nolabel="1"/>
+                    </group>
+                    <notebook>
+                        <page string="Prompt Buttons" name="prompt_buttons">
+                            <field name="prompt_button_ids">
+                                <list editable="bottom">
+                                    <field name="sequence" widget="handle"/>
+                                    <field name="name"/>
+                                    <field name="prompt"/>
+                                </list>
+                            </field>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="ow_ai_composer_action" model="ir.actions.act_window">
+        <field name="name">Default Prompts</field>
+        <field name="res_model">ow.ai.composer</field>
+        <field name="view_mode">list,form</field>
+    </record>
+</odoo>

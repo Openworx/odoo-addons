@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <title>OW AI Assistant</title>
+</head>
+<body>
+<section style="font-family: 'Montserrat', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif; max-width: 960px; margin: 0 auto; padding: 28px 18px; color: #1d2b3a; line-height: 1.7; background-color: #ffffff;">
+
+    <!-- HERO -->
+    <div style="background-color: #14212E; background-image: radial-gradient(circle at 88% 15%, rgba(0,114,192,0.35) 0, transparent 45%), radial-gradient(circle at 75% 85%, rgba(0,114,192,0.18) 0, transparent 40%), radial-gradient(circle at 96% 55%, rgba(255,149,14,0.10) 0, transparent 30%); border-radius: 14px; padding: 54px 40px 46px 40px; margin-bottom: 20px;">
+        <img src="https://download.openworx.nl/logo.png" alt="Openworx" style="max-width: 170px; height: auto; margin-bottom: 30px;"/>
+        <div style="margin-bottom: 22px;">
+            <span style="display: inline-block; background-color: #0072C0; color: #fff; font-size: 13px; font-weight: 700; padding: 7px 16px; border-radius: 6px; margin: 0 8px 8px 0;">AI assistant for Odoo Community</span>
+            <span style="display: inline-block; background-color: #ff950e; color: #fff; font-size: 13px; font-weight: 700; padding: 7px 16px; border-radius: 6px; margin: 0 0 8px 0;">By Openworx — Odoo specialists since 2010</span>
+        </div>
+        <h1 style="font-size: 42px; line-height: 1.15; margin: 0 0 16px 0; font-weight: 800; letter-spacing: -0.01em; color: #ffffff; max-width: 680px;">
+            OW AI Assistant — an AI colleague inside Odoo<span style="color: #ff950e;">.</span>
+        </h1>
+        <p style="font-size: 17px; color: #b9c6d4; max-width: 640px; margin: 0 0 26px 0; font-weight: 500;">
+            Ask questions about your Odoo data, let the assistant prepare records and approve every change
+            before it is made — on any OpenAI-compatible provider, from OpenRouter to a local Ollama.
+        </p>
+        <div style="font-size: 15px; color: #ffffff; font-weight: 700;">
+            <span style="display: inline-block; margin: 4px 26px 4px 0;"><span style="color: #ff950e; margin-right: 8px;">&#10004;</span>Any OpenAI-compatible provider</span>
+            <span style="display: inline-block; margin: 4px 26px 4px 0;"><span style="color: #ff950e; margin-right: 8px;">&#10004;</span>Runs with the user's own access rights</span>
+            <span style="display: inline-block; margin: 4px 0;"><span style="color: #ff950e; margin-right: 8px;">&#10004;</span>Changes only after your approval</span>
+        </div>
+    </div>
+
+    <!-- SCREENSHOT -->
+    <div style="margin-bottom: 52px; border-radius: 12px; border: 1px solid #dfe9f2;">
+        <img src="screenshot_chat.png" alt="OW AI Assistant answering a question with a table in Discuss" style="width: 100%; height: auto; display: block; border-radius: 12px;"/>
+    </div>
+
+    <!-- WHAT IT DOES -->
+    <div style="margin-bottom: 48px;">
+        <div style="font-size: 12px; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: #0072C0; margin-bottom: 6px;">The idea</div>
+        <h2 style="font-size: 30px; font-weight: 800; color: #14212E; margin: 0 0 12px 0;">What it does<span style="color: #ff950e;">.</span></h2>
+        <p style="font-size: 16px; color: #55677a; margin: 0;">
+            OW AI Assistant gives every internal user an AI agent to chat with — from Discuss, the
+            <strong style="color: #14212E;">Ask AI</strong> button in the top bar, the command palette or any record's form.
+            The agent looks things up with tools that read your Odoo data, answers with tables and links to the
+            records, prepares new or updated records for your approval and asks you a question when it is not sure.
+            Everything runs as the user who asks, through Odoo's normal access rights: the assistant sees and
+            changes nothing that user could not.
+        </p>
+    </div>
+
+    <!-- KEY FEATURES -->
+    <div style="background-color: #EEF5FB; border-radius: 14px; padding: 34px 26px; margin-bottom: 48px;">
+        <div style="font-size: 12px; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: #0072C0; margin-bottom: 6px;">Features</div>
+        <h2 style="font-size: 30px; font-weight: 800; color: #14212E; margin: 0 0 22px 0;">Everything an Odoo assistant should do<span style="color: #ff950e;">.</span></h2>
+
+        <div style="margin: 0 -0.5%;">
+
+            <div style="display: inline-block; box-sizing: border-box; width: 48%; vertical-align: top; margin: 0 0.5% 14px 0.5%; background-color: #fff; border: 1px solid #dfe9f2; border-radius: 10px; padding: 20px 22px;">
+                <div style="font-size: 24px; margin-bottom: 8px;">💬</div>
+                <h3 style="margin: 0 0 6px 0; color: #14212E; font-size: 17px; font-weight: 700;">Chat from anywhere<span style="color: #ff950e;">.</span></h3>
+                <p style="margin: 0; color: #55677a; font-size: 15px;">Start a chat from Discuss, the <strong style="color: #14212E;">Ask AI</strong> button in the top bar or the command palette. Chats get a title of their own and live in an <strong style="color: #14212E;">OW AI</strong> section of Discuss and the messaging menu.</p>
+            </div>
+
+            <div style="display: inline-block; box-sizing: border-box; width: 48%; vertical-align: top; margin: 0 0.5% 14px 0.5%; background-color: #fff; border: 1px solid #dfe9f2; border-radius: 10px; padding: 20px 22px;">
+                <div style="font-size: 24px; margin-bottom: 8px;">📊</div>
+                <h3 style="margin: 0 0 6px 0; color: #14212E; font-size: 17px; font-weight: 700;">Answers from your data<span style="color: #ff950e;">.</span></h3>
+                <p style="margin: 0; color: #55677a; font-size: 15px;">The agent searches, reads and groups records with its tools instead of guessing, and answers with Markdown tables, lists and links that open the records it talks about.</p>
+            </div>
+
+            <div style="display: inline-block; box-sizing: border-box; width: 48%; vertical-align: top; margin: 0 0.5% 14px 0.5%; background-color: #fff; border: 1px solid #dfe9f2; border-radius: 10px; padding: 20px 22px;">
+                <div style="font-size: 24px; margin-bottom: 8px;">✅</div>
+                <h3 style="margin: 0 0 6px 0; color: #14212E; font-size: 17px; font-weight: 700;">You approve every change<span style="color: #ff950e;">.</span></h3>
+                <p style="margin: 0; color: #55677a; font-size: 15px;">Creating or updating records pauses the chat on a card that shows exactly what will be written. Choose <em>Yes</em>, <em>Yes, always in this chat</em> or <em>No</em> — nothing is written before that.</p>
+            </div>
+
+            <div style="display: inline-block; box-sizing: border-box; width: 48%; vertical-align: top; margin: 0 0.5% 14px 0.5%; background-color: #fff; border: 1px solid #dfe9f2; border-radius: 10px; padding: 20px 22px;">
+                <div style="font-size: 24px; margin-bottom: 8px;">📇</div>
+                <h3 style="margin: 0 0 6px 0; color: #14212E; font-size: 17px; font-weight: 700;">Ask about this record<span style="color: #ff950e;">.</span></h3>
+                <p style="margin: 0; color: #55677a; font-size: 15px;">On a form, <strong style="color: #14212E;">Ask AI</strong> opens a chat that already knows the record. Post a useful answer straight to the record's chatter as a note or a message.</p>
+            </div>
+
+            <div style="display: inline-block; box-sizing: border-box; width: 48%; vertical-align: top; margin: 0 0.5% 14px 0.5%; background-color: #fff; border: 1px solid #dfe9f2; border-radius: 10px; padding: 20px 22px;">
+                <div style="font-size: 24px; margin-bottom: 8px;">🙋</div>
+                <h3 style="margin: 0 0 6px 0; color: #14212E; font-size: 17px; font-weight: 700;">Asks when it is not sure<span style="color: #ff950e;">.</span></h3>
+                <p style="margin: 0; color: #55677a; font-size: 15px;">Instead of assuming, the agent can pause and ask you a question with answer options or free text, then continue with your answer.</p>
+            </div>
+
+            <div style="display: inline-block; box-sizing: border-box; width: 48%; vertical-align: top; margin: 0 0.5% 14px 0.5%; background-color: #fff; border: 1px solid #dfe9f2; border-radius: 10px; padding: 20px 22px;">
+                <div style="font-size: 24px; margin-bottom: 8px;">👣</div>
+                <h3 style="margin: 0 0 6px 0; color: #14212E; font-size: 17px; font-weight: 700;">Transparent steps<span style="color: #ff950e;">.</span></h3>
+                <p style="margin: 0; color: #55677a; font-size: 15px;">Switch on <strong style="color: #14212E;">Show steps</strong> in a chat and a folded <strong style="color: #14212E;">Steps taken</strong> list under each answer shows every tool the agent used. Off by default, for a clean chat.</p>
+            </div>
+
+            <div style="display: inline-block; box-sizing: border-box; width: 48%; vertical-align: top; margin: 0 0.5% 14px 0.5%; background-color: #fff; border: 1px solid #dfe9f2; border-radius: 10px; padding: 20px 22px;">
+                <div style="font-size: 24px; margin-bottom: 8px;">🧩</div>
+                <h3 style="margin: 0 0 6px 0; color: #14212E; font-size: 17px; font-weight: 700;">Agents, skills and tools<span style="color: #ff950e;">.</span></h3>
+                <p style="margin: 0; color: #55677a; font-size: 15px;">Create agents with their own instructions and model. Skills bundle extra instructions and tools that an agent loads only when a question needs them — try any agent with <strong style="color: #14212E;">Test in chat</strong>.</p>
+            </div>
+
+            <div style="display: inline-block; box-sizing: border-box; width: 48%; vertical-align: top; margin: 0 0.5% 14px 0.5%; background-color: #fff; border: 1px solid #dfe9f2; border-radius: 10px; padding: 20px 22px;">
+                <div style="font-size: 24px; margin-bottom: 8px;">🎛️</div>
+                <h3 style="margin: 0 0 6px 0; color: #14212E; font-size: 17px; font-weight: 700;">Composers per entry point<span style="color: #ff950e;">.</span></h3>
+                <p style="margin: 0; color: #55677a; font-size: 15px;">Decide per entry point which agent answers, add extra instructions and prompt buttons, and limit a chat about a record to one model — for example only contacts.</p>
+            </div>
+
+            <div style="display: inline-block; box-sizing: border-box; width: 48%; vertical-align: top; margin: 0 0.5% 14px 0.5%; background-color: #fff; border: 1px solid #dfe9f2; border-radius: 10px; padding: 20px 22px;">
+                <div style="font-size: 24px; margin-bottom: 8px;">🌐</div>
+                <h3 style="margin: 0 0 6px 0; color: #14212E; font-size: 17px; font-weight: 700;">Web search with sources<span style="color: #ff950e;">.</span></h3>
+                <p style="margin: 0; color: #55677a; font-size: 15px;">Connect your own <strong style="color: #14212E;">SearXNG</strong> instance and switch web search on per chat. The agent searches, reads the pages it found and cites them with numbered source links. Off by default.</p>
+            </div>
+
+            <div style="display: inline-block; box-sizing: border-box; width: 48%; vertical-align: top; margin: 0 0.5% 14px 0.5%; background-color: #fff; border: 1px solid #dfe9f2; border-radius: 10px; padding: 20px 22px;">
+                <div style="font-size: 24px; margin-bottom: 8px;">📈</div>
+                <h3 style="margin: 0 0 6px 0; color: #14212E; font-size: 17px; font-weight: 700;">Usage at a glance<span style="color: #ff950e;">.</span></h3>
+                <p style="margin: 0; color: #55677a; font-size: 15px;">Every model call is logged with tokens, latency and status, and with its cost when the provider reports one (OpenRouter does). Analyse it per user, agent or model in list, pivot and graph views.</p>
+            </div>
+
+            <div style="display: inline-block; box-sizing: border-box; width: 48%; vertical-align: top; margin: 0 0.5% 14px 0.5%; background-color: #fff; border: 1px solid #dfe9f2; border-radius: 10px; padding: 20px 22px;">
+                <div style="font-size: 24px; margin-bottom: 8px;">🌍</div>
+                <h3 style="margin: 0 0 6px 0; color: #14212E; font-size: 17px; font-weight: 700;">Speaks your language<span style="color: #ff950e;">.</span></h3>
+                <p style="margin: 0; color: #55677a; font-size: 15px;">The agent answers in the language the user writes in. The interface ships in English, Dutch, French and German.</p>
+            </div>
+
+            <div style="display: inline-block; box-sizing: border-box; width: 48%; vertical-align: top; margin: 0 0.5% 14px 0.5%; background-color: #fff; border: 1px solid #dfe9f2; border-radius: 10px; padding: 20px 22px;">
+                <div style="font-size: 24px; margin-bottom: 8px;">⚙️</div>
+                <h3 style="margin: 0 0 6px 0; color: #14212E; font-size: 17px; font-weight: 700;">Runs in the background<span style="color: #ff950e;">.</span></h3>
+                <p style="margin: 0; color: #55677a; font-size: 15px;">Each turn runs as a queued job on Odoo's own cron workers, so a slow model never blocks the browser. Limits for rounds, tool calls and timeouts keep every turn in check.</p>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- IN ACTION -->
+    <div style="margin-bottom: 48px;">
+        <div style="font-size: 12px; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: #0072C0; margin-bottom: 6px;">In action</div>
+        <h2 style="font-size: 30px; font-weight: 800; color: #14212E; margin: 0 0 22px 0;">See it at work<span style="color: #ff950e;">.</span></h2>
+
+        <h3 style="margin: 0 0 6px 0; color: #14212E; font-size: 19px; font-weight: 700;">Approve before anything is written<span style="color: #ff950e;">.</span></h3>
+        <p style="margin: 0 0 14px 0; color: #55677a; font-size: 15px;">The agent found the opportunity with the highest expected revenue and prepared the activity. The card shows every value it will write; nothing happens until you click.</p>
+        <div style="margin-bottom: 40px; border-radius: 12px; border: 1px solid #dfe9f2;">
+            <img src="screenshot_confirm.png" alt="Confirmation card for a new activity" style="width: 100%; height: auto; display: block; border-radius: 12px;"/>
+        </div>
+
+        <h3 style="margin: 0 0 6px 0; color: #14212E; font-size: 19px; font-weight: 700;">Chat about the record you are looking at<span style="color: #ff950e;">.</span></h3>
+        <p style="margin: 0 0 14px 0; color: #55677a; font-size: 15px;">Open <strong style="color: #14212E;">Ask AI</strong> on a customer and get a summary of its quotations, orders and opportunities in a chat window next to the form.</p>
+        <div style="margin-bottom: 40px; border-radius: 12px; border: 1px solid #dfe9f2;">
+            <img src="screenshot_record.png" alt="Chat about a customer next to its form" style="width: 100%; height: auto; display: block; border-radius: 12px;"/>
+        </div>
+
+        <h3 style="margin: 0 0 6px 0; color: #14212E; font-size: 19px; font-weight: 700;">Settings per chat<span style="color: #ff950e;">.</span></h3>
+        <p style="margin: 0 0 14px 0; color: #55677a; font-size: 15px;">Auto-approve actions, web search and the steps list are switched on or off per chat, right from the composer.</p>
+        <div style="margin-bottom: 40px; border-radius: 12px; border: 1px solid #dfe9f2;">
+            <img src="screenshot_composer.png" alt="Per-chat switches in the composer menu" style="width: 100%; height: auto; display: block; border-radius: 12px;"/>
+        </div>
+
+        <h3 style="margin: 0 0 6px 0; color: #14212E; font-size: 19px; font-weight: 700;">Your agents, your instructions<span style="color: #ff950e;">.</span></h3>
+        <p style="margin: 0 0 14px 0; color: #55677a; font-size: 15px;">Every agent has its own instructions, skills and, if you like, its own model. Usage and sessions are one click away.</p>
+        <div style="margin-bottom: 40px; border-radius: 12px; border: 1px solid #dfe9f2;">
+            <img src="screenshot_agent.png" alt="Agent form with instructions and skills" style="width: 100%; height: auto; display: block; border-radius: 12px;"/>
+        </div>
+
+        <h3 style="margin: 0 0 6px 0; color: #14212E; font-size: 19px; font-weight: 700;">Three settings to connect<span style="color: #ff950e;">.</span></h3>
+        <p style="margin: 0 0 14px 0; color: #55677a; font-size: 15px;">Base URL, API key and default model — plus limits and the optional SearXNG connection. The key is stored server-side and never sent back to the browser.</p>
+        <div style="margin-bottom: 40px; border-radius: 12px; border: 1px solid #dfe9f2;">
+            <img src="screenshot_settings.png" alt="OW AI settings: provider, limits and web search" style="width: 100%; height: auto; display: block; border-radius: 12px;"/>
+        </div>
+
+        <h3 style="margin: 0 0 6px 0; color: #14212E; font-size: 19px; font-weight: 700;">Know what it costs<span style="color: #ff950e;">.</span></h3>
+        <p style="margin: 0 0 14px 0; color: #55677a; font-size: 15px;">The usage log lists every model call with tokens, cost and status — here the real calls behind the screenshots on this page.</p>
+        <div style="border-radius: 12px; border: 1px solid #dfe9f2;">
+            <img src="screenshot_usage.png" alt="Usage log with tokens and cost per call" style="width: 100%; height: auto; display: block; border-radius: 12px;"/>
+        </div>
+    </div>
+
+    <!-- PROVIDERS (donkere band) -->
+    <div style="background-color: #14212E; background-image: radial-gradient(circle at 90% 20%, rgba(0,114,192,0.30) 0, transparent 45%); border-radius: 14px; padding: 36px 28px; margin-bottom: 48px;">
+        <div style="font-size: 12px; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: #4da3e0; margin-bottom: 6px;">No lock-in</div>
+        <h2 style="font-size: 30px; font-weight: 800; color: #ffffff; margin: 0 0 6px 0;">Bring your own model<span style="color: #ff950e;">.</span></h2>
+        <p style="font-size: 16px; color: #b9c6d4; margin: 0 0 20px 0; max-width: 760px;">
+            OW AI Assistant talks to one OpenAI-compatible Chat Completions endpoint. Switch provider by changing
+            the Base URL — no provider-specific code, no extra module. Pick a model that supports tool calling.
+        </p>
+        <div style="margin: 0 -0.5%;">
+            <div style="display: inline-block; box-sizing: border-box; width: 32%; vertical-align: top; margin: 0 0.5% 14px 0.5%; background-color: #fff; border-radius: 10px; padding: 20px 22px;">
+                <div style="font-size: 24px; margin-bottom: 8px;">🔀</div>
+                <h3 style="margin: 0 0 6px 0; color: #14212E; font-size: 17px; font-weight: 700;">Model routers<span style="color: #ff950e;">.</span></h3>
+                <p style="margin: 0; color: #55677a; font-size: 15px;"><strong style="color: #14212E;">OpenRouter</strong> (the default Base URL) gives one key for hundreds of models and reports the cost of every call.</p>
+            </div>
+            <div style="display: inline-block; box-sizing: border-box; width: 32%; vertical-align: top; margin: 0 0.5% 14px 0.5%; background-color: #fff; border-radius: 10px; padding: 20px 22px;">
+                <div style="font-size: 24px; margin-bottom: 8px;">☁️</div>
+                <h3 style="margin: 0 0 6px 0; color: #14212E; font-size: 17px; font-weight: 700;">Direct APIs<span style="color: #ff950e;">.</span></h3>
+                <p style="margin: 0; color: #55677a; font-size: 15px;"><strong style="color: #14212E;">OpenAI</strong>, <strong style="color: #14212E;">HostYourAI</strong> or any other hosted endpoint that speaks the OpenAI Chat Completions API.</p>
+            </div>
+            <div style="display: inline-block; box-sizing: border-box; width: 32%; vertical-align: top; margin: 0 0.5% 14px 0.5%; background-color: #fff; border-radius: 10px; padding: 20px 22px;">
+                <div style="font-size: 24px; margin-bottom: 8px;">🏠</div>
+                <h3 style="margin: 0 0 6px 0; color: #14212E; font-size: 17px; font-weight: 700;">Local and private<span style="color: #ff950e;">.</span></h3>
+                <p style="margin: 0; color: #55677a; font-size: 15px;"><strong style="color: #14212E;">Ollama</strong>, <strong style="color: #14212E;">vLLM</strong> or <strong style="color: #14212E;">LM Studio</strong> on your own hardware: your data never leaves your network. The API key is optional.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- INSTALLATION -->
+    <div style="margin-bottom: 48px;">
+        <div style="font-size: 12px; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: #0072C0; margin-bottom: 6px;">Getting started</div>
+        <h2 style="font-size: 30px; font-weight: 800; color: #14212E; margin: 0 0 22px 0;">Up and running in minutes<span style="color: #ff950e;">.</span></h2>
+
+        <div style="margin-bottom: 14px; padding: 18px 20px; background-color: #fff; border: 1px solid #dfe9f2; border-radius: 10px;">
+            <span style="display: inline-block; margin-right: 12px; width: 32px; height: 32px; background-color: #0072C0; color: #fff; border-radius: 50%; text-align: center; line-height: 32px; font-weight: 800; font-size: 14px;">1</span>
+            Install <strong style="color: #14212E;">OW AI Assistant</strong> from the Odoo App Store, or drop the module into your addons path and update the apps list.
+        </div>
+        <div style="margin-bottom: 14px; padding: 18px 20px; background-color: #fff; border: 1px solid #dfe9f2; border-radius: 10px;">
+            <span style="display: inline-block; margin-right: 12px; width: 32px; height: 32px; background-color: #0072C0; color: #fff; border-radius: 50%; text-align: center; line-height: 32px; font-weight: 800; font-size: 14px;">2</span>
+            Open <strong style="color: #14212E;">Settings → OW AI</strong>, enter the Base URL, API key and default model of your provider and click <strong style="color: #14212E;">Test connection</strong>.
+        </div>
+        <div style="margin-bottom: 14px; padding: 18px 20px; background-color: #fff; border: 1px solid #dfe9f2; border-radius: 10px;">
+            <span style="display: inline-block; margin-right: 12px; width: 32px; height: 32px; background-color: #0072C0; color: #fff; border-radius: 50%; text-align: center; line-height: 32px; font-weight: 800; font-size: 14px;">3</span>
+            Click <strong style="color: #14212E;">Ask AI</strong> in the top bar and ask your first question.
+        </div>
+        <div style="margin-bottom: 20px; padding: 18px 20px; background-color: #EEF5FB; border: 1px solid #cfe3f5; border-radius: 10px;">
+            <span style="display: inline-block; margin-right: 12px; width: 32px; height: 32px; background-color: #ff950e; color: #fff; border-radius: 50%; text-align: center; line-height: 32px; font-weight: 800; font-size: 14px;">+</span>
+            <strong style="color: #14212E;">Optional:</strong> enter the URL of your SearXNG instance (JSON output enabled) under <strong style="color: #14212E;">Web search</strong> to let users switch on web search per chat.
+        </div>
+    </div>
+
+    <!-- SECURITY -->
+    <div style="background-color: #EEF5FB; border-radius: 14px; padding: 34px 26px; margin-bottom: 48px;">
+        <div style="font-size: 12px; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: #0072C0; margin-bottom: 6px;">Security</div>
+        <h2 style="font-size: 30px; font-weight: 800; color: #14212E; margin: 0 0 20px 0;">Built to keep your data yours<span style="color: #ff950e;">.</span></h2>
+
+        <div style="margin: 0 -0.5%;">
+            <div style="display: inline-block; box-sizing: border-box; width: 48%; vertical-align: top; margin: 0 0.5% 12px 0.5%; padding: 16px 18px; background-color: #fff; border: 1px solid #dfe9f2; border-radius: 10px;"><span style="color: #ff950e; font-weight: 800; margin-right: 8px;">&#10004;</span><strong style="color: #14212E;">Runs as the user.</strong> <span style="color: #55677a;">Every tool call uses the asking user's access rights, record rules and field security.</span></div>
+            <div style="display: inline-block; box-sizing: border-box; width: 48%; vertical-align: top; margin: 0 0.5% 12px 0.5%; padding: 16px 18px; background-color: #fff; border: 1px solid #dfe9f2; border-radius: 10px;"><span style="color: #ff950e; font-weight: 800; margin-right: 8px;">&#10004;</span><strong style="color: #14212E;">Approval before writes.</strong> <span style="color: #55677a;">Nothing is created or changed until the user confirms the card.</span></div>
+            <div style="display: inline-block; box-sizing: border-box; width: 48%; vertical-align: top; margin: 0 0.5% 12px 0.5%; padding: 16px 18px; background-color: #fff; border: 1px solid #dfe9f2; border-radius: 10px;"><span style="color: #ff950e; font-weight: 800; margin-right: 8px;">&#10004;</span><strong style="color: #14212E;">Sensitive models off-limits.</strong> <span style="color: #55677a;">Security internals, API keys and system parameters are refused; users and companies stay read-only.</span></div>
+            <div style="display: inline-block; box-sizing: border-box; width: 48%; vertical-align: top; margin: 0 0.5% 12px 0.5%; padding: 16px 18px; background-color: #fff; border: 1px solid #dfe9f2; border-radius: 10px;"><span style="color: #ff950e; font-weight: 800; margin-right: 8px;">&#10004;</span><strong style="color: #14212E;">Sanitised answers.</strong> <span style="color: #55677a;">External images and tracking pixels are stripped, and links the model writes to other hosts become plain text.</span></div>
+            <div style="display: inline-block; box-sizing: border-box; width: 48%; vertical-align: top; margin: 0 0.5% 12px 0.5%; padding: 16px 18px; background-color: #fff; border: 1px solid #dfe9f2; border-radius: 10px;"><span style="color: #ff950e; font-weight: 800; margin-right: 8px;">&#10004;</span><strong style="color: #14212E;">Key stays on the server.</strong> <span style="color: #55677a;">The API key is write-only in Settings, can come from the environment and never reaches the browser.</span></div>
+            <div style="display: inline-block; box-sizing: border-box; width: 48%; vertical-align: top; margin: 0 0.5% 12px 0.5%; padding: 16px 18px; background-color: #fff; border: 1px solid #dfe9f2; border-radius: 10px;"><span style="color: #ff950e; font-weight: 800; margin-right: 8px;">&#10004;</span><strong style="color: #14212E;">Guarded web access.</strong> <span style="color: #55677a;">Pages are only read from search results or URLs the user typed, and never from private or internal addresses.</span></div>
+        </div>
+    </div>
+
+    <!-- FAQ -->
+    <div style="margin-bottom: 48px;">
+        <div style="font-size: 12px; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: #0072C0; margin-bottom: 6px;">Questions</div>
+        <h2 style="font-size: 30px; font-weight: 800; color: #14212E; margin: 0 0 22px 0;">FAQ<span style="color: #ff950e;">.</span></h2>
+
+        <details style="margin-bottom: 10px; padding: 16px 20px; background-color: #fff; border: 1px solid #dfe9f2; border-radius: 10px;">
+            <summary style="cursor: pointer; font-weight: 700; color: #14212E; font-size: 16px;">Does it need Odoo Enterprise?</summary>
+            <p style="margin: 12px 0 0 0; color: #55677a; font-size: 15px;">No. OW AI Assistant is built for Odoo Community and depends only on the standard Discuss (mail) and settings modules.</p>
+        </details>
+
+        <details style="margin-bottom: 10px; padding: 16px 20px; background-color: #fff; border: 1px solid #dfe9f2; border-radius: 10px;">
+            <summary style="cursor: pointer; font-weight: 700; color: #14212E; font-size: 16px;">Which models work?</summary>
+            <p style="margin: 12px 0 0 0; color: #55677a; font-size: 15px;">Any model behind an OpenAI-compatible <code style="background-color: #EEF5FB; padding: 1px 6px; border-radius: 4px;">/v1/chat/completions</code> endpoint that supports tool (function) calling. Set a default model in Settings and, if you like, a different model per agent.</p>
+        </details>
+
+        <details style="margin-bottom: 10px; padding: 16px 20px; background-color: #fff; border: 1px solid #dfe9f2; border-radius: 10px;">
+            <summary style="cursor: pointer; font-weight: 700; color: #14212E; font-size: 16px;">Is my data sent to the AI provider?</summary>
+            <p style="margin: 12px 0 0 0; color: #55677a; font-size: 15px;">The question and the data the agent reads to answer it go to the endpoint you configured — nothing else, and only what the asking user may see. Point the Base URL at a local Ollama, vLLM or LM Studio server to keep everything on your own network.</p>
+        </details>
+
+        <details style="margin-bottom: 10px; padding: 16px 20px; background-color: #fff; border: 1px solid #dfe9f2; border-radius: 10px;">
+            <summary style="cursor: pointer; font-weight: 700; color: #14212E; font-size: 16px;">What does it cost?</summary>
+            <p style="margin: 12px 0 0 0; color: #55677a; font-size: 15px;">The module is free (LGPL-3). You pay your AI provider for the tokens you use, or nothing when you run a model yourself. The usage log shows tokens per call, and the cost whenever the provider reports it.</p>
+        </details>
+
+        <details style="margin-bottom: 10px; padding: 16px 20px; background-color: #fff; border: 1px solid #dfe9f2; border-radius: 10px;">
+            <summary style="cursor: pointer; font-weight: 700; color: #14212E; font-size: 16px;">Who can use it?</summary>
+            <p style="margin: 12px 0 0 0; color: #55677a; font-size: 15px;">Every internal user can chat (group <em>AI User</em>). The <em>AI Manager</em> group configures agents, skills, tools and composers and sees the usage log. Portal and public users have no access.</p>
+        </details>
+
+        <details style="padding: 16px 20px; background-color: #fff; border: 1px solid #dfe9f2; border-radius: 10px;">
+            <summary style="cursor: pointer; font-weight: 700; color: #14212E; font-size: 16px;">Are there extra server requirements?</summary>
+            <p style="margin: 12px 0 0 0; color: #55677a; font-size: 15px;">The Python package <code style="background-color: #EEF5FB; padding: 1px 6px; border-radius: 4px;">markdown2</code> renders the answers (a simpler built-in fallback is used without it; the official Odoo Docker image does not include it). Turns run on Odoo's cron workers: set <code style="background-color: #EEF5FB; padding: 1px 6px; border-radius: 4px;">max_cron_threads = 2</code> or more and <code style="background-color: #EEF5FB; padding: 1px 6px; border-radius: 4px;">limit_time_real_cron = 900</code> or more.</p>
+        </details>
+    </div>
+
+    <!-- FOOTER -->
+    <div style="text-align: center; padding: 40px 24px; background-color: #14212E; background-image: radial-gradient(circle at 85% 30%, rgba(0,114,192,0.25) 0, transparent 45%); border-radius: 14px;">
+        <img src="https://download.openworx.nl/logo.png" alt="Openworx" style="max-width: 170px; height: auto; margin-bottom: 14px;"/>
+        <p style="margin: 8px 0 4px 0; color: #fff; font-size: 16px; font-weight: 700;">Jouw partner in Odoo — implementatie, maatwerk en hosting<span style="color: #ff950e;">.</span></p>
+        <p style="margin: 0;"><a href="https://www.openworx.nl" style="color: #4da3e0; text-decoration: none; font-size: 15px; font-weight: 700;">openworx.nl</a></p>
+    </div>
+
+</section>
+</body>
+</html>

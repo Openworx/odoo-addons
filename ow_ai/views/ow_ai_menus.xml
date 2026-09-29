@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <menuitem
+        id="menu_ai_root"
+        name="OW AI"
+        web_icon="ow_ai,static/description/icon.png"
+        groups="ow_ai.group_ai_user"
+        sequence="200"/>
+
+    <menuitem
+        id="menu_ai_agents"
+        name="Agents"
+        parent="menu_ai_root"
+        action="ow_ai_agent_action"
+        groups="ow_ai.group_ai_user"
+        sequence="10"/>
+
+    <menuitem
+        id="menu_ai_reports"
+        name="Reports"
+        parent="menu_ai_root"
+        groups="ow_ai.group_ai_manager"
+        sequence="50"/>
+
+    <menuitem
+        id="menu_ai_sessions"
+        name="Sessions"
+        parent="menu_ai_reports"
+        action="ow_ai_session_action"
+        groups="ow_ai.group_ai_manager"
+        sequence="10"/>
+
+    <menuitem
+        id="menu_ai_jobs"
+        name="Jobs"
+        parent="menu_ai_reports"
+        action="ow_ai_job_action"
+        groups="ow_ai.group_ai_manager"
+        sequence="20"/>
+
+    <menuitem
+        id="menu_ai_usage"
+        name="Usage"
+        parent="menu_ai_reports"
+        action="ow_ai_usage_action"
+        groups="ow_ai.group_ai_manager"
+        sequence="50"/>
+
+    <menuitem
+        id="menu_ai_configuration"
+        name="Configuration"
+        parent="menu_ai_root"
+        groups="ow_ai.group_ai_manager"
+        sequence="99"/>
+
+    <menuitem
+        id="menu_ai_skills"
+        name="Skills"
+        parent="menu_ai_configuration"
+        action="ow_ai_skill_action"
+        groups="ow_ai.group_ai_manager"
+        sequence="10"/>
+
+    <menuitem
+        id="menu_ai_tools"
+        name="Tools"
+        parent="menu_ai_configuration"
+        action="ow_ai_tool_action"
+        groups="ow_ai.group_ai_manager"
+        sequence="20"/>
+
+    <menuitem
+        id="menu_ai_composers"
+        name="Default Prompts"
+        parent="menu_ai_configuration"
+        action="ow_ai_composer_action"
+        groups="ow_ai.group_ai_manager"
+        sequence="30"/>
+
+    <menuitem
+        id="menu_ai_settings"
+        name="Settings"
+        parent="menu_ai_configuration"
+        action="action_ow_ai_config_settings"
+        groups="ow_ai.group_ai_manager"
+        sequence="40"/>
+</odoo>

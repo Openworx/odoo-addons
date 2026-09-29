@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Updatable: native tools are locked for users (is_native), so a module
+         update is the only way they change and must be allowed to. -->
+    <data noupdate="0">
+        <record id="tool_load_skills" model="ow.ai.tool">
+            <field name="name">Load Skills</field>
+            <field name="tool_name">load_skills</field>
+            <field name="kind">builtin</field>
+            <field name="builtin_key">interaction.load_skills</field>
+            <field name="is_native" eval="True"/>
+            <field name="description">Load the instructions and tools of one or more skills by id, making them available for the rest of this conversation. Skills are only loaded progressively, on demand: only the tools of a skill you have actually loaded are usable, so call this before using any tool that belongs to a skill you have not loaded yet.</field>
+            <field name="schema">{"type": "object", "properties": {"skill_ids": {"type": "array", "items": {"type": "integer"}, "description": "IDs of the skills to load"}}, "required": ["skill_ids"]}</field>
+        </record>
+
+        <record id="tool_ask_user_question" model="ow.ai.tool">
+            <field name="name">Ask User Question</field>
+            <field name="tool_name">ask_user_question</field>
+            <field name="kind">builtin</field>
+            <field name="builtin_key">interaction.ask_user_question</field>
+            <field name="is_native" eval="True"/>
+            <field name="description">Ask the user a short clarifying question when a request is ambiguous or a choice must be made before you can continue. Offer 2 to 4 concrete options; ask only one question at a time and wait for the answer before doing anything else.</field>
+            <field name="schema">{"type": "object", "properties": {"question": {"type": "string"}, "choices": {"type": "array", "items": {"type": "string"}, "minItems": 2, "maxItems": 4}, "multi_select": {"type": "boolean"}, "allow_free_text": {"type": "boolean"}}, "required": ["question", "choices", "multi_select", "allow_free_text"]}</field>
+        </record>
+
+        <record id="tool_get_models" model="ow.ai.tool">
+            <field name="name">Get Models</field>
+            <field name="tool_name">get_models</field>
+            <field name="kind">builtin</field>
+            <field name="builtin_key">introspection.get_models</field>
+            <field name="is_native" eval="True"/>
+            <field name="thinking_text">Looking up available models</field>
+            <field name="description">List the Odoo models this assistant is allowed to query, with their label and, when it has one, the main menu path a human would use to find it. Call this first when you are not sure which model holds the data the user is asking about; it takes no arguments. Once you have a model name, call get_fields before searching it so you use real field names instead of guessing them.</field>
+            <field name="schema">{"type": "object", "properties": {}, "additionalProperties": false}</field>
+        </record>
+
+        <record id="tool_get_fields" model="ow.ai.tool">
+            <field name="name">Get Fields</field>
+            <field name="tool_name">get_fields</field>
+            <field name="kind">builtin</field>
+            <field name="builtin_key">introspection.get_fields</field>
+            <field name="is_native" eval="True"/>
+            <field name="thinking_text">Inspecting fields</field>
+            <field name="description">List the fields of a model: technical name, label, type (with the related model in parentheses for relational fields), flags (req = required, ro = read-only, search = searchable, sort = sortable) and, for selection fields, the allowed key=label pairs. Always call this before search/read_records/read_group on a model you have not inspected yet in this conversation, so you use the exact field names the model actually has.</field>
+            <field name="schema">{"type": "object", "properties": {"model_name": {"type": "string", "description": "Technical model name, e.g. res.partner"}, "include_description": {"type": "boolean", "description": "Also include each field's help text"}}, "required": ["model_name"]}</field>
+        </record>
+
+        <record id="tool_search" model="ow.ai.tool">
+            <field name="name">Search</field>
+            <field name="tool_name">search</field>
+            <field name="kind">builtin</field>
+            <field name="builtin_key">read.search</field>
+            <field name="is_native" eval="True"/>
+            <field name="thinking_text">Searching</field>
+            <field name="description">Search a model and return a page of matching records. The domain is a standard Odoo domain, given as a Python/JSON list of ["field", "operator", value] triples, e.g. [["state", "=", "done"], ["amount_total", ">", 100]]; combine conditions with the prefix operators "&amp;" (and, the default between consecutive conditions), "|" (or) and "!" (not), e.g. ["|", ["city", "=", "Rotterdam"], ["city", "=", "Amsterdam"]]. Supported operators include =, !=, &gt;, &gt;=, &lt;, &lt;=, in, not in, like, ilike and child_of. For relative dates (e.g. "created last week"), call compute_date first and use its value in the domain rather than guessing a date. Results are paginated (limit is clamped between 1 and 200, default 50); check has_more and increase offset to get the next page. Omit fields to get a sensible default set, or pass an explicit list from get_fields.</field>
+            <field name="schema">{"type": "object", "properties": {"model_name": {"type": "string"}, "domain": {"anyOf": [{"type": "string", "description": "Odoo domain as a Python/JSON list literal, e.g. \"[['state', '=', 'done']]\"; an empty list matches everything"}, {"type": "array", "items": {"type":["string","integer","number","boolean","array"],"items":{"type":["string","integer","number","boolean","array"],"items":{"type":["string","integer","number","boolean"]}}}}]}, "fields": {"type": "array", "items": {"type": "string"}, "description": "Field names to return; omit for a sensible default set"}, "offset": {"type": "integer"}, "limit": {"type": "integer"}, "order": {"type": "string", "description": "e.g. 'create_date desc' or 'name asc, id desc'"}}, "required": ["model_name"]}</field>
+        </record>
+
+        <record id="tool_read_records" model="ow.ai.tool">
+            <field name="name">Read Records</field>
+            <field name="tool_name">read_records</field>
+            <field name="kind">builtin</field>
+            <field name="builtin_key">read.read_records</field>
+            <field name="is_native" eval="True"/>
+            <field name="thinking_text">Reading records</field>
+            <field name="description">Read a specific, already-known list of record ids on a model (up to 50 at a time). Never guess ids: get them from a previous search or from the record the user is currently looking at. Ids that no longer exist, or that you are not allowed to read, are reported in missing_ids instead of causing an error. Set include_files to true (for 5 or fewer records) to also receive their linked images/PDF attachments as inline content.</field>
+            <field name="schema">{"type": "object", "properties": {"model_name": {"type": "string"}, "record_ids": {"type": "array", "items": {"type": "integer"}}, "fields": {"type": "array", "items": {"type": "string"}}, "include_files": {"type": "boolean", "description": "Also return linked image/PDF attachments as inline content (5 records max)"}}, "required": ["model_name", "record_ids"]}</field>
+        </record>
+
+        <record id="tool_read_group" model="ow.ai.tool">
+            <field name="name">Read Group</field>
+            <field name="tool_name">read_group</field>
+            <field name="kind">builtin</field>
+            <field name="builtin_key">read.read_group</field>
+            <field name="is_native" eval="True"/>
+            <field name="thinking_text">Aggregating data</field>
+            <field name="description">Group and aggregate records, e.g. "count of orders per country" or "total amount per month". groupby items are a field name, or "field:granularity" for date/datetime fields (granularity one of year, quarter, month, week, day). aggregates items are "field:function" (function one of sum, avg, min, max, count, count_distinct) or the special "__count" for a plain row count. Use compute_date beforehand for any relative date boundaries in the domain. Prefer this over search when the user wants totals, counts or breakdowns rather than a list of individual records.</field>
+            <field name="schema">{"type": "object", "properties": {"model_name": {"type": "string"}, "domain": {"anyOf": [{"type": "string", "description": "Odoo domain as a Python/JSON list literal"}, {"type": "array", "items": {"type": ["string", "integer", "number", "boolean", "array"], "items": {"type": ["string", "integer", "number", "boolean", "array"], "items": {"type": ["string", "integer", "number", "boolean"]}}}}]}, "groupby": {"type": "array", "items": {"type": "string"}, "description": "e.g. [\"country_id\", \"create_date:month\"]"}, "aggregates": {"type": "array", "items": {"type": "string"}, "description": "e.g. [\"amount_total:sum\", \"__count\"]"}, "having": {"anyOf": [{"type": "string", "description": "Domain over the aggregate names, e.g. \"[['__count', '>', 5]]\""}, {"type": "array", "items": {"type": ["string", "integer", "number", "boolean", "array"], "items": {"type": ["string", "integer", "number", "boolean", "array"], "items": {"type": ["string", "integer", "number", "boolean"]}}}}]}, "offset": {"type": "integer"}, "limit": {"type": "integer"}, "order": {"type": "string", "description": "One of the groupby or aggregate items exactly as given, plus asc or desc, e.g. 'amount_total:sum desc' or '__count desc'"}}, "required": ["model_name"]}</field>
+        </record>
+
+        <record id="tool_compute_date" model="ow.ai.tool">
+            <field name="name">Compute Date</field>
+            <field name="tool_name">compute_date</field>
+            <field name="kind">builtin</field>
+            <field name="builtin_key">dates.compute_date</field>
+            <field name="is_native" eval="True"/>
+            <field name="thinking_text">Computing date</field>
+            <field name="description">Turn a relative date expression ("yesterday", "last month", "next Friday at 5pm", "the first Monday of last month") into the exact string to use for field_name in a domain, computed in the user's own timezone. Always use this instead of computing or guessing dates yourself; the model does not reliably know today's date, the user's timezone, or how many days are in a given month. operations are applied in order: {"type": "navigate", "period": "day|week|month|quarter|year|hour|minute", "offset": -1, "boundary": "start|end|none"} shifts by whole periods and optionally snaps to the start/end of the resulting period (weeks start on Monday); {"type": "find_previous"|"find_next", "weekday": 0-6 (Monday=0)} jumps to the nearest such weekday, not counting today. An optional pin then fixes the day of month (an integer, or {"weekday": 0-6, "occurrence": 1-5 or -1 for "last"}) and/or the time of day ("HH:MM" or "HH:MM:SS"). The returned value is 'YYYY-MM-DD' for a Date field or 'YYYY-MM-DD HH:MM:SS' in UTC for a Datetime field.</field>
+            <field name="schema">{"type": "object", "properties": {"model_name": {"type": "string"}, "field_name": {"type": "string"}, "operations": {"type": "array", "items": {"type": "object", "properties": {"type": {"type": "string", "enum": ["navigate", "find_previous", "find_next"]}, "period": {"type": "string", "enum": ["minute", "hour", "day", "week", "month", "quarter", "year"]}, "offset": {"type": "integer"}, "boundary": {"type": "string", "enum": ["start", "end", "none"]}, "weekday": {"type": "integer", "minimum": 0, "maximum": 6}}, "additionalProperties": false}}, "pin": {"type": "object", "properties": {"day": {"anyOf": [{"type": "integer"}, {"type": "object", "properties": {"weekday": {"type": "integer", "minimum": 0, "maximum": 6}, "occurrence": {"type": "integer", "minimum": -5, "maximum": 5}}, "additionalProperties": false}]}, "time": {"type": "string", "description": "HH:MM or HH:MM:SS"}}, "additionalProperties": false}}, "required": ["model_name", "field_name"]}</field>
+        </record>
+
+        <record id="tool_create_records" model="ow.ai.tool">
+            <field name="name">Create Records</field>
+            <field name="tool_name">create_records</field>
+            <field name="kind">builtin</field>
+            <field name="builtin_key">write.create_records</field>
+            <field name="is_native" eval="True"/>
+            <field name="is_write" eval="True"/>
+            <field name="thinking_text">Preparing to create records</field>
+            <field name="description">Create one or more new records on a model. Always call get_fields on the model first so you use its real field names, types and required fields; never guess a field name or invent an id. Write a short, plain-language explanation of what you are about to create and why, so the user can review it before anything happens. "values" is a list of records to create (max 20); each record's "field_values" is a list of {"field": technical field name, "value": the value to set, "x2m_link_ids": an id or list of ids} entries. Use "value" for every field except many2many/one2many ones: for a many2one, "value" is the target record's id (search for it first, e.g. with search or read_records, rather than guessing it); for many2many/one2many fields leave "value" empty and put the ids of the existing records to link in "x2m_link_ids" instead (this tool can only link existing records, it cannot create related records in the same call). This tool always shows the user a preview of exactly what will be created first and only writes to the database once they confirm; do not tell the user something was created until you see the confirmed result.</field>
+            <field name="schema">{"type": "object", "properties": {"explanation": {"type": "string", "description": "Plain-language explanation of what you are about to create and why, shown to the user"}, "model_name": {"type": "string"}, "values": {"type": "array", "maxItems": 20, "description": "Records to create", "items": {"type": "object", "properties": {"field_values": {"type": "array", "items": {"type": "object", "properties": {"field": {"type": "string", "description": "Technical field name"}, "value": {"anyOf": [{"type": "string"}, {"type": "number"}, {"type": "boolean"}, {"type": "null"}]}, "x2m_link_ids": {"anyOf": [{"type": "integer"}, {"type": "array", "items": {"type": "integer"}}, {"type": "null"}], "description": "For many2many/one2many fields only: id(s) of existing records to link"}}, "required": ["field"]}}}, "required": ["field_values"]}}, "preview_menu_id": {"anyOf": [{"type": "integer"}, {"type": "null"}], "description": "Optional id of a menu whose action opens this model, used to build a nicer link to the created record(s)"}}, "required": ["explanation", "model_name", "values"]}</field>
+        </record>
+
+        <record id="tool_update_records" model="ow.ai.tool">
+            <field name="name">Update Records</field>
+            <field name="tool_name">update_records</field>
+            <field name="kind">builtin</field>
+            <field name="builtin_key">write.update_records</field>
+            <field name="is_native" eval="True"/>
+            <field name="is_write" eval="True"/>
+            <field name="thinking_text">Preparing to update records</field>
+            <field name="description">Change the values of records that already exist. Always call get_fields first, and search beforehand for the exact records you mean to change, so the domain you pass here targets only those; a domain that would match every record on the model (an empty domain, or an always-true condition such as an id filter every record satisfies) is refused, on purpose. "updates" is a list of {"model_name", "domain", "changes"} groups (max 50; usually you only need one), each matching at most 200 records; each "changes" item is {"field": technical field name, "value": the new value, "x2m_commands": null or a JSON string for many2many/one2many fields only}. Use "value" for every field except many2many/one2many ones, where "x2m_commands" must instead be a JSON string such as {"link": [ids to add]}, {"unlink": [ids to remove]}, {"set": [ids that should be the only ones linked]} or {"clear": true} (only existing records can be linked; never invent an id). Write a short, plain-language explanation of the change, and when a field being changed represents a status or stage, also explain what changing it will do. This tool always shows the user a preview of the old and new value of every affected record first and only writes to the database once they confirm; do not tell the user something was updated until you see the confirmed result.</field>
+            <field name="schema">{"type": "object", "properties": {"explanation": {"type": "string", "description": "Plain-language explanation of the change, shown to the user"}, "updates": {"type": "array", "maxItems": 50, "items": {"type": "object", "properties": {"model_name": {"type": "string"}, "domain": {"anyOf": [{"type": "string", "description": "Odoo domain as a Python/JSON list literal; must target specific records, not every record"}, {"type": "array", "items": {"type":["string","integer","number","boolean","array"],"items":{"type":["string","integer","number","boolean","array"],"items":{"type":["string","integer","number","boolean"]}}}}]}, "changes": {"type": "array", "items": {"type": "object", "properties": {"field": {"type": "string", "description": "Technical field name"}, "value": {"anyOf": [{"type": "string"}, {"type": "number"}, {"type": "boolean"}, {"type": "null"}]}, "x2m_commands": {"anyOf": [{"type": "string"}, {"type": "null"}], "description": "For many2many/one2many fields only: JSON string with link/unlink/set/clear"}}, "required": ["field"]}}}, "required": ["model_name", "domain", "changes"]}}, "preview_menus": {"type": "array", "items": {"type": "integer"}, "description": "Optional menu id per update group (same order), used to build nicer links to the updated records"}}, "required": ["explanation", "updates"]}</field>
+        </record>
+
+        <record id="tool_web_search" model="ow.ai.tool">
+            <field name="name">Web Search</field>
+            <field name="tool_name">web_search</field>
+            <field name="kind">builtin</field>
+            <field name="builtin_key">web.search</field>
+            <field name="is_native" eval="True"/>
+            <field name="thinking_text">Searching the web</field>
+            <field name="description">Search the public web through the configured search service. Returns numbered results (title, url, snippet, date). Use a short specific query; use time_range for recent things and site to restrict to one domain. Cite results in your answer as [WEB_SOURCE:n].</field>
+            <field name="schema">{"type":"object","properties":{"query":{"type":"string","maxLength":400},"count":{"type":"integer","minimum":1,"maximum":10},"time_range":{"type":"string","enum":["day","week","month","year"]},"site":{"type":"string"}},"required":["query"]}</field>
+        </record>
+
+        <record id="tool_fetch_web_page" model="ow.ai.tool">
+            <field name="name">Fetch Web Page</field>
+            <field name="tool_name">fetch_web_page</field>
+            <field name="kind">builtin</field>
+            <field name="builtin_key">web.fetch</field>
+            <field name="is_native" eval="True"/>
+            <field name="thinking_text">Reading a page</field>
+            <field name="description">Read the text of one public web page from the search results or from a URL the user gave. Returns the page text in slices: use offset to continue when truncated is true. Never use it for URLs you made up.</field>
+            <field name="schema">{"type":"object","properties":{"url":{"type":"string"},"offset":{"type":"integer","minimum":0},"max_chars":{"type":"integer","minimum":500,"maximum":60000}},"required":["url"]}</field>
+        </record>
+    </data>
+</odoo>

@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!--
+        An AI user may delete their own AI chats, and nothing else, like the
+        domain-scoped `ir.access` row of the 20.0 branch. On 19 the unlink
+        permission comes from the `ir.model.access` row granting `unlink` on
+        `discuss.channel` to AI users; this rule scopes it to the AI chats they
+        are a member of.
+    -->
+    <record id="rule_ow_ai_chat_unlink_own" model="ir.rule">
+        <field name="name">discuss.channel: AI users can delete their own AI chats</field>
+        <field name="model_id" ref="model_discuss_channel"/>
+        <field name="groups" eval="[Command.link(ref('ow_ai.group_ai_user'))]"/>
+        <field name="domain_force">[('channel_type', '=', 'ow_ai_chat'), ('channel_member_ids.partner_id', '=', user.partner_id.id)]</field>
+        <field name="perm_read" eval="False"/>
+        <field name="perm_write" eval="False"/>
+        <field name="perm_create" eval="False"/>
+        <field name="perm_unlink" eval="True"/>
+    </record>
+
+    <!--
+        Record rules of the same operation OR-combine across the user's
+        groups, and mail's membership rule on `discuss.channel` (for internal,
+        portal and public users) applies to every operation. Left as is, it
+        would let an AI user delete any channel they belong to (or any open
+        `channel`) through the unlink right above. Only `base.group_system`
+        holds an `unlink` access right on `discuss.channel` in mail, and it has
+        its own unrestricted rule, so taking `unlink` off mail's membership
+        rule changes nothing else. Same idea as sale_timesheet overriding
+        account's analytic line rules, but as a data function rather than a
+        `<record>` override: mail's rule is `noupdate`, so a `<record>` would
+        only be written at install, while this function (not `noupdate`) runs
+        on every install and update of ow_ai and repairs a rule that was
+        reset in the meantime.
+    -->
+    <function model="ir.rule" name="write">
+        <value eval="[ref('mail.ir_rule_discuss_channel_all')]"/>
+        <value eval="{'perm_unlink': False}"/>
+    </function>
+</odoo>

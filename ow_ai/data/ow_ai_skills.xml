@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Updatable, like the native tools (see ow_ai_tools.xml). -->
+    <data noupdate="0">
+        <record id="skill_search_database" model="ow.ai.skill">
+            <field name="name">Search Database</field>
+            <field name="is_native" eval="True"/>
+            <field name="description">Look up, count and summarise records stored in this Odoo database: contacts, orders, invoices, tasks, and anything else the user has access to.</field>
+            <field name="instructions">Use this workflow to answer questions about data in this database:
+1. If you do not already know the exact model, call get_models to find it.
+2. Call get_fields on that model before searching it, so you use its real field and selection values instead of guessing.
+3. For anything relative to "now" (today, this week, last month, next Friday, …), call compute_date and put its returned value, unchanged, as the third element of your condition, e.g. [["invoice_date", "&gt;=", "2026-07-01"]]; never compute or guess a date yourself.
+4. Use search for a list of individual records, or read_group when the user wants a count, total, breakdown or ranking rather than a list. Use read_records once you already have specific ids, e.g. from a previous search or from the record the user is looking at.
+5. For a ranking such as "top 5 customers by revenue", aggregate the underlying transactions (e.g. posted customer invoices, or confirmed sales orders) with read_group: group them by the related record (e.g. the customer), sum their amount, and pass order "&lt;field&gt;:sum desc" with the limit you need. Do not try to rank by sorting a list of contacts or products on a computed total.
+
+Domain rules: a domain is a list of ["field", "operator", value] triples, e.g. [["state", "=", "done"]]. Consecutive conditions are implicitly AND-ed; use the prefix operators "&amp;", "|" and "!" for explicit and/or/not, e.g. ["|", ["city", "=", "Utrecht"], ["city", "=", "Almere"]]. Supported operators: =, !=, &gt;, &gt;=, &lt;, &lt;=, in, not in, like, ilike, child_of. Only fields that get_fields flags "sort" can be used in order or in groupby.
+
+When answering:
+- Never invent a record id, amount or date; only report what a tool returned.
+- Refer to records by name, not by technical id, and mention the count you found (e.g. "3 of 12 matching contacts").
+- Format monetary amounts with their currency symbol, not the bare field value.
+- Use plain language, not technical field or model names, unless the user is clearly asking about the technical structure.
+- Present lists of more than a couple of records as a short table or bullet list, not one long sentence.
+- Every company-scoped model is already filtered to the companies the user can see; do not try to add your own company filter unless the user asks for a specific one.
+- When you mention a specific record, you may link to it as /odoo/&lt;model&gt;/&lt;id&gt; so the user can open it directly.</field>
+            <field name="tool_ids" eval="[(6, 0, [
+                ref('ow_ai.tool_get_models'),
+                ref('ow_ai.tool_get_fields'),
+                ref('ow_ai.tool_search'),
+                ref('ow_ai.tool_read_records'),
+                ref('ow_ai.tool_read_group'),
+                ref('ow_ai.tool_compute_date'),
+            ])]"/>
+        </record>
+
+        <record id="skill_create_records" model="ow.ai.skill">
+            <field name="name">Create Records</field>
+            <field name="is_native" eval="True"/>
+            <field name="description">Create new records (contacts, tasks, leads, and anything else the user has access to) after showing the user exactly what will be created and getting their confirmation.</field>
+            <field name="instructions">Use this workflow to create new records:
+1. If you do not already know the exact model, call get_models to find it.
+2. Call get_fields on that model so you use its real field names, types and required fields; never guess a field name.
+3. For any field that refers to another record (a many2one, or a many2many/one2many to link), search first to find the right id; never invent one. For a relative date (e.g. "due next Friday"), call compute_date rather than computing it yourself.
+4. Call create_records with a short, plain-language explanation of what you are about to create and why. The user is shown a preview and must confirm before anything is written.
+5. If the user declines, ask what should be different instead of retrying the same values. If they confirm, summarise what was created in plain language and, when helpful, link to the new record(s) as /odoo/&lt;model&gt;/&lt;id&gt;.
+
+Never claim a record was created before you have the confirmed result. If create_records reports a missing required field or an invalid value, fix it and try again rather than giving up.</field>
+            <field name="tool_ids" eval="[(6, 0, [
+                ref('ow_ai.tool_get_models'),
+                ref('ow_ai.tool_get_fields'),
+                ref('ow_ai.tool_search'),
+                ref('ow_ai.tool_compute_date'),
+                ref('ow_ai.tool_create_records'),
+            ])]"/>
+        </record>
+
+        <record id="skill_update_records" model="ow.ai.skill">
+            <field name="name">Update Records</field>
+            <field name="is_native" eval="True"/>
+            <field name="description">Change the values of existing records after showing the user exactly what will change (old value to new value) and getting their confirmation.</field>
+            <field name="instructions">Use this workflow to update existing records:
+1. If you do not already know the exact model, call get_models to find it.
+2. Call get_fields on that model so you use its real field names, types, and allowed selection values; never guess one.
+3. Search for the specific records to change and use a domain that targets only those; a domain that would match every record on the model is refused on purpose, so always narrow it down (e.g. by id, or by a specific filter you already checked with search). For a relative date, call compute_date rather than computing it yourself.
+4. Call update_records with a short, plain-language explanation of the change. When a field you are changing represents a status or stage, also explain what changing it will do (e.g. what happens once an order is confirmed). The user is shown a preview of the old and new value of every affected record and must confirm before anything is written.
+5. If the user declines, ask what should be different instead of retrying the same change. If they confirm, summarise what was updated in plain language and, when helpful, link to the record(s) as /odoo/&lt;model&gt;/&lt;id&gt;.
+
+Never claim a record was updated before you have the confirmed result. If update_records reports too many matching records or an invalid value, narrow the domain or fix the value and try again rather than giving up.</field>
+            <field name="tool_ids" eval="[(6, 0, [
+                ref('ow_ai.tool_get_models'),
+                ref('ow_ai.tool_get_fields'),
+                ref('ow_ai.tool_search'),
+                ref('ow_ai.tool_compute_date'),
+                ref('ow_ai.tool_update_records'),
+            ])]"/>
+        </record>
+
+        <record id="skill_web_search" model="ow.ai.skill">
+            <field name="name">Web Search</field>
+            <field name="is_native" eval="True"/>
+            <field name="description">Find current or public information on the web (news, prices, documentation, companies, regulations) and cite the sources.</field>
+            <field name="instructions">Use this when the answer needs current or public information that is not in this database (news, prices, documentation, companies, addresses, regulations).
+1. Call web_search with a short, specific query; refine once if the results are off.
+2. Read the snippets; open a page with fetch_web_page only when you need details, at most three pages, using offset to continue a long page.
+3. Answer in your own words and put [WEB_SOURCE:n] right after each claim that comes from result n; list nothing else as a source.
+4. Never fetch a URL that was not in the results or in the user's message.
+5. Say when the results are inconclusive instead of guessing.
+
+You can do at most 5 searches and 5 page reads per turn. Sources are numbered per turn: in a later turn, search again before citing or reading a result.</field>
+            <field name="tool_ids" eval="[(6, 0, [
+                ref('ow_ai.tool_web_search'),
+                ref('ow_ai.tool_fetch_web_page'),
+            ])]"/>
+        </record>
+
+        <!-- Runs on every install/update (noupdate="0"): gives the default
+             agent (itself noupdate) any native skill it does not have yet. -->
+        <function model="ow.ai.skill" name="_sync_default_agent_skills"/>
+    </data>
+</odoo>

@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+
+<t t-name="ow_ai.ToolSummary">
+    <div class="o_ow_ai_tool_summary_row" t-att-data-call-id="this.callId">
+        <button t-if="this.canShowDetails" type="button"
+            class="o_ow_ai_tool_summary_toggle btn btn-link text-reset text-start d-flex align-items-center gap-1 p-0 w-100"
+            t-att-aria-expanded="this.state.open ? 'true' : 'false'"
+            t-on-click="this.toggle"
+        >
+            <t t-call="ow_ai.ToolSummary.line"/>
+            <i class="fa o_ow_ai_tool_summary_chevron ms-auto opacity-50" t-att-class="this.state.open ? 'fa-chevron-up' : 'fa-chevron-down'"/>
+        </button>
+        <div t-else="" class="d-flex align-items-center gap-1">
+            <t t-call="ow_ai.ToolSummary.line"/>
+        </div>
+        <div t-if="this.state.open" class="o_ow_ai_tool_params mt-1">
+            <i t-if="this.state.loading" class="fa fa-refresh fa-spin text-muted" role="status" aria-label="Loading"/>
+            <div t-elif="this.state.error" class="text-danger small" t-out="this.state.error"/>
+            <pre t-else="" class="o_ow_ai_pre mb-0 small" t-out="this.paramsText"/>
+        </div>
+    </div>
+</t>
+
+<t t-name="ow_ai.ToolSummary.line">
+    <i class="fa fa-fw text-muted flex-shrink-0" t-att-class="this.icon"/>
+    <span class="o_ow_ai_tool_summary_text text-truncate" t-out="this.text"/>
+</t>
+
+</templates>

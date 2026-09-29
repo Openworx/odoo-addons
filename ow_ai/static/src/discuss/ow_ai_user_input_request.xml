@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+
+<t t-name="ow_ai.UserInputRequest">
+    <div class="o_ow_ai_user_input_request mx-2 my-2 p-2 rounded-3 border position-relative"
+        t-att-class="{ 'o_ow_ai_busy': this.state.isSubmitting }"
+        t-att-data-type="this.request.type"
+        t-att-aria-busy="this.state.isSubmitting ? 'true' : 'false'"
+        tabindex="-1"
+        t-ref="root"
+        t-on-keydown="this.onKeydown"
+    >
+        <div class="o_ow_ai_user_input_request_body text-break" t-out="this.request.body"/>
+        <t t-if="!this.isQuestion">
+            <div class="o_ow_ai_user_input_request_buttons d-flex flex-wrap align-items-center gap-2 mt-2">
+                <button t-foreach="this.confirmationButtons" t-as="button" t-key="button.value"
+                    class="btn btn-sm" t-att-class="button.className" t-att-name="button.value"
+                    t-att-disabled="this.state.isSubmitting"
+                    t-on-click="() => this.onConfirm(button.value)"
+                    t-out="button.label"/>
+                <i t-if="this.state.isSubmitting" class="fa fa-refresh fa-spin text-muted" role="status" aria-label="Sending"/>
+            </div>
+        </t>
+        <t t-else="">
+            <div class="o_ow_ai_options d-flex flex-column gap-1 mt-2" t-att-role="this.request.multiSelect ? 'group' : 'radiogroup'">
+                <label t-foreach="this.options" t-as="option" t-key="option"
+                    class="o_ow_ai_option d-flex align-items-center gap-2 rounded-2 px-2 py-1 mb-0"
+                    t-att-class="{ 'o_ow_ai_option_selected': this.isSelected(option) }"
+                >
+                    <input class="form-check-input mt-0 flex-shrink-0"
+                        t-att-type="this.request.multiSelect ? 'checkbox' : 'radio'"
+                        t-att-name="'o_ow_ai_option_' + this.request.id"
+                        t-att-checked="this.isSelected(option)"
+                        t-att-disabled="this.state.isSubmitting"
+                        t-on-change="() => this.toggleOption(option)"/>
+                    <span t-if="option_index lt 4" class="o_ow_ai_option_key badge text-bg-light border flex-shrink-0" t-out="option_index + 1"/>
+                    <span class="text-break" t-out="option"/>
+                </label>
+            </div>
+            <input t-if="this.request.allowFreeText" type="text"
+                class="o_ow_ai_free_text form-control form-control-sm mt-2"
+                placeholder="Or type your own answer…"
+                t-model="this.state.text"
+                t-att-disabled="this.state.isSubmitting"/>
+            <div class="d-flex align-items-center gap-2 mt-2">
+                <button class="o_ow_ai_send btn btn-primary btn-sm" t-att-disabled="!this.canSend or this.state.isSubmitting" t-on-click="this.onSend">Send</button>
+                <button class="o_ow_ai_skip btn btn-link btn-sm" t-att-disabled="this.state.isSubmitting" t-on-click="this.onSkip">Skip</button>
+                <i t-if="this.state.isSubmitting" class="fa fa-refresh fa-spin text-muted" role="status" aria-label="Sending"/>
+            </div>
+        </t>
+    </div>
+</t>
+
+</templates>

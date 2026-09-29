@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="ow_ai_agent_view_list" model="ir.ui.view">
+        <field name="name">ow.ai.agent.view.list</field>
+        <field name="model">ow.ai.agent</field>
+        <field name="arch" type="xml">
+            <list string="AI Agents">
+                <field name="sequence" widget="handle"/>
+                <field name="avatar_128" widget="image" options="{'size': [24, 24]}"/>
+                <field name="name"/>
+                <field name="subtitle"/>
+                <field name="model"/>
+                <field name="active" column_invisible="True"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="ow_ai_agent_view_kanban" model="ir.ui.view">
+        <field name="name">ow.ai.agent.view.kanban</field>
+        <field name="model">ow.ai.agent</field>
+        <field name="arch" type="xml">
+            <kanban string="AI Agents">
+                <field name="name"/>
+                <field name="subtitle"/>
+                <field name="avatar_128"/>
+                <templates>
+                    <t t-name="card">
+                        <div class="d-flex align-items-center">
+                            <img t-att-src="kanban_image('ow.ai.agent', 'avatar_128', record.id.raw_value)"
+                                 class="o_kanban_image rounded-circle me-2" style="width:40px;height:40px;"
+                                 t-att-alt="record.name.value"/>
+                            <div>
+                                <strong><field name="name"/></strong>
+                                <div class="text-muted"><field name="subtitle"/></div>
+                            </div>
+                        </div>
+                    </t>
+                </templates>
+            </kanban>
+        </field>
+    </record>
+
+    <record id="ow_ai_agent_view_form" model="ir.ui.view">
+        <field name="name">ow.ai.agent.view.form</field>
+        <field name="model">ow.ai.agent</field>
+        <field name="arch" type="xml">
+            <form string="AI Agent">
+                <sheet>
+                    <widget name="web_ribbon" title="System Agent" invisible="not is_system_agent"/>
+                    <div class="oe_button_box" name="button_box">
+                        <button name="%(ow_ai_usage_action_from_agent)d" type="action"
+                                class="oe_stat_button" icon="fa-line-chart">
+                            <field name="usage_count" widget="statinfo" string="Usage"/>
+                        </button>
+                        <button name="%(ow_ai_session_action_from_agent)d" type="action"
+                                class="oe_stat_button" icon="fa-comments"
+                                groups="ow_ai.group_ai_manager">
+                            <field name="session_count" widget="statinfo" string="Sessions"/>
+                        </button>
+                    </div>
+                    <field name="image_128" widget="image" class="oe_avatar"/>
+                    <field name="avatar_128" invisible="1"/>
+                    <div class="oe_title">
+                        <h1><field name="name" placeholder="Agent name"/></h1>
+                        <field name="subtitle" placeholder="Subtitle"/>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="model" placeholder="Default Model (Settings)"/>
+                            <field name="is_system_agent" readonly="1"/>
+                        </group>
+                        <group>
+                            <field name="skill_ids" widget="many2many_tags"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Instructions" name="instructions">
+                            <field name="system_prompt" widget="text"/>
+                        </page>
+                        <page string="Model Options" name="model_options">
+                            <field name="model_options" widget="text"/>
+                        </page>
+                    </notebook>
+                    <button name="action_test_chat" type="object" string="Test in chat" class="btn-secondary"/>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="ow_ai_agent_action" model="ir.actions.act_window">
+        <field name="name">Agents</field>
+        <field name="res_model">ow.ai.agent</field>
+        <field name="view_mode">list,kanban,form</field>
+    </record>
+</odoo>

@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="ow_ai_tool_view_list" model="ir.ui.view">
+        <field name="name">ow.ai.tool.view.list</field>
+        <field name="model">ow.ai.tool</field>
+        <field name="arch" type="xml">
+            <list string="AI Tools">
+                <field name="name"/>
+                <field name="tool_name"/>
+                <field name="kind"/>
+                <field name="is_write"/>
+                <field name="requires_confirmation"/>
+                <field name="active" column_invisible="True"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="ow_ai_tool_view_form" model="ir.ui.view">
+        <field name="name">ow.ai.tool.view.form</field>
+        <field name="model">ow.ai.tool</field>
+        <field name="arch" type="xml">
+            <form string="AI Tool">
+                <sheet>
+                    <widget name="web_ribbon" title="Native" invisible="not is_native"/>
+                    <div class="oe_title">
+                        <field name="name" placeholder="Tool name" readonly="is_native"/>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="tool_name" readonly="is_native"/>
+                            <field name="kind" readonly="is_native"/>
+                            <field name="builtin_key" readonly="is_native" invisible="kind != 'builtin'"/>
+                            <field name="server_action_id" readonly="is_native" invisible="kind != 'server_action'"/>
+                            <field name="model_name"/>
+                        </group>
+                        <group>
+                            <field name="is_write"/>
+                            <field name="requires_confirmation"/>
+                            <field name="active"/>
+                            <field name="thinking_text"/>
+                        </group>
+                    </group>
+                    <group string="Description">
+                        <field name="description" nolabel="1"/>
+                    </group>
+                    <group string="Schema">
+                        <field name="schema" widget="code" options="{'mode': 'json'}" readonly="is_native" nolabel="1"/>
+                        <field name="schema_summary" readonly="1"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="ow_ai_tool_action" model="ir.actions.act_window">
+        <field name="name">Tools</field>
+        <field name="res_model">ow.ai.tool</field>
+        <field name="view_mode">list,form</field>
+    </record>
+</odoo>

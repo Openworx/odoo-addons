@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="ow_ai_session_view_list" model="ir.ui.view">
+        <field name="name">ow.ai.session.view.list</field>
+        <field name="model">ow.ai.session</field>
+        <field name="arch" type="xml">
+            <list string="AI Sessions" create="false" edit="false">
+                <field name="create_date"/>
+                <field name="channel_id"/>
+                <field name="agent_id"/>
+                <field name="request_user_id"/>
+                <!-- the error is system-only: AI managers get the badge without its red -->
+                <field name="loop_state" widget="badge" groups="base.group_system"
+                       decoration-danger="last_error"
+                       decoration-warning="loop_state not in ('ready', 'waiting_model')"/>
+                <field name="loop_state" widget="badge" groups="!base.group_system"
+                       decoration-warning="loop_state not in ('ready', 'waiting_model')"/>
+                <field name="request_round"/>
+                <field name="request_round_limit"/>
+                <field name="last_error" groups="base.group_system"/>
+                <field name="active" column_invisible="True"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="ow_ai_session_view_search" model="ir.ui.view">
+        <field name="name">ow.ai.session.view.search</field>
+        <field name="model">ow.ai.session</field>
+        <field name="arch" type="xml">
+            <search string="AI Sessions">
+                <field name="channel_id"/>
+                <field name="agent_id"/>
+                <field name="request_user_id"/>
+                <filter string="Mine" name="mine" domain="[('request_user_id', '=', uid)]"/>
+                <filter string="Errors" name="errors" domain="[('last_error', '!=', False)]"
+                        groups="base.group_system"/>
+                <separator/>
+                <filter string="Ready" name="state_ready" domain="[('loop_state', '=', 'ready')]"/>
+                <filter string="Waiting for model" name="state_waiting_model" domain="[('loop_state', '=', 'waiting_model')]"/>
+                <filter string="Waiting for user" name="state_waiting_user"
+                        domain="[('loop_state', 'in', ('waiting_confirmation', 'waiting_answer', 'waiting_client_result'))]"/>
+                <separator/>
+                <filter string="Archived" name="inactive" domain="[('active', '=', False)]"/>
+                <group>
+                    <filter string="Agent" name="group_agent" context="{'group_by': 'agent_id'}"/>
+                    <filter string="User" name="group_user" context="{'group_by': 'request_user_id'}"/>
+                    <filter string="State" name="group_state" context="{'group_by': 'loop_state'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="ow_ai_session_view_form" model="ir.ui.view">
+        <field name="name">ow.ai.session.view.form</field>
+        <field name="model">ow.ai.session</field>
+        <field name="arch" type="xml">
+            <form string="AI Session" create="false" edit="false">
+                <header>
+                    <button name="action_abort_pending" type="object" string="Abort pending"
+                            groups="ow_ai.group_ai_manager"
+                            invisible="loop_state not in ('waiting_confirmation', 'waiting_answer', 'waiting_client_result')"/>
+                    <button name="action_open_chat" type="object" string="Open chat"
+                            groups="ow_ai.group_ai_manager" invisible="not channel_id"/>
+                    <field name="loop_state" widget="statusbar"/>
+                </header>
+                <sheet>
+                    <div class="oe_title">
+                        <h1><field name="channel_id"/></h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="agent_id"/>
+                            <field name="request_user_id"/>
+                            <field name="res_model"/>
+                            <field name="res_id"/>
+                            <field name="active"/>
+                        </group>
+                        <group>
+                            <field name="request_round"/>
+                            <field name="request_round_limit"/>
+                            <field name="auto_confirm"/>
+                            <field name="show_agent_steps"/>
+                            <field name="web_search"/>
+                            <field name="last_error" groups="base.group_system"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Events" name="events">
+                            <field name="event_ids" readonly="1">
+                                <list>
+                                    <field name="sequence"/>
+                                    <field name="role"/>
+                                    <field name="summary" groups="base.group_system"/>
+                                    <field name="usage_id"/>
+                                </list>
+                                <form string="Session Event">
+                                    <group>
+                                        <field name="sequence"/>
+                                        <field name="role"/>
+                                        <field name="usage_id"/>
+                                    </group>
+                                    <field name="metadata" widget="code" options="{'mode': 'json'}"
+                                           groups="base.group_system"/>
+                                </form>
+                            </field>
+                        </page>
+                        <page string="Jobs" name="jobs">
+                            <field name="job_ids" readonly="1">
+                                <list>
+                                    <field name="kind"/>
+                                    <field name="state" widget="badge" decoration-danger="state == 'failed'"/>
+                                    <field name="attempt"/>
+                                    <field name="scheduled_at"/>
+                                    <field name="claimed_at"/>
+                                    <field name="finished_at"/>
+                                    <field name="error" groups="base.group_system"/>
+                                </list>
+                            </field>
+                        </page>
+                        <page string="Usage" name="usage">
+                            <field name="usage_ids" readonly="1">
+                                <list>
+                                    <field name="create_date"/>
+                                    <field name="kind"/>
+                                    <field name="model"/>
+                                    <field name="total_tokens" sum="Total"/>
+                                    <field name="cost" sum="Cost" digits="[16, 6]"/>
+                                    <field name="status" widget="badge" decoration-danger="status == 'error'"/>
+                                </list>
+                            </field>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="ow_ai_session_action" model="ir.actions.act_window">
+        <field name="name">Sessions</field>
+        <field name="res_model">ow.ai.session</field>
+        <field name="view_mode">list,form</field>
+        <field name="search_view_id" ref="ow_ai_session_view_search"/>
+    </record>
+
+    <record id="ow_ai_session_action_from_agent" model="ir.actions.act_window">
+        <field name="name">Sessions</field>
+        <field name="res_model">ow.ai.session</field>
+        <field name="view_mode">list,form</field>
+        <field name="search_view_id" ref="ow_ai_session_view_search"/>
+        <field name="domain">[('agent_id', '=', active_id)]</field>
+    </record>
+</odoo>

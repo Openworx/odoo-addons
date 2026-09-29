@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+
+<t t-name="ow_ai.ThreadStatus">
+    <div t-if="this.session?.isGenerating" class="o_ow_ai_status d-flex align-items-center gap-2 mx-2 my-1 px-1 small" role="status" aria-live="polite">
+        <t t-if="this.isWaitingForPage">
+            <i class="fa fa-hourglass-o text-muted"/>
+            <span class="text-muted">Waiting for this page…</span>
+            <button t-if="this.canRetry" type="button" class="o_ow_ai_status_retry btn btn-link btn-sm p-0" t-on-click="this.onClickRetry">Retry</button>
+        </t>
+        <t t-else="">
+            <span class="o_ow_ai_shimmer" t-if="this.session.toolStatus" t-out="this.session.toolStatus"/>
+            <span class="o_ow_ai_shimmer" t-else="">Thinking…</span>
+        </t>
+    </div>
+</t>
+
+</templates>

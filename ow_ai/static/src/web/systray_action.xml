@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+
+<t t-name="ow_ai.SystrayAskAi">
+    <button t-if="this.isAiUser()" type="button" class="o_nav_entry o_ow_ai_systray_ask_ai"
+        title="Ask AI" aria-label="Ask AI" t-on-click="this.onClick">
+        <i class="fa fa-magic" role="img" aria-hidden="true"/>
+    </button>
+</t>
+
+</templates>

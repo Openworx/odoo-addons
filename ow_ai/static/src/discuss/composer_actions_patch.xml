@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+
+<!-- icon of an AI chat setting (composer_actions_patch.js): its icon and an on/off switch -->
+<t t-name="ow_ai.ComposerSettingIcon">
+    <i t-attf-class="{{ templateParams.icon }} fa-fw {{ props.dropdown ? 'o-fs-small' : '' }}"/>
+    <span class="o_ow_ai_toggle form-check form-switch mb-0 ms-auto ps-5 pe-none order-last" aria-hidden="true">
+        <input type="checkbox" class="form-check-input" tabindex="-1" t-att-checked="templateParams.checked"/>
+    </span>
+</t>
+
+<!-- an action may keep its dropdown open when selected (the AI chat settings toggle in place) -->
+<t t-inherit="mail.Action.main" t-inherit-mode="extension">
+    <xpath expr="//DropdownItem" position="attributes">
+        <attribute name="closingMode">action.definition?.keepDropdownOpen ? 'none' : undefined</attribute>
+    </xpath>
+</t>
+
+</templates>
