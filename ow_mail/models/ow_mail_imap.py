@@ -2,6 +2,7 @@
 
 All live-read paths go through here so controllers stay thin.
 """
+import base64
 import email
 import html as _stdlib_html
 import imaplib
@@ -590,6 +591,41 @@ def fetch_section(conn, uid, section):
         if isinstance(item, tuple) and len(item) == 2:
             return item[1] or b""
     return b""
+
+
+def decode_imap_utf7(name):
+    """Decode an IMAP modified-UTF-7 mailbox name (RFC 3501 section 5.1.3).
+
+    Servers return non-ASCII folder names in modified UTF-7, e.g.
+    ``cumplea&APE-os`` for ``cumpleaños``. Returns the human-readable name;
+    ``&-`` is a literal ``&``. On any malformed sequence the original text is
+    kept rather than raising.
+    """
+    if "&" not in name:
+        return name
+    out, i, n = [], 0, len(name)
+    while i < n:
+        c = name[i]
+        if c != "&":
+            out.append(c)
+            i += 1
+            continue
+        j = name.find("-", i + 1)
+        if j == -1:
+            out.append(name[i:])
+            break
+        seq = name[i + 1:j]
+        if seq == "":
+            out.append("&")
+        else:
+            try:
+                b64 = seq.replace(",", "/")
+                b64 += "=" * (-len(b64) % 4)
+                out.append(base64.b64decode(b64).decode("utf-16-be"))
+            except Exception:
+                out.append(name[i:j + 1])
+        i = j + 1
+    return "".join(out)
 
 
 def fetch_envelopes(conn, uids):
