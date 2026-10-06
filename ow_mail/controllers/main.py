@@ -1146,7 +1146,7 @@ class OwMailController(http.Controller):
         return out
 
     @http.route("/ow_mail/send", type="jsonrpc", auth="ow_mail_user")
-    def send(self, account_id, to, cc=None, bcc=None, subject="", body_html="",
+    def send(self, account_id=None, to=None, cc=None, bcc=None, subject="", body_html="",
              attachment_ids=None, in_reply_to=None, references=None):
         """Send a message via SMTP and APPEND a copy to the Sent folder.
 
@@ -1174,7 +1174,7 @@ class OwMailController(http.Controller):
         return {"ok": True}
 
     @http.route("/ow_mail/draft", type="jsonrpc", auth="ow_mail_user")
-    def save_draft(self, account_id, to="", cc="", bcc="", subject="", body_html="",
+    def save_draft(self, account_id=None, to="", cc="", bcc="", subject="", body_html="",
                    attachment_ids=None, in_reply_to=None, references=None,
                    replace_uid=None):
         """APPEND a draft message to the account's Drafts folder via IMAP.
@@ -1209,7 +1209,7 @@ class OwMailController(http.Controller):
                 "folder_id": acc.drafts_folder_id.id}
 
     @http.route("/ow_mail/draft/discard", type="jsonrpc", auth="ow_mail_user")
-    def discard_draft(self, account_id, uid):
+    def discard_draft(self, account_id=None, uid=None):
         """Expunge one draft from the account's Drafts folder (best-effort).
 
         Called after a successful send to remove the autosaved copy. Only
