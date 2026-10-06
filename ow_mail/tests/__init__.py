@@ -12,3 +12,4 @@ from . import test_security
 from . import test_refresh_notify
 from . import test_no_account_guard
 from . import test_fetch_literals
+from . import test_folder_names
