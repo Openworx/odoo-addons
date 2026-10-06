@@ -592,6 +592,56 @@ def fetch_section(conn, uid, section):
     return b""
 
 
+_HEADER_LITERAL_RX = re.compile(rb"BODY\[HEADER\.FIELDS[^\]]*\]\s*\{\d+\}\s*$", re.I)
+
+
+def _iter_fetch_messages(data):
+    """Yield ``(meta_text, header_bytes)`` per message of a FETCH response.
+
+    skanndar (2026-10-06). imaplib splits the response at every IMAP literal
+    (``{n}``): each literal yields a ``(text_before, literal)`` tuple and the
+    remainder of the line arrives as a plain ``bytes`` item. The header block
+    is one literal, but servers also send *other* strings as literals when
+    they contain non-ASCII characters — typically an attachment filename
+    inside BODYSTRUCTURE (``"filename" {19}`` for ``261006 Flächen.pdf``). The
+    message then spans several tuples: the first literal is the filename, not
+    the headers, and the tuple that does carry the headers has no ``UID`` in
+    its text. Taking "tuple = message, literal = headers" produced a row with
+    no sender, no date and ``(no subject)``.
+
+    Tuples are grouped up to the closing ``bytes`` item; the header literal is
+    recognised by the ``BODY[HEADER.FIELDS ...] {n}`` that precedes it, and any
+    other literal is folded back into the metadata as a quoted string so the
+    FLAGS / SIZE / attachment regexes still see the whole line.
+    """
+    meta, header, pending = [], b"", False
+
+    def _flush():
+        text = b"".join(meta).decode(errors="replace")
+        return text, header
+
+    for item in data or []:
+        if isinstance(item, tuple) and len(item) == 2:
+            head = item[0] if isinstance(item[0], (bytes, bytearray)) else str(item[0]).encode()
+            literal = item[1] or b""
+            if _HEADER_LITERAL_RX.search(head):
+                header = literal
+                meta.append(head)
+            else:
+                # Drop the "{n}" marker and inline the literal as a quoted string.
+                meta.append(re.sub(rb"\{\d+\}\s*$", b"", head))
+                meta.append(b'"' + literal.replace(b'"', b"'") + b'"')
+            pending = True
+        elif isinstance(item, (bytes, bytearray)):
+            if not pending:
+                continue
+            meta.append(bytes(item))
+            yield _flush()
+            meta, header, pending = [], b"", False
+    if pending:
+        yield _flush()
+
+
 def fetch_envelopes(conn, uids):
     """UID FETCH ENVELOPE FLAGS BODYSTRUCTURE RFC822.SIZE for list view.
 
@@ -609,11 +659,9 @@ def fetch_envelopes(conn, uids):
     )
     if typ != "OK" or not data:
         return []
-    for item in data:
-        if not isinstance(item, tuple) or len(item) != 2:
-            continue
-        meta = item[0].decode(errors="replace") if isinstance(item[0], bytes) else str(item[0])
-        header_bytes = item[1] or b""
+    # skanndar (2026-10-06): a message is not always a single tuple (see
+    # _iter_fetch_messages); the previous code took the first literal as headers.
+    for meta, header_bytes in _iter_fetch_messages(data):
         m_uid = re.search(r"UID (\d+)", meta)
         m_flags = re.search(r"FLAGS \(([^)]*)\)", meta)
         m_size = re.search(r"RFC822\.SIZE (\d+)", meta)
