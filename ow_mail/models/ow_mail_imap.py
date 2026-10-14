@@ -89,6 +89,53 @@ def decode_header_value(value):
         return value
 
 
+_QUOTED = re.compile(r'"(?:[^"\\]|\\.)*"')
+_ADDR_TOKEN = re.compile(r"[^\s<>,;:()\[\]]+@[^\s<>,;:()\[\]]+")
+_BARE_PAIR = re.compile(r'([^\s,;<>"]+@[^\s,;<>"]+)\s+(?=[^\s,;<>"]+@)')
+
+
+def normalize_recipients(value):
+    """Turn hand-typed separators into RFC 5322 commas.
+
+    People habitually separate addresses with ``;`` (the Outlook habit) or a
+    bare space: ``a@x.de; b@y.de`` and ``a@x.de b@y.de`` both become
+    ``a@x.de, b@y.de``.  These are not RFC 5322 list separators, but the intent
+    is unambiguous.  Quoted display names are left untouched.
+    """
+    parts = re.split(r'("(?:[^"\\]|\\.)*")', value or "")
+    return "".join(
+        p if i % 2 else _BARE_PAIR.sub(r"\1, ", p.replace(";", ","))
+        for i, p in enumerate(parts)
+    )
+
+
+def parse_recipients(*values):
+    """Return ``(recipients, unreadable)`` for raw To/Cc/Bcc strings.
+
+    Each value is parsed strictly with ``getaddresses``.  Empty list elements
+    (the trailing comma left by autocomplete) are ignored, and any
+    address-looking token outside a quoted display name that the parser did
+    not return is reported as unreadable instead of being silently dropped.
+    """
+    recipients, unreadable = [], []
+    for value in values:
+        value = re.sub(r"[\r\n\x00-\x1f]", "", value or "")
+        value = re.sub(r"\s*,[\s,]*", ", ", value).strip(" ,")
+        if not value:
+            continue
+        parsed = [a for _n, a in getaddresses([value]) if a]
+        good = [a for a in parsed if "@" in a]
+        seen = {a.lower() for a in good}
+        recipients += good
+        unreadable += [a for a in parsed if "@" not in a]
+        unreadable += [
+            t
+            for t in _ADDR_TOKEN.findall(_QUOTED.sub("", value))
+            if t.lower() not in seen
+        ]
+    return recipients, unreadable
+
+
 def _addrs(header_value):
     """Parse a comma-separated RFC 2822 address header into a display string.
 
@@ -96,11 +143,15 @@ def _addrs(header_value):
     commas (e.g. ``"Smith, John" <john@example.com>``); a naïve ``split(',')``
     would split inside the quoted name and produce garbage.  Entries with an
     empty address component are filtered out to avoid trailing delimiters when
-    only display names are present.
+    only display names are present.  A header the strict parser cannot read
+    (e.g. ``a@x.de b@y.de``) is normalized first, and anything still unreadable
+    is shown raw rather than as an empty string.
     """
-    return ", ".join(
-        a for _n, a in getaddresses([decode_header_value(header_value or "")]) if a
-    )
+    value = decode_header_value(header_value or "")
+    recipients, unreadable = parse_recipients(normalize_recipients(value))
+    if unreadable:
+        return value.strip()
+    return ", ".join(recipients)
 
 
 def parse_envelope(msg):
