@@ -54,9 +54,14 @@ class OwMailConnectWizard(models.TransientModel):
 
     def _probe_imap(self, login):
         """Attempt IMAP LOGIN + LOGOUT; raise UserError on failure."""
-        cls = imaplib.IMAP4_SSL if self.imap_ssl else imaplib.IMAP4
         try:
-            conn = cls(self.imap_host, self.imap_port)
+            if self.imap_ssl:
+                # Verify the certificate, as _probe_smtp does: imaplib's
+                # default context does not.
+                conn = imaplib.IMAP4_SSL(self.imap_host, self.imap_port,
+                                         ssl_context=ssl_mod.create_default_context())
+            else:
+                conn = imaplib.IMAP4(self.imap_host, self.imap_port)
         except (OSError, imaplib.IMAP4.error) as e:
             raise UserError(_("Cannot reach IMAP server %s:%s — %s")
                             % (self.imap_host, self.imap_port, e))
