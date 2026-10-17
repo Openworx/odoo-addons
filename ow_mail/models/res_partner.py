@@ -8,15 +8,17 @@ class ResPartner(models.Model):
     def _ow_find_by_email(self, email):
         """Resolve a sender address to a partner.
 
-        Exact match on ``email_normalized`` first, then a case-insensitive
-        fallback on the raw ``email`` column for legacy rows where the
-        normalized value was never computed. Single home for the lookup —
-        controllers and the record-link helper all funnel through here.
+        Asks the mail app's own matcher first, the one incoming mail uses, so
+        a module extending it (several addresses per contact, say) is
+        honoured here too; then a case-insensitive fallback on the raw
+        ``email`` column for legacy rows where the normalized value was
+        never computed. Single home for the lookup — controllers and the
+        record-link helper all funnel through here.
         """
         email = (email or "").strip().lower()
         if not email:
             return self.browse()
-        return (self.search([("email_normalized", "=", email)], limit=1)
+        return (self.env["mail.thread"]._mail_find_partner_from_emails([email])[0]
                 or self.search([("email", "=ilike", email)], limit=1))
 
     def action_ow_mail_conversations(self):

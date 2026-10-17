@@ -180,8 +180,8 @@ def _envelope_to_dict(e, folder):
 
 def _annotate_known_partners(msgs):
     """Stamp each envelope wire dict with ``partner_id`` when the sender
-    address matches a ``res.partner`` (one batched query per page, matching
-    on ``email_normalized`` like the single-message endpoint). The frontend
+    address matches a ``res.partner`` (one batched lookup per page, through
+    the mail app's matcher like the single-message endpoint). The frontend
     renders a "Customer" badge for messages whose sender is a known contact;
     no match → ``partner_id`` is False.
     """
@@ -189,11 +189,9 @@ def _annotate_known_partners(msgs):
     emails.discard("")
     if not emails:
         return msgs
-    partners = request.env["res.partner"].search_read(
-        [("email_normalized", "in", list(emails))],
-        ["id", "email_normalized"],
-    )
-    by_email = {p["email_normalized"]: p["id"] for p in partners}
+    emails = list(emails)
+    partners = request.env["mail.thread"]._mail_find_partner_from_emails(emails)
+    by_email = {email: p.id for email, p in zip(emails, partners) if p}
     for m in msgs:
         m["partner_id"] = by_email.get(
             (m.get("from_email") or "").strip().lower(), False)

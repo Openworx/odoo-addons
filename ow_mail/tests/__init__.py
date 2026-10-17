@@ -15,3 +15,4 @@ from . import test_fetch_literals
 from . import test_folder_names
 from . import test_recipients
 from . import test_imap_tls
+from . import test_partner_match
