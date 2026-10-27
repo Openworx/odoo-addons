@@ -7,11 +7,12 @@ import smtplib
 import ssl
 from datetime import datetime, timedelta, timezone
 from email.message import EmailMessage
-from email.utils import getaddresses
 
 from odoo import _, api, fields, models
 
 from .ow_mail_imap import imap_mbox_quote as _mbox
+from .ow_mail_imap import normalize_recipients as _normalize_recipients  # noqa: F401
+from .ow_mail_imap import parse_recipients as _parse_recipients
 from odoo.exceptions import UserError
 from odoo.tools import html_sanitize
 
@@ -1000,6 +1001,15 @@ class OwMailAccount(models.Model):
         won't contain a copy.
         """
         self.ensure_one()
+        to, cc, bcc = (_normalize_recipients(v) for v in (to, cc, bcc))
+        recipients, unreadable = _parse_recipients(to, cc, bcc)
+        if unreadable:
+            raise UserError(_(
+                "Could not read these recipient addresses: %s. "
+                "Separate several addresses with commas.") % ", ".join(unreadable))
+        if not recipients:
+            raise UserError(_(
+                "No valid recipient address. Please fill in To, Cc, or Bcc."))
         atts = []
         for att in self.env["ir.attachment"].browse(attachment_ids or []):
             atts.append({
@@ -1010,11 +1020,6 @@ class OwMailAccount(models.Model):
             })
         msg = self._build_outgoing(to, cc, subject, body_html, attachments=atts,
                                    in_reply_to=in_reply_to, references=references, bcc=bcc)
-        addr_fields = [str(h) for h in (msg["To"], msg.get("Cc"), msg.get("Bcc")) if h]
-        recipients = [a for _n, a in getaddresses(addr_fields) if a]
-        if not recipients:
-            raise UserError(_(
-                "No valid recipient address. Please fill in To, Cc, or Bcc."))
         smtp = self._smtp_connect()
         try:
             smtp.send_message(msg, from_addr=self.email, to_addrs=recipients)
@@ -1145,4 +1150,3 @@ class OwMailAccount(models.Model):
         finally:
             imap.logout()
         return True
-
