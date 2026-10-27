@@ -45,9 +45,14 @@ class OwMailFolder(models.Model):
     ]
 
     def refresh_counts(self, conn=None):
-        """Update unread/total via IMAP STATUS. `conn` reuses an existing session."""
+        """Update unread/total via IMAP STATUS. `conn` reuses an existing session.
+
+        Returns True if any folder's counts actually changed, so callers can
+        skip work (e.g. a bus notification) when nothing moved.
+        """
         if not self:
-            return
+            return False
+        changed = False
         close = False
         if conn is None:
             conn = self.account_id[:1]._imap_connect()
@@ -56,7 +61,11 @@ class OwMailFolder(models.Model):
             for folder in self:
                 try:
                     total, unseen = imap_utils.status_counts(conn, folder.full_path)
-                    folder.write({"total_count": total, "unread_count": unseen})
+                    # Only write on a real change: a no-op write still bumps
+                    # write_date and fires recomputes every run.
+                    if (folder.total_count, folder.unread_count) != (total, unseen):
+                        folder.write({"total_count": total, "unread_count": unseen})
+                        changed = True
                 except Exception:
                     pass
         finally:
@@ -65,3 +74,4 @@ class OwMailFolder(models.Model):
                     conn.logout()
                 except Exception:
                     pass
+        return changed

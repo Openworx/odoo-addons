@@ -9,3 +9,4 @@ from . import test_record_link
 from . import test_record_routes
 from . import test_auto_link
 from . import test_security
+from . import test_refresh_notify
