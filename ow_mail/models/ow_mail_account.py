@@ -11,7 +11,7 @@ from email.message import EmailMessage
 from odoo import _, api, fields, models
 
 from .ow_mail_imap import imap_mbox_quote as _mbox
-from .ow_mail_imap import normalize_recipients as _normalize_recipients  # noqa: F401
+from .ow_mail_imap import normalize_recipients as _normalize_recipients
 from .ow_mail_imap import parse_recipients as _parse_recipients
 from odoo.exceptions import UserError
 from odoo.tools import html_sanitize
