@@ -83,6 +83,10 @@ class TestMcpWithOauth(HttpCase):
         self.assertIn('tools', r.json()['result'])
 
     def test_write_tool_blocked_without_write_scope(self):
+        # insufficient scope is an HTTP 403 with
+        # a RFC 6750 `insufficient_scope` challenge (MCP 2025-06-18
+        # authorization §Error handling), not a tool error the client
+        # cannot act on.
         token = self._mint('mcp:read')
         r = self._mcp({
             'jsonrpc': '2.0', 'id': 1, 'method': 'tools/call',
@@ -94,12 +98,9 @@ class TestMcpWithOauth(HttpCase):
                 },
             },
         }, token)
-        self.assertEqual(r.status_code, 200)
-        body = r.json()
-        # MCP idiom: tools/call returns isError=True in result, not a
-        # JSON-RPC error.
-        result = body.get('result', {})
-        self.assertTrue(result.get('isError'),
-                        f'expected isError=True, got {result}')
-        text = (result.get('content') or [{}])[0].get('text', '')
-        self.assertIn('mcp:write', text)
+        self.assertEqual(r.status_code, 403, r.text)
+        www = r.headers.get('WWW-Authenticate', '')
+        self.assertIn('error="insufficient_scope"', www)
+        self.assertIn('scope="mcp:write"', www)
+        self.assertFalse(self.env['res.partner'].search_count(
+            [('name', '=', 'Hacker')]))

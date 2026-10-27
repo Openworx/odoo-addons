@@ -1,3 +1,5 @@
+from unittest.mock import patch
+
 from odoo.tests import tagged
 from odoo.tests.common import TransactionCase
 from odoo.exceptions import AccessError, UserError
@@ -36,6 +38,29 @@ class TestWriteTools(TransactionCase):
         })
         self.assertTrue(out['id'])
         self.assertEqual(out['record']['name'], 'NewOne')
+
+    def test_create_echo_ignores_vals_mutated_by_overrides(self):
+        """The echo lists only the client's keys, even when a
+        create() override mutates the dict (and the caller's dict is left
+        untouched)."""
+        self.ma.allow_create = True
+        Partner = type(self.env['res.partner'])
+        orig_create = Partner.create
+
+        def mutating_create(model, vals_list):
+            vals_list = vals_list if isinstance(vals_list, list) else [vals_list]
+            for vals in vals_list:
+                vals['comment'] = 'added by an override'
+            return orig_create(model, vals_list)
+
+        values = {'name': 'Echo'}
+        with patch.object(Partner, 'create', mutating_create):
+            out = create_record(self.env, {
+                'model': 'res.partner', 'values': values,
+            })
+        self.assertEqual(values, {'name': 'Echo'})
+        self.assertEqual(set(out['record']), {'id', 'name', 'display_name'})
+        self.assertEqual(out['record']['name'], 'Echo')
 
     def test_create_respects_field_allowlist(self):
         self.ma.allow_create = True

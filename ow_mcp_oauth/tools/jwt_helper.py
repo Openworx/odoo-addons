@@ -146,6 +146,11 @@ def verify_access_token(
     from jwt import InvalidTokenError
 
     header = decode_token_unverified_header(token)
+    # RFC 9068 §4 — reject anything that is not
+    # an access-token JWT (e.g. an ID token signed with the same key).
+    if str(header.get('typ') or '').lower() not in ('at+jwt',
+                                                    'application/at+jwt'):
+        return None
     kid = header.get('kid')
     if not kid or kid not in public_pems_by_kid:
         return None

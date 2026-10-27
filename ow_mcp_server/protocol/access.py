@@ -18,21 +18,35 @@ _logger = logging.getLogger(__name__)
 
 BLOCKLIST_RE = re.compile(
     r'^('
-    # ir.* high-value surface: RCE, config, secrets, views, scheduling, ACL.
-    r'ir\.(rule|config_parameter|logging|attachment|attachment\.history'
-    r'|actions\.server|actions\.act_url|cron|ui\.view|mail_server'
-    r'|model\.access|model\.data|filters|module\.module|sequence'
-    r'|autovacuum|http)'
-    # Users, API keys, auth helpers, automation.
-    r'|res\.users(\.apikeys.*)?'
-    r'|res\.users\.identitycheck'
-    r'|res\.users\.log'
-    r'|auth_.*'
+    # The whole ir.* namespace: RCE, config, secrets, views, scheduling, ACL
+    # (ir.model.fields computes code, ir.asset injects JS into the backend,
+    # ir.default, ir.actions.*, ir.ui.menu, ir.profile...). Nothing an MCP
+    # client needs.
+    r'ir\..*'
+    # Users, groups, API keys, auth helpers, automation.
+    r'|res\.users(\..*)?'
+    r'|res\.groups(\..*)?'
+    r'|auth[._].*'
     r'|base_automation.*'
     r'|base_import\..*'
-    # Mail transport / outbound credentials.
-    r'|fetchmail\.server'
-    r'|mail\.mail'
+    # Settings: creating a res.config.settings reads every config_parameter
+    # (API keys of third-party integrations).
+    r'|res\.config(\..*)?'
+    # Mail transport / templates (QWeb/inline rendering) / credentials.
+    r'|fetchmail\..*'
+    r'|mail\.(mail|template.*|alias.*|ice\.server)'
+    r'|google\..*|microsoft\..*|calendar\.provider\.config'
+    # Payment / banking / certificates / IAP credentials.
+    r'|payment\.(provider|token)'
+    r'|online\.bank\.statement\.provider.*'
+    r'|certificate\..*|l10n\.es\.aeat\.certificate.*'
+    r'|iap\..*'
+    # Integrations holding tokens/secrets.
+    r'|whatsapp\.account'
+    r'|ow\.mail\..*'
+    # The MCP server's own config: model rows, audit, OAuth keys/tokens. A
+    # row exposing these would let an MCP admin widen their own access.
+    r'|ow\.mcp\..*'
     # Odoo internal registry / bus.
     r'|bus\..*'
     r')$'
@@ -45,6 +59,20 @@ _OP_FIELD = {
     'unlink': 'allow_delete',
 }
 _OP_ALIASES = {'delete': 'unlink'}
+
+
+def is_mcp_user(user):
+    """True if `user` may use MCP at all: active, internal (not portal /
+    public) and member of "MCP User" (implied by "MCP Administrator").
+
+    the old code only defined the group; any user with
+    a valid API key or OAuth token (portal users included) could call /mcp.
+    """
+    user = user.sudo()
+    return bool(
+        user.exists() and user.active and not user.share
+        and user.has_group('ow_mcp_server.group_mcp_user')
+    )
 
 
 def check_model_access(env, model_name, op):
@@ -179,7 +207,12 @@ def per_model_limit(env, model_name, global_cap):
 _DOMAIN_CONNECTORS = frozenset(('&', '|', '!'))
 
 
-def assert_domain_fields_allowed(env, model_name, domain):
+# operators whose right-hand side is a sub-domain
+# evaluated on the comodel (Odoo 17+).
+_SUBDOMAIN_OPERATORS = frozenset(('any', 'not any', 'any!', 'not any!'))
+
+
+def assert_domain_fields_allowed(env, model_name, domain, _nested=False):
     """Reject search domains that reference forbidden columns.
 
     Applied to `search_records`, `search_count`, and `read_group` so a
@@ -194,6 +227,12 @@ def assert_domain_fields_allowed(env, model_name, domain):
 
     Walking stops at the first non-relational field (the leaf) or at an
     unknown field name (deferred to the ORM).
+
+    when the path ends on a relational field,
+    `any` / `not any` sub-domains are validated recursively on the comodel
+    (they were not inspected at all), and a string value — which the ORM
+    resolves with a name search on the comodel — requires the comodel to
+    be exposed too.
     """
     if not domain:
         return
@@ -211,15 +250,56 @@ def assert_domain_fields_allowed(env, model_name, domain):
         if not isinstance(field_expr, str):
             bad.append(repr(atom))
             continue
-        _walk_domain_path(env, model_name, field_expr)
+        comodel = _walk_domain_path(
+            env, model_name, field_expr, strict_root=_nested,
+        )
+        if not comodel:
+            continue
+        operator, value = atom[1], atom[2]
+        if isinstance(operator, str) and \
+                operator.lower() in _SUBDOMAIN_OPERATORS:
+            if not isinstance(value, (list, tuple)):
+                bad.append(repr(atom))
+                continue
+            assert_domain_fields_allowed(env, comodel, value, _nested=True)
+        elif _is_name_search_value(value):
+            _assert_model_exposed(env, comodel, field_expr)
     if bad:
         raise AccessError(
             f'Malformed domain on {model_name}: {bad}'
         )
 
 
-def _walk_domain_path(env, model_name, dotted):
-    """Validate every hop of a (possibly dotted) domain path."""
+def _is_name_search_value(value):
+    if isinstance(value, str):
+        return True
+    return isinstance(value, (list, tuple)) and any(
+        isinstance(v, str) for v in value
+    )
+
+
+def _assert_model_exposed(env, model_name, dotted):
+    if BLOCKLIST_RE.match(model_name):
+        raise AccessError(
+            f'Domain traversal reaches blocked model {model_name!r} '
+            f'via {dotted!r}.'
+        )
+    if not env['ow.mcp.model.access'].sudo().search_count(
+        [('model_name', '=', model_name)], limit=1,
+    ):
+        raise AccessError(
+            f'Domain traverses into {model_name!r} which is not '
+            f'exposed via MCP (path: {dotted!r}).'
+        )
+
+
+def _walk_domain_path(env, model_name, dotted, strict_root=False):
+    """Validate every hop of a (possibly dotted) field path.
+
+    Returns the comodel name when the path ends on a relational field,
+    else None. With `strict_root` the first model must be exposed too (it
+    is a comodel reached through `any`).
+    """
     parts = dotted.split('.')
     current = model_name
     for i, hop in enumerate(parts):
@@ -236,11 +316,11 @@ def _walk_domain_path(env, model_name, dotted):
         ma = env['ow.mcp.model.access'].sudo().search(
             [('model_name', '=', current)], limit=1,
         )
-        if i == 0:
+        if i == 0 and not strict_root:
             # Root model: preserve the original noop semantics — when no
             # MA row exists, leave gating to check_model_access elsewhere.
             if not ma:
-                return
+                return None
         else:
             # Non-root hop: traversal into another model. Require an MA row;
             # otherwise the dotted path could reach data whose MCP allow-list
@@ -259,10 +339,35 @@ def _walk_domain_path(env, model_name, dotted):
         f = Model._fields.get(hop)
         if f is None:
             # Unknown field at this hop — defer to the ORM's own error.
-            return
+            return None
         if not f.relational:
-            return  # leaf reached
+            return None  # leaf reached
         current = f.comodel_name
+    return current
+
+
+_ORDER_TERM_RE = re.compile(
+    r'^\s*([A-Za-z_][\w.]*)(?:\s+(?:asc|desc))?'
+    r'(?:\s+nulls\s+(?:first|last))?\s*$',
+    re.IGNORECASE,
+)
+
+
+def assert_order_allowed(env, model_name, order):
+    """`order` may only sort on fields (and
+    dotted paths) the caller could also filter on; sorting by a hidden
+    column is an ordering oracle on it.
+    """
+    if not order:
+        return
+    if not isinstance(order, str):
+        raise AccessError(f'Invalid order clause {order!r}.')
+    for term in order.split(','):
+        m = _ORDER_TERM_RE.match(term)
+        if not m:
+            raise AccessError(f'Invalid order clause {order!r}.')
+        if m.group(1) != 'id':  # ids are returned anyway
+            _walk_domain_path(env, model_name, m.group(1))
 
 
 def assert_fields_allowed(env, model_name, fields):
@@ -284,8 +389,25 @@ def assert_fields_allowed(env, model_name, fields):
 # 0 = create, 1 = update, 2 = unlink-and-delete. We block these because they
 # write to a *different* model whose MCP allow-list would otherwise be
 # bypassed via the parent's allow-list. Opcodes 3 (forget), 4 (link), 5
-# (clear), 6 (replace) only touch relation rows, not the sub-model's fields.
+# (clear), 6 (replace) only touch relation rows on a many2many — but NOT on
+# a one2many, see _one2many_command_ops.
 _FORBIDDEN_X2M_OPS = frozenset({0, 1, 2})
+
+
+def _one2many_command_ops(env, field, op):
+    """MCP ops that link-only command `op` really performs on the comodel
+    of one2many `field` (Odoo 19 `One2many.write_real`):
+      3 UNLINK, 5 CLEAR: remove lines → DELETE them when the inverse
+        many2one is ondelete='cascade', else write the inverse to False;
+      4 LINK: write the inverse of the line (moves it from its document);
+      6 SET: both of the above.
+    """
+    inverse = env[field.comodel_name]._fields.get(field.inverse_name)
+    remove = 'unlink' if getattr(inverse, 'ondelete', None) == 'cascade' \
+        else 'write'
+    return {3: {remove}, 4: {'write'}, 5: {remove}, 6: {remove, 'write'}}.get(
+        op, set(),
+    )
 
 
 def assert_no_nested_writes(env, model_name, values):
@@ -294,7 +416,8 @@ def assert_no_nested_writes(env, model_name, values):
     Protects the MCP field allow-list: without this, a caller with write
     access to model A can inject `child_ids=[(0, 0, {...})]` and create or
     mutate records on a related model B whose MCP allow-list was never
-    consulted. Only the safe link-only opcodes (3, 4, 5, 6) are permitted.
+    consulted. Only the link-only opcodes (3, 4, 5, 6) are permitted, and
+    on a one2many only if the comodel's MCP row allows their real effect.
     """
     if not isinstance(values, dict):
         return
@@ -320,3 +443,11 @@ def assert_no_nested_writes(env, model_name, values):
                     f'create_record / update_record / delete_record calls '
                     f'against the related model so its allow-list applies.'
                 )
+            if field.type == 'one2many':
+                # The comodel's MCP row must allow what the command does.
+                for mcp_op in _one2many_command_ops(env, field, op):
+                    check_model_access(env, field.comodel_name, mcp_op)
+                    if mcp_op == 'write':
+                        assert_fields_allowed(
+                            env, field.comodel_name, [field.inverse_name],
+                        )

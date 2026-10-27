@@ -10,7 +10,6 @@ import logging
 import secrets
 
 from odoo.http import request, Response
-from odoo.tools import config as odoo_config
 
 
 _logger = logging.getLogger(__name__)
@@ -50,6 +49,22 @@ def error_response(error, description=None, status=400):
     return json_response(body, status=status)
 
 
+# /register, /token and /revoke are
+# unauthenticated and read the whole body; client metadata and token
+# requests are a few hundred bytes.
+MAX_BODY_BYTES = 16 * 1024
+
+
+def body_too_large():
+    """Return a 413 response if the request body exceeds MAX_BODY_BYTES."""
+    hr = request.httprequest
+    if (hr.content_length or 0) > MAX_BODY_BYTES or \
+            len(hr.get_data(cache=True)) > MAX_BODY_BYTES:
+        return error_response('invalid_request', 'Request body too large.',
+                              status=413)
+    return None
+
+
 def b64url_decode(value):
     """Decode unpadded base64url to bytes."""
     if isinstance(value, bytes):
@@ -79,14 +94,11 @@ def constant_time_eq(a: str, b: str) -> bool:
 
 
 def effective_client_ip():
-    """Real client IP, honoring X-Forwarded-For when proxy_mode is on."""
-    remote = request.httprequest.remote_addr or ''
-    if not odoo_config.get('proxy_mode'):
-        return remote
-    fwd = request.httprequest.headers.get('X-Forwarded-For', '')
-    if not fwd:
-        return remote
-    return fwd.split(',')[0].strip() or remote
+    """Real client IP: remote_addr, already resolved by Odoo's ProxyFix when
+    proxy_mode is on. the first X-Forwarded-For
+    entry is client-controlled, see ow_mcp_server._effective_client_ip.
+    """
+    return request.httprequest.remote_addr or ''
 
 
 # DCR throttle is persisted in `ow.mcp.oauth.dcr_attempt` so the

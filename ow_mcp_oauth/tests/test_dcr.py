@@ -7,6 +7,12 @@ from . import _helpers as h
 
 @tagged('post_install', '-at_install')
 class TestDCR(HttpCase):
+    def setUp(self):
+        super().setUp()
+        # DCR is off by default.
+        self.env['ow.mcp.oauth.config'].sudo().get_singleton() \
+            .oauth_dcr_enabled = True
+
     def test_register_happy_path_public_client(self):
         body = h.register_client(self)
         self.assertIn('client_id', body)

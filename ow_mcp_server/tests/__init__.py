@@ -24,3 +24,10 @@ from . import test_dispatch_savepoint
 from . import test_cors_origins
 from . import test_effective_client_ip
 from . import test_multicompany
+from . import test_batch_audit
+from . import test_sec_client_ip
+from . import test_sec_mcp_group
+from . import test_sec_read_group_domain
+from . import test_sec_o2m_commands
+from . import test_sec_cache_limits
+from . import test_sec_audit

@@ -7,3 +7,4 @@ from . import oauth_consent
 from . import oauth_event
 from . import oauth_dcr_attempt
 from . import res_config_settings
+from . import res_users
