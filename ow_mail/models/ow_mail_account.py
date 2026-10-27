@@ -821,6 +821,7 @@ class OwMailAccount(models.Model):
         pointers.
         """
         self.ensure_one()
+        from . import ow_mail_imap as imap_utils
         conn = self._imap_connect()
         try:
             typ, data = conn.list()
@@ -866,7 +867,8 @@ class OwMailAccount(models.Model):
                 parent_path = r["full_path"].rsplit(delim, 1)[0] if delim and delim in r["full_path"] else ""
                 parent_id = path_to_id.get(parent_path) if parent_path and parent_path != r["full_path"] else False
                 values = {
-                    "name": r["leaf"], "full_path": r["full_path"],
+                    "name": imap_utils.decode_imap_utf7(r["leaf"]),
+                    "full_path": r["full_path"],
                     "kind": r["kind"], "parent_id": parent_id,
                 }
                 if r["full_path"] in existing:
