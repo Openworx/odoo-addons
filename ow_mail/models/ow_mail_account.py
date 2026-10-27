@@ -236,13 +236,18 @@ class OwMailAccount(models.Model):
         ``False`` uses plain ``IMAP4``. STARTTLS is not supported — imaplib
         exposes ``starttls()`` but it must be called explicitly and this code
         does not do so; use port 993 with SSL for encrypted connections.
-        No custom ``ssl_context`` is applied here so self-signed certificates
-        used in dev (GreenMail) will be rejected — disable SSL in the account
+        The certificate and hostname are verified with
+        ``ssl.create_default_context()``, as for SMTP: imaplib's own default
+        context verifies neither. Self-signed certificates used in dev
+        (GreenMail) are therefore rejected — disable SSL in the account
         settings for those.
         """
         self.ensure_one()
-        cls = imaplib.IMAP4_SSL if self.imap_ssl else imaplib.IMAP4
-        conn = cls(self.imap_host, self.imap_port)
+        if self.imap_ssl:
+            conn = imaplib.IMAP4_SSL(self.imap_host, self.imap_port,
+                                     ssl_context=ssl.create_default_context())
+        else:
+            conn = imaplib.IMAP4(self.imap_host, self.imap_port)
         self._imap_authenticate(conn)
         return conn
 
