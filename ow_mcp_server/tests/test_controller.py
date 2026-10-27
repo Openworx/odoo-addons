@@ -112,14 +112,15 @@ class TestMcpController(HttpCase):
         structured = r.json()['result']['structuredContent']
         self.assertIn('res.partner', {m['model'] for m in structured['models']})
 
-    def test_batch_request(self):
+    def test_batch_request_rejected(self):
+        # MCP 2025-06-18 removed JSON-RPC
+        # batching; a batch used to count as ONE call for the rate limit.
         r = self._post([
             {'jsonrpc': '2.0', 'id': 1, 'method': 'initialize'},
             {'jsonrpc': '2.0', 'id': 2, 'method': 'tools/list'},
         ], f'Bearer {self.key}')
-        self.assertEqual(r.status_code, 200)
-        arr = r.json()
-        self.assertEqual({x['id'] for x in arr}, {1, 2})
+        self.assertEqual(r.status_code, 400)
+        self.assertEqual(r.json()['error']['code'], -32600)
 
     def test_parse_error_returns_400(self):
         headers = {

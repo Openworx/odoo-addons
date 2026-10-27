@@ -4,6 +4,7 @@ Singleton, like ow.mcp.config. Stores the RSA private key used to sign
 RS256 JWT access tokens and exposes endpoints metadata + TTLs.
 """
 import logging
+from urllib.parse import urlparse
 
 from odoo import api, fields, models
 from odoo.exceptions import UserError
@@ -26,9 +27,19 @@ class OauthConfig(models.Model):
              'back to API-key auth only.',
     )
     oauth_dcr_enabled = fields.Boolean(
-        default=True,
+        # off by default (was True). Open DCR
+        # lets anyone register a client called "Claude" pointing at their
+        # own redirect_uri and phish a consent.
+        default=False,
         help='When off, /ow_mcp/oauth/register returns 403. Existing clients '
              'keep working; new ones must be created manually by an admin.',
+    )
+    dcr_allowed_redirect_hosts = fields.Text(
+        default='claude.ai\nclaude.com\nlocalhost\n127.0.0.1\n::1',
+        help='Hosts (one per line, exact match) that dynamically registered '
+             'clients may use in redirect_uris. Empty = no host allowed. '
+             'Default: Claude.ai / Claude Desktop callbacks and loopback '
+             '(Claude Code, other native clients).',
     )
 
     # ---- Endpoints / canonical resource ----
@@ -41,9 +52,17 @@ class OauthConfig(models.Model):
 
     # ---- TTLs ----
     access_token_ttl_seconds = fields.Integer(default=900)        # 15 min
-    refresh_token_ttl_seconds = fields.Integer(default=2592000)   # 30 d
+    # sliding 7 d (was 30 d) + absolute cap of
+    # the whole rotation chain (there was none: refresh lived forever).
+    refresh_token_ttl_seconds = fields.Integer(default=604800)    # 7 d
+    refresh_token_absolute_ttl_seconds = fields.Integer(
+        default=2592000,  # 30 d
+        help='Maximum lifetime of a refresh-token rotation chain, counted '
+             'from the original authorization. After it the client must '
+             'send the user through /authorize again. 0 = no cap.',
+    )
     auth_code_ttl_seconds = fields.Integer(default=60)            # 1 min
-    consent_remember_days = fields.Integer(default=30)
+    consent_remember_days = fields.Integer(default=0)  # was 30
     unused_client_purge_days = fields.Integer(default=7)
 
     # ---- DCR throttle ----
@@ -142,6 +161,20 @@ class OauthConfig(models.Model):
             'ow_mcp_oauth: rotated key. new kid=%s, prev kid=%s', kid, old_kid,
         )
         return True
+
+    def redirect_host_allowed(self, uri):
+        """DCR redirect_uri host allow-list."""
+        self.ensure_one()
+        allowed = {
+            line.strip().lower()
+            for line in (self.dcr_allowed_redirect_hosts or '').splitlines()
+            if line.strip() and not line.strip().startswith('#')
+        }
+        try:
+            host = (urlparse(uri).hostname or '').lower()
+        except ValueError:
+            return False
+        return bool(host) and host in allowed
 
     def base_url(self):
         """Return the canonical issuer base (no trailing slash)."""

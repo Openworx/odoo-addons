@@ -1,6 +1,6 @@
 {
     'name': 'OW MCP OAuth 2.1',
-    'version': '20.0.1.0.1',
+    'version': '20.0.1.1.0',
     'summary': 'OAuth 2.1 + Dynamic Client Registration for OW MCP Server '
                '— direct Claude/ChatGPT remote-MCP connect, no bridge.',
     'description': """

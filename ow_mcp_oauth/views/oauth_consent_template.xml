@@ -26,11 +26,21 @@
             <div class="card shadow-sm">
                 <div class="card-body p-4">
                     <h4 class="card-title mb-3">Authorize MCP access</h4>
+                    <div t-if="unverified" class="alert alert-warning">
+                        <strong>Unverified client.</strong>
+                        It registered itself and its name has not been verified.
+                        Only continue if you started this connection
+                        yourself and recognise the address below.
+                    </div>
                     <p>
                         <strong>
                             <t t-out="client.client_name or client.client_id"/>
                         </strong>
                         is requesting access to your Odoo MCP server.
+                    </p>
+                    <p>
+                        The authorization will be sent to
+                        <strong class="fs-5"><t t-esc="redirect_host"/></strong>
                     </p>
                     <p class="meta">
                         Logged in as
@@ -80,12 +90,12 @@
                         <input type="hidden" name="resource"
                                t-att-value="resource"/>
 
-                        <div class="form-check mb-3">
+                        <div t-if="remember_days" class="form-check mb-3">
                             <input type="checkbox" class="form-check-input"
-                                   id="remember" name="remember" value="1"
-                                   checked="checked"/>
+                                   id="remember" name="remember" value="1"/>
                             <label class="form-check-label" for="remember">
-                                Remember this decision
+                                Remember this decision for
+                                <t t-esc="remember_days"/> days
                             </label>
                         </div>
 

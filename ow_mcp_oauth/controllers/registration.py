@@ -82,6 +82,10 @@ class OauthRegistration(http.Controller):
                 status=403,
             )
 
+        too_big = u.body_too_large()
+        if too_big is not None:
+            return too_big
+
         ip = u.effective_client_ip()
         if not u.dcr_check_throttle(
             request.env, ip, c.dcr_rate_limit_per_ip_per_hour,
@@ -151,6 +155,17 @@ class OauthRegistration(http.Controller):
         if not granted:
             granted = supported
         scope = ' '.join(sorted(granted))
+
+        # only allow-listed redirect hosts
+        # (default: claude.ai / claude.com / loopback). Checked last so the
+        # metadata errors above keep their RFC 7591 codes.
+        for uri in redirect_uris:
+            if not c.redirect_host_allowed(uri):
+                return u.error_response(
+                    'invalid_redirect_uri',
+                    'redirect_uri host is not allowed for dynamic client '
+                    'registration on this server.',
+                )
 
         client_secret_plain = None
         client_secret_hash = False

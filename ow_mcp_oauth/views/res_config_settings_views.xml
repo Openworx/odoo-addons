@@ -16,8 +16,14 @@
                     </setting>
                     <setting id="ow_mcp_oauth_dcr_enabled"
                              string="Enable Dynamic Client Registration"
-                             help="When on, any client may POST to /ow_mcp/oauth/register (rate-limited per IP). Disable to require admins to register clients manually.">
+                             help="When on, any client may POST to /ow_mcp/oauth/register (rate-limited per IP, redirect hosts restricted). Off by default: admins register clients manually.">
                         <field name="ow_mcp_oauth_dcr_enabled"/>
+                    </setting>
+                    <setting id="ow_mcp_oauth_dcr_allowed_redirect_hosts"
+                             string="DCR redirect hosts"
+                             invisible="not ow_mcp_oauth_dcr_enabled"
+                             help="Hosts (one per line, exact match) that dynamically registered clients may redirect to. Default: claude.ai, claude.com and loopback.">
+                        <field name="ow_mcp_oauth_dcr_allowed_redirect_hosts"/>
                     </setting>
                     <setting id="ow_mcp_oauth_canonical_resource_uri"
                              string="Canonical resource URI"
@@ -35,8 +41,13 @@
                     </setting>
                     <setting id="ow_mcp_oauth_refresh_token_ttl_seconds"
                              string="Refresh token TTL (seconds)"
-                             help="Default 2,592,000 (30 days).">
+                             help="Sliding lifetime of each refresh token. Default 604,800 (7 days).">
                         <field name="ow_mcp_oauth_refresh_token_ttl_seconds"/>
+                    </setting>
+                    <setting id="ow_mcp_oauth_refresh_token_absolute_ttl_seconds"
+                             string="Refresh chain max lifetime (seconds)"
+                             help="Maximum lifetime of a rotation chain since the user consented; then the user must authorize again. Default 2,592,000 (30 days). 0 = no cap.">
+                        <field name="ow_mcp_oauth_refresh_token_absolute_ttl_seconds"/>
                     </setting>
                     <setting id="ow_mcp_oauth_auth_code_ttl_seconds"
                              string="Authorization code TTL (seconds)"

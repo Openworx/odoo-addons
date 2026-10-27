@@ -6,12 +6,15 @@ class ResConfigSettings(models.TransientModel):
     _inherit = 'res.config.settings'
 
     ow_mcp_oauth_enabled = fields.Boolean(default=True)
-    ow_mcp_oauth_dcr_enabled = fields.Boolean(default=True)
+    ow_mcp_oauth_dcr_enabled = fields.Boolean(default=False)
+    ow_mcp_oauth_dcr_allowed_redirect_hosts = fields.Text()
     ow_mcp_oauth_canonical_resource_uri = fields.Char()
     ow_mcp_oauth_access_token_ttl_seconds = fields.Integer(default=900)
-    ow_mcp_oauth_refresh_token_ttl_seconds = fields.Integer(default=2592000)
+    ow_mcp_oauth_refresh_token_ttl_seconds = fields.Integer(default=604800)
+    ow_mcp_oauth_refresh_token_absolute_ttl_seconds = fields.Integer(
+        default=2592000)
     ow_mcp_oauth_auth_code_ttl_seconds = fields.Integer(default=60)
-    ow_mcp_oauth_consent_remember_days = fields.Integer(default=30)
+    ow_mcp_oauth_consent_remember_days = fields.Integer(default=0)
     ow_mcp_oauth_unused_client_purge_days = fields.Integer(default=7)
     ow_mcp_oauth_dcr_rate_limit_per_ip_per_hour = fields.Integer(default=20)
     ow_mcp_oauth_active_kid = fields.Char(
@@ -34,9 +37,13 @@ class ResConfigSettings(models.TransientModel):
         res.update({
             'ow_mcp_oauth_enabled': s.oauth_enabled,
             'ow_mcp_oauth_dcr_enabled': s.oauth_dcr_enabled,
+            'ow_mcp_oauth_dcr_allowed_redirect_hosts':
+                s.dcr_allowed_redirect_hosts,
             'ow_mcp_oauth_canonical_resource_uri': s.canonical_resource_uri,
             'ow_mcp_oauth_access_token_ttl_seconds': s.access_token_ttl_seconds,
             'ow_mcp_oauth_refresh_token_ttl_seconds': s.refresh_token_ttl_seconds,
+            'ow_mcp_oauth_refresh_token_absolute_ttl_seconds':
+                s.refresh_token_absolute_ttl_seconds,
             'ow_mcp_oauth_auth_code_ttl_seconds': s.auth_code_ttl_seconds,
             'ow_mcp_oauth_consent_remember_days': s.consent_remember_days,
             'ow_mcp_oauth_unused_client_purge_days': s.unused_client_purge_days,
@@ -50,9 +57,13 @@ class ResConfigSettings(models.TransientModel):
         self.env['ow.mcp.oauth.config'].sudo().get_singleton().write({
             'oauth_enabled': self.ow_mcp_oauth_enabled,
             'oauth_dcr_enabled': self.ow_mcp_oauth_dcr_enabled,
+            'dcr_allowed_redirect_hosts':
+                self.ow_mcp_oauth_dcr_allowed_redirect_hosts,
             'canonical_resource_uri': self.ow_mcp_oauth_canonical_resource_uri,
             'access_token_ttl_seconds': self.ow_mcp_oauth_access_token_ttl_seconds,
             'refresh_token_ttl_seconds': self.ow_mcp_oauth_refresh_token_ttl_seconds,
+            'refresh_token_absolute_ttl_seconds':
+                self.ow_mcp_oauth_refresh_token_absolute_ttl_seconds,
             'auth_code_ttl_seconds': self.ow_mcp_oauth_auth_code_ttl_seconds,
             'consent_remember_days': self.ow_mcp_oauth_consent_remember_days,
             'unused_client_purge_days': self.ow_mcp_oauth_unused_client_purge_days,
