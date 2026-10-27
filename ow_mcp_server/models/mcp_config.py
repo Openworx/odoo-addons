@@ -62,7 +62,8 @@ class MCPConfig(models.Model):
              'N * this value.',
     )
     audit_log = fields.Boolean(
-        default=False,
+        # on by default (was False).
+        default=True,
         help='Record every MCP call in ow.mcp.audit.log (admin-only).',
     )
     audit_retention_days = fields.Integer(
@@ -88,8 +89,10 @@ class MCPConfig(models.Model):
              'IPv4-mapped IPv6 clients (::ffff:a.b.c.d) are matched against '
              'their IPv4 form, so a v4 entry covers dual-stack clients. '
              'Behind a reverse proxy, set proxy_mode = True in odoo.conf '
-             'so X-Forwarded-For is trusted; otherwise this checks the '
-             'proxy IP instead of the real client.',
+             'and have the proxy send X-Forwarded-Host and overwrite '
+             'X-Forwarded-For with $remote_addr (Odoo\'s ProxyFix then '
+             'resolves the client IP); otherwise this checks the proxy IP '
+             'instead of the real client.',
     )
     warning_banner = fields.Char(compute='_compute_warning_banner')
     proxy_mode_warning = fields.Char(compute='_compute_proxy_mode_warning')
@@ -132,7 +135,8 @@ class MCPConfig(models.Model):
                     "proxy_mode is off in odoo.conf. If a reverse proxy "
                     "sits in front of Odoo, the IP whitelist will match "
                     "the proxy's IP instead of the real client — set "
-                    "proxy_mode = True so X-Forwarded-For is trusted."
+                    "proxy_mode = True (and X-Forwarded-Host from the proxy) so "
+                    "the real client IP is resolved."
                 )
             else:
                 rec.proxy_mode_warning = False

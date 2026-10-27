@@ -37,12 +37,16 @@ class TestEffectiveClientIp(TransactionCase):
         )
         self.assertEqual(self._run(req, proxy_mode=False), '10.0.0.1')
 
-    def test_proxy_mode_uses_first_xff_entry(self):
+    def test_proxy_mode_ignores_client_supplied_xff(self):
+        # the FIRST X-Forwarded-For entry is
+        # whatever the client sent. With proxy_mode Odoo's ProxyFix has
+        # already put the last (proxy-appended) hop in remote_addr, so that
+        # is the only trustworthy value.
         req = _fake_request(
-            remote_addr='10.0.0.1',
-            xff='203.0.113.9, 198.51.100.2, 10.0.0.1',
+            remote_addr='198.51.100.2',
+            xff='203.0.113.9, 198.51.100.2',
         )
-        self.assertEqual(self._run(req, proxy_mode=True), '203.0.113.9')
+        self.assertEqual(self._run(req, proxy_mode=True), '198.51.100.2')
 
     def test_proxy_mode_without_xff_falls_back_to_remote_addr(self):
         req = _fake_request(remote_addr='10.0.0.1', xff=None)
@@ -52,12 +56,6 @@ class TestEffectiveClientIp(TransactionCase):
         req = _fake_request(remote_addr='10.0.0.1', xff='')
         self.assertEqual(self._run(req, proxy_mode=True), '10.0.0.1')
 
-    def test_xff_whitespace_stripped(self):
-        req = _fake_request(
-            remote_addr='10.0.0.1',
-            xff='  203.0.113.9  , 10.0.0.1',
-        )
-        self.assertEqual(self._run(req, proxy_mode=True), '203.0.113.9')
 
     def test_missing_remote_addr_with_proxy_off(self):
         req = _fake_request(remote_addr=None, xff='203.0.113.9')

@@ -20,7 +20,7 @@ from odoo import http
 from odoo.http import request, Response
 from odoo.tools import config as odoo_config
 
-from ..protocol import authfail, dispatcher, jsonrpc, ratelimit
+from ..protocol import access, authfail, dispatcher, jsonrpc, ratelimit
 
 
 _logger = logging.getLogger(__name__)
@@ -98,6 +98,13 @@ class MCPController(http.Controller):
                 error_code=jsonrpc.AUTH_REQUIRED,
                 error_message='auth required',
             )
+        if not access.is_mcp_user(request.env['res.users'].browse(uid)):
+            return self._audit_and_return(
+                cfg, self._forbidden_user(cfg), t0, user_id=uid,
+                method=None, tool_name=None, success=False,
+                error_code=jsonrpc.PERMISSION_DENIED,
+                error_message='user not allowed to use MCP',
+            )
         request.update_env(user=uid)
         if _no_cache_requested(request):
             request.update_env(
@@ -137,20 +144,34 @@ class MCPController(http.Controller):
             )
 
         payload_bytes = len(raw or '')
-        if isinstance(msg, list):
-            out = [
-                x for x in (dispatcher.dispatch(request.env, m) for m in msg)
-                if x is not None
-            ]
-            resp = self._json(out, 200, cfg=cfg)
-            # Audit one row per sub-call for accurate traceability.
-            if cfg and cfg.audit_log:
-                for m in msg:
-                    self._record_audit(
-                        cfg, t0, uid, m, success=True,
-                        payload_bytes=payload_bytes,
-                    )
-            return resp
+        if not isinstance(msg, dict):
+            # JSON-RPC batching was removed in MCP 2025-06-18. A batch
+            # counted as ONE request for the per-user rate limit and was
+            # audited as success with the raw arguments; any other
+            # non-object body crashed.
+            resp = self._json(
+                jsonrpc.transport_error(
+                    jsonrpc.INVALID_REQUEST,
+                    'Invalid Request: send one JSON-RPC object per HTTP '
+                    'request (batching is not supported).',
+                ),
+                400, cfg=cfg,
+            )
+            return self._audit_and_return(
+                cfg, resp, t0, user_id=uid, method=None, tool_name=None,
+                success=False, error_code=jsonrpc.INVALID_REQUEST,
+                error_message='batch / non-object request rejected',
+                payload_bytes=payload_bytes,
+            )
+
+        early = self._precheck_message(cfg, msg)
+        if early is not None:
+            return self._audit_and_return(
+                cfg, early, t0, user_id=uid, success=False,
+                error_code=jsonrpc.PERMISSION_DENIED,
+                error_message='rejected before dispatch',
+                payload_bytes=payload_bytes, message=msg,
+            )
 
         resp_body = dispatcher.dispatch(request.env, msg)
         if resp_body is None:
@@ -163,7 +184,7 @@ class MCPController(http.Controller):
             )
         return self._audit_and_return(
             cfg, response, t0, user_id=uid,
-            method=(msg or {}).get('method') if isinstance(msg, dict) else None,
+            method=msg.get('method'),
             tool_name=_tool_name(msg),
             model_name=_model_name(msg),
             success=_is_success(resp_body),
@@ -188,6 +209,8 @@ class MCPController(http.Controller):
         uid = self._authenticate()
         if not uid:
             return self._unauthorized()
+        if not access.is_mcp_user(request.env['res.users'].browse(uid)):
+            return self._forbidden_user(cfg)
 
         def _stream():
             yield 'event: ready\ndata: {}\n\n'
@@ -215,6 +238,16 @@ class MCPController(http.Controller):
         return resp
 
     # -- gates ---------------------------------------------------------------
+
+    def _precheck_message(self, cfg, msg):
+        """Hook: return a Response to reject an authenticated, parsed
+        JSON-RPC message before dispatch, else None.
+
+        lets ow_mcp_oauth answer an insufficient
+        OAuth scope with HTTP 403 + `insufficient_scope` (RFC 6750 §3.1,
+        MCP 2025-06-18 authorization) instead of a tool error.
+        """
+        return None
 
     def _body_too_large(self, cfg):
         """Cheap pre-read check on Content-Length. The real body is re-checked
@@ -276,12 +309,14 @@ class MCPController(http.Controller):
             return None
         if request.db == target:
             return None
+        # this runs before authentication; do
+        # not echo the name of the database actually served.
         return self._json(
             jsonrpc.transport_error(
                 jsonrpc.NOT_FOUND,
-                f'Request reached database {request.db!r} but client asked '
-                f'for {target!r}. Configure Odoo dbfilter to route this '
-                f'host to {target!r}, or use a host/URL that maps to it.',
+                f'This endpoint does not serve database {target!r}. '
+                f'Configure Odoo dbfilter to route this host to it, or use '
+                f'a host/URL that maps to it.',
             ),
             404, cfg=cfg,
         )
@@ -316,6 +351,16 @@ class MCPController(http.Controller):
         )
         resp.headers['WWW-Authenticate'] = 'Bearer realm="mcp"'
         return resp
+
+    def _forbidden_user(self, cfg):
+        return self._json(
+            jsonrpc.transport_error(
+                jsonrpc.PERMISSION_DENIED,
+                'This user may not use MCP: an active internal user in the '
+                '"MCP User" group is required.',
+            ),
+            403, cfg=cfg,
+        )
 
     def _auth_throttled(self, cfg):
         resp = self._json(
@@ -422,12 +467,16 @@ _SUMMARY_LIMIT = 4000
 # Keys whose value must never reach the audit log in plaintext. Matched
 # case-insensitively as substrings so `new_password`, `totp_secret`,
 # `x_api_key` and so on are all covered.
+# + `pass` (smtp_pass), `pwd`, `key` (openai_key,
+# private keys), `credential`, `bearer`.
 _SENSITIVE_KEY_SUBSTRINGS = (
     'password', 'passwd', 'secret', 'token', 'api_key', 'apikey',
     'totp', 'otp_secret', 'private_key', 'privatekey', 'signing_key',
     'client_secret', 'access_token', 'refresh_token',
-    'acc_number', 'iban', 'bic', 'swift', 'cvv', 'cvc', 'card_number',
+    'acc_number', 'account_number', 'iban', 'bic', 'swift', 'cvv', 'cvc',
+    'card_number',
     'ssn', 'tax_id',
+    'pass', 'pwd', 'key', 'credential', 'bearer',
 )
 _REDACTED = '***REDACTED***'
 
@@ -440,12 +489,20 @@ def _is_sensitive_key(key):
 
 
 def _redact(obj):
-    """Recursively redact values under sensitive keys inside a JSON-ish tree."""
+    """Recursively redact values under sensitive keys inside a JSON-ish tree.
+
+    also the value of a domain leaf on a sensitive
+    field, e.g. ["password", "=", "..."] (by the last segment of the path).
+    """
     if isinstance(obj, dict):
         return {
             k: (_REDACTED if _is_sensitive_key(k) else _redact(v))
             for k, v in obj.items()
         }
+    if isinstance(obj, (list, tuple)) and len(obj) == 3 and \
+            isinstance(obj[0], str) and isinstance(obj[1], str) and \
+            _is_sensitive_key(obj[0].rsplit('.', 1)[-1]):
+        return [obj[0], obj[1], _REDACTED]
     if isinstance(obj, list):
         return [_redact(v) for v in obj]
     if isinstance(obj, tuple):
@@ -514,20 +571,17 @@ def _ip_allowed(client_ip, whitelist_text):
 
 
 def _effective_client_ip():
-    """Return the real client IP, honoring X-Forwarded-For when proxy_mode is
-    set in odoo.conf. Without this, behind a reverse proxy the auth-failure
-    throttle and IP allowlist key on the *proxy's* IP — one bad actor trips
-    the throttle for every legitimate client.
+    """Return the real client IP.
+
+    never re-parse X-Forwarded-For. Its FIRST
+    entry is whatever the client sent (nginx's $proxy_add_x_forwarded_for
+    appends the real address at the END), so trusting it let anyone bypass
+    ip_whitelist / the auth throttle / the DCR limit and forge the audited
+    IP. With proxy_mode (and X-Forwarded-Host from the proxy) Odoo already
+    runs werkzeug's ProxyFix(x_for=1), which puts the last, proxy-written
+    hop in remote_addr.
     """
-    remote = request.httprequest.remote_addr or ''
-    if not odoo_config.get('proxy_mode'):
-        return remote
-    fwd = request.httprequest.headers.get('X-Forwarded-For', '')
-    if not fwd:
-        return remote
-    # First entry = original client; subsequent entries are intermediate hops.
-    first = fwd.split(',')[0].strip()
-    return first or remote
+    return request.httprequest.remote_addr or ''
 
 
 def _is_https_effective():

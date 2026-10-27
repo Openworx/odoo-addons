@@ -4,11 +4,14 @@ GET  /ow_mcp/oauth/authorize  — render consent screen (auth='user')
 POST /ow_mcp/oauth/authorize  — submit consent decision (auth='user', CSRF on)
 """
 import logging
+import re
 from datetime import datetime, timedelta
-from urllib.parse import urlencode
+from urllib.parse import urlencode, urlparse
 
 from odoo import http
 from odoo.http import request
+
+from odoo.addons.ow_mcp_server.protocol.access import is_mcp_user
 
 from . import _utils as u
 
@@ -29,6 +32,33 @@ def _redirect_with_error(redirect_uri: str, error: str, state: str | None,
     )
 
 
+_SUPPORTED_SCOPES = frozenset(('mcp:read', 'mcp:write'))
+# RFC 7636 §4.2: BASE64URL(SHA256(verifier)) is 43 chars; allow the spec's
+# 43..128 unreserved range.
+_CODE_CHALLENGE_RE = re.compile(r'^[A-Za-z0-9._~-]{43,128}$')
+
+
+def _no_frame(response):
+    """The consent screen must never be
+    framed (clickjacking of the Allow button). Odoo only sends
+    X-Frame-Options on /web and /web/login."""
+    response.headers['X-Frame-Options'] = 'DENY'
+    response.headers['Content-Security-Policy'] = "frame-ancestors 'none'"
+    return response
+
+
+def _forbidden_user(client=None):
+    """/authorize is auth='user', which
+    lets portal users in; only internal "MCP User" members may consent."""
+    u.event_log('authorize_deny', client=client, user=request.env.user,
+                payload={'reason': 'not_mcp_user'})
+    return u.error_response(
+        'access_denied',
+        'This user may not use MCP: an internal user in the "MCP User" '
+        'group is required.', status=403,
+    )
+
+
 class OauthAuthorize(http.Controller):
 
     @http.route(
@@ -37,11 +67,16 @@ class OauthAuthorize(http.Controller):
         csrf=False, save_session=True, website=False, readonly=False,
     )
     def authorize_get(self, **kwargs):
+        return _no_frame(self._authorize_get(**kwargs))
+
+    def _authorize_get(self, **kwargs):
         c = u.cfg()
         if not c.oauth_enabled:
             return u.error_response(
                 'oauth_disabled', 'OAuth is disabled.', status=404,
             )
+        if not is_mcp_user(request.env.user):
+            return _forbidden_user()
 
         # Required params
         client_id = (kwargs.get('client_id') or '').strip()
@@ -88,6 +123,11 @@ class OauthAuthorize(http.Controller):
                 redirect_uri, 'invalid_request', state,
                 'code_challenge_method must be S256.',
             )
+        if not _CODE_CHALLENGE_RE.match(code_challenge):
+            return _redirect_with_error(
+                redirect_uri, 'invalid_request', state,
+                'code_challenge is malformed.',
+            )
 
         canonical = c.effective_canonical_resource_uri()
         if resource and resource.rstrip('/') != canonical:
@@ -100,7 +140,7 @@ class OauthAuthorize(http.Controller):
 
         # Intersect scope with what client + server support.
         requested = set(scope.split())
-        granted_set = requested & set(client.scope_list())
+        granted_set = requested & set(client.scope_list()) & _SUPPORTED_SCOPES
         if not granted_set:
             return _redirect_with_error(
                 redirect_uri, 'invalid_scope', state,
@@ -136,6 +176,10 @@ class OauthAuthorize(http.Controller):
                 'resource': bound_resource,
                 'scope_str': granted_scope,
                 'csrf_token': request.csrf_token(),
+                # who really gets the code.
+                'unverified': client.is_dynamic,
+                'redirect_host': urlparse(redirect_uri).hostname or '',
+                'remember_days': c.consent_remember_days,
             },
         )
 
@@ -145,9 +189,14 @@ class OauthAuthorize(http.Controller):
         csrf=True, save_session=True, website=False, readonly=False,
     )
     def authorize_post(self, **kwargs):
+        return _no_frame(self._authorize_post(**kwargs))
+
+    def _authorize_post(self, **kwargs):
         c = u.cfg()
         if not c.oauth_enabled:
             return u.error_response('oauth_disabled', status=404)
+        if not is_mcp_user(request.env.user):
+            return _forbidden_user()
 
         decision = (kwargs.get('decision') or '').strip()
         client_id = (kwargs.get('client_id') or '').strip()
@@ -182,6 +231,27 @@ class OauthAuthorize(http.Controller):
             return _redirect_with_error(
                 redirect_uri, 'access_denied', state,
                 'User denied the authorization request.',
+            )
+
+        # the POST is user-controlled; re-check
+        # what GET validated. Scope must stay within the client's registered
+        # scopes (it was copied from the form as is) and PKCE must be S256
+        # with a well-formed challenge.
+        requested = set(scope.split())
+        if not requested or not requested <= (
+                set(client.scope_list()) & _SUPPORTED_SCOPES):
+            u.event_log('authorize_deny', client=client, user=request.env.user,
+                        payload={'reason': 'scope_escalation', 'scope': scope})
+            return _redirect_with_error(
+                redirect_uri, 'invalid_scope', state,
+                'scope exceeds the client registration.',
+            )
+        scope = ' '.join(sorted(requested))
+        if code_challenge_method != 'S256' or \
+                not _CODE_CHALLENGE_RE.match(code_challenge):
+            return _redirect_with_error(
+                redirect_uri, 'invalid_request', state,
+                'a valid S256 code_challenge is required (PKCE).',
             )
 
         if remember and c.consent_remember_days > 0:

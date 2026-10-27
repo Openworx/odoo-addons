@@ -7,3 +7,7 @@ from . import test_audience_binding
 from . import test_mcp_with_oauth
 from . import test_apikey_fallback
 from . import test_concurrency
+from . import test_sec_client_ip
+from . import test_sec_jwt
+from . import test_sec_authorize
+from . import test_sec_token_lifecycle

@@ -37,9 +37,10 @@ Then in Odoo: install **OW MCP Server** first, then **OW MCP OAuth 2.1**.
 Open *Settings → MCP Server* and scroll to the **OAuth 2.1** sections:
 
 - *Enable OAuth 2.1* — master toggle.
-- *Enable Dynamic Client Registration* — admin kill-switch for `/register`.
+- *Enable Dynamic Client Registration* — off by default. When on, `/register` accepts clients whose `redirect_uris` use a host from *DCR redirect hosts* (default: `claude.ai`, `claude.com`, loopback). Dynamically registered clients are shown as *unverified* on the consent screen, together with the host that receives the code.
 - *Canonical resource URI* — defaults to `<web.base.url>/mcp`. Override only when the MCP server is reverse-proxied at a different URL.
-- *TTLs* — access token (default 15 min), refresh token (default 30 d), auth code (default 60 s), consent memory (default 30 d).
+- *TTLs* — access token (default 15 min), refresh token (default 7 d, sliding), refresh chain maximum (default 30 d, then the user authorizes again), auth code (default 60 s), consent memory (default 0 = always ask).
+- Only active internal users in *MCP User* can authorize or refresh. Changing a user's password or archiving the user revokes all of their tokens.
 - *DCR rate limit per IP/hour* — default 20.
 - *Signing keys* — current and previous `kid`, plus a "Rotate now" button that demotes the active key to "previous" and generates a new keypair.
 
@@ -66,7 +67,7 @@ https://abcd.ngrok-free.app/mcp
 Claude will:
 1. POST to `/mcp` → receive 401 with `WWW-Authenticate: Bearer ... resource_metadata=...`.
 2. Fetch the protected-resource and AS metadata.
-3. Register itself via `/ow_mcp/oauth/register` (DCR).
+3. Register itself via `/ow_mcp/oauth/register` (DCR — enable it first, see *Settings*).
 4. Open a browser to `/ow_mcp/oauth/authorize` — you log into Odoo and approve the consent screen.
 5. Exchange the code at `/ow_mcp/oauth/token` (with PKCE).
 6. Retry `/mcp` with the resulting JWT.
@@ -123,3 +124,10 @@ register→authorize→token→/mcp, and a regression check that existing
 ## License
 
 LGPL-3.
+
+## Credits
+
+### Contributors
+
+- Openworx
+- skanndar (<https://github.com/skanndar>) — security review and hardening

@@ -48,13 +48,45 @@ _ALWAYS_BLOCKED_NAMES = [
     'mail.mail',
     'bus.bus',
     'bus.presence',
+    # privilege / code / secret surfaces.
+    'ir.model',
+    'ir.model.fields',
+    'ir.asset',
+    'ir.default',
+    'ir.actions.report',
+    'ir.actions.act_window',
+    'ir.ui.menu',
+    'res.groups',
+    'res.groups.privilege',
+    'res.users.settings',
+    'res.config.settings',
+    'auth.passkey.key',
+    'mail.template',
+    'mail.alias',
+    'mail.ice.server',
+    'fetchmail.server',
+    'payment.provider',
+    'payment.token',
+    'iap.account',
+    'certificate.key',
+    'l10n.es.aeat.certificate',
+    'online.bank.statement.provider',
+    'calendar.provider.config',
+    'whatsapp.account',
+    'ow.mcp.model.access',
+    'ow.mcp.config',
+    'ow.mcp.oauth.client',
+    'ow.mail.account',
 ]
 
 
 _NEVER_BLOCKED_NAMES = [
     'res.partner',
     'res.company',
-    'ir.model',           # metadata; not in blocklist.
+    'mail.message',
+    'sale.order',
+    'account.move',
+    'project.task',
     'product.template',
 ]
 

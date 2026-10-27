@@ -266,6 +266,22 @@ TOOL_HANDLERS = {
 }
 
 
+def _check_model_read(env, name, args):
+    """Model-level MCP gate (blocklist, active row, allow_read, required
+    groups, Odoo ACL) for read tools that take a model."""
+    if name in cache._READ_TOOLS and isinstance(args, dict) and \
+            isinstance(args.get('model'), str):
+        tools.acc.check_model_access(env, args['model'], 'read')
+
+
+# checks run BEFORE the response cache is
+# consulted, `check(env, tool_name, args)` raising to deny. The old code only
+# ran them inside the handler, i.e. after a cache hit had already been
+# returned: a model or OAuth scope revoked within cache_ttl_seconds kept
+# being served. ow_mcp_oauth appends its scope check here.
+PRE_CALL_CHECKS = [_check_model_read]
+
+
 def dispatch(env, message: dict):
     """Dispatch a single JSON-RPC message. Returns a response dict or None
     for notifications (messages without an 'id' key, per JSON-RPC 2.0 §4.1).
@@ -306,6 +322,8 @@ def _dispatch(env, message: dict):
             # revoked company access cannot replay a previously authorized
             # result out of the in-memory cache (H1).
             call_env = _apply_company(env, args)
+            for check in PRE_CALL_CHECKS:
+                check(call_env, name, args)
             result = cache.lookup(call_env, name, args)
             if result is None:
                 # Per-call savepoint so a failed handler (IntegrityError,

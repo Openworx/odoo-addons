@@ -35,7 +35,7 @@ class ResConfigSettings(models.TransientModel):
     ow_mcp_rate_limit_per_minute = fields.Integer(default=120)
     ow_mcp_enable_cors = fields.Boolean(default=False)
     ow_mcp_cors_origins = fields.Text()
-    ow_mcp_audit_log = fields.Boolean(default=False)
+    ow_mcp_audit_log = fields.Boolean(default=True)
     ow_mcp_audit_retention_days = fields.Integer(default=30)
     ow_mcp_cache_enabled = fields.Boolean(default=True)
     ow_mcp_cache_ttl_seconds = fields.Integer(default=60)

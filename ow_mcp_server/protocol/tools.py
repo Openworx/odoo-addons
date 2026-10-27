@@ -4,6 +4,8 @@ Each tool takes `(env, params)` and returns a JSON-serialisable dict.
 Permission checks and field filtering are delegated to `access` and
 serialisation to `formatter`.
 """
+import re
+
 from odoo.exceptions import AccessError, UserError
 
 from . import access as acc
@@ -76,6 +78,7 @@ def search_records(env, params):
     limit = min(requested, hard_cap)
     offset = int(params.get('offset') or 0)
     order = params.get('order') or 'id asc'
+    acc.assert_order_allowed(env, model_name, order)
     Model = env[model_name]
     total = Model.search_count(domain)
     recs = Model.search(domain, limit=limit, offset=offset, order=order)
@@ -97,7 +100,7 @@ def search_records(env, params):
 def get_record(env, params):
     model_name = params['model']
     acc.check_model_access(env, model_name, 'read')
-    ids = _collect_ids(params)
+    ids = _collect_ids(params, env)
     fields = _resolve_fields(env, model_name, params.get('fields'))
     cfg = env['ow.mcp.config'].sudo().get_singleton()
     recs = env[model_name].search([('id', 'in', ids)])
@@ -115,8 +118,14 @@ def create_record(env, params):
     acc.assert_fields_allowed(env, model_name, list(values.keys()))
     acc.assert_no_nested_writes(env, model_name, values)
     cfg = env['ow.mcp.config'].sudo().get_singleton()
-    rec = env[model_name].create(values)
+    # echo only the fields the CLIENT sent. create() overrides may
+    # mutate the dict (partner_firstname drops `name`, the Odoo 19 properties
+    # mixin adds `properties_base_definition_id`), so pass a copy: otherwise
+    # the echo leaks fields outside the allow-list and serialising them can
+    # raise AccessError (ir.model.fields) for non-admin users, rolling back
+    # the whole create.
     echo_fields = list({*values.keys(), 'id', 'display_name'})
+    rec = env[model_name].create(dict(values))
     data = fmt.serialize_records(
         rec, echo_fields, cfg.max_text_len, cfg.max_relational_preview,
     )
@@ -131,7 +140,7 @@ def update_record(env, params):
     values = params.get('values') or {}
     acc.assert_fields_allowed(env, model_name, list(values.keys()))
     acc.assert_no_nested_writes(env, model_name, values)
-    ids = _collect_ids(params)
+    ids = _collect_ids(params, env)
     recs = env[model_name].browse(ids).exists()
     recs.write(values)
     return {
@@ -146,7 +155,7 @@ def update_record(env, params):
 def delete_record(env, params):
     model_name = params['model']
     acc.check_model_access(env, model_name, 'unlink')
-    ids = _collect_ids(params)
+    ids = _collect_ids(params, env)
     recs = env[model_name].browse(ids).exists()
     deleted_ids = list(recs.ids)
     recs.unlink()
@@ -157,9 +166,19 @@ def delete_record(env, params):
     }
 
 
-def _collect_ids(params):
+def _collect_ids(params, env=None):
     if 'ids' in params and params['ids']:
-        return list(params['ids'])
+        ids = list(params['ids'])
+        # same cap as search limits — ~150k
+        # ids fit in a 1 MiB body and were all fetched/serialised.
+        if env is not None:
+            cfg = env['ow.mcp.config'].sudo().get_singleton()
+            cap = acc.per_model_limit(env, params['model'], cfg.max_limit)
+            if len(ids) > cap:
+                raise UserError(
+                    f'Too many ids ({len(ids)}); at most {cap} per call.'
+                )
+        return ids
     if 'id' in params and params['id'] is not None:
         return [params['id']]
     raise UserError('Missing required parameter: provide `id` or `ids`.')
@@ -180,7 +199,11 @@ def search_count(env, params):
 def get_model_schema(env, params):
     model_name = params['model']
     acc.check_model_access(env, model_name, 'read')
-    allowed = acc.filter_fields(env, model_name, [])
+    allowed = acc.get_model_allowlist(env, model_name)
+    if allowed == []:
+        # explicit deny-all allow-list; the old code
+        # passed `[] or None` to fields_get(), i.e. the FULL schema.
+        return {'model': model_name, 'fields': []}
     fields_meta = env[model_name].fields_get(
         allowed or None,
         ['string', 'type', 'required', 'readonly', 'relation', 'selection', 'help'],
@@ -213,17 +236,41 @@ def read_group(env, params):
     domain = params.get('domain') or []
     acc.assert_domain_fields_allowed(env, model_name, domain)
     fields = params.get('fields') or []
-    # Strip any field aggregator suffix (`amount:sum`) before validating.
-    agg_bare = [f.split(':', 1)[0] for f in fields]
-    gb_bare = [g.split(':', 1)[0] for g in groupby]
-    acc.assert_fields_allowed(env, model_name, agg_bare + gb_bare)
-    rows = env[model_name].read_group(domain, fields, groupby)
+    # Validate the field each aggregate actually reads. The old code
+    # stripped `:agg` and checked the *alias*, so `name:max(vat)` read `vat`
+    # outside the allow-list (and a harmless alias such as `n:count(id)` was
+    # refused). Groupby specs are walked like domain paths
+    # (`partner_id.country_id`, `date:month`).
+    read_fields = []
+    for spec in fields:
+        m = _AGG_SPEC_RE.match(spec) if isinstance(spec, str) else None
+        if not m:
+            raise UserError(f'Invalid aggregate specification {spec!r}.')
+        read_fields.append(m.group(3) or m.group(1))
+    acc.assert_fields_allowed(env, model_name, read_fields)
+    for spec in groupby:
+        if not isinstance(spec, str):
+            raise UserError(f'Invalid groupby specification {spec!r}.')
+        acc._walk_domain_path(env, model_name, spec.split(':', 1)[0])
+    cfg = env['ow.mcp.config'].sudo().get_singleton()
+    limit = acc.per_model_limit(env, model_name, cfg.max_limit)
+    # lazy=False: group by every level at once and always return `__count`
+    # (a lazy read_group names it `<groupby>_count`), as on 19.0.
+    rows = env[model_name].read_group(
+        domain, fields, groupby, limit=limit, lazy=False,
+    )
     groups = []
     for row in rows:
         entry = {k: v for k, v in row.items() if not k.startswith('__')}
         entry['count'] = row.get('__count', 0)
         groups.append(entry)
-    return {'model': model_name, 'groups': groups, 'total_groups': len(groups)}
+    return {
+        'model': model_name, 'groups': groups, 'total_groups': len(groups),
+        'limit': limit, 'has_more': len(groups) >= limit,
+    }
+
+
+_AGG_SPEC_RE = re.compile(r'^(\w+)(?::(\w+)(?:\((\w+)\))?)?$')
 
 
 # ---------- get_user_context --------------------------------------------------

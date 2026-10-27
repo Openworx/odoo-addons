@@ -20,10 +20,12 @@ import hashlib
 import json
 import logging
 import time
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 
 from odoo import http
 from odoo.http import request
+
+from odoo.addons.ow_mcp_server.protocol.access import is_mcp_user
 
 from . import _utils as u
 from ..tools import jwt_helper
@@ -69,6 +71,9 @@ class OauthToken(http.Controller):
         c = u.cfg()
         if not c.oauth_enabled:
             return u.error_response('oauth_disabled', status=404)
+        too_big = u.body_too_large()
+        if too_big is not None:
+            return too_big
 
         # Read form-encoded body (RFC 6749 §3.2 mandates form-urlencoded).
         params = dict(kwargs)
@@ -181,6 +186,9 @@ class OauthToken(http.Controller):
         bound_resource = rec_resource or canonical
 
         user = request.env['res.users'].sudo().browse(rec_user_id)
+        if not is_mcp_user(user):
+            return u.error_response('invalid_grant',
+                                    'user may not use MCP.')
         return self._issue_token_pair(c, client, user, rec_scope,
                                       bound_resource)
 
@@ -239,7 +247,20 @@ class OauthToken(http.Controller):
         bound_resource = rec_audience
 
         rec = request.env['ow.mcp.oauth.refresh_token'].sudo().browse(rec_id)
+        # absolute lifetime of the chain.
+        chain_start = rec.chain_issued_at or rec.issued_at
+        if c.refresh_token_absolute_ttl_seconds > 0 and \
+                time.time() - chain_start > c.refresh_token_absolute_ttl_seconds:
+            rec.revoke_chain()
+            return u.error_response(
+                'invalid_grant',
+                'refresh_token chain expired; authorization required.',
+            )
         user = request.env['res.users'].sudo().browse(rec_user_id)
+        if not is_mcp_user(user):
+            rec.revoke_chain()
+            return u.error_response('invalid_grant',
+                                    'user may not use MCP.')
         return self._issue_token_pair(
             c, client, user, rec_scope, bound_resource,
             parent_refresh=rec, kind='token_refresh',
@@ -265,10 +286,23 @@ class OauthToken(http.Controller):
             'scope': scope,
             'audience': resource,
             'issued_at': iat,
-            'expires_at': datetime.fromtimestamp(exp),
+            # UTC like every Odoo Datetime
+            # (fromtimestamp() used the server's local time zone).
+            'expires_at': datetime.fromtimestamp(exp, timezone.utc).replace(
+                tzinfo=None,
+            ),
         })
 
         refresh_plain = u.random_token(32)
+        now = int(time.time())
+        chain_start = (
+            (parent_refresh.chain_issued_at or parent_refresh.issued_at)
+            if parent_refresh else now
+        )
+        ttl = c.refresh_token_ttl_seconds
+        if c.refresh_token_absolute_ttl_seconds > 0:
+            ttl = min(ttl, chain_start + c.refresh_token_absolute_ttl_seconds
+                      - now)
         new_refresh = request.env['ow.mcp.oauth.refresh_token'].sudo().create({
             'token_hash': u.sha256_hex(refresh_plain),
             'client_id': client.id,
@@ -276,9 +310,10 @@ class OauthToken(http.Controller):
             'scope': scope,
             'audience': resource,
             'parent_id': parent_refresh.id if parent_refresh else False,
-            'issued_at': int(time.time()),
+            'issued_at': now,
+            'chain_issued_at': chain_start,
             'expires_at': datetime.utcnow() + timedelta(
-                seconds=c.refresh_token_ttl_seconds,
+                seconds=max(ttl, 0),
             ),
         })
         if parent_refresh:
@@ -313,6 +348,9 @@ class OauthToken(http.Controller):
         c = u.cfg()
         if not c.oauth_enabled:
             return u.error_response('oauth_disabled', status=404)
+        too_big = u.body_too_large()
+        if too_big is not None:
+            return too_big
 
         params = dict(kwargs)
         client = self._authenticate_client(params)

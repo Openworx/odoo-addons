@@ -1,6 +1,6 @@
 {
     'name': 'OW MCP Server',
-    'version': '18.0.1.0.2',
+    'version': '18.0.1.1.0',
     'summary': 'Native MCP (Model Context Protocol) server for Odoo — Claude, Cursor, Copilot.',
     'description': """
 Native Model Context Protocol (MCP) server for Odoo 18.0.

@@ -26,6 +26,10 @@ def register_client(case, *, redirect_uri='http://127.0.0.1:9999/callback',
                     auth_method='none', scope='mcp:read mcp:write'):
     """Hit /ow_mcp/oauth/register and return the parsed response."""
     reset_throttles(case.env)
+    # DCR is off by default; the tests that
+    # exercise it switch it on explicitly.
+    case.env['ow.mcp.oauth.config'].sudo().get_singleton().oauth_dcr_enabled = True
+    case.env.flush_all()
     body = {
         'client_name': 'Test Client',
         'redirect_uris': [redirect_uri],

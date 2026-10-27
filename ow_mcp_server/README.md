@@ -35,6 +35,11 @@ built-in User API keys only** — no passwords accepted on `/mcp`.
    ```
 3. Assign users who should have MCP access to the group *MCP User*. The
    admin automatically gets *MCP Administrator* and thus both groups.
+   Only **active internal users** in *MCP User* can call `/mcp` (API key
+   or OAuth); portal and public users are always refused. When upgrading
+   from an earlier version, internal users who already used MCP (an `mcp`
+   API key, an OAuth token or consent, or an audit row) are added to the
+   group automatically.
 
 ## Create an API key (required)
 
@@ -259,8 +264,11 @@ Even with YOLO `full`, the hardcoded blocklist still blocks `ir.rule`,
 
 - **HTTPS only** in production. Toggle `require_https` in *MCP Server →
   Configuration* to reject plain HTTP. When Odoo runs behind a reverse
-  proxy, set `proxy_mode = True` in `odoo.conf` so `X-Forwarded-Proto`
-  and `X-Forwarded-For` are trusted.
+  proxy, set `proxy_mode = True` in `odoo.conf` and have the proxy send
+  `X-Forwarded-Host` and *overwrite* `X-Forwarded-For` with the client
+  address (nginx: `proxy_set_header X-Forwarded-For $remote_addr;`).
+  Odoo's ProxyFix then resolves the client IP; the module never parses
+  `X-Forwarded-For` itself.
 - **One key per client** (Claude Code, Cursor, Desktop…) so revocation is
   surgical.
 - **Expiration**: set reasonable expiries, rotate periodically.
@@ -270,8 +278,9 @@ Even with YOLO `full`, the hardcoded blocklist still blocks `ir.rule`,
   set, so a flipped config field alone never opens up access.
 - MCP calls run **as the API key's owning user**, so record rules, group
   memberships, and ACLs behave exactly as they would in the web client.
-- **Per-call savepoint isolation.** A failure inside one JSON-RPC batch
-  message cannot poison the rest of the batch.
+- **One message per request.** JSON-RPC batches (removed in MCP
+  2025-06-18) and other non-object bodies are rejected with HTTP 400
+  `-32600` and an audited failure row.
 - **Domain field allow-list.** Search domains are walked hop-by-hop and
   rejected when they reference fields outside the per-model allow-list,
   traverse into a blocklisted model, or traverse into a model that is not
@@ -287,12 +296,14 @@ Even with YOLO `full`, the hardcoded blocklist still blocks `ir.rule`,
   server-side with a UUID trace id; the client sees only
   `Internal server error (trace id: <uuid>)` so SQL fragments, column
   names, and offending row values do not leak through MCP.
-- **Audit log.** When *Audit log* is enabled, every call is recorded in
+- **Audit log.** *Audit log* is on by default; every call is recorded in
   `ow.mcp.audit.log` with user, login, company, tool, model, success,
   duration, IP, and a redacted payload/response summary. Sensitive keys
   (`password`, `api_key`, `token`, `secret`, `iban`, `cvv`, `ssn`, …) are
-  replaced with `***REDACTED***` before persistence. A daily cron prunes
-  rows older than `audit_retention_days` (set to 0 to keep forever).
+  replaced with `***REDACTED***` before persistence, as are domain values
+  on such fields. Audit rows cannot be deleted by MCP administrators; a
+  daily cron prunes rows older than `audit_retention_days` (set to 0 to
+  keep forever).
 - **Per-API-key rate limit.** Sliding 60-second window per uid; default
   120 req/min, configurable. The counter is per Odoo worker, so the
   effective ceiling is `N_workers × configured`.
@@ -300,8 +311,8 @@ Even with YOLO `full`, the hardcoded blocklist still blocks `ir.rule`,
   60 seconds, further requests from that IP are rejected with HTTP 429
   before any credential check runs. Per-worker, like the rate limit.
 - **IP allow-list.** Optional CIDR/IP list (IPv4 + IPv6) gated at the
-  controller before authentication. Behind a reverse proxy this trusts
-  `X-Forwarded-For` only when `proxy_mode = True` is set in `odoo.conf`.
+  controller before authentication. Behind a reverse proxy it matches the
+  client IP resolved by Odoo's ProxyFix (see *HTTPS only* above).
 - **CORS.** Disabled by default. When enabled, only origins listed in
   `cors_origins` (one per line, exact match) receive an
   `Access-Control-Allow-Origin` header. An empty list while CORS is on
@@ -369,3 +380,10 @@ make shell       # shell inside the odoo container
 make logs        # tail odoo logs
 make down        # stop
 ```
+
+## Credits
+
+### Contributors
+
+- Openworx
+- skanndar (<https://github.com/skanndar>) — security review and hardening
