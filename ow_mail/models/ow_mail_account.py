@@ -1024,7 +1024,8 @@ class OwMailAccount(models.Model):
         atts = []
         for att in self.env["ir.attachment"].browse(attachment_ids or []):
             atts.append({
-                "content": att.raw,
+                # raw is a BinaryValue in Odoo 20; add_attachment needs bytes
+                "content": bytes(att.raw or b""),
                 "filename": att.name or "attachment",
                 "maintype": (att.mimetype or "application/octet-stream").split("/")[0],
                 "subtype": (att.mimetype or "application/octet-stream").split("/")[-1],
@@ -1082,7 +1083,8 @@ class OwMailAccount(models.Model):
         atts = []
         for att in self.env["ir.attachment"].browse(attachment_ids or []):
             atts.append({
-                "content": att.raw,
+                # raw is a BinaryValue in Odoo 20; add_attachment needs bytes
+                "content": bytes(att.raw or b""),
                 "filename": att.name or "attachment",
                 "maintype": (att.mimetype or "application/octet-stream").split("/")[0],
                 "subtype": (att.mimetype or "application/octet-stream").split("/")[-1],
