@@ -77,7 +77,7 @@ Design notes
 """,
     "version": "19.0.1.0.0",
     "category": "Security",
-    "author": "Openworx <info@openworx.nl>",
+    "author": "Openworx",
     "website": "https://www.openworx.nl",
     "license": "LGPL-3",
     "images": [
