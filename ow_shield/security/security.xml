@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="group_waf_manager" model="res.groups">
+        <field name="name">OW Shield / Manager</field>
+        <field name="comment">Can view and change the firewall, block list,
+            traffic log and run security scans. Implied by Settings (admin)
+            rights.</field>
+    </record>
+
+    <!-- Settings users automatically manage the firewall -->
+    <record id="base.group_system" model="res.groups">
+        <field name="implied_ids" eval="[(4, ref('group_waf_manager'))]"/>
+    </record>
+</odoo>

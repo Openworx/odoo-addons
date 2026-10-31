@@ -1,0 +1,523 @@
+# Bundled built-in rule packs for the Security Firewall (WAF).
+# scope: url | query | ua | header | body
+# action: log | block | auto   (auto = block + counts toward lockout)
+# no_session: only apply to visitors without an Odoo session cookie
+#             (true = default: payload rules skip logged-in users, avoiding
+#              false positives on editors and rich-content authors).
+rules:
+  # ------------------------------------------------ user agents / tooling
+  # route-group/RPC coverage (database manager, xmlrpc/json surfaces,
+  # signup limits, report/export bursts) is matched structurally as
+  # endpoint policies in data/policies.yaml, not by regex here.
+  - id: waf-ua-attack-tooling
+    name: Attack tooling user agent
+    category: scanners
+    scope: ua
+    severity: 5
+    action: block
+    no_session: false
+    pattern: '(nikto|sqlmap|nmap|masscan|dirbuster|gobuster|wfuzz|wpscan|joomscan|acunetix|nessus|openvas|w3af|arachni|havij|bsqlbf|nuclei|zgrab|skipfish|wafw00f|whatweb|commix|dalfox|xsser|leaduncover|hydra)'
+  - id: waf-ua-research-scanner
+    name: Internet-wide research scanner
+    category: scanners
+    scope: ua
+    severity: 3
+    action: log
+    no_session: false
+    pattern: '(shodan|censys|netclarity|binaryedge|onyphe|crimx|l9explore|paloaltonetworks)'
+  - id: waf-ua-generic-client
+    name: Bare scripted HTTP client (recon visibility)
+    category: scanners
+    scope: ua
+    severity: 2
+    action: log
+    no_session: false
+    pattern: '^(curl/[0-9]|wget/[0-9]|python-requests|go-http-client|okhttp|java/[0-9]|libwww)'
+
+  # ------------------------------------------------ path probes
+  # database manager routes are endpoint policies, see data/policies.yaml
+  - id: waf-url-hidden-files
+    name: Hidden dotfile probe (.env/.git/.aws...)
+    category: probes
+    scope: url
+    severity: 4
+    action: block
+    no_session: false
+    pattern: '(^|/)\.(env|git|svn|hg|aws|ssh|htaccess|bash_history|gitignore|git-credentials)\b'
+  - id: waf-url-php-probes
+    name: PHP/WordPress/phpMyAdmin probe
+    category: probes
+    scope: url
+    severity: 4
+    action: block
+    no_session: false
+    pattern: '/(wp-(login|admin|content|json|includes)|xmlrpc\.php|phpmyadmin|pma/|adminer\.php|administrator/index\.php|config\.php)'
+  - id: waf-url-server-status
+    name: Server status handler probe
+    category: probes
+    scope: url
+    severity: 4
+    action: block
+    no_session: false
+    pattern: '^/(server-status|server-info|nginx_status|apache-status)'
+  - id: waf-url-cgi
+    name: cgi-bin probe
+    category: probes
+    scope: url
+    severity: 3
+    action: block
+    no_session: false
+    pattern: '^/cgi-bin/'
+  - id: waf-url-webshells
+    name: Known webshell file names
+    category: probes
+    scope: url
+    severity: 5
+    action: block
+    no_session: false
+    pattern: '/(c99|r57|b37k|wso|webshell|cmd\.php|shell\.php|reverse\.sh)'
+  - id: waf-url-etc-passwd
+    name: /etc/passwd style probe
+    category: probes
+    scope: url
+    severity: 5
+    action: block
+    no_session: false
+    pattern: '/etc/(passwd|shadow|hosts|issue|profile)'
+  - id: waf-url-upload-tools
+    name: Upload-tooling endpoint probe
+    category: probes
+    scope: url
+    severity: 4
+    action: block
+    no_session: false
+    pattern: '/(file_upload|uploadify|fckeditor|kindeditor|elfinder|connector\.php)'
+  - id: waf-url-xmlrpc-info
+    name: xmlrpc info endpoint access
+    category: odoo
+    scope: url
+    severity: 2
+    action: log
+    no_session: false
+    pattern: '^/xmlrpc/(common|version)'
+  - id: waf-url-old-cron
+    name: legacy /cron route probe
+    category: odoo
+    scope: url
+    severity: 3
+    action: log
+    no_session: false
+    pattern: '^/cron/'
+  - id: waf-url-backup-probe
+    name: backup/dump path probe
+    category: probes
+    scope: url
+    severity: 3
+    action: log
+    no_session: false
+    pattern: '^/(backup|backups|dumps?|pgdump|dbdump)\b'
+
+  # ------------------------------------------------ traversal & null bytes
+  - id: waf-traversal-url
+    name: Path traversal (../) in URL
+    category: traversal
+    scope: url
+    severity: 5
+    action: block
+    no_session: false
+    pattern: '\.\./'
+  - id: waf-traversal-query
+    name: Path traversal (../) in parameters
+    category: traversal
+    scope: query
+    severity: 5
+    action: block
+    no_session: false
+    pattern: '\.\./'
+  - id: waf-nullbyte-url
+    name: Null byte in URL
+    category: traversal
+    scope: url
+    severity: 4
+    action: block
+    no_session: false
+    pattern: '%00'
+  - id: waf-nullbyte-query
+    name: Null byte in parameters
+    category: traversal
+    scope: query
+    severity: 4
+    action: block
+    no_session: false
+    pattern: '%00'
+
+  # ------------------------------------------------ SQL injection
+  - id: waf-sqli-union-q
+    name: SQL UNION SELECT
+    category: sqli
+    scope: query
+    severity: 5
+    action: block
+    pattern: '\bunion\b[\s]+(?:all[\s]+)?select\b'
+  - id: waf-sqli-union-b
+    name: SQL UNION SELECT
+    category: sqli
+    scope: body
+    severity: 5
+    action: block
+    pattern: '\bunion\b[\s]+(?:all[\s]+)?select\b'
+  - id: waf-sqli-taut-q
+    name: SQL boolean tautology
+    category: sqli
+    scope: query
+    severity: 4
+    action: block
+    pattern: '\b(?:or|and)\b\s+[''"]?\d+[''"]?\s*=\s*[''"]?\d+'
+  - id: waf-sqli-taut-b
+    name: SQL boolean tautology
+    category: sqli
+    scope: body
+    severity: 4
+    action: block
+    pattern: '\b(?:or|and)\b\s+[''"]?\d+[''"]?\s*=\s*[''"]?\d+'
+  - id: waf-sqli-stacked-q
+    name: Stacked SQL query
+    category: sqli
+    scope: query
+    severity: 5
+    action: block
+    pattern: ';\s*(?:drop|delete|insert|update|truncate|alter)\s+\w'
+  - id: waf-sqli-stacked-b
+    name: Stacked SQL query
+    category: sqli
+    scope: body
+    severity: 5
+    action: block
+    pattern: ';\s*(?:drop|delete|insert|update|truncate|alter)\s+\w'
+  - id: waf-sqli-timing-q
+    name: SQL time-based injection
+    category: sqli
+    scope: query
+    severity: 5
+    action: block
+    pattern: '\b(?:sleep|benchmark|pg_sleep|waitfor\s+delay)\s*\('
+  - id: waf-sqli-timing-b
+    name: SQL time-based injection
+    category: sqli
+    scope: body
+    severity: 5
+    action: block
+    pattern: '\b(?:sleep|benchmark|pg_sleep|waitfor\s+delay)\s*\('
+  - id: waf-sqli-meta-q
+    name: SQL schema enumeration
+    category: sqli
+    scope: query
+    severity: 4
+    action: block
+    pattern: '(information_schema\s*\.|pg_catalog\s*\.|mysql\s*\.\s*user|sysdatabases)'
+  - id: waf-sqli-meta-b
+    name: SQL schema enumeration
+    category: sqli
+    scope: body
+    severity: 4
+    action: block
+    pattern: '(information_schema\s*\.|pg_catalog\s*\.|mysql\s*\.\s*user|sysdatabases)'
+  - id: waf-sqli-files-q
+    name: SQL file access
+    category: sqli
+    scope: query
+    severity: 5
+    action: block
+    pattern: '(\bload_file\s*\(|\binto\s+(outfile|dumpfile)\b|\b(?:pg_read_(?:binary_)?file|pg_ls_dir|lo_import|lo_export|query_to_xml|dblink)\s*\()'
+  - id: waf-sqli-files-b
+    name: SQL file access
+    category: sqli
+    scope: body
+    severity: 5
+    action: block
+    pattern: '(\bload_file\s*\(|\binto\s+(outfile|dumpfile)\b|\b(?:pg_read_(?:binary_)?file|pg_ls_dir|lo_import|lo_export|query_to_xml|dblink)\s*\()'
+  # COPY ... PROGRAM needs server superuser, so this signature marks the
+  # attempt shape (COPY bounded-window + PROGRAM), not reachability.
+  - id: waf-pg-copy-program-q
+    name: PostgreSQL COPY ... PROGRAM
+    category: sqli
+    scope: query
+    severity: 5
+    action: block
+    pattern: '\bcopy\b[^;\n]{0,64}?\b(?:to|from)\s+program\b'
+  - id: waf-pg-copy-program-b
+    name: PostgreSQL COPY ... PROGRAM
+    category: sqli
+    scope: body
+    severity: 5
+    action: block
+    pattern: '\bcopy\b[^;\n]{0,64}?\b(?:to|from)\s+program\b'
+  # privilege/role names appear in admin docs and DBA chatter: log-only;
+  # the dangerous combinations are covered by the COPY ... PROGRAM rules.
+  - id: waf-pg-server-program-q
+    name: pg_execute_server_program role mention (visibility)
+    category: sqli
+    scope: query
+    severity: 4
+    action: log
+    pattern: '\bpg_execute_server_program\b'
+  - id: waf-pg-server-program-b
+    name: pg_execute_server_program role mention (visibility)
+    category: sqli
+    scope: body
+    severity: 4
+    action: log
+    pattern: '\bpg_execute_server_program\b'
+  - id: waf-sqli-proc-q
+    name: SQL dangerous procedure
+    category: sqli
+    scope: query
+    severity: 5
+    action: block
+    pattern: '\b(?:xp_cmdshell|sp_executesql|utl_http|utl_inaddr)\b'
+  - id: waf-sqli-proc-b
+    name: SQL dangerous procedure
+    category: sqli
+    scope: body
+    severity: 5
+    action: block
+    pattern: '\b(?:xp_cmdshell|sp_executesql|utl_http|utl_inaddr)\b'
+
+  # ------------------------------------------------ XSS
+  - id: waf-xss-script-q
+    name: <script tag in parameters
+    category: xss
+    scope: query
+    severity: 5
+    action: block
+    pattern: '<script[\s>/]'
+  - id: waf-xss-script-b
+    name: <script tag in body
+    category: xss
+    scope: body
+    severity: 5
+    action: block
+    pattern: '<script[\s>/]'
+  - id: waf-xss-events-q
+    name: inline event handler in parameters
+    category: xss
+    scope: query
+    severity: 4
+    action: block
+    pattern: '\bon(?:error|load|click|mouse\w+|focus|blur|toggle|animationstart|begin|finish)\s*='
+  - id: waf-xss-events-b
+    name: inline event handler in body
+    category: xss
+    scope: body
+    severity: 4
+    action: block
+    pattern: '\bon(?:error|load|click|mouse\w+|focus|blur|toggle|animationstart|begin|finish)\s*='
+  - id: waf-xss-uri-q
+    name: 'javascript:/vbscript:/data: URI'
+    category: xss
+    scope: query
+    severity: 5
+    action: block
+    pattern: '(?:href|src|formaction|action|xlink:href)\s*=\s*[''"]?\s*(?:javascript|vbscript|data)\s*:'
+  - id: waf-xss-uri-b
+    name: 'javascript:/vbscript:/data: URI'
+    category: xss
+    scope: body
+    severity: 5
+    action: block
+    pattern: '(?:href|src|formaction|action|xlink:href)\s*=\s*[''"]?\s*(?:javascript|vbscript|data)\s*:'
+  - id: waf-xss-doc-q
+    name: DOM access probe
+    category: xss
+    scope: query
+    severity: 4
+    action: block
+    pattern: 'document\s*\.\s*(?:cookie|write|domain)\s*[=(]?'
+  - id: waf-xss-doc-b
+    name: DOM access probe
+    category: xss
+    scope: body
+    severity: 4
+    action: block
+    pattern: 'document\s*\.\s*(?:cookie|write|domain)\s*[=(]?'
+  - id: waf-xss-iframe-b
+    name: iframe in untrusted content
+    category: xss
+    scope: body
+    severity: 2
+    action: log
+    pattern: '<iframe'
+
+  # ------------------------------------------------ template injection
+  - id: waf-ssti-jinja-q
+    name: Jinja2 object probe in parameters
+    category: ssti
+    scope: query
+    severity: 5
+    action: block
+    pattern: '\{\{[^{}]*(config|request|self|cycler|namespace|__subclasses__|url_for|mro|__class__)[^{}]*\}\}'
+  - id: waf-ssti-jinja-b
+    name: Jinja2 object probe in body
+    category: ssti
+    scope: body
+    severity: 5
+    action: block
+    pattern: '\{\{[^{}]*(config|request|self|cycler|namespace|__subclasses__|url_for|mro|__class__)[^{}]*\}\}'
+  - id: waf-ssti-block-q
+    name: template block tag in parameters
+    category: ssti
+    scope: query
+    severity: 4
+    action: block
+    pattern: '\{%-?\s*(for|if|print|set|import|with|macro)\b'
+  - id: waf-ssti-block-b
+    name: template block tag in body
+    category: ssti
+    scope: body
+    severity: 4
+    action: block
+    pattern: '\{%-?\s*(for|if|print|set|import|with|macro)\b'
+  - id: waf-ssti-qweb-q
+    name: QWeb tag probe in parameters
+    category: ssti
+    scope: query
+    severity: 4
+    action: block
+    pattern: '<t\s[^<>]*t-(esc|out|raw|if|foreach|set|call|att|attf|translation|value|tag|js|debug)\b'
+  - id: waf-ssti-qweb-b
+    name: QWeb tag probe in body
+    category: ssti
+    scope: body
+    severity: 4
+    action: block
+    pattern: '<t\s[^<>]*t-(esc|out|raw|if|foreach|set|call|att|attf|translation|value|tag|js|debug)\b'
+  # Python sandbox-escape chains: dunder traversal wired into a call;
+  # no legitimate request-level use. Bounded gaps ({0,32}) keep matching
+  # cost linear on long non-matching input. Single dunder keywords are
+  # log-only (waf-ssti-py-attr rules below).
+  - id: waf-ssti-py-chain-q
+    name: Python object-chain probe (dunder + call primitive)
+    category: ssti
+    scope: query
+    severity: 5
+    action: block
+    pattern: '__class__[^<>"'']{0,32}__mro__|__mro__[^<>"'']{0,32}__subclasses__|__subclasses__\s*\(|__globals__\s*\[|__builtins__[^()]{0,24}__import__|__import__\s*\('
+  - id: waf-ssti-py-chain-b
+    name: Python object-chain probe (dunder + call primitive)
+    category: ssti
+    scope: body
+    severity: 5
+    action: block
+    pattern: '__class__[^<>"'']{0,32}__mro__|__mro__[^<>"'']{0,32}__subclasses__|__subclasses__\s*\(|__globals__\s*\[|__builtins__[^()]{0,24}__import__|__import__\s*\('
+  - id: waf-ssti-py-attr-q
+    name: Python dunder keyword in request data (visibility only)
+    category: ssti
+    scope: query
+    severity: 3
+    action: log
+    pattern: '\b__(?:class__|mro__|subclasses__|globals__|builtins__|import__|getattr__|getattribute__|dict__|reduce__)\b'
+  - id: waf-ssti-py-attr-b
+    name: Python dunder keyword in request data (visibility only)
+    category: ssti
+    scope: body
+    severity: 3
+    action: log
+    pattern: '\b__(?:class__|mro__|subclasses__|globals__|builtins__|import__|getattr__|getattribute__|dict__|reduce__)\b'
+  - id: waf-ssti-arith-q
+    name: arithmetic evaluation probe in parameters
+    category: ssti
+    scope: query
+    severity: 4
+    action: block
+    pattern: '(?:\{\{|\$\{)\s*\d+\s*[-+*/%]\s*\d+\s*\}+'
+  - id: waf-ssti-arith-b
+    name: arithmetic evaluation probe in body
+    category: ssti
+    scope: body
+    severity: 4
+    action: block
+    pattern: '(?:\{\{|\$\{)\s*\d+\s*[-+*/%]\s*\d+\s*\}+'
+
+  # ------------------------------------------------ RCE & protocol abuse
+  - id: waf-rce-shellshock-h
+    name: Shellshock (CVE-2014-0160) header
+    category: rce
+    scope: header
+    severity: 5
+    action: block
+    no_session: false
+    pattern: '\(\s*\)\s*\{[^}]{0,120}\}\s*;'
+  - id: waf-rce-shellshock-q
+    name: Shellshock (CVE-2014-0160)
+    category: rce
+    scope: query
+    severity: 5
+    action: block
+    pattern: '\(\s*\)\s*\{[^}]{0,120}\}\s*;'
+  - id: waf-rce-log4j-h
+    name: Log4Shell JNDI lookup in header
+    category: rce
+    scope: header
+    severity: 5
+    action: block
+    no_session: false
+    pattern: '\$\{\s*jndi\s*:'
+  - id: waf-rce-log4j-q
+    name: Log4Shell JNDI lookup
+    category: rce
+    scope: query
+    severity: 5
+    action: block
+    pattern: '\$\{\s*jndi\s*:'
+  - id: waf-rce-log4j-b
+    name: Log4Shell JNDI lookup
+    category: rce
+    scope: body
+    severity: 5
+    action: block
+    pattern: '\$\{\s*jndi\s*:'
+  - id: waf-rce-jndi-lookup-q
+    name: JNDI expression lookup
+    category: rce
+    scope: query
+    severity: 4
+    action: block
+    pattern: '\$\{(env|sys|java|script|lower|upper|date|ctx|pipe|::)'
+  - id: waf-rce-php-q
+    name: PHP open tag in parameters
+    category: rce
+    scope: query
+    severity: 4
+    action: block
+    pattern: '<\?php'
+  - id: waf-rce-php-b
+    name: PHP open tag in body
+    category: rce
+    scope: body
+    severity: 4
+    action: block
+    pattern: '<\?php'
+  - id: waf-rce-jsp-b
+    name: JSP tag in body
+    category: rce
+    scope: body
+    severity: 4
+    action: block
+    pattern: '<%[=@]'
+  - id: waf-rce-ssi-b
+    name: Apache SSI directive in body
+    category: rce
+    scope: body
+    severity: 4
+    action: block
+    pattern: '<!--#(exec|include|echo|config)'
+
+  # ------------------------------------------------ header sanity
+  - id: waf-hdr-xff-invalid
+    name: X-Forwarded-For with non-IP content
+    category: headers
+    scope: header
+    severity: 3
+    action: log
+    no_session: false
+    pattern: 'x-forwarded-for:[^0-9a-f.,: -]'

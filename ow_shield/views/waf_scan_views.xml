@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_waf_scan_list" model="ir.ui.view">
+        <field name="name">waf.scan.list</field>
+        <field name="model">waf.scan</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="name"/>
+                <field name="date_start"/>
+                <field name="grade" widget="badge"
+                       decoration-success="grade in ('A','B')"
+                       decoration-warning="grade in ('C','D')"
+                       decoration-danger="grade in ('E','F')"/>
+                <field name="score"/>
+                <field name="n_critical"/>
+                <field name="n_high"/>
+                <field name="n_medium"/>
+                <field name="state" widget="badge"
+                       decoration-info="state == 'draft'"
+                       decoration-success="state == 'done'"
+                       decoration-danger="state == 'error'"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_waf_scan_form" model="ir.ui.view">
+        <field name="name">waf.scan.form</field>
+        <field name="model">waf.scan</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <button name="action_run" type="object" string="Run Scan"
+                            class="btn-primary"/>
+                    <field name="state" widget="statusbar"/>
+                </header>
+                <sheet>
+                    <div class="oe_title">
+                        <h1><field name="name" readonly="1"/></h1>
+                    </div>
+                    <div>
+                        <span style="font-size:2em;font-weight:bold"
+                              invisible="not grade">Grade: <field name="grade"/></span>
+                        <span style="font-size:1.4em;color:#666"
+                              invisible="not score">Score <field name="score"/>/100</span>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="date_start"/>
+                            <field name="date_end"/>
+                            <field name="duration"/>
+                        </group>
+                        <group>
+                            <field name="scan_files"/>
+                            <field name="scan_attachments"/>
+                        </group>
+                    </group>
+                    <group string="Findings by severity">
+                        <group>
+                            <field name="n_critical"/>
+                            <field name="n_high"/>
+                            <field name="n_medium"/>
+                        </group>
+                        <group>
+                            <field name="n_low"/>
+                            <field name="n_info"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Findings">
+                            <field name="finding_ids" readonly="1">
+                                <list>
+                                    <field name="severity" widget="badge"
+                                           decoration-danger="severity == 'critical'"
+                                           decoration-warning="severity in ('high','medium')"/>
+                                    <field name="name"/>
+                                    <field name="model_name" optional="show"/>
+                                    <field name="path" optional="show"/>
+                                </list>
+                            </field>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_waf_scan" model="ir.actions.act_window">
+        <field name="name">Security Scans</field>
+        <field name="res_model">waf.scan</field>
+        <field name="view_mode">list,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">No scans yet</p>
+            <p>Run a scan from the firewall configuration screen to audit
+            your instance (config, accounts, exposed code paths) and, when
+            enabled, scan add-on files and attachments.</p>
+        </field>
+    </record>
+</odoo>

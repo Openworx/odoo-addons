@@ -1,0 +1,13 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_waf_config_manager,waf.config manager,model_waf_config,group_waf_manager,1,1,1,0
+access_waf_rule_manager,waf.rule manager,model_waf_rule,group_waf_manager,1,1,1,1
+access_waf_ip_entry_manager,waf.ip.entry manager,model_waf_ip_entry,group_waf_manager,1,1,1,1
+access_waf_hit_manager,waf.hit manager,model_waf_hit,group_waf_manager,1,0,0,1
+access_waf_scan_manager,waf.scan manager,model_waf_scan,group_waf_manager,1,1,1,1
+access_waf_finding_manager,waf.finding manager,model_waf_finding,group_waf_manager,1,1,1,1
+access_waf_endpoint_policy_manager,waf.endpoint.policy manager,model_waf_endpoint_policy,group_waf_manager,1,1,1,1
+access_waf_exception_manager,waf.exception manager,model_waf_exception,group_waf_manager,1,1,1,1
+access_waf_lockout_hit_none,waf.lockout.hit deny-all,model_waf_lockout_hit,base.group_user,0,0,0,0
+access_waf_login_hit_none,waf.login.hit deny-all,model_waf_login_hit,base.group_user,0,0,0,0
+access_waf_rate_hit_none,waf.rate.hit deny-all,model_waf_rate_hit,base.group_user,0,0,0,0
+access_waf_master_hit_none,waf.master.hit deny-all,model_waf_master_hit,base.group_user,0,0,0,0

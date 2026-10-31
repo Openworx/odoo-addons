@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <title>OW Shield — Web Application Firewall &amp; Security Scanner</title>
+</head>
+<body>
+<section style="font-family: 'Montserrat', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif; max-width: 960px; margin: 0 auto; padding: 28px 18px; color: #1d2b3a; line-height: 1.7; background-color: #ffffff;">
+
+    <!-- HERO -->
+    <div style="background-color: #14212E; background-image: radial-gradient(circle at 88% 15%, rgba(0,114,192,0.35) 0, transparent 45%), radial-gradient(circle at 75% 85%, rgba(0,114,192,0.18) 0, transparent 40%), radial-gradient(circle at 96% 55%, rgba(255,149,14,0.10) 0, transparent 30%); border-radius: 14px; padding: 54px 40px 46px 40px; margin-bottom: 20px;">
+        <img src="https://download.openworx.nl/logo.png" alt="Openworx" style="max-width: 170px; height: auto; margin-bottom: 30px;"/>
+        <div style="margin-bottom: 22px;">
+            <span style="display: inline-block; background-color: #0072C0; color: #fff; font-size: 13px; font-weight: 700; padding: 7px 16px; border-radius: 6px; margin: 0 8px 8px 0;">Web application firewall for Odoo Community and Enterprise</span>
+            <span style="display: inline-block; background-color: #ff950e; color: #fff; font-size: 13px; font-weight: 700; padding: 7px 16px; border-radius: 6px; margin: 0 0 8px 0;">By Openworx — Odoo specialists since 2010</span>
+        </div>
+        <h1 style="font-size: 42px; line-height: 1.15; margin: 0 0 16px 0; font-weight: 800; letter-spacing: -0.01em; color: #ffffff; max-width: 700px;">
+            OW Shield — a real firewall for your Odoo, running inside Odoo<span style="color: #ff950e;">.</span>
+        </h1>
+        <p style="font-size: 17px; color: #b9c6d4; max-width: 660px; margin: 0 0 26px 0; font-weight: 500;">
+            Every request is inspected before it reaches Odoo's routing or ORM: attacks blocked by curated rules,
+            attackers auto-banned with a recovery link so you can never lock yourself out, and your whole
+            instance health-checked with an A–F grade and a shareable PDF report.
+        </p>
+        <div style="font-size: 15px; color: #ffffff; font-weight: 700;">
+            <span style="display: inline-block; margin: 4px 26px 4px 0;"><span style="color: #ff950e; margin-right: 8px;">&#10004;</span>Blocks attacks before they reach your data</span>
+            <span style="display: inline-block; margin: 4px 26px 4px 0;"><span style="color: #ff950e; margin-right: 8px;">&#10004;</span>No nginx rules — Odoo enforces itself</span>
+            <span style="display: inline-block; margin: 4px 0;"><span style="color: #ff950e; margin-right: 8px;">&#10004;</span>Learning mode first, one switch to enforce</span>
+        </div>
+    </div>
+
+    <!-- SCREENSHOT -->
+    <div style="margin-bottom: 52px; border-radius: 12px; border: 1px solid #dfe9f2;">
+        <img src="screenshot_dashboard.png" alt="OW Shield dashboard with live traffic, world map and health grade" style="width: 100%; height: auto; display: block; border-radius: 12px;"/>
+    </div>
+
+    <!-- WHAT IT DOES -->
+    <div style="margin-bottom: 48px;">
+        <div style="font-size: 12px; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: #0072C0; margin-bottom: 6px;">The idea</div>
+        <h2 style="font-size: 30px; font-weight: 800; color: #14212E; margin: 0 0 12px 0;">What it does<span style="color: #ff950e;">.</span></h2>
+        <p style="font-size: 16px; color: #55677a; margin: 0;">
+            OW Shield is a full web application firewall for Odoo Community and Enterprise. Instead of fragile
+            proxy rules that differ per host, <strong style="color: #14212E;">Odoo itself enforces the firewall</strong>:
+            every request is inspected at the very entry point — before routing, controllers or the ORM — so
+            probes against login, the database manager, <code style="background-color: #EEF5FB; padding: 1px 6px; border-radius: 4px;">.env</code> or unknown
+            paths never touch your data. Around that engine sit the things a security team actually needs:
+            a live traffic log with world map, IP and country controls, automatic lockouts, brute-force
+            protection, endpoint rate limits, active session control, and a read-only scanner that grades your instance and hands you a to-do list.
+        </p>
+    </div>
+
+    <!-- KEY FEATURES -->
+    <div style="background-color: #EEF5FB; border-radius: 14px; padding: 34px 26px; margin-bottom: 48px;">
+        <div style="font-size: 12px; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: #0072C0; margin-bottom: 6px;">Features</div>
+        <h2 style="font-size: 30px; font-weight: 800; color: #14212E; margin: 0 0 22px 0;">Everything a real WAF does — for Odoo<span style="color: #ff950e;">.</span></h2>
+
+        <div style="margin: 0 -0.5%;">
+
+            <div style="display: inline-block; box-sizing: border-box; width: 48%; vertical-align: top; margin: 0 0.5% 14px 0.5%; background-color: #fff; border: 1px solid #dfe9f2; border-radius: 10px; padding: 20px 22px;">
+                <div style="font-size: 24px; margin-bottom: 8px;">🌍</div>
+                <h3 style="margin: 0 0 6px 0; color: #14212E; font-size: 17px; font-weight: 700;">Live traffic log &amp; world map<span style="color: #ff950e;">.</span></h3>
+                <p style="margin: 0; color: #55677a; font-size: 15px;">Every matched request is logged with IP, country flag, method, path, rule and severity. The dashboard adds a timeline, attacks by category, an origin world map and top-attacker/top-rule lists — with one-click <em>Block IP</em> from any row.</p>
+            </div>
+
+            <div style="display: inline-block; box-sizing: border-box; width: 48%; vertical-align: top; margin: 0 0.5% 14px 0.5%; background-color: #fff; border: 1px solid #dfe9f2; border-radius: 10px; padding: 20px 22px;">
+                <div style="font-size: 24px; margin-bottom: 8px;">🛡️</div>
+                <h3 style="margin: 0 0 6px 0; color: #14212E; font-size: 17px; font-weight: 700;">Curated Odoo-tuned rule pack<span style="color: #ff950e;">.</span></h3>
+                <p style="margin: 0; color: #55677a; font-size: 15px;">67 bundled rules against SQL injection, XSS, SSTI (Jinja2/QWeb), path traversal, null bytes, Log4Shell &amp; Shellshock (in <em>any</em> header), scanner user agents (sqlmap, Nikto, WPScan…) and probe paths (<code style="background-color: #EEF5FB; padding: 1px 6px; border-radius: 4px;">.env</code>, <code style="background-color: #EEF5FB; padding: 1px 6px; border-radius: 4px;">.git</code>, phpMyAdmin, database manager…). Every rule toggles and has a test-payload box.</p>
+            </div>
+
+            <div style="display: inline-block; box-sizing: border-box; width: 48%; vertical-align: top; margin: 0 0.5% 14px 0.5%; background-color: #fff; border: 1px solid #dfe9f2; border-radius: 10px; padding: 20px 22px;">
+                <div style="font-size: 24px; margin-bottom: 8px;">🎚️</div>
+                <h3 style="margin: 0 0 6px 0; color: #14212E; font-size: 17px; font-weight: 700;">Endpoint &amp; rate policies<span style="color: #ff950e;">.</span></h3>
+                <p style="margin: 0; color: #55677a; font-size: 15px;">Beyond attack signatures: whole route groups and RPC services (database manager, XML-RPC, JSON-RPC, the JSON view API) are matched from the <em>parsed</em> request — a business string that merely contains "db" cannot fire the database-service policy. Plus rate limits per IP, per user or per request target: signup and password-reset floods, report and list-export bursts. Counters are shared across all your worker processes.</p>
+            </div>
+
+            <div style="display: inline-block; box-sizing: border-box; width: 48%; vertical-align: top; margin: 0 0.5% 14px 0.5%; background-color: #fff; border: 1px solid #dfe9f2; border-radius: 10px; padding: 20px 22px;">
+                <div style="font-size: 24px; margin-bottom: 8px;">🎓</div>
+                <h3 style="margin: 0 0 6px 0; color: #14212E; font-size: 17px; font-weight: 700;">Learning mode first<span style="color: #ff950e;">.</span></h3>
+                <p style="margin: 0; color: #55677a; font-size: 15px;">New installs only log — never block. Watch a week of real traffic, tune the few rules that need it, then flip the switch to enforce. Ambiguous patterns stay log-only even in enforce mode, and log-only rules are labelled as such.</p>
+            </div>
+
+            <div style="display: inline-block; box-sizing: border-box; width: 48%; vertical-align: top; margin: 0 0.5% 14px 0.5%; background-color: #fff; border: 1px solid #dfe9f2; border-radius: 10px; padding: 20px 22px;">
+                <div style="font-size: 24px; margin-bottom: 8px;">🛟</div>
+                <h3 style="margin: 0 0 6px 0; color: #14212E; font-size: 17px; font-weight: 700;">Auto-bans with a life raft<span style="color: #ff950e;">.</span></h3>
+                <p style="margin: 0; color: #55677a; font-size: 15px;">A configured number of block-rule hits within a window bans the IP automatically — with an expiry. Banned admins e-mail themselves back in: each block mails a signed, time-limited recovery link. You can never lock yourself out.</p>
+            </div>
+
+            <div style="display: inline-block; box-sizing: border-box; width: 48%; vertical-align: top; margin: 0 0.5% 14px 0.5%; background-color: #fff; border: 1px solid #dfe9f2; border-radius: 10px; padding: 20px 22px;">
+                <div style="font-size: 24px; margin-bottom: 8px;">🗺️</div>
+                <h3 style="margin: 0 0 6px 0; color: #14212E; font-size: 17px; font-weight: 700;">IP &amp; country controls<span style="color: #ff950e;">.</span></h3>
+                <p style="margin: 0; color: #55677a; font-size: 15px;">CIDR allow and deny lists with reasons and expiry dates. Optional country allow/deny gating via a local MaxMind GeoLite2 database — and country attribution for the map works even when gating is off.</p>
+            </div>
+
+            <div style="display: inline-block; box-sizing: border-box; width: 48%; vertical-align: top; margin: 0 0.5% 14px 0.5%; background-color: #fff; border: 1px solid #dfe9f2; border-radius: 10px; padding: 20px 22px;">
+                <div style="font-size: 24px; margin-bottom: 8px;">🔑</div>
+                <h3 style="margin: 0 0 6px 0; color: #14212E; font-size: 17px; font-weight: 700;">Login brute-force protection<span style="color: #ff950e;">.</span></h3>
+                <p style="margin: 0; color: #55677a; font-size: 15px;">Per-IP failure counters on top of Odoo's login cooldown: too many failed logins in a window blocks the whole IP (with recovery e-mail), stopping password spraying at the front door.</p>
+            </div>
+
+            <div style="display: inline-block; box-sizing: border-box; width: 48%; vertical-align: top; margin: 0 0.5% 14px 0.5%; background-color: #fff; border: 1px solid #dfe9f2; border-radius: 10px; padding: 20px 22px;">
+                <div style="font-size: 24px; margin-bottom: 8px;">🔐</div>
+                <h3 style="margin: 0 0 6px 0; color: #14212E; font-size: 17px; font-weight: 700;">Master-password brute-force protection<span style="color: #ff950e;">.</span></h3>
+                <p style="margin: 0; color: #55677a; font-size: 15px;">Every confirmed failed master-password check — database manager, XML-RPC, JSON-RPC — counts against one instance-wide counter per source. Past the threshold, database management is refused to that source for a cooling-off period: never your website or backend access. With a signed recovery link and a one-click admin reset.</p>
+            </div>
+
+            <div style="display: inline-block; box-sizing: border-box; width: 48%; vertical-align: top; margin: 0 0.5% 14px 0.5%; background-color: #fff; border: 1px solid #dfe9f2; border-radius: 10px; padding: 20px 22px;">
+                <div style="font-size: 24px; margin-bottom: 8px;">🖥️</div>
+                <h3 style="margin: 0 0 6px 0; color: #14212E; font-size: 17px; font-weight: 700;">Active session control<span style="color: #ff950e;">.</span></h3>
+                <p style="margin: 0; color: #55677a; font-size: 15px;">See who is logged in right now — user, device, browser, proxy-corrected IP and GeoIP country — and <strong style="color: #14212E;">force-logout a hijacked session with one click</strong>. Optionally expire idle sessions automatically after a timeout you set.</p>
+            </div>
+
+            <div style="display: inline-block; box-sizing: border-box; width: 48%; vertical-align: top; margin: 0 0.5% 14px 0.5%; background-color: #fff; border: 1px solid #dfe9f2; border-radius: 10px; padding: 20px 22px;">
+                <div style="font-size: 24px; margin-bottom: 8px;">🩺</div>
+                <h3 style="margin: 0 0 6px 0; color: #14212E; font-size: 17px; font-weight: 700;">Security scanner &amp; grade<span style="color: #ff950e;">.</span></h3>
+                <p style="margin: 0; color: #55677a; font-size: 15px;">A read-only audit of your instance: database manager exposure, master password, demo data, admin hygiene, 2FA coverage, proxy settings, server actions with code, and more — plus optional file and attachment scans. Findings with concrete fixes, a 0–100 score, A–F grade and a styled PDF report, on a weekly schedule.</p>
+            </div>
+
+            <div style="display: inline-block; box-sizing: border-box; width: 48%; vertical-align: top; margin: 0 0.5% 14px 0.5%; background-color: #fff; border: 1px solid #dfe9f2; border-radius: 10px; padding: 20px 22px;">
+                <div style="font-size: 24px; margin-bottom: 8px;">🧯</div>
+                <h3 style="margin: 0 0 6px 0; color: #14212E; font-size: 17px; font-weight: 700;">It never takes your site down<span style="color: #ff950e;">.</span></h3>
+                <p style="margin: 0; color: #55677a; font-size: 15px;">The firewall fails open: any internal error is logged and the request proceeds. Rules are evaluated against a cached snapshot — the per-request cost is microseconds — and everything runs in-process: no shell calls, no side daemons.</p>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- HOSTING (dark band) -->
+    <div style="background-color: #14212E; background-image: radial-gradient(circle at 90% 20%, rgba(0,114,192,0.30) 0, transparent 45%); border-radius: 14px; padding: 36px 28px; margin-bottom: 48px;">
+        <div style="font-size: 12px; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: #4da3e0; margin-bottom: 6px;">Fits your hosting</div>
+        <h2 style="font-size: 30px; font-weight: 800; color: #ffffff; margin: 0 0 6px 0;">Same protection on every setup<span style="color: #ff950e;">.</span></h2>
+        <p style="font-size: 16px; color: #b9c6d4; margin: 0 0 20px 0; max-width: 760px;">
+            Behind nginx, a load balancer, PROXY protocol, Odoo.sh or plain Docker — the firewall runs where
+            your Odoo runs, so the rules can never drift out of sync with your proxy configuration.
+        </p>
+        <div style="margin: 0 -0.5%;">
+            <div style="display: inline-block; box-sizing: border-box; width: 32%; vertical-align: top; margin: 0 0.5% 14px 0.5%; background-color: #fff; border-radius: 10px; padding: 20px 22px;">
+                <div style="font-size: 24px; margin-bottom: 8px;">🕵️</div>
+                <h3 style="margin: 0 0 6px 0; color: #14212E; font-size: 17px; font-weight: 700;">Spoof-proof client IPs<span style="color: #ff950e;">.</span></h3>
+                <p style="margin: 0; color: #55677a; font-size: 15px;">Forwarded headers are honoured only from <strong style="color: #14212E;">your configured trusted proxies</strong>. X-Forwarded-For forged from the internet is ignored, and bans land on the real attacker IP.</p>
+            </div>
+            <div style="display: inline-block; box-sizing: border-box; width: 32%; vertical-align: top; margin: 0 0.5% 14px 0.5%; background-color: #fff; border-radius: 10px; padding: 20px 22px;">
+                <div style="font-size: 24px; margin-bottom: 8px;">🚪</div>
+                <h3 style="margin: 0 0 6px 0; color: #14212E; font-size: 17px; font-weight: 700;">Before Odoo even routes<span style="color: #ff950e;">.</span></h3>
+                <p style="margin: 0; color: #55677a; font-size: 15px;">Inspection happens at the WSGI entry point: probes against routes without a database, the database manager or unknown paths are answered with a block page — not a 404 trail.</p>
+            </div>
+            <div style="display: inline-block; box-sizing: border-box; width: 32%; vertical-align: top; margin: 0 0.5% 14px 0.5%; background-color: #fff; border-radius: 10px; padding: 20px 22px;">
+                <div style="font-size: 24px; margin-bottom: 8px;">🎛️</div>
+                <h3 style="margin: 0 0 6px 0; color: #14212E; font-size: 17px; font-weight: 700;">Your rules, your call<span style="color: #ff950e;">.</span></h3>
+                <p style="margin: 0; color: #55677a; font-size: 15px;">Toggle any bundled rule or endpoint policy, write your own with a live test box, and keep allow entries as a guaranteed escape hatch. Rule changes go live in seconds — no restart.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- IN ACTION -->
+    <div style="margin-bottom: 48px;">
+        <div style="font-size: 12px; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: #0072C0; margin-bottom: 6px;">In action</div>
+        <h2 style="font-size: 30px; font-weight: 800; color: #14212E; margin: 0 0 22px 0;">See it at work<span style="color: #ff950e;">.</span></h2>
+
+        <h3 style="margin: 0 0 6px 0; color: #14212E; font-size: 19px; font-weight: 700;">Know exactly what is happening<span style="color: #ff950e;">.</span></h3>
+        <p style="margin: 0 0 14px 0; color: #55677a; font-size: 15px;">The traffic log shows every matched request — country flags, rule, severity, and whether it was actually blocked — with <em>Block IP</em> and <em>Allow IP</em> one click away on each row.</p>
+        <div style="margin-bottom: 40px; border-radius: 12px; border: 1px solid #dfe9f2;">
+            <img src="screenshot_trafficlog.png" alt="Traffic log with countries, rules and block buttons" style="width: 100%; height: auto; display: block; border-radius: 12px;"/>
+        </div>
+
+        <h3 style="margin: 0 0 6px 0; color: #14212E; font-size: 19px; font-weight: 700;">Who is logged in right now<span style="color: #ff950e;">.</span></h3>
+        <p style="margin: 0 0 14px 0; color: #55677a; font-size: 15px;">The active sessions view lists every logged-in user with device, browser, IP (corrected through your proxy) and GeoIP country — and <em>Force logout</em> ends a suspicious session instantly, on the user's very next request. An optional idle timeout does it automatically.</p>
+        <div style="margin-bottom: 40px; border-radius: 12px; border: 1px solid #dfe9f2;">
+            <img src="screenshot_sessions.png" alt="Active sessions list with users, countries and force logout" style="width: 100%; height: auto; display: block; border-radius: 12px;"/>
+        </div>
+
+        <h3 style="margin: 0 0 6px 0; color: #14212E; font-size: 19px; font-weight: 700;">Grade your instance<span style="color: #ff950e;">.</span></h3>
+        <p style="margin: 0 0 14px 0; color: #55677a; font-size: 15px;">One scan gives a grade, a score and findings by severity — each with the concrete fix, like <em>set list_db = False in the odoo.conf</em>. Schedule it weekly and watch the grade improve.</p>
+        <div style="margin-bottom: 40px; border-radius: 12px; border: 1px solid #dfe9f2;">
+            <img src="screenshot_scan.png" alt="Scan result with grade and findings by severity" style="width: 100%; height: auto; display: block; border-radius: 12px;"/>
+        </div>
+
+        <h3 style="margin: 0 0 6px 0; color: #14212E; font-size: 19px; font-weight: 700;">Hand the audit to your customer or colleague<span style="color: #ff950e;">.</span></h3>
+        <p style="margin: 0 0 14px 0; color: #55677a; font-size: 15px;">The PDF report bundles grade, findings, remediation checklist and the firewall posture at scan time — with your own logo on it.</p>
+        <div style="margin-bottom: 40px; border-radius: 12px; border: 1px solid #dfe9f2;">
+            <img src="screenshot_pdf.png" alt="Security scan PDF report with grade and findings" style="width: 100%; height: auto; display: block; border-radius: 12px;"/>
+        </div>
+
+        <h3 style="margin: 0 0 6px 0; color: #14212E; font-size: 19px; font-weight: 700;">What the attacker sees<span style="color: #ff950e;">.</span></h3>
+        <p style="margin: 0 0 14px 0; color: #55677a; font-size: 15px;">Blocked requests get a clean block page with a reference to quote. If the block was an automatic IP ban, your e-mail inbox gets a signed recovery link — the escape hatch is always in your hands, never the attacker's.</p>
+        <div style="border-radius: 12px; border: 1px solid #dfe9f2;">
+            <img src="screenshot_blockpage.png" alt="Block page with reference code" style="width: 100%; height: auto; display: block; border-radius: 12px;"/>
+        </div>
+    </div>
+
+    <!-- INSTALLATION -->
+    <div style="margin-bottom: 48px;">
+        <div style="font-size: 12px; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: #0072C0; margin-bottom: 6px;">Getting started</div>
+        <h2 style="font-size: 30px; font-weight: 800; color: #14212E; margin: 0 0 22px 0;">Up and running in three steps<span style="color: #ff950e;">.</span></h2>
+
+        <div style="margin-bottom: 14px; padding: 18px 20px; background-color: #fff; border: 1px solid #dfe9f2; border-radius: 10px;">
+            <span style="display: inline-block; margin-right: 12px; width: 32px; height: 32px; background-color: #0072C0; color: #fff; border-radius: 50%; text-align: center; line-height: 32px; font-weight: 800; font-size: 14px;">1</span>
+            Install <strong style="color: #14212E;">OW Shield</strong>. It starts in <strong style="color: #14212E;">learning mode</strong>: everything is logged, nothing is blocked. Set your trusted proxy CIDRs so client IPs resolve correctly.
+        </div>
+        <div style="margin-bottom: 14px; padding: 18px 20px; background-color: #fff; border: 1px solid #dfe9f2; border-radius: 10px;">
+            <span style="display: inline-block; margin-right: 12px; width: 32px; height: 32px; background-color: #0072C0; color: #fff; border-radius: 50%; text-align: center; line-height: 32px; font-weight: 800; font-size: 14px;">2</span>
+            Let it watch real traffic for a few days. Run your first <strong style="color: #14212E;">Security Scan</strong> and work the findings.
+        </div>
+        <div style="margin-bottom: 14px; padding: 18px 20px; background-color: #fff; border: 1px solid #dfe9f2; border-radius: 10px;">
+            <span style="display: inline-block; margin-right: 12px; width: 32px; height: 32px; background-color: #0072C0; color: #fff; border-radius: 50%; text-align: center; line-height: 32px; font-weight: 800; font-size: 14px;">3</span>
+            Flip the switch to <strong style="color: #14212E;">Enforce</strong>. Attacks now get 403s, repeat offenders get automatic bans — and you keep the recovery link.
+        </div>
+        <div style="margin-bottom: 20px; padding: 18px 20px; background-color: #EEF5FB; border: 1px solid #cfe3f5; border-radius: 10px;">
+            <span style="display: inline-block; margin-right: 12px; width: 32px; height: 32px; background-color: #ff950e; color: #fff; border-radius: 50%; text-align: center; line-height: 32px; font-weight: 800; font-size: 14px;">+</span>
+            <strong style="color: #14212E;">Optional:</strong> drop a MaxMind <code style="background-color: #E3EFF9; padding: 1px 6px; border-radius: 4px;">GeoLite2-Country.mmdb</code> in Odoo's standard GeoIP path to light up the world map and country-based rules. Nothing else needs configuring: the log-pruning and weekly-scan crons are installed with the module.
+        </div>
+    </div>
+
+    <!-- SECURITY -->
+    <div style="background-color: #EEF5FB; border-radius: 14px; padding: 34px 26px; margin-bottom: 48px;">
+        <div style="font-size: 12px; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: #0072C0; margin-bottom: 6px;">Security &amp; trust</div>
+        <h2 style="font-size: 30px; font-weight: 800; color: #14212E; margin: 0 0 20px 0;">Built to never break your site<span style="color: #ff950e;">.</span></h2>
+
+        <div style="margin: 0 -0.5%;">
+            <div style="display: inline-block; box-sizing: border-box; width: 48%; vertical-align: top; margin: 0 0.5% 12px 0.5%; padding: 16px 18px; background-color: #fff; border: 1px solid #dfe9f2; border-radius: 10px;"><span style="color: #ff950e; font-weight: 800; margin-right: 8px;">&#10004;</span><strong style="color: #14212E;">Fail-open by design.</strong> <span style="color: #55677a;">If the firewall itself errors, the request continues and the error is logged — availability wins.</span></div>
+            <div style="display: inline-block; box-sizing: border-box; width: 48%; vertical-align: top; margin: 0 0.5% 12px 0.5%; padding: 16px 18px; background-color: #fff; border: 1px solid #dfe9f2; border-radius: 10px;"><span style="color: #ff950e; font-weight: 800; margin-right: 8px;">&#10004;</span><strong style="color: #14212E;">Nothing leaves your server.</strong> <span style="color: #55677a;">No external calls, no rule-update fetches, geolocation from your local mmdb file. Rule packs ship inside the module. And stored log entries are sanitised: credential values in blocked queries are saved as [redacted].</span></div>
+            <div style="display: inline-block; box-sizing: border-box; width: 48%; vertical-align: top; margin: 0 0.5% 12px 0.5%; padding: 16px 18px; background-color: #fff; border: 1px solid #dfe9f2; border-radius: 10px;"><span style="color: #ff950e; font-weight: 800; margin-right: 8px;">&#10004;</span><strong style="color: #14212E;">Signed recovery links.</strong> <span style="color: #55677a;">HMAC-signed, time-limited and e-mailed only — an attacker who is banned cannot use them, but you always can.</span></div>
+            <div style="display: inline-block; box-sizing: border-box; width: 48%; vertical-align: top; margin: 0 0.5% 12px 0.5%; padding: 16px 18px; background-color: #fff; border: 1px solid #dfe9f2; border-radius: 10px;"><span style="color: #ff950e; font-weight: 800; margin-right: 8px;">&#10004;</span><strong style="color: #14212E;">Bans expire on their own.</strong> <span style="color: #55677a;">Automatic entries carry an expiry; the traffic log is pruned by cron. No runaway tables.</span></div>
+            <div style="display: inline-block; box-sizing: border-box; width: 48%; vertical-align: top; margin: 0 0.5% 12px 0.5%; padding: 16px 18px; background-color: #fff; border: 1px solid #dfe9f2; border-radius: 10px;"><span style="color: #ff950e; font-weight: 800; margin-right: 8px;">&#10004;</span><strong style="color: #14212E;">Escape hatch first.</strong> <span style="color: #55677a;">Allow-listed IPs skip evaluation entirely — monitoring systems and your own office are a one-line exception.</span></div>
+            <div style="display: inline-block; box-sizing: border-box; width: 48%; vertical-align: top; margin: 0 0.5% 12px 0.5%; padding: 16px 18px; background-color: #fff; border: 1px solid #dfe9f2; border-radius: 10px;"><span style="color: #ff950e; font-weight: 800; margin-right: 8px;">&#10004;</span><strong style="color: #14212E;">One manager group.</strong> <span style="color: #55677a;">Firewall configuration, rules and scans are restricted to an explicit manager group.</span></div>
+        </div>
+    </div>
+
+    <!-- FAQ -->
+    <div style="margin-bottom: 48px;">
+        <div style="font-size: 12px; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: #0072C0; margin-bottom: 6px;">Questions</div>
+        <h2 style="font-size: 30px; font-weight: 800; color: #14212E; margin: 0 0 22px 0;">FAQ<span style="color: #ff950e;">.</span></h2>
+
+        <details style="margin-bottom: 10px; padding: 16px 20px; background-color: #fff; border: 1px solid #dfe9f2; border-radius: 10px;">
+            <summary style="cursor: pointer; font-weight: 700; color: #14212E; font-size: 16px;">Which Odoo editions does it support?</summary>
+            <p style="margin: 12px 0 0 0; color: #55677a; font-size: 15px;">Both: Odoo 19 Community and Enterprise. OW Shield depends only on <code style="background-color: #EEF5FB; padding: 1px 6px; border-radius: 4px;">base</code> and <code style="background-color: #EEF5FB; padding: 1px 6px; border-radius: 4px;">mail</code>, and needs no nginx rules, no separate daemon and no external service. One module, inside your existing Odoo.</p>
+        </details>
+
+        <details style="margin-bottom: 10px; padding: 16px 20px; background-color: #fff; border: 1px solid #dfe9f2; border-radius: 10px;">
+            <summary style="cursor: pointer; font-weight: 700; color: #14212E; font-size: 16px;">Will it block my legitimate users?</summary>
+            <p style="margin: 12px 0 0 0; color: #55677a; font-size: 15px;">That is what learning mode is for: you see what <em>would</em> be blocked before anything is. The rule pack is curated for Odoo's own traffic (including safe log-only rules for ambiguous patterns), every rule can be toggled, allow entries are absolute, and automatic IP bans come with an e-mailed recovery link and an expiry.</p>
+        </details>
+
+        <details style="margin-bottom: 10px; padding: 16px 20px; background-color: #fff; border: 1px solid #dfe9f2; border-radius: 10px;">
+            <summary style="cursor: pointer; font-weight: 700; color: #14212E; font-size: 16px;">What is the performance impact?</summary>
+            <p style="margin: 12px 0 0 0; color: #55677a; font-size: 15px;">Rules and lists live in a precompiled snapshot cache (refreshed within seconds of a config change), so a request pays one normalisation pass and a set of compiled regex matches — microseconds. Hit writes are buffered. And a firewall error never breaks the request: it fails open.</p>
+        </details>
+
+        <details style="margin-bottom: 10px; padding: 16px 20px; background-color: #fff; border: 1px solid #dfe9f2; border-radius: 10px;">
+            <summary style="cursor: pointer; font-weight: 700; color: #14212E; font-size: 16px;">It runs inside Odoo — can't attackers bypass it?</summary>
+            <p style="margin: 12px 0 0 0; color: #55677a; font-size: 15px;">Everything HTTP that reaches your application is inspected, before any routing — including requests against paths and endpoints that have no database. Attacks that bypass the WAF must bypass Odoo's own HTTP server entirely, which is exactly where nginx/CDN hardening comes in. OW Shield complements network hardening; it does not replace it.</p>
+        </details>
+
+        <details style="margin-bottom: 10px; padding: 16px 20px; background-color: #fff; border: 1px solid #dfe9f2; border-radius: 10px;">
+            <summary style="cursor: pointer; font-weight: 700; color: #14212E; font-size: 16px;">Does it work behind nginx, a load balancer or Odoo.sh?</summary>
+            <p style="margin: 12px 0 0 0; color: #55677a; font-size: 15px;">Yes — PROXY protocol, X-Forwarded-For and X-Real-IP chains all work. Tell OW Shield which proxy networks to trust and client IPs, the world map and bans all use the real visitor address, while forged headers from the internet are ignored.</p>
+        </details>
+
+        <details style="margin-bottom: 10px; padding: 16px 20px; background-color: #fff; border: 1px solid #dfe9f2; border-radius: 10px;">
+            <summary style="cursor: pointer; font-weight: 700; color: #14212E; font-size: 16px;">Do I need a MaxMind subscription?</summary>
+            <p style="margin: 12px 0 0 0; color: #55677a; font-size: 15px;">No. The firewall works completely without geolocation. Drop the free GeoLite2-Country database (Odoo's standard GeoIP path) into your server and the world map, country flags and country allow/deny rules light up automatically — the file never leaves your machine.</p>
+        </details>
+
+        <details style="padding: 16px 20px; background-color: #fff; border: 1px solid #dfe9f2; border-radius: 10px;">
+            <summary style="cursor: pointer; font-weight: 700; color: #14212E; font-size: 16px;">What does it cost?</summary>
+            <p style="margin: 12px 0 0 0; color: #55677a; font-size: 15px;">Nothing. OW Shield is free and open source under LGPL-3, maintained by Openworx — an Odoo consultancy that runs this on its own production instances.</p>
+        </details>
+    </div>
+
+    <!-- FOOTER -->
+    <div style="text-align: center; padding: 40px 24px; background-color: #14212E; background-image: radial-gradient(circle at 85% 30%, rgba(0,114,192,0.25) 0, transparent 45%); border-radius: 14px;">
+        <img src="https://download.openworx.nl/logo.png" alt="Openworx" style="max-width: 170px; height: auto; margin-bottom: 14px;"/>
+        <p style="margin: 8px 0 4px 0; color: #fff; font-size: 16px; font-weight: 700;">Jouw partner in Odoo — implementatie, maatwerk en hosting<span style="color: #ff950e;">.</span></p>
+        <p style="margin: 0;"><a href="https://www.openworx.nl" style="color: #4da3e0; text-decoration: none; font-size: 15px; font-weight: 700;">openworx.nl</a></p>
+    </div>
+
+</section>
+</body>
+</html>

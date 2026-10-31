@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_waf_finding_list" model="ir.ui.view">
+        <field name="name">waf.finding.list</field>
+        <field name="model">waf.finding</field>
+        <field name="arch" type="xml">
+            <list create="0" edit="0" decoration-danger="severity == 'critical'"
+                  decoration-warning="severity in ('high','medium')">
+                <field name="scan_id" optional="hide"/>
+                <field name="severity"/>
+                <field name="name"/>
+                <field name="model_name" optional="show"/>
+                <field name="path" optional="show"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_waf_finding_form" model="ir.ui.view">
+        <field name="name">waf.finding.form</field>
+        <field name="model">waf.finding</field>
+        <field name="arch" type="xml">
+            <form create="0" edit="0">
+                <sheet>
+                    <div class="oe_title">
+                        <h1><field name="name"/></h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="severity"/>
+                            <field name="scan_id"/>
+                        </group>
+                        <group>
+                            <field name="model_name"/>
+                            <field name="res_id"/>
+                            <field name="path"/>
+                        </group>
+                    </group>
+                    <group string="Details">
+                        <field name="message" nolabel="1"/>
+                    </group>
+                    <group string="Recommendation">
+                        <field name="recommendation" nolabel="1"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_waf_finding_search" model="ir.ui.view">
+        <field name="name">waf.finding.search</field>
+        <field name="model">waf.finding</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="name"/>
+                <field name="path"/>
+                <filter name="critical" string="Critical"
+                        domain="[('severity','=','critical')]"/>
+                <filter name="high" string="High &amp; above"
+                        domain="[('severity','in',['critical','high'])]"/>
+                <filter name="group_severity" string="Severity"
+                        context="{'group_by': 'severity'}"/>
+                <filter name="group_scan" string="Scan"
+                        context="{'group_by': 'scan_id'}"/>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_waf_finding" model="ir.actions.act_window">
+        <field name="name">Findings</field>
+        <field name="res_model">waf.finding</field>
+        <field name="view_mode">list,form</field>
+    </record>
+</odoo>

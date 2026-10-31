@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <menuitem id="menu_waf_root" name="OW Shield"
+              web_icon="ow_shield,static/description/icon.png"
+              sequence="260" groups="group_waf_manager"/>
+
+    <menuitem id="menu_waf_dashboard" parent="menu_waf_root" sequence="10"
+              name="Dashboard" action="action_waf_dashboard_client"/>
+    <menuitem id="menu_waf_traffic" parent="menu_waf_root" sequence="20"
+              name="Traffic Log" action="action_waf_hit"/>
+    <menuitem id="menu_waf_sessions" parent="menu_waf_root" sequence="25"
+              name="Active Sessions" action="action_ow_shield_sessions"/>
+    <menuitem id="menu_waf_blocklist" parent="menu_waf_root" sequence="30"
+              name="Block &amp; Allow List" action="action_waf_ip_entry"/>
+    <menuitem id="menu_waf_rules" parent="menu_waf_root" sequence="40"
+              name="Rules" action="action_waf_rule"/>
+    <menuitem id="menu_waf_endpoint_policy" parent="menu_waf_root" sequence="42"
+              name="Endpoint Policies" action="action_waf_endpoint_policy"/>
+    <menuitem id="menu_waf_exception" parent="menu_waf_root" sequence="44"
+              name="Targeted Exceptions" action="action_waf_exception"/>
+    <menuitem id="menu_waf_scans" parent="menu_waf_root" sequence="50"
+              name="Security Scans" action="action_waf_scan"/>
+    <menuitem id="menu_waf_findings" parent="menu_waf_root" sequence="60"
+              name="Findings" action="action_waf_finding"/>
+    <menuitem id="menu_waf_config" parent="menu_waf_root" sequence="90"
+              name="Configuration" action="action_waf_config"/>
+</odoo>

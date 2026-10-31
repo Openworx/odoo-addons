@@ -1,0 +1,376 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:id="ow_shield_dashboard_templates">
+    <t t-name="ow_shield.Dashboard">
+        <div class="o_waf_dashboard container-fluid pb-4">
+            <div t-if="!state.data &amp;&amp; state.loading" class="text-center py-5 text-muted">
+                <i class="fa fa-circle-o-notch fa-spin fa-2x me-2"/>
+                <span>Loading firewall status…</span>
+            </div>
+            <t t-else="">
+                <div t-if="state.error" class="alert alert-danger mt-3" role="alert">
+                    <t t-esc="state.error"/>
+                </div>
+                <t t-if="state.data">
+                    <!-- ================================================== header -->
+                    <div class="d-flex flex-wrap align-items-center gap-2 pt-3 pb-2 border-bottom mb-3">
+                        <h4 class="mb-0 me-auto">
+                            <i class="fa fa-shield me-2 text-primary"/>OW Shield
+                        </h4>
+                        <span t-attf-class="badge fs-6 {{ state.data.mode === 'enforce' ? 'text-bg-danger' : 'text-bg-warning' }}">
+                            <i t-attf-class="fa {{ state.data.mode === 'enforce' ? 'fa-lock' : 'fa-graduation-cap' }} me-1"/>
+                            <t t-esc="state.data.mode === 'enforce' ? 'Enforce' : 'Learning'"/> mode
+                        </span>
+                        <button t-if="state.data.mode === 'learning'" class="btn btn-danger btn-sm"
+                                t-on-click="() => this.setMode('enforce')">Enforce now</button>
+                        <button t-else="" class="btn btn-warning btn-sm"
+                                t-on-click="() => this.setMode('learning')">Back to Learning</button>
+                        <button class="btn btn-primary btn-sm" t-on-click="runScan"
+                                t-att-disabled="state.scanning">
+                            <i class="fa fa-stethoscope me-1"/>
+                            <t t-if="!state.scanning">Run scan</t>
+                            <t t-else="">Scanning…</t>
+                        </button>
+                        <button class="btn btn-secondary btn-sm" t-on-click="loadData"
+                                title="Refresh"><i class="fa fa-refresh"/></button>
+                        <button class="btn btn-secondary btn-sm" t-on-click="() => this.open('action_waf_config')"
+                                title="Configuration"><i class="fa fa-cog"/></button>
+                    </div>
+
+                    <!-- =================================================== tiles -->
+                    <div class="row row-cols-2 row-cols-md-3 row-cols-lg-4 g-3 mb-4">
+                        <div class="col">
+                            <div class="card o_waf-tile h-100" role="button"
+                                 t-on-click="() => this.open('action_waf_hit')">
+                                <div class="card-body py-3">
+                                    <div class="o_waf-tile-value text-primary"
+                                         t-esc="formatNumber(state.data.hits_24h)"/>
+                                    <div class="o_waf-tile-label">Events · last 24h</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col">
+                            <div class="card o_waf-tile h-100" role="button"
+                                 t-on-click="() => this.open('action_waf_hit')">
+                                <div class="card-body py-3">
+                                    <div class="o_waf-tile-value text-danger"
+                                         t-esc="formatNumber(state.data.blocked_24h)"/>
+                                    <div class="o_waf-tile-label">Blocked · last 24h</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col">
+                            <div class="card o_waf-tile h-100" role="button"
+                                 t-on-click="() => this.open('action_waf_hit')">
+                                <div class="card-body py-3">
+                                    <div class="o_waf-tile-value"
+                                         t-esc="formatNumber(state.data.hits_total)"/>
+                                    <div class="o_waf-tile-label">Events · total</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col">
+                            <div class="card o_waf-tile h-100" role="button"
+                                 t-on-click="() => this.open('action_waf_rule')">
+                                <div class="card-body py-3">
+                                    <div class="o_waf-tile-value"
+                                         t-esc="formatNumber(state.data.rules_active)"/>
+                                    <div class="o_waf-tile-label">
+                                        Active rules
+                                        (<t t-esc="state.data.rules_custom"/> custom,
+                                        <t t-esc="state.data.rules_off"/> off)
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col">
+                            <div class="card o_waf-tile h-100" role="button"
+                                 t-on-click="() => this.open('action_waf_ip_entry')">
+                                <div class="card-body py-3">
+                                    <div class="o_waf-tile-value text-danger"
+                                         t-esc="formatNumber(state.data.ip_deny)"/>
+                                    <div class="o_waf-tile-label">
+                                        Blocked IPs (<t t-esc="state.data.auto_lockouts"/> auto)
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col">
+                            <div class="card o_waf-tile h-100" role="button"
+                                 t-on-click="() => this.open('action_waf_ip_entry')">
+                                <div class="card-body py-3">
+                                    <div class="o_waf-tile-value text-success"
+                                         t-esc="formatNumber(state.data.ip_allow)"/>
+                                    <div class="o_waf-tile-label">Allowed entries</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col">
+                            <div class="card o_waf-tile h-100" role="button"
+                                 t-on-click="openScan">
+                                <div class="card-body py-3 d-flex align-items-center gap-3">
+                                    <div t-attf-class="o_waf-grade {{ state.data.last_scan ? gradeClass(state.data.last_scan.grade) : 'text-muted' }}">
+                                        <t t-esc="state.data.last_scan ? state.data.last_scan.grade : '—'"/>
+                                    </div>
+                                    <div>
+                                        <div class="o_waf-tile-value" style="font-size:1.1rem"
+                                             t-esc="state.data.last_scan ? `${state.data.last_scan.score}/100` : 'not scanned'"/>
+                                        <div class="o_waf-tile-label">Health grade</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col">
+                            <div class="card o_waf-tile h-100" role="button"
+                                 t-on-click="() => this.open('action_waf_config')">
+                                <div class="card-body py-3">
+                                    <div class="o_waf-tile-value text-capitalize"
+                                         t-esc="state.data.country_mode"/>
+                                    <div class="o_waf-tile-label">Country gate</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- ================================================= charts -->
+                    <div class="row g-3 mb-4">
+                        <div class="col-12 col-xl-4">
+                            <div class="card h-100">
+                                <div class="card-header d-flex justify-content-between align-items-center">
+                                    <span><i class="fa fa-line-chart me-2"/>Matched requests</span>
+                                    <div class="btn-group btn-group-sm" role="group">
+                                        <button t-attf-class="btn {{ state.data.days === 1 ? 'btn-primary' : 'btn-outline-secondary' }}"
+                                                t-on-click="() => this.setDays(1)">24h</button>
+                                        <button t-attf-class="btn {{ state.data.days === 7 ? 'btn-primary' : 'btn-outline-secondary' }}"
+                                                t-on-click="() => this.setDays(7)">7d</button>
+                                        <button t-attf-class="btn {{ state.data.days === 30 ? 'btn-primary' : 'btn-outline-secondary' }}"
+                                                t-on-click="() => this.setDays(30)">30d</button>
+                                    </div>
+                                </div>
+                                <div class="card-body">
+                                    <div class="o_waf-chart">
+                                        <canvas t-ref="wafTimeline"/>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-12 col-xl-4">
+                            <div class="card h-100">
+
+                                <div class="card-header d-flex justify-content-between align-items-center">
+                                    <span>
+                                        <i class="fa fa-globe me-2"/>Attack origins
+                                        (<t t-esc="state.data.period"/>)
+                                    </span>
+                                    <span t-if="mapHasData"
+                                          class="d-flex align-items-center gap-2 text-muted small">
+                                        <span class="o_waf-map-ramp"/> more events
+                                    </span>
+                                </div>
+                                <div class="card-body position-relative">
+                                    <svg class="o_waf-map-svg" t-att-viewBox="geo.viewBox"
+                                         preserveAspectRatio="xMidYMid meet"
+                                         role="img" aria-label="World map of attack origins">
+                                        <path class="o_waf-map-land" t-att-d="geo.land"/>
+                                        <path t-foreach="mapCountries" t-as="c" t-key="c.key"
+                                              class="o_waf-map-country"
+                                              t-att-d="c.d" t-att-fill="c.fill">
+                                            <title t-esc="c.tip"/>
+                                        </path>
+                                    </svg>
+                                    <div t-if="mapExtra.length" class="o_waf-map-extra text-muted"
+                                         title="Origins without map geometry (small states) or without GeoIP attribution">
+                                        <i class="fa fa-flag-o me-1"/>also seen:
+                                        <span t-foreach="mapExtra" t-as="x" t-key="x.key"
+                                              t-att-title="x.blocked ? x.total + ' events, ' + x.blocked + ' blocked' : x.total + ' events'">
+                                            <t t-esc="x.code"/> <b t-esc="x.total"/>
+                                        </span>
+                                        <t t-if="mapExtraExpandable">
+                                            <button t-if="state.mapExtraOpen" type="button"
+                                                    class="o_waf-map-more"
+                                                    t-on-click="toggleMapExtra">show less
+                                            </button>
+                                            <button t-else="" type="button"
+                                                    class="o_waf-map-more"
+                                                    t-att-title="'Not shown: ' + mapExtraOmitted + ' further origin(s) beyond the top ' + mapExtra.length"
+                                                    t-on-click="toggleMapExtra">+<t t-esc="mapExtraOmitted"/> more
+                                            </button>
+                                        </t>
+                                    </div>
+                                    <div t-if="!mapHasData"
+                                         class="o_waf-chart-empty text-muted">
+                                        <t t-if="!state.data.country_ready">
+                                            <i class="fa fa-map-o me-2"/>
+                                            Country detection needs the MaxMind
+                                            GeoLite2-Country database on the server
+                                            (<code>geoip_country_db</code>) —
+                                            traffic is still inspected and blocked without it.
+                                        </t>
+                                        <t t-else="">
+                                            No geolocated events in this period.
+                                        </t>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-12 col-xl-4">
+                            <div class="card h-100">
+                                <div class="card-header">
+                                    <i class="fa fa-pie-chart me-2"/>Attacks by category
+                                    (<t t-esc="state.data.period"/>)
+                                </div>
+                                <div class="card-body position-relative">
+                                    <div class="o_waf-chart">
+                                        <canvas t-ref="wafCategory"/>
+                                    </div>
+                                    <div t-if="!state.data.by_category.length"
+                                         class="o_waf-chart-empty text-muted">
+                                        No events in this period.
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- ==================================== top lists + last scan -->
+                    <div class="row g-3 mb-4">
+                        <div class="col-lg-4">
+                            <div class="card h-100">
+                                <div class="card-header d-flex justify-content-between">
+                                    <span><i class="fa fa-crosshairs me-2"/>Top attackers (<t t-esc="state.data.period"/>)</span>
+                                </div>
+                                <div class="card-body p-0">
+                                    <table t-if="state.data.top_ips.length"
+                                           class="table table-sm o_waf-recent mb-0">
+                                        <tbody>
+                                            <tr t-foreach="state.data.top_ips" t-as="row" t-key="row.label">
+                                                <td class="font-monospace" t-esc="row.label"/>
+                                                <td class="text-center o_waf-topcountry"
+                                                    t-att-title="row.country || ''">
+                                                    <t t-if="row.country">
+                                                        <span class="o_waf-topflag"
+                                                              t-esc="flagEmoji(row.country)"/>
+                                                        <small t-esc="row.country"/>
+                                                    </t>
+                                                </td>
+                                                <td class="text-end">
+                                                    <span class="badge text-bg-secondary" t-esc="row.count"/>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                    <div t-else="" class="p-3 text-muted">No events in this period.</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-4">
+                            <div class="card h-100">
+                                <div class="card-header">
+                                    <i class="fa fa-bolt me-2"/>Most hit rules (<t t-esc="state.data.period"/>)
+                                </div>
+                                <div class="card-body p-0">
+                                    <table t-if="state.data.top_rules.length"
+                                           class="table table-sm o_waf-recent mb-0">
+                                        <tbody>
+                                            <tr t-foreach="state.data.top_rules" t-as="row" t-key="row.label">
+                                                <td t-esc="row.label"/>
+                                                <td class="text-end">
+                                                    <span class="badge text-bg-secondary" t-esc="row.count"/>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                    <div t-else="" class="p-3 text-muted">No rule hits in this period.</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-4">
+                            <div class="card h-100">
+                                <div class="card-header d-flex justify-content-between align-items-center">
+                                    <span><i class="fa fa-stethoscope me-2"/>Latest security scan</span>
+                                    <span t-if="state.data.last_scan"
+                                          t-attf-class="o_waf-grade-sm fw-bold fs-5 {{ gradeClass(state.data.last_scan.grade) }}">
+                                        <t t-esc="state.data.last_scan.grade"/>
+                                        · <t t-esc="state.data.last_scan.score"/>
+                                    </span>
+                                </div>
+                                <div t-if="state.data.last_scan" class="card-body py-2">
+                                    <div class="d-flex flex-wrap gap-2 mb-2">
+                                        <span class="badge text-bg-danger"
+                                              t-esc="`${state.data.last_scan.critical} critical`"/>
+                                        <span class="badge text-bg-warning"
+                                              t-esc="`${state.data.last_scan.high} high`"/>
+                                        <span class="badge text-bg-info"
+                                              t-esc="`${state.data.last_scan.medium} medium`"/>
+                                        <span class="badge text-bg-secondary"
+                                              t-esc="`${state.data.last_scan.low} low`"/>
+                                        <span class="badge text-bg-light border"
+                                              t-esc="`${state.data.last_scan.info} info`"/>
+                                    </div>
+                                    <div class="text-muted small">
+                                        Run on <t t-esc="state.data.last_scan.date"/> (UTC)
+                                    </div>
+                                    <div class="mt-2">
+                                        <button class="btn btn-link btn-sm p-0" t-on-click="openScan">
+                                            Open report <i class="fa fa-angle-right"/>
+                                        </button>
+                                    </div>
+                                </div>
+                                <div t-else="" class="card-body py-2 text-muted">
+                                    No scan yet — click <b>Run scan</b> for an instant
+                                    healthcheck and A–F grade.
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- ============================================== recent log -->
+                    <div class="card">
+                        <div class="card-header d-flex justify-content-between align-items-center">
+                            <span><i class="fa fa-list me-2"/>Recent firewall events</span>
+                            <span class="d-flex gap-2">
+                                <button class="btn btn-link btn-sm p-0"
+                                        t-on-click="() => this.open('action_waf_dashboard')">
+                                    Analytics <i class="fa fa-area-chart"/>
+                                </button>
+                                <button class="btn btn-link btn-sm p-0"
+                                        t-on-click="() => this.open('action_waf_hit')">
+                                    Full traffic log <i class="fa fa-angle-right"/>
+                                </button>
+                            </span>
+                        </div>
+                        <div class="card-body p-0">
+                            <table t-if="state.data.recent_hits.length"
+                                   class="table table-sm o_waf-recent mb-0">
+                                <thead>
+                                    <tr>
+                                        <th>Time (UTC)</th><th>Method</th><th>Path</th>
+                                        <th>IP</th><th>Rule</th><th class="text-end">Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr t-foreach="state.data.recent_hits" t-as="hit" t-key="hit_index">
+                                        <td class="text-muted" t-esc="hit.date.slice(0, 16)"/>
+                                        <td><span class="badge text-bg-light border" t-esc="hit.method"/></td>
+                                        <td class="font-monospace" t-esc="hit.path"/>
+                                        <td class="font-monospace" t-esc="hit.ip"/>
+                                        <td t-esc="hit.rule"/>
+                                        <td class="text-end">
+                                            <span t-attf-class="badge {{ hit.blocked ? 'text-bg-danger' : 'text-bg-warning' }}"
+                                                  t-esc="hit.blocked ? 'BLOCKED' : 'logged'"/>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            <div t-else="" class="p-4 text-center text-muted">
+                                <i class="fa fa-shield d-block mb-2 fs-1 text-success"/>
+                                Nothing logged yet. Requests matching a firewall rule will
+                                show up here — traffic looks clean so far.
+                            </div>
+                        </div>
+                    </div>
+                </t>
+            </t>
+        </div>
+    </t>
+</templates>

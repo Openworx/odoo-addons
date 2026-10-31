@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_waf_endpoint_policy_list" model="ir.ui.view">
+        <field name="name">waf.endpoint.policy.list</field>
+        <field name="model">waf.endpoint.policy</field>
+        <field name="arch" type="xml">
+            <list decoration-danger="action == 'block'"
+                  decoration-warning="action == 'log' and severity >= 4">
+                <field name="code" optional="hide"/>
+                <field name="name"/>
+                <field name="category"/>
+                <field name="route_re"/>
+                <field name="methods" optional="show"/>
+                <field name="action"/>
+                <field name="severity"/>
+                <field name="rate_max" optional="show"/>
+                <field name="exempt_nets" optional="hide"/>
+                <field name="source" optional="show"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_waf_endpoint_policy_form" model="ir.ui.view">
+        <field name="name">waf.endpoint.policy.form</field>
+        <field name="model">waf.endpoint.policy</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <div class="oe_title">
+                        <h1><field name="name" placeholder="Policy name"/></h1>
+                    </div>
+                    <group>
+                        <group string="Coverage">
+                            <field name="category"/>
+                            <field name="code" readonly="1"/>
+                            <field name="source"/>
+                            <field name="active"/>
+                        </group>
+                        <group string="Verdict">
+                            <field name="action"/>
+                            <field name="severity"/>
+                            <field name="methods"
+                                   placeholder="e.g. POST (empty = any)"/>
+                            <field name="apply_pre_db"/>
+                        </group>
+                    </group>
+                    <group string="Route group">
+                        <field name="route_re" nolabel="1"
+                               placeholder="^/web/database(?:/|$)"/>
+                    </group>
+                    <group string="Structured RPC matching (parsed request, never body text)">
+                        <group>
+                            <field name="rpc_service" placeholder="db"/>
+                            <field name="rpc_method" placeholder="export"/>
+                        </group>
+                        <group>
+                            <field name="rpc_model" placeholder="res.users"/>
+                            <field name="ids_max"/>
+                        </group>
+                        <field name="on_unverified"/>
+                    </group>
+                    <group string="Rate limit">
+                        <group>
+                            <field name="rate_max"
+                                   placeholder="0 = no rate limit"/>
+                            <field name="rate_window"
+                                   invisible="rate_max == 0"/>
+                        </group>
+                        <group>
+                            <field name="rate_key"
+                                   invisible="rate_max == 0"/>
+                            <field name="rate_param"
+                                   invisible="rate_max == 0 or rate_key != 'target'"/>
+                            <field name="rate_block_minutes"
+                                   invisible="rate_max == 0"/>
+                        </group>
+                    </group>
+                    <group string="Exempt networks (this policy only)">
+                        <field name="exempt_nets" nolabel="1"
+                               placeholder="203.0.113.0/24, 2001:db8::/32"/>
+                    </group>
+                    <group string="Notes">
+                        <field name="note" nolabel="1"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_waf_endpoint_policy_search" model="ir.ui.view">
+        <field name="name">waf.endpoint.policy.search</field>
+        <field name="model">waf.endpoint.policy</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="name"/>
+                <field name="code"/>
+                <field name="category"/>
+                <filter name="builtin" string="Built-in pack"
+                        domain="[('source','=','builtin')]"/>
+                <filter name="custom" string="Custom policies"
+                        domain="[('source','=','custom')]"/>
+                <filter name="blocking" string="Blocking"
+                        domain="[('action','=','block')]"/>
+                <filter name="rated" string="Rate-limited"
+                        domain="[('rate_max','>',0)]"/>
+                <separator/>
+                <filter name="archived" string="Archived"
+                        domain="[('active','=',False)]"/>
+                <filter name="group_category" string="Category"
+                        context="{'group_by': 'category'}"/>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_waf_endpoint_policy" model="ir.actions.act_window">
+        <field name="name">Endpoint Policies</field>
+        <field name="res_model">waf.endpoint.policy</field>
+        <field name="view_mode">list,form</field>
+        <field name="context">{'search_default_group_category': 1}</field>
+    </record>
+</odoo>

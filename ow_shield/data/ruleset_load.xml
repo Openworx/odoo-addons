@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Data files re-execute on every install and upgrade, so upgrades also
+         refresh the bundled rule pack; post_init_hook only fires on first install. -->
+    <function model="waf.rule" name="load_builtin_rules"/>
+    <function model="waf.endpoint.policy" name="load_builtin_policies"/>
+</odoo>

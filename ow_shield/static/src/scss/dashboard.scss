@@ -1,0 +1,125 @@
+.o_waf_dashboard {
+    // the web client's action container does not scroll; scroll the root
+    height: 100%;
+    overflow-y: auto;
+
+    .o_waf-tile {
+        cursor: pointer;
+        transition: transform .12s ease, box-shadow .12s ease;
+
+        &:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 14px rgba(0, 0, 0, .12);
+        }
+
+        .o_waf-tile-value {
+            font-size: 1.7rem;
+            font-weight: 600;
+            line-height: 1.1;
+        }
+
+        .o_waf-tile-label {
+            margin-top: .15rem;
+            font-size: .72rem;
+            letter-spacing: .04em;
+            text-transform: uppercase;
+            opacity: .65;
+        }
+    }
+
+    .o_waf-chart {
+        position: relative;
+        height: 280px;
+    }
+
+    .o_waf-map-svg {
+        display: block;
+        width: 100%;
+        height: 280px; // matches .o_waf-chart so the three cards align
+        background: #f7f8fa; // "sea" — the land shapes sit on this colour; dropping it leaves the card without an ocean
+        border-radius: 6px;
+
+        .o_waf-map-land {
+            fill: #e9e2ea;
+            stroke: rgba(108, 117, 125, .35);
+            stroke-width: .5;
+        }
+
+        .o_waf-map-country {
+            stroke: #fff;
+            stroke-width: .5;
+            transition: fill .3s ease;
+
+            &:hover {
+                stroke: #212529;
+                stroke-width: 1.2;
+            }
+        }
+    }
+
+    .o_waf-map-ramp {
+        display: inline-block;
+        width: 90px;
+        height: 10px;
+        border-radius: 5px;
+        background: linear-gradient(to right, #ffe3d7, #f9b79e, #ef8a6a, #e05c45, #c0392b, #8e1b13);
+    }
+
+    .o_waf-map-extra {
+        margin-top: .45rem;
+        font-size: .72rem;
+        line-height: 1.5;
+
+        > span {
+            margin-right: .65rem;
+            white-space: nowrap;
+        }
+
+        .o_waf-map-more {
+            padding: 0;
+            border: 0;
+            background: none;
+            font-size: .72rem;
+            color: #714B67;
+            text-decoration: underline;
+            cursor: pointer;
+        }
+    }
+
+    .o_waf-topcountry {
+        width: 5rem;
+        white-space: nowrap;
+        color: #6c757d;
+    }
+
+    .o_waf-topflag {
+        font-size: 1rem;
+        line-height: 1;
+    }
+
+    .o_waf-chart-empty {
+        position: absolute;
+        inset: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .o_waf-grade {
+        font-size: 2.4rem;
+        font-weight: 700;
+        line-height: 1;
+    }
+
+    .o_waf-recent {
+        font-size: .85rem;
+
+        td, th {
+            vertical-align: middle;
+        }
+
+        td.font-monospace {
+            word-break: break-all;
+        }
+    }
+}

@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_waf_rule_list" model="ir.ui.view">
+        <field name="name">waf.rule.list</field>
+        <field name="model">waf.rule</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="code" optional="hide"/>
+                <field name="name"/>
+                <field name="category"/>
+                <field name="scope"/>
+                <field name="pattern" optional="show"/>
+                <field name="action"/>
+                <field name="severity"/>
+                <field name="no_session" optional="show"/>
+                <field name="source" optional="show"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_waf_rule_form" model="ir.ui.view">
+        <field name="name">waf.rule.form</field>
+        <field name="model">waf.rule</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <div class="oe_title">
+                        <h1><field name="name" placeholder="Rule name"/></h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="category"/>
+                            <field name="scope"/>
+                            <field name="action"/>
+                            <field name="severity"/>
+                            <field name="code" readonly="1"/>
+                            <field name="source"/>
+                        </group>
+                        <group>
+                            <field name="no_session"/>
+                            <field name="case_sensitive"/>
+                            <field name="active"/>
+                        </group>
+                    </group>
+                    <group string="Pattern">
+                        <field name="pattern" nolabel="1"
+                               placeholder="python regular expression"/>
+                    </group>
+                    <group string="Rule tester" col="4">
+                        <field name="test_text" colspan="3"
+                               placeholder="paste a sample payload to test"/>
+                        <field name="test_result"/>
+                    </group>
+                    <group string="Notes">
+                        <field name="note" nolabel="1"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_waf_rule_search" model="ir.ui.view">
+        <field name="name">waf.rule.search</field>
+        <field name="model">waf.rule</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="name"/>
+                <field name="code"/>
+                <field name="category"/>
+                <filter name="builtin" string="Built-in pack"
+                        domain="[('source','=','builtin')]"/>
+                <filter name="custom" string="Custom rules"
+                        domain="[('source','=','custom')]"/>
+                <filter name="blocking" string="Blocking"
+                        domain="[('action','in',['block','auto'])]"/>
+                <separator/>
+                <filter name="archived" string="Archived"
+                        domain="[('active','=',False)]"/>
+                <filter name="group_category" string="Category"
+                        context="{'group_by': 'category'}"/>
+                <filter name="group_scope" string="Scope"
+                        context="{'group_by': 'scope'}"/>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_waf_rule" model="ir.actions.act_window">
+        <field name="name">Firewall Rules</field>
+        <field name="res_model">waf.rule</field>
+        <field name="view_mode">list,form</field>
+        <field name="context">{'search_default_group_category': 1}</field>
+    </record>
+</odoo>

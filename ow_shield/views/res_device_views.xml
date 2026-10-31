@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Device session admin view on core's res.device model (Odoo 19 tracks sessions natively). -->
+<odoo>
+    <record id="view_res_device_waf_list" model="ir.ui.view">
+        <field name="name">res.device.waf.list</field>
+        <field name="model">res.device</field>
+        <field name="arch" type="xml">
+            <list create="0" edit="0" delete="0"
+                  default_order="last_activity desc">
+                <field name="user_id"/>
+                <field name="display_name" string="Device"/>
+                <field name="device_type" optional="show"/>
+                <field name="platform" optional="hide"/>
+                <field name="browser" optional="show"/>
+                <field name="ip_address"/>
+                <field name="country" optional="show"/>
+                <field name="city" optional="hide"/>
+                <field name="first_activity" optional="hide"/>
+                <field name="last_activity" string="Last Activity"/>
+                <button name="action_revoke_session" type="object"
+                        string="Force logout" icon="fa-user-times"
+                        confirm="End this session now? The user will be logged out on their next request."/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_res_device_waf_form" model="ir.ui.view">
+        <field name="name">res.device.waf.form</field>
+        <field name="model">res.device</field>
+        <field name="arch" type="xml">
+            <form create="0" edit="0" delete="0">
+                <header>
+                    <button name="action_revoke_session" type="object"
+                            string="Force logout" class="btn-danger"
+                            confirm="End this session now? The user will be logged out on their next request."/>
+                </header>
+                <sheet>
+                    <div class="oe_title">
+                        <h1><field name="display_name"/></h1>
+                    </div>
+                    <group>
+                        <group string="Session">
+                            <field name="user_id"/>
+                            <field name="device_type"/>
+                            <field name="platform"/>
+                            <field name="browser"/>
+                            <field name="session_identifier" readonly="1"
+                                   copy="False"/>
+                        </group>
+                        <group string="Activity">
+                            <field name="ip_address" string="Last IP Address"/>
+                            <field name="country"/>
+                            <field name="city"/>
+                            <field name="first_activity"/>
+                            <field name="last_activity"/>
+                        </group>
+                    </group>
+                    <group string="All IP addresses seen for this session">
+                        <field name="linked_ip_addresses" nolabel="1"
+                               colspan="2"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_res_device_waf_search" model="ir.ui.view">
+        <field name="name">res.device.waf.search</field>
+        <field name="model">res.device</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="user_id"/>
+                <field name="ip_address"/>
+                <field name="platform" string="Platform / Browser"/>
+                <filter name="filter_today" string="Active Today"
+                        date="last_activity"/>
+                <group name="groupby">
+                    <filter name="group_user" string="User"
+                            context="{'group_by': 'user_id'}"/>
+                    <filter name="group_device" string="Device Type"
+                            context="{'group_by': 'device_type'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_ow_shield_sessions" model="ir.actions.act_window">
+        <field name="name">Active Sessions</field>
+        <field name="res_model">res.device</field>
+        <field name="view_mode">list,form</field>
+        <field name="view_ids" eval="[(5, 0, 0),
+            (0, 0, {'view_mode': 'list', 'view_id': ref('view_res_device_waf_list')}),
+            (0, 0, {'view_mode': 'form', 'view_id': ref('view_res_device_waf_form')})]"/>
+        <field name="search_view_id" ref="view_res_device_waf_search"/>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                No active sessions
+            </p>
+            <p>
+                Logged-in users and their devices appear here automatically.
+                Use <b>Force logout</b> to end a suspicious session instantly.
+            </p>
+        </field>
+    </record>
+</odoo>

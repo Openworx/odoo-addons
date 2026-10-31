@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_waf_exception_list" model="ir.ui.view">
+        <field name="name">waf.exception.list</field>
+        <field name="model">waf.exception</field>
+        <field name="arch" type="xml">
+            <list decoration-warning="expires and expires &lt; context_today()">
+                <field name="name"/>
+                <field name="rule_id" optional="show"/>
+                <field name="policy_id" optional="show"/>
+                <field name="route_re" optional="show"/>
+                <field name="methods" optional="show"/>
+                <field name="param" optional="show"/>
+                <field name="reason"/>
+                <field name="expires"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_waf_exception_form" model="ir.ui.view">
+        <field name="name">waf.exception.form</field>
+        <field name="model">waf.exception</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <div class="oe_title">
+                        <h1><field name="name"
+                                   placeholder="e.g. Nightly sync exports res.partner"/></h1>
+                    </div>
+                    <group>
+                        <group string="Target (at least one)">
+                            <field name="rule_id"/>
+                            <field name="policy_id"/>
+                        </group>
+                        <group string="Lifetime">
+                            <field name="expires"/>
+                            <field name="active"/>
+                        </group>
+                    </group>
+                    <group string="Scope narrowing">
+                        <group>
+                            <field name="route_re"
+                                   placeholder="^/web/export/ (empty = any)"/>
+                            <field name="methods"
+                                   placeholder="POST (empty = any)"/>
+                        </group>
+                        <group>
+                            <field name="param"
+                                   placeholder="model=res.partner"/>
+                        </group>
+                    </group>
+                    <group string="Reason (required, shown in the traffic log)">
+                        <field name="reason" nolabel="1"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_waf_exception_search" model="ir.ui.view">
+        <field name="name">waf.exception.search</field>
+        <field name="model">waf.exception</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="name"/>
+                <field name="reason"/>
+                <filter name="on_rule" string="On a rule"
+                        domain="[('rule_id','!=',False)]"/>
+                <filter name="on_policy" string="On an endpoint policy"
+                        domain="[('policy_id','!=',False)]"/>
+                <filter name="expiring" string="Expires soon"
+                        domain="[('expires','!=',False),('expires','&lt;',datetime.now())]"/>
+                <separator/>
+                <filter name="archived" string="Archived"
+                        domain="[('active','=',False)]"/>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_waf_exception" model="ir.actions.act_window">
+        <field name="name">Targeted Exceptions</field>
+        <field name="res_model">waf.exception</field>
+        <field name="view_mode">list,form</field>
+    </record>
+</odoo>

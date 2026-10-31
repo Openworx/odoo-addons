@@ -1,0 +1,11 @@
+// Odoo 19 caps form sheets at 1400px and pins them left for the chatter;
+// this record has no chatter, so the sheet spans the full width.
+.o_waf_config_form {
+    .o_form_sheet_bg {
+        max-width: none;
+    }
+
+    .o_waf_mode-banner {
+        font-size: 0.9rem;
+    }
+}

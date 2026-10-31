@@ -8,6 +8,7 @@
 | ow_mail_oauth | OAuth2 (Gmail / Microsoft 365) for ow_mail accounts |
 | ow_mcp_server | MCP server: exposes models and records safely to AI clients |
 | ow_mcp_oauth | OAuth 2.1 authorization server with Dynamic Client Registration for ow_mcp_server |
+| ow_shield | Web application firewall and security suite: request filtering, brute-force and master-password protection, session control, security scans |
 | ow_security_txt | `/.well-known/security.txt` (RFC 9116) |
 
 One branch per Odoo version (`18.0`, `19.0`, `20.0`). The 19.0 and 20.0 code of `ow_ai`, `ow_mcp_server` and

@@ -1,0 +1,182 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_waf_config_form" model="ir.ui.view">
+        <field name="name">waf.config.form</field>
+        <field name="model">waf.config</field>
+        <field name="arch" type="xml">
+            <form create="false" delete="false" class="o_waf_config_form">
+                <header>
+                    <button name="action_run_scan" type="object"
+                            string="Run Security Scan" class="btn-primary"/>
+                    <button name="action_allow_current_ip" type="object"
+                            string="Allow My Current IP (72h)"/>
+                    <button name="action_reload_rules" type="object"
+                            string="Reload Built-in Rules"/>
+                    <field name="mode" widget="statusbar"
+                           statusbar_visible="off,learning,enforce"/>
+                </header>
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button name="%(action_waf_rule)d" type="action"
+                                class="oe_stat_button" icon="fa-list">
+                            <field name="rule_count" widget="statinfo"
+                                   string="Rules"/>
+                        </button>
+                        <button name="%(action_waf_ip_entry)d" type="action"
+                                class="oe_stat_button" icon="fa-ban">
+                            <field name="block_count" widget="statinfo"
+                                   string="Blocked IPs"/>
+                        </button>
+                        <button name="%(action_waf_hit)d" type="action"
+                                class="oe_stat_button" icon="fa-exchange">
+                            <field name="hits_24h" widget="statinfo"
+                                   string="Hits 24h"/>
+                        </button>
+                        <button name="%(action_waf_hit)d" type="action"
+                                class="oe_stat_button" icon="fa-shield"
+                                context="{'search_default_blocked': 1}">
+                            <field name="blocked_24h" widget="statinfo"
+                                   string="Blocked 24h"/>
+                        </button>
+                        <button name="%(action_ow_shield_sessions)d"
+                                type="action" class="oe_stat_button"
+                                icon="fa-desktop">
+                            <field name="live_sessions" widget="statinfo"
+                                   string="Live Sessions"/>
+                        </button>
+                    </div>
+                    <div invisible="mode != 'learning'"
+                         class="alert alert-warning o_waf_mode-banner mb-3"
+                         role="alert">
+                        <b>Learning mode:</b> matching requests are logged but
+                        <b>not blocked</b>. Review the traffic log for a few
+                        days, then switch to <b>Enforce</b>.
+                    </div>
+                    <div invisible="mode != 'enforce'"
+                         class="alert alert-success o_waf_mode-banner mb-3"
+                         role="alert">
+                        <b>Enforce mode:</b> matching requests are blocked
+                        immediately and written to the traffic log.
+                    </div>
+                    <div invisible="mode != 'off'"
+                         class="alert alert-danger o_waf_mode-banner mb-3"
+                         role="alert">
+                        <b>The firewall is off:</b> rules neither block nor
+                        log; only manual block/allow entries apply.
+                    </div>
+                    <group>
+                        <group string="Traffic &amp; trust">
+                            <field name="trusted_proxies"/>
+                            <field name="country_mode"/>
+                            <field name="country_ids" widget="many2many_tags"
+                                   invisible="country_mode == 'off'"/>
+                        </group>
+                        <group string="Inspection &amp; retention">
+                            <field name="body_scan_max"/>
+                            <field name="retention_days"/>
+                            <field name="alert_email"
+                                   placeholder="secops@example.com"/>
+                        </group>
+                    </group>
+                    <group>
+                        <group string="Automatic IP lockout">
+                            <field name="auto_lockout_enabled"
+                                   string="Enabled" widget="boolean_toggle"/>
+                            <field name="auto_lockout_max"
+                                   invisible="not auto_lockout_enabled"/>
+                            <field name="auto_lockout_window"
+                                   invisible="not auto_lockout_enabled"/>
+                            <field name="auto_lockout_minutes"
+                                   invisible="not auto_lockout_enabled"/>
+                        </group>
+                        <group string="Login brute force">
+                            <field name="login_fail_enabled"
+                                   string="Enabled" widget="boolean_toggle"/>
+                            <field name="login_fail_max"
+                                   invisible="not login_fail_enabled"/>
+                            <field name="login_fail_window"
+                                   invisible="not login_fail_enabled"/>
+                            <field name="login_fail_minutes"
+                                   invisible="not login_fail_enabled"/>
+                        </group>
+                    </group>
+                    <group string="Database master password"
+                           col="1">
+                        <div class="row">
+                            <group colspan="4" col="4">
+                                <field name="master_bp_enabled"
+                                       string="Enabled"
+                                       widget="boolean_toggle"/>
+                                <field name="master_bp_max"
+                                       invisible="not master_bp_enabled"/>
+                                <field name="master_bp_window"
+                                       invisible="not master_bp_enabled"/>
+                                <field
+                                    name="master_bp_lockout_minutes"
+                                    invisible="not master_bp_enabled"/>
+                            </group>
+                        </div>
+                        <div class="text-muted">
+                            This counts <b>confirmed failed master-password
+                            checks</b> -- odoo's own verification decided
+                            "wrong password" -- across the database
+                            manager, XML-RPC and JSON-RPC at once, in one
+                            counter per source address shared by the
+                            whole instance. Two different mechanisms live
+                            on the <i>Endpoint policies</i> screen: the
+                            <b>database-manager policy</b> blocks the
+                            entire route group regardless of what is
+                            attempted, and <b>rate limits</b> count
+                            matching requests, not failed checks. The
+                            Nth failure here refuses only the
+                            db-management surface (never website or
+                            backend access) until the lockout expires;
+                            the alert e-mail carries a signed recovery
+                            link, and global allow entries are exempt as
+                            everywhere. A policy's own exempt networks do
+                            <i>not</i> exempt a network from master-
+                            password counting. While this module is in
+                            Learning mode no master-password lockout is
+                            enforced, <i>not even one that was started
+                            earlier in Enforce mode</i>; such a lockout
+                            keeps its expiry timer and blocks again if
+                            Enforce is re-enabled while it is still
+                            active.
+                            <button name="action_reset_master_counters"
+                                    type="object" class="btn-link"
+                                    string="Reset counters now"
+                                    confirm="End all master-password
+                                             failure windows and lift
+                                             active master-password
+                                             lockouts? Other protections
+                                             are not modified."/>
+                        </div>
+                    </group>
+                    <group>
+                        <group string="Live session control">
+                            <field name="session_idle_minutes"/>
+                        </group>
+                        <group string="Security scan defaults">
+                            <field name="scan_files" widget="boolean_toggle"/>
+                            <field name="scan_attachments"
+                                   widget="boolean_toggle"/>
+                        </group>
+                        <group string="Recovery links"
+                               groups="ow_shield.group_waf_manager">
+                            <field name="recover_secret" password="1"
+                                   readonly="1" copy="False"/>
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_waf_config" model="ir.actions.act_window">
+        <field name="name">Firewall Configuration</field>
+        <field name="res_model">waf.config</field>
+        <field name="view_mode">form</field>
+        <field name="res_id" eval="1"/>
+        <field name="target">current</field>
+    </record>
+</odoo>

@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_waf_hit_list" model="ir.ui.view">
+        <field name="name">waf.hit.list</field>
+        <field name="model">waf.hit</field>
+        <field name="arch" type="xml">
+            <list create="0" edit="0" decoration-danger="blocked"
+                  decoration-warning="action == 'log' and severity >= 4" default_order="id desc">
+                <field name="create_date" string="Time" widget="datetime"/>
+                <field name="ip"/>
+                <field name="country" optional="show"/>
+                <field name="method" optional="show"/>
+                <field name="path"/>
+                <field name="rule_name"/>
+                <field name="category" optional="show"/>
+                <field name="severity" optional="show"/>
+                <field name="mode" optional="hide"/>
+                <field name="action"/>
+                <field name="blocked"/>
+                <button name="action_block_ip" type="object" string="Block IP"
+                        icon="fa-ban"/>
+                <button name="action_allow_ip" type="object" string="Allow IP"
+                        icon="fa-shield"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_waf_hit_form" model="ir.ui.view">
+        <field name="name">waf.hit.form</field>
+        <field name="model">waf.hit</field>
+        <field name="arch" type="xml">
+            <form create="0" edit="0">
+                <header>
+                    <button name="action_block_ip" type="object" string="Block this IP"
+                            class="btn-danger"/>
+                    <button name="action_allow_ip" type="object" string="Allow this IP"/>
+                </header>
+                <sheet>
+                    <widget name="web_ribbon" title="Blocked" bg_color="text-bg-danger"
+                            invisible="not blocked"/>
+                    <div class="oe_title">
+                        <h1><field name="rule_name"/></h1>
+                    </div>
+                    <group>
+                        <group string="Request">
+                            <field name="create_date"/>
+                            <field name="ip"/>
+                            <field name="country"/>
+                            <field name="method"/>
+                            <field name="path"/>
+                            <field name="query"/>
+                            <field name="ua"/>
+                        </group>
+                        <group string="Decision">
+                            <field name="ref"/>
+                            <field name="kind"/>
+                            <field name="rule_id"/>
+                            <field name="category"/>
+                            <field name="severity"/>
+                            <field name="mode"/>
+                            <field name="action"/>
+                            <field name="blocked"/>
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_waf_hit_search" model="ir.ui.view">
+        <field name="name">waf.hit.search</field>
+        <field name="model">waf.hit</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="ip"/>
+                <field name="path"/>
+                <field name="rule_name"/>
+                <field name="category"/>
+                <filter name="blocked" string="Blocked" domain="[('blocked','=',True)]"/>
+                <filter name="unblocked" string="Logged only" domain="[('blocked','=',False)]"/>
+                <separator/>
+                <filter name="group_ip" string="Group by IP"
+                        context="{'group_by': 'ip'}"/>
+                <filter name="group_rule" string="Group by rule"
+                        context="{'group_by': 'rule_name'}"/>
+                <filter name="group_category" string="Group by category"
+                        context="{'group_by': 'category'}"/>
+                <filter name="group_date" string="Group by day"
+                        context="{'group_by': 'create_date:day'}"/>
+            </search>
+        </field>
+    </record>
+
+    <record id="view_waf_hit_graph" model="ir.ui.view">
+        <field name="name">waf.hit.graph</field>
+        <field name="model">waf.hit</field>
+        <field name="arch" type="xml">
+            <graph type="bar" sample="1">
+                <field name="create_date" interval="hour"/>
+            </graph>
+        </field>
+    </record>
+
+    <record id="view_waf_hit_pivot" model="ir.ui.view">
+        <field name="name">waf.hit.pivot</field>
+        <field name="model">waf.hit</field>
+        <field name="arch" type="xml">
+            <pivot>
+                <field name="category" type="row"/>
+                <field name="blocked" type="col"/>
+            </pivot>
+        </field>
+    </record>
+
+    <record id="action_waf_hit" model="ir.actions.act_window">
+        <field name="name">Traffic Log</field>
+        <field name="res_model">waf.hit</field>
+        <field name="view_mode">list,form</field>
+        <field name="context">{}</field>
+    </record>
+
+    <record id="action_waf_dashboard" model="ir.actions.act_window">
+        <field name="name">Traffic Analytics</field>
+        <field name="res_model">waf.hit</field>
+        <field name="view_mode">graph,pivot,list</field>
+        <field name="context">{'group_by': 'create_date:day'}</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">No firewall events yet</p>
+            <p>Requests matching a rule will show up here. While the firewall
+            runs in Learning mode nothing is blocked — review the hits, tune
+            the rules, then switch the mode to Enforce.</p>
+        </field>
+    </record>
+</odoo>

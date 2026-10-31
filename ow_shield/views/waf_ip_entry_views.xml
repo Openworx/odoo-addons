@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_waf_ip_entry_list" model="ir.ui.view">
+        <field name="name">waf.ip.entry.list</field>
+        <field name="model">waf.ip.entry</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="network"/>
+                <field name="kind" widget="badge"
+                       decoration-danger="kind == 'deny'" decoration-success="kind == 'allow'"/>
+                <field name="source"/>
+                <field name="reason"/>
+                <field name="expires"/>
+                <field name="active" column_invisible="1"/>
+                <button name="action_deactivate" type="object" string="Remove"
+                        icon="fa-trash"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_waf_ip_entry_form" model="ir.ui.view">
+        <field name="name">waf.ip.entry.form</field>
+        <field name="model">waf.ip.entry</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <div class="oe_title">
+                        <h1><field name="network"/></h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="kind"/>
+                            <field name="reason"/>
+                        </group>
+                        <group>
+                            <field name="source"/>
+                            <field name="expires"/>
+                            <field name="active"/>
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_waf_ip_entry_search" model="ir.ui.view">
+        <field name="name">waf.ip.entry.search</field>
+        <field name="model">waf.ip.entry</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="network"/>
+                <field name="reason"/>
+                <filter name="denied" string="Blocked" domain="[('kind','=','deny')]"/>
+                <filter name="allowed" string="Allowed" domain="[('kind','=','allow')]"/>
+                <filter name="auto" string="Automatic lockouts"
+                        domain="[('source','=','auto')]"/>
+                <filter name="archived" string="Expired/Removed"
+                        domain="[('active','=',False)]"/>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_waf_ip_entry" model="ir.actions.act_window">
+        <field name="name">Block &amp; Allow List</field>
+        <field name="res_model">waf.ip.entry</field>
+        <field name="view_mode">list,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">No IP entries yet</p>
+            <p>Blocked IPs are denied by Odoo itself before any routing
+            happens — no web-server configuration needed. Automatic lockouts
+            appear here when thresholds are reached.</p>
+        </field>
+    </record>
+</odoo>

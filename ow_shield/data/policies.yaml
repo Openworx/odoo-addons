@@ -1,0 +1,183 @@
+# Bundled built-in endpoint policies for OW Shield.
+# Structured route/RPC/operation policies, not attack signatures (those
+# live in ruleset.yaml). Each covers a complete route group or RPC service
+# as Odoo 19 defines it.
+#
+# action: log | block   (block refuses with the generic 403 only while the
+#           firewall runs in Enforce; learning mode never blocks either way)
+# rate_max: requests per rate_window minutes per rate_key; 0 = no rate limit
+# on_unverified: off | match, what to do when the request rides this
+#           policy's route group but its RPC operation could not be parsed
+#           (body padded past the parse cap): "match" = fail closed, the
+#           padding itself counts as the evasion attempt
+# defaults are conservative/log-only: flip to block once you know your traffic.
+policies:
+  # ------------------------------------------------ database management
+  - id: waf-ep-dbmanager
+    name: Odoo database manager (full route group)
+    category: odoo
+    route: '^/web/database(?:/|$)'
+    action: log
+    severity: 4
+    apply_pre_db: true
+    note: >
+      Covers every database-manager route Odoo 19 serves: selector,
+      manager, create, duplicate, drop, backup, restore, change_password
+      and the JSON list route. Default is LOG so you can never lock
+      yourself out; for production set action=block and add your
+      management VPN/network to this policy's exempt networks. apply_pre_db
+      keeps the group covered even for hosts that resolve to no database
+      at all (Odoo serves the manager without one). Normal backend access
+      through /web and /odoo is untouched by this policy. Counting the
+      FAILED MASTER-PASSWORD CHECKS themselves is a separate mechanism
+      (Firewall settings -> Database master password), not this policy.
+  - id: waf-ep-xmldb
+    name: Database service over XML-RPC
+    category: odoo
+    route: '^/xmlrpc/(?:2/)?db$'
+    action: log
+    severity: 4
+    note: >
+      The "db" service (list/create/dump/drop over master password) is
+      exposed on BOTH legacy XML-RPC route families: /xmlrpc/db and
+      /xmlrpc/2/db. The service name comes from the path itself, so this
+      holds even for malformed XML bodies. Set action=block when remote
+      database management is not needed; your app integrations keep
+      running (only the db service is refused, not common/object).
+  - id: waf-ep-jsonrpc-db
+    name: Database service over JSON-RPC
+    category: odoo
+    route: '^/jsonrpc$'
+    rpc_service: db
+    on_unverified: match
+    action: log
+    severity: 4
+    note: >
+      Structured match against the PARSED JSON-RPC envelope (params.service
+      == "db") -- not a text search of the body: a model, database or field
+      name containing "db" in ordinary business data cannot fire this.
+      on_unverified=match makes the restriction survive evasion by
+      padding: the envelope itself is parsed up to 512 KiB (far past the
+      signature-scan cap), and a body so huge that not even its operation
+      can be verified counts as matching -- while the action is Block,
+      such hidden-service requests are refused too, never just covered by
+      a partial-inspection note.
+  # ------------------------------------------------ legacy / external RPC
+  - id: waf-ep-xmlrpc
+    name: External XML-RPC endpoints
+    category: odoo
+    route: '^/xmlrpc(?:/|$)'
+    action: log
+    severity: 2
+    note: >
+      Every XML-RPC call (both /xmlrpc/<service> and /xmlrpc/2/<service>)
+      becomes visible in the traffic log. Odoo 19 ships these in the
+      auto-installed `rpc` module; if nothing in your stack speaks
+      XML-RPC anymore, set action=block to close the legacy surface.
+      The web client itself does NOT use XML-RPC.
+  - id: waf-ep-jsonrpc
+    name: External JSON-RPC endpoint (/jsonrpc)
+    category: odoo
+    route: '^/jsonrpc$'
+    action: log
+    severity: 2
+    note: >
+      The legacy service-style JSON-RPC root used by external client
+      libraries. The Odoo web client uses /web/dataset and /websocket
+      instead, so logging this costs nothing; block it when no
+      integration speaks it. /web/dataset is deliberately NOT covered:
+      the web client depends on it.
+  - id: waf-ep-json2
+    name: JSON view API (/json)
+    category: odoo
+    route: '^/json/'
+    action: log
+    severity: 2
+    note: >
+      Odoo 19's JSON-2 view endpoint family (/json/..., /json/1/...) used
+      by API-token integrations. Log first to learn who calls it, then
+      decide.
+  # ------------------------------------------------ account abuse limits
+  - id: waf-ep-signup
+    name: Signup request flood (per IP)
+    category: signup
+    route: '^/web/signup$'
+    methods: POST
+    action: block
+    severity: 4
+    rate_max: 15
+    rate_window: 10
+    rate_key: ip
+    rate_block_minutes: 15
+    note: >
+      Automated account creation from one source address is capped at 15
+      POSTs per 10 minutes; the IP is then auto-denied for 15 minutes
+      (entry expires by itself, recovery link mailed -- nothing here
+      locks anybody out permanently). Passwords never reach the traffic
+      log: bodies are not stored.
+  - id: waf-ep-reset-ip
+    name: Password-reset flood (per IP)
+    category: signup
+    route: '^/web/reset_password$'
+    methods: POST
+    action: block
+    severity: 4
+    rate_max: 10
+    rate_window: 10
+    rate_key: ip
+    rate_block_minutes: 15
+    note: >
+      One address hammering password resets is capped at 10 per 10
+      minutes, then auto-denied for 15 minutes. Limits are per window --
+      they can never accumulate into a permanent lockout.
+  - id: waf-ep-reset-account
+    name: Password-reset flood targeting one account
+    category: signup
+    route: '^/web/reset_password$'
+    methods: POST
+    action: log
+    severity: 4
+    rate_max: 25
+    rate_window: 10
+    rate_key: target
+    rate_param: login
+    note: >
+      Distributed flooding of resets for a SINGLE account (many IPs, one
+      victim) is visible the moment the account-wide counter crosses 25
+      per 10 minutes. Deliberately log-only: blocking on the account key
+      would let an attacker flood resets for a colleague's login and deny
+      THAT user their own password reset -- the exact deliberate-account-
+      lockout this feature must not create. The per-IP policies above do
+      the actual blocking. The targeted login is masked in logs
+      (first two characters only).
+  # ------------------------------------------------ expensive operations
+  - id: waf-ep-report
+    name: Report generation bursts (per user + IP)
+    category: report
+    route: '^/report/(?!barcode)'
+    action: log
+    severity: 3
+    rate_max: 100
+    rate_window: 10
+    rate_key: ip_user
+    ids_max: 500
+    note: >
+      Report renders are counted per authenticated user+IP (falls back to
+      IP for anonymous); the doc-id segment of /report/<mimetype>/<report>/<ids>
+      is counted too, and > 500 ids in one render is flagged. Default is
+      log-only: scheduled integrations and legitimate batch exports must
+      be observable before anything blocks them. Barcode rendering is
+      cheap and excluded.
+  - id: waf-ep-export
+    name: List export bursts (per user + IP)
+    category: export
+    route: '^/web/export/(?:csv|xlsx)$'
+    action: log
+    severity: 3
+    rate_max: 40
+    rate_window: 10
+    rate_key: ip_user
+    note: >
+      CSV/XLSX export calls counted per authenticated user+IP. Log-only
+      by default; tune the limit (and action) to your own reporting
+      rhythm before ever blocking.

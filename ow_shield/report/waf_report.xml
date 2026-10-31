@@ -1,0 +1,440 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="action_report_waf_scan" model="ir.actions.report">
+        <field name="name">Security Report (PDF)</field>
+        <field name="model">waf.scan</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">ow_shield.report_waf_scan</field>
+        <field name="report_file">ow_shield.report_waf_scan</field>
+        <field name="binding_model_id" ref="model_waf_scan"/>
+        <field name="binding_type">report</field>
+    </record>
+
+    <!-- Accent color: Odoo brand purple #714B67. Floats and tables only:
+         wkhtmltopdf renders them more reliably than flexbox. -->
+    <template id="report_waf_scan">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="scan">
+                <t t-call="web.external_layout">
+                    <t t-set="meta" t-value="scan.report_meta()"/>
+                    <t t-set="findings" t-value="scan.report_numbered_findings()"/>
+                    <t t-set="sevbar" t-value="scan.report_severity_counts()"/>
+                    <t t-set="actions" t-value="scan.report_priority_actions()"/>
+                    <t t-set="remediation" t-value="scan.report_remediation()"/>
+                    <t t-set="posture" t-value="scan.report_posture()"/>
+                    <t t-set="scope" t-value="scan.report_scope()"/>
+                    <t t-set="incomplete" t-value="scan.state != 'done'"/>
+
+                    <!-- hero band -->
+                    <div style="background:#714B67;color:#ffffff;padding:16px 18px;
+                                margin-bottom:16px;page-break-inside:avoid">
+                        <table style="width:100%;border-collapse:collapse">
+                            <tr>
+                                <td style="vertical-align:top">
+                                    <div style="font-size:21px;font-weight:800;
+                                                letter-spacing:1px">OW SHIELD
+                                    </div>
+                                    <div style="font-size:8.5px;letter-spacing:3px;
+                                                color:#d9c9d1;margin-top:4px">ODOO SECURITY
+                                        HEALTHCHECK
+                                    </div>
+                                    <div style="font-size:9px;color:#c3adb9;margin-top:3px">
+                                        WAF and security scanner running inside the Odoo
+                                        application server
+                                    </div>
+                                </td>
+                                <td style="text-align:right;vertical-align:top;width:38%">
+                                    <div style="display:inline-block;border:1px solid #a88ba0;
+                                                padding:2px 9px;font-size:8.5px;font-weight:700;
+                                                letter-spacing:2px">CONFIDENTIAL
+                                    </div>
+                                    <div style="font-size:18px;font-weight:700;margin-top:8px"
+                                         t-out="meta['organization']"/>
+                                    <div style="font-size:9.5px;color:#d9c9d1;
+                                                font-family:monospace;margin-top:2px">
+                                        Run on <t t-out="meta['run_on']"/>
+                                    </div>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+
+                    <!-- result: grade tile + score + severity stack. A draft or
+                         error scan never shows a grade: an interrupted run must
+                         not read as a clean bill of health. -->
+                    <div t-if="incomplete"
+                         style="border:1px solid #b02a37;border-left:5px solid
+                                #b02a37;padding:12px 14px;margin-bottom:20px;
+                                page-break-inside:avoid">
+                        <div style="font-size:13px;font-weight:700;color:#b02a37;
+                                    letter-spacing:1px">INCOMPLETE SCAN
+                        </div>
+                        <p style="margin:6px 0 0">This scan did not finish
+                            (state: <b t-out="scan.state"/>). No grade or severity
+                            summary is shown, and any partial findings below are not
+                            a complete assessment. Re-run the scan before acting on
+                            this report.
+                        </p>
+                    </div>
+                    <div t-else="" style="page-break-inside:avoid;margin-bottom:20px">
+                        <table style="width:100%;border-collapse:collapse">
+                            <tr>
+                                <td style="width:100px;vertical-align:top">
+                                    <div t-attf-style="width:88px;height:88px;line-height:88px;
+                                        text-align:center;color:#ffffff;font-size:46px;
+                                        font-weight:800;
+                                        background:{{ scan.report_grade_color() }}"
+                                         t-out="scan.grade or '—'"/>
+                                </td>
+                                <td style="vertical-align:top;padding-left:6px">
+                                    <div style="font-size:8.5px;color:#868e96;
+                                                letter-spacing:2px">HEALTHCHECK RESULT
+                                    </div>
+                                    <div style="margin-top:1px">
+                                        <span t-attf-style="font-size:22px;font-weight:800;
+                                            color:{{ scan.report_grade_color() }}">Grade
+                                            <t t-out="scan.grade or '—'"/></span>
+                                        <span style="font-size:13px;color:#6c757d"> · Score
+                                            <b style="font-size:15px;color:#212529"
+                                               t-out="scan.score"/>/100
+                                        </span>
+                                    </div>
+                                    <t t-if="sevbar">
+                                        <table style="width:100%;height:12px;
+                                                      border-collapse:collapse;margin-top:10px">
+                                            <tr>
+                                                <td t-foreach="sevbar" t-as="seg"
+                                                    t-attf-style="width:{{ seg['pct'] }}%;
+                                                    background:{{ seg['color'] }};
+                                                    padding:0;font-size:0"/>
+                                            </tr>
+                                        </table>
+                                        <div style="margin-top:5px;font-size:10px;color:#495057">
+                                            <span t-foreach="sevbar" t-as="seg"
+                                                  style="margin-right:14px">
+                                                <span t-attf-style="display:inline-block;
+                                                    width:8px;height:8px;
+                                                    background:{{ seg['color'] }}"/>
+                                                <t t-out="seg['label']"/>
+                                                <b t-out="seg['count']"/>
+                                            </span>
+                                        </div>
+                                    </t>
+                                    <div t-else="" style="margin-top:8px;font-size:11px;
+                                                         color:#1a7f37">No findings were
+                                        recorded by this scan.
+                                    </div>
+                                </td>
+                            </tr>
+                        </table>
+                        <table style="width:100%;border-collapse:collapse;font-size:10.5px;
+                                      margin-top:14px">
+                            <tr>
+                                <td style="width:130px;color:#868e96;font-size:9px;
+                                          letter-spacing:.5px;padding:5px 0;
+                                          border-bottom:1px solid #e9ecef">INSTANCE URL</td>
+                                <td style="padding:5px 16px 5px 0;font-family:monospace;
+                                          border-bottom:1px solid #e9ecef"
+                                    t-out="meta['url']"/>
+                                <td style="width:130px;color:#868e96;font-size:9px;
+                                          letter-spacing:.5px;padding:5px 0;
+                                          border-bottom:1px solid #e9ecef">DATABASE</td>
+                                <td style="padding:5px 0;font-family:monospace;
+                                          border-bottom:1px solid #e9ecef"
+                                    t-out="meta['database']"/>
+                            </tr>
+                            <tr>
+                                <td style="color:#868e96;font-size:9px;letter-spacing:.5px;
+                                          padding:5px 0;border-bottom:1px solid #e9ecef">ODOO VERSION</td>
+                                <td style="padding:5px 16px 5px 0;font-family:monospace;
+                                          border-bottom:1px solid #e9ecef"
+                                    t-out="meta['version']"/>
+                                <td style="color:#868e96;font-size:9px;letter-spacing:.5px;
+                                          padding:5px 0;border-bottom:1px solid #e9ecef">TOTAL FINDINGS</td>
+                                <td style="padding:5px 0;font-family:monospace;
+                                          border-bottom:1px solid #e9ecef"
+                                    t-out="meta['total']"/>
+                            </tr>
+                            <tr>
+                                <td style="color:#868e96;font-size:9px;letter-spacing:.5px;
+                                          padding:5px 0;border-bottom:1px solid #e9ecef">OPEN CRITICAL / HIGH</td>
+                                <td style="padding:5px 16px 5px 0;font-family:monospace;
+                                          font-weight:700;color:#b02a37;
+                                          border-bottom:1px solid #e9ecef"
+                                    t-out="meta['danger']"/>
+                                <td style="border-bottom:1px solid #e9ecef"> </td>
+                                <td style="border-bottom:1px solid #e9ecef"> </td>
+                            </tr>
+                        </table>
+                    </div>
+
+                    <!-- contents -->
+                    <div t-if="findings" style="page-break-inside:avoid;
+                                margin-bottom:16px">
+                        <div style="border-left:4px solid #714B67;
+                                    padding-left:8px;font-size:14px;
+                                    font-weight:700;margin-bottom:6px">Contents
+                        </div>
+                        <table style="width:100%;border-collapse:collapse;
+                                      font-size:11px">
+                            <tr t-foreach="findings" t-as="fd">
+                                <td style="width:42px;padding:3px 8px 3px 0;
+                                          border-bottom:1px dotted #dee2e6;
+                                          font-family:monospace;color:#714B67;
+                                          font-weight:700"
+                                    t-out="fd['ref']"/>
+                                <td style="padding:3px 8px 3px 0;
+                                          border-bottom:1px dotted #dee2e6">
+                                    <span t-attf-style="display:inline-block;
+                                        padding:1px 6px;border-radius:3px;
+                                        color:#ffffff;font-size:9px;
+                                        font-weight:700;white-space:nowrap;
+                                        background:{{ fd['ui']['color'] }}"
+                                          t-out="fd['ui']['label']"/>
+                                </td>
+                                <td style="padding:3px 0;
+                                          border-bottom:1px dotted #dee2e6"
+                                    t-out="fd['name']"/>
+                            </tr>
+                        </table>
+                    </div>
+
+                    <!-- summary (only for completed scans) -->
+                    <div t-if="not incomplete"
+                         style="border:1px solid #dee2e6;padding:10px 14px;
+                                margin-bottom:18px;page-break-inside:avoid">
+                        <div style="border-left:4px solid #714B67;
+                                    padding-left:8px;font-size:14px;
+                                    font-weight:700;margin-bottom:6px">Summary
+                        </div>
+                        <p style="margin:0 0 6px"
+                           t-out="scan.report_summary_text()"/>
+                        <t t-if="actions">
+                            <div style="font-weight:700">Priority actions:</div>
+                            <ol style="padding-left:18px;margin:4px 0 0">
+                                <li t-foreach="actions" t-as="a"
+                                    style="margin-bottom:3px">
+                                    <b><span style="font-family:monospace;
+                                        color:#714B67" t-out="a['ref']"/>
+                                        · <t t-out="a['name']"/></b>
+                                    – <t t-out="a['recommendation']"/>
+                                </li>
+                            </ol>
+                        </t>
+                    </div>
+
+                    <!-- findings -->
+                    <div style="color:#714B67;font-size:16px;font-weight:700;
+                                margin:0 0 8px">Findings and recommendations
+                    </div>
+                    <t t-if="not findings">
+                        <p style="color:#6c757d">No findings — nothing was
+                            checked or everything passed.</p>
+                    </t>
+                    <div t-foreach="findings" t-as="fd"
+                         style="padding:9px 0;border-bottom:1px solid #e9ecef;
+                                page-break-inside:avoid;overflow:hidden">
+                        <span t-attf-style="float:right;font-weight:600;
+                            font-size:10.5px;color:{{ fd['ui']['color'] }}"
+                              t-out="fd['ui']['label']"/>
+                        <div style="font-size:12.5px;font-weight:700">
+                            <span style="font-family:monospace;color:#714B67"
+                                  t-out="fd['ref']"/>
+                            <span style="padding-left:8px" t-out="fd['name']"/>
+                        </div>
+                        <p t-if="fd['message']" style="margin:4px 0 0"
+                           t-out="fd['message']"/>
+                        <p t-if="fd['path']" style="margin:4px 0 0;
+                           font-family:monospace;color:#495057"
+                           t-out="fd['path']"/>
+                        <p t-if="fd['recommendation']" style="margin:5px 0 0">
+                            <b>Recommendation:</b>
+                            <t t-out="fd['recommendation']"/>
+                        </p>
+                    </div>
+
+                    <!-- remediation checklist -->
+                    <div style="page-break-inside:avoid;margin-top:18px">
+                        <div style="border-left:4px solid #714B67;
+                                    padding-left:8px;font-size:14px;
+                                    font-weight:700;margin-bottom:6px">Remediation checklist
+                        </div>
+                        <t t-if="remediation">
+                            <table style="width:100%;border-collapse:collapse;
+                                          font-size:10.5px">
+                                <tr>
+                                    <th style="text-align:left;padding:3px 6px;
+                                               font-size:9px;letter-spacing:.5px;
+                                               color:#6c757d;font-weight:700;
+                                               border-bottom:2px solid #714B67">Ref</th>
+                                    <th style="text-align:left;padding:3px 6px;
+                                               font-size:9px;letter-spacing:.5px;
+                                               color:#6c757d;font-weight:700;
+                                               border-bottom:2px solid #714B67">Finding</th>
+                                    <th style="text-align:left;padding:3px 6px;
+                                               font-size:9px;letter-spacing:.5px;
+                                               color:#6c757d;font-weight:700;
+                                               border-bottom:2px solid #714B67">Severity</th>
+                                    <th style="text-align:left;padding:3px 6px;
+                                               width:80px;font-size:9px;
+                                               letter-spacing:.5px;color:#6c757d;
+                                               font-weight:700;
+                                               border-bottom:2px solid #714B67">Status</th>
+                                    <th style="text-align:left;padding:3px 6px;
+                                               width:80px;font-size:9px;
+                                               letter-spacing:.5px;color:#6c757d;
+                                               font-weight:700;
+                                               border-bottom:2px solid #714B67">Owner</th>
+                                    <th style="text-align:left;padding:3px 6px;
+                                               width:60px;font-size:9px;
+                                               letter-spacing:.5px;color:#6c757d;
+                                               font-weight:700;
+                                               border-bottom:2px solid #714B67">Due</th>
+                                </tr>
+                                <tr t-foreach="remediation" t-as="r">
+                                    <td style="padding:4px 6px;font-family:monospace;
+                                               color:#714B67;font-weight:700;
+                                               border-bottom:1px solid #e9ecef"
+                                        t-out="r['ref']"/>
+                                    <td style="padding:4px 6px;
+                                               border-bottom:1px solid #e9ecef"
+                                        t-out="r['name']"/>
+                                    <td t-attf-style="padding:4px 6px;white-space:nowrap;
+                                               color:{{ r['ui']['color'] }};
+                                               font-weight:700;
+                                               border-bottom:1px solid #e9ecef"
+                                        t-out="r['ui']['label']"/>
+                                    <td style="border-bottom:1px solid #e9ecef;
+                                               padding:4px 6px"> </td>
+                                    <td style="border-bottom:1px solid #e9ecef;
+                                               padding:4px 6px"> </td>
+                                    <td style="border-bottom:1px solid #e9ecef;
+                                               padding:4px 6px"> </td>
+                                </tr>
+                            </table>
+                            <div style="font-size:9px;color:#868e96;margin-top:4px">
+                                Fill in Status / Owner / Due during follow-up to
+                                track each item to closure.
+                            </div>
+                        </t>
+                        <div t-else="" style="font-size:11px;color:#1a7f37">
+                            No critical or high findings — nothing to schedule.
+                        </div>
+                    </div>
+
+                    <!-- WAF posture at scan time (snapshotted by action_run) -->
+                    <div style="page-break-inside:avoid;margin-top:18px">
+                        <div style="border-left:4px solid #714B67;
+                                    padding-left:8px;font-size:14px;
+                                    font-weight:700;margin-bottom:6px">WAF posture at scan time
+                        </div>
+                        <t t-if="posture">
+                            <table style="width:100%;border-collapse:collapse;
+                                          font-size:10.5px">
+                                <tr>
+                                    <td style="color:#6c757d;width:34%;
+                                               padding:2px 8px 2px 0;
+                                               border-bottom:1px solid #e9ecef">Firewall mode</td>
+                                    <td style="font-family:monospace;
+                                               border-bottom:1px solid #e9ecef"
+                                        t-out="posture['mode']"/>
+                                </tr>
+                                <tr>
+                                    <td style="color:#6c757d;
+                                               padding:2px 8px 2px 0;
+                                               border-bottom:1px solid #e9ecef">Country filter</td>
+                                    <td style="font-family:monospace;
+                                               border-bottom:1px solid #e9ecef"
+                                        t-out="posture['country']"/>
+                                </tr>
+                                <tr>
+                                    <td style="color:#6c757d;
+                                               padding:2px 8px 2px 0;
+                                               border-bottom:1px solid #e9ecef">Rules</td>
+                                    <td style="font-family:monospace;
+                                               border-bottom:1px solid #e9ecef">
+                                        <t t-out="posture['rules_active']"/> active
+                                        (<t t-out="posture['rules_custom']"/> custom,
+                                        <t t-out="posture['rules_off']"/> disabled)
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="color:#6c757d;
+                                               padding:2px 8px 2px 0;
+                                               border-bottom:1px solid #e9ecef">IP entries</td>
+                                    <td style="font-family:monospace;
+                                               border-bottom:1px solid #e9ecef">
+                                        <t t-out="posture['ip_allow']"/> allow ·
+                                        <t t-out="posture['ip_deny']"/> deny
+                                        (<t t-out="posture['auto_lockouts']"/> automatic lockouts)
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="color:#6c757d;
+                                               padding:2px 8px 2px 0;
+                                               border-bottom:1px solid #e9ecef">Auto lockout</td>
+                                    <td style="font-family:monospace;
+                                               border-bottom:1px solid #e9ecef"
+                                        t-out="posture['lockout']"/>
+                                </tr>
+                                <tr>
+                                    <td style="color:#6c757d;
+                                               padding:2px 8px 2px 0;
+                                               border-bottom:1px solid #e9ecef">Login-failure lockout</td>
+                                    <td style="font-family:monospace;
+                                               border-bottom:1px solid #e9ecef"
+                                        t-out="posture['login_lockout']"/>
+                                </tr>
+                                <tr>
+                                    <td style="color:#6c757d;
+                                               padding:2px 8px 2px 0;
+                                               border-bottom:1px solid #e9ecef">Traffic last 24 h</td>
+                                    <td style="font-family:monospace;
+                                               border-bottom:1px solid #e9ecef">
+                                        <t t-out="posture['hits_24h']"/> matched,
+                                        <t t-out="posture['blocked_24h']"/> blocked
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="color:#6c757d;
+                                               padding:2px 8px 2px 0">Snapshot captured</td>
+                                    <td style="font-family:monospace;color:#868e96"
+                                        t-out="posture['captured']"/>
+                                </tr>
+                            </table>
+                        </t>
+                        <div t-else="" style="font-size:10.5px;color:#868e96">
+                            No posture snapshot was stored for this scan —
+                            re-run it to capture the firewall state at scan time.
+                        </div>
+                    </div>
+
+                    <!-- scan scope footer -->
+                    <div style="margin-top:18px;border-top:2px solid #714B67;
+                                padding-top:6px;page-break-inside:avoid">
+                        <div style="font-size:9px;color:#6c757d;
+                                    letter-spacing:1px;text-transform:uppercase;
+                                    margin-bottom:3px">Scan scope
+                        </div>
+                        <span t-foreach="scope['items']" t-as="item"
+                              t-attf-style="margin-right:14px;font-size:10px;
+                                          color:{{ item[1] and '#495057' or '#adb5bd' }}">
+                            <t t-out="item[1] and '✓' or '—'"/>
+                            <t t-out="item[0]"/>
+                        </span>
+                        <div style="font-size:9.5px;color:#868e96;margin-top:3px">
+                            Duration <t t-out="scope['duration']"/> ·
+                            Database <t t-out="meta['database']"/> ·
+                            Odoo <t t-out="meta['version']"/>
+                        </div>
+                        <div t-if="incomplete"
+                             style="font-size:9.5px;color:#b02a37;margin-top:3px">
+                            Scan incomplete — not all checks above were
+                            necessarily executed.
+                        </div>
+                    </div>
+                </t>
+            </t>
+        </t>
+    </template>
+</odoo>
