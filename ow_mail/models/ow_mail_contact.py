@@ -22,6 +22,7 @@ class OwMailContact(models.Model):
     """
 
     _name = "ow.mail.contact"
+    _inherit = ["ow.mail.owned.mixin"]
     _description = "OW Mail Contact"
     _order = "last_used desc, name"
 

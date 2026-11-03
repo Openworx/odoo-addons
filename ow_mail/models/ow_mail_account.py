@@ -58,6 +58,7 @@ class OwMailAccount(models.Model):
     """
 
     _name = "ow.mail.account"
+    _inherit = ["ow.mail.owned.mixin"]
     _description = "OW Mail Account"
     _order = "sequence, id"
 
