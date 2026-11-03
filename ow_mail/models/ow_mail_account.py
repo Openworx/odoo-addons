@@ -18,6 +18,9 @@ from odoo.tools import html_sanitize
 
 _logger = logging.getLogger(__name__)
 
+# Seconds any one IMAP socket operation may take; see _imap_connect.
+_IMAP_TIMEOUT = 30
+
 SPECIAL_USE_MAP = {
     "\\Inbox": "inbox",
     "\\Sent": "sent",
@@ -242,13 +245,20 @@ class OwMailAccount(models.Model):
         context verifies neither. Self-signed certificates used in dev
         (GreenMail) are therefore rejected — disable SSL in the account
         settings for those.
+
+        Every socket operation times out after ``_IMAP_TIMEOUT`` seconds, as
+        SMTP does after 30: without one, a server that stops answering holds
+        the HTTP worker, or the counts cron and every account queued behind
+        it, until Odoo's time limit kills the worker.
         """
         self.ensure_one()
         if self.imap_ssl:
             conn = imaplib.IMAP4_SSL(self.imap_host, self.imap_port,
-                                     ssl_context=ssl.create_default_context())
+                                     ssl_context=ssl.create_default_context(),
+                                     timeout=_IMAP_TIMEOUT)
         else:
-            conn = imaplib.IMAP4(self.imap_host, self.imap_port)
+            conn = imaplib.IMAP4(self.imap_host, self.imap_port,
+                                 timeout=_IMAP_TIMEOUT)
         self._imap_authenticate(conn)
         return conn
 

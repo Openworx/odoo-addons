@@ -54,4 +54,6 @@ class TestImapTls(TransactionCase):
         with patch.object(imaplib, "IMAP4", MagicMock()) as imap_plain, \
                 patch.object(type(self.account), "_imap_authenticate"):
             self.account._imap_connect()
-        imap_plain.assert_called_once_with("imap.ow.test", 993)
+        imap_plain.assert_called_once()
+        self.assertEqual(imap_plain.call_args.args, ("imap.ow.test", 993))
+        self.assertNotIn("ssl_context", imap_plain.call_args.kwargs)
