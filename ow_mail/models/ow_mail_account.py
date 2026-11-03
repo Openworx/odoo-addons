@@ -10,6 +10,7 @@ from email.message import EmailMessage
 
 from odoo import api, fields, models
 
+from .ow_mail_imap import expunge_uids as _expunge_uids
 from .ow_mail_imap import imap_mbox_quote as _mbox
 from .ow_mail_imap import normalize_recipients as _normalize_recipients
 from .ow_mail_imap import parse_recipients as _parse_recipients
@@ -1123,7 +1124,7 @@ class OwMailAccount(models.Model):
                     if typ2 == "OK":
                         imap.uid("STORE", str(int(replace_uid)),
                                  "+FLAGS", r"(\Deleted)")
-                        imap.expunge()
+                        _expunge_uids(imap, str(int(replace_uid)))
                 except Exception as e:
                     _logger.info("draft replace cleanup failed (%s uid %s): %s",
                                  self.email, replace_uid, e)
@@ -1157,7 +1158,7 @@ class OwMailAccount(models.Model):
             if typ != "OK":
                 return False
             imap.uid("STORE", str(int(uid)), "+FLAGS", r"(\Deleted)")
-            imap.expunge()
+            _expunge_uids(imap, str(int(uid)))
         finally:
             imap.logout()
         return True

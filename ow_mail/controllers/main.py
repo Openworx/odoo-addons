@@ -1296,26 +1296,16 @@ class OwMailController(http.Controller):
                         return _imap_err("Target folder missing")
                     if target.account_id.id != folder.account_id.id:
                         return _imap_err("Cross-account move is not supported")
-                    target_mbox = imap_utils.imap_mbox_quote(target.full_path)
-                    try:
-                        conn.uid("MOVE", uid_set, target_mbox)
-                    except Exception:
-                        conn.uid("COPY", uid_set, target_mbox)
-                        conn.uid("STORE", uid_set, "+FLAGS", "(\\Deleted)")
-                        conn.expunge()
+                    imap_utils.move_uids(
+                        conn, uid_set, imap_utils.imap_mbox_quote(target.full_path))
                 elif action == "delete":
                     trash = folder.account_id.trash_folder_id
                     if trash and trash != folder:
-                        trash_mbox = imap_utils.imap_mbox_quote(trash.full_path)
-                        try:
-                            conn.uid("MOVE", uid_set, trash_mbox)
-                        except Exception:
-                            conn.uid("COPY", uid_set, trash_mbox)
-                            conn.uid("STORE", uid_set, "+FLAGS", "(\\Deleted)")
-                            conn.expunge()
+                        imap_utils.move_uids(
+                            conn, uid_set, imap_utils.imap_mbox_quote(trash.full_path))
                     else:
                         conn.uid("STORE", uid_set, "+FLAGS", "(\\Deleted)")
-                        conn.expunge()
+                        imap_utils.expunge_uids(conn, uid_set)
                 elif action in ("add_tag", "remove_tag"):
                     # Bulk tagging: single +/-FLAGS on the whole uid set — no
                     # per-uid FETCH needed (unlike set_tags, which diffs the

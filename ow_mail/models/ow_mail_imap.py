@@ -602,6 +602,55 @@ def imap_session(account, folder_path=None, readonly=False):
             pass
 
 
+def _check_ok(command, typ, data):
+    """Raise unless an IMAP command answered OK.
+
+    imaplib raises only on a ``BAD`` response; a ``NO`` (over quota, missing
+    mailbox, permission denied) comes back as a return value, and a caller
+    that does not look at it carries on as if the command had worked.
+    """
+    if typ != "OK":
+        detail = b" ".join(d for d in data or [] if isinstance(d, bytes))
+        raise imaplib.IMAP4.error(
+            f"{command} failed: {detail.decode(errors='replace') or typ}")
+
+
+def expunge_uids(conn, uid_set):
+    """Permanently remove ``uid_set``, already flagged ``\\Deleted``.
+
+    ``UID EXPUNGE`` (UIDPLUS, RFC 4315) removes only those messages. A plain
+    ``EXPUNGE`` removes every ``\\Deleted`` message in the mailbox, including
+    ones another client has flagged and not yet purged, so it is used only
+    when the server rejects ``UID EXPUNGE``.
+    """
+    try:
+        typ, data = conn.uid("EXPUNGE", uid_set)
+    except imaplib.IMAP4.error:
+        typ, data = conn.expunge()
+    _check_ok("EXPUNGE", typ, data)
+
+
+def move_uids(conn, uid_set, target_mbox):
+    """Move ``uid_set`` to ``target_mbox``, which must already be quoted.
+
+    Uses ``UID MOVE`` (RFC 6851). A server without MOVE rejects it with
+    ``BAD``; the messages are then copied, and the originals are flagged
+    ``\\Deleted`` and expunged only once the copy has succeeded. A ``NO`` to
+    MOVE is the server refusing this move, not lacking the command, so it is
+    raised rather than retried as a copy.
+    """
+    try:
+        typ, data = conn.uid("MOVE", uid_set, target_mbox)
+    except imaplib.IMAP4.error:
+        typ, data = conn.uid("COPY", uid_set, target_mbox)
+        _check_ok("COPY", typ, data)
+        typ, data = conn.uid("STORE", uid_set, "+FLAGS", "(\\Deleted)")
+        _check_ok("STORE", typ, data)
+        expunge_uids(conn, uid_set)
+        return
+    _check_ok("MOVE", typ, data)
+
+
 def fetch_full(conn, uid):
     """UID FETCH the full body without touching \\Seen.
 
