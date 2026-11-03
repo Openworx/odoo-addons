@@ -59,16 +59,17 @@ class OwMailConnectWizard(models.TransientModel):
                 # Verify the certificate, as _probe_smtp does: imaplib's
                 # default context does not.
                 conn = imaplib.IMAP4_SSL(self.imap_host, self.imap_port,
-                                         ssl_context=ssl_mod.create_default_context())
+                                         ssl_context=ssl_mod.create_default_context(),
+                                         timeout=15)
             else:
-                conn = imaplib.IMAP4(self.imap_host, self.imap_port)
+                conn = imaplib.IMAP4(self.imap_host, self.imap_port, timeout=15)
         except (OSError, imaplib.IMAP4.error) as e:
             raise UserError(self.env._("Cannot reach IMAP server %s:%s — %s")
                             % (self.imap_host, self.imap_port, e))
         try:
             try:
                 conn.login(login, self.password)
-            except imaplib.IMAP4.error as e:
+            except (OSError, imaplib.IMAP4.error) as e:
                 raise UserError(self.env._("IMAP login failed for %s — %s")
                                 % (login, e))
         finally:
