@@ -17,8 +17,10 @@ class OwMailFolder(models.Model):
     """
 
     _name = "ow.mail.folder"
+    _inherit = ["ow.mail.owned.mixin"]
     _description = "OW Mail Folder"
     _order = "kind, name"
+    _ow_owner_field = "account_id"
 
     account_id = fields.Many2one("ow.mail.account", required=True, ondelete="cascade")
     user_id = fields.Many2one(related="account_id.user_id", store=True)

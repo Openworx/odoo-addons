@@ -10,6 +10,7 @@ from odoo import api, fields, models
 
 class OwMailPreferences(models.Model):
     _name = "ow.mail.preferences"
+    _inherit = ["ow.mail.owned.mixin"]
     _description = "OW Mail Preferences"
 
     user_id = fields.Many2one(

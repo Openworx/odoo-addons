@@ -14,6 +14,7 @@ class OwMailTrustedSender(models.Model):
     """
 
     _name = "ow.mail.trusted.sender"
+    _inherit = ["ow.mail.owned.mixin"]
     _description = "OW Mail Trusted Sender"
 
     user_id = fields.Many2one("res.users", required=True,

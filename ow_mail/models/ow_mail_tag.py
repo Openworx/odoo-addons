@@ -51,6 +51,7 @@ class OwMailTag(models.Model):
     """
 
     _name = "ow.mail.tag"
+    _inherit = ["ow.mail.owned.mixin"]
     _description = "OW Mail Tag"
     _order = "sequence, name"
 
