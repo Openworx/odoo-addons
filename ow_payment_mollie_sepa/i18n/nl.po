@@ -1,0 +1,1502 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# 	* ow_payment_mollie_sepa
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 19.0\n"
+"Report-Msgid-Bugs-To: \n"
+"Language: nl\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#. module: ow_payment_mollie_sepa
+#: model:ir.actions.report,print_report_name:ow_payment_mollie_sepa.action_report_sepa_mandate
+msgid "'SEPA mandate - %s' % object.name"
+msgstr "'SEPA-machtiging - %s' % object.name"
+
+#. module: ow_payment_mollie_sepa
+#: model:mail.template,body_html:ow_payment_mollie_sepa.mail_template_sepa_mandate_request
+msgid ""
+"<div style=\"margin: 0px; padding: 0px;\">\n"
+"    <p>Dear <t t-out=\"object.name or ''\">customer</t>,</p>\n"
+"    <p>\n"
+"        From now on we would like to collect our invoices by SEPA direct debit. Please\n"
+"        authorize this through the link below. You confirm your bank account with a\n"
+"        symbolic payment of EUR 0.01 through your bank; this amount is not invoiced.\n"
+"    </p>\n"
+"    <p style=\"margin: 16px 0px;\">\n"
+"        <a t-att-href=\"object.get_sepa_mandate_url()\" style=\"background-color: #875A7B; padding: 8px 16px; color: #fff; border-radius: 5px; text-decoration: none;\">\n"
+"            Grant SEPA direct debit mandate\n"
+"        </a>\n"
+"    </p>\n"
+"    <p>You can withdraw the mandate at any time through your bank or by contacting us.</p>\n"
+"    <p>Kind regards,<br/><t t-out=\"(object.company_id or user.company_id).name or ''\"/></p>\n"
+"</div>\n"
+"            "
+msgstr ""
+"<div style=\"margin: 0px; padding: 0px;\">\n"
+"    <p>Beste <t t-out=\"object.name or ''\">klant</t>,</p>\n"
+"    <p>\n"
+"        Voortaan willen wij onze facturen via SEPA automatische incasso innen. Wilt u\n"
+"        hiervoor toestemming geven via de link hieronder? U bevestigt uw bankrekening met\n"
+"        een symbolische betaling van EUR 0,01 via uw bank; dit bedrag wordt niet gefactureerd.\n"
+"    </p>\n"
+"    <p style=\"margin: 16px 0px;\">\n"
+"        <a t-att-href=\"object.get_sepa_mandate_url()\" style=\"background-color: #875A7B; padding: 8px 16px; color: #fff; border-radius: 5px; text-decoration: none;\">\n"
+"            Machtiging automatische incasso afgeven\n"
+"        </a>\n"
+"    </p>\n"
+"    <p>U kunt de machtiging altijd intrekken via uw bank of door contact met ons op te nemen.</p>\n"
+"    <p>Met vriendelijke groet,<br/><t t-out=\"(object.company_id or user.company_id).name or ''\"/></p>\n"
+"</div>\n"
+"            "
+
+#. module: ow_payment_mollie_sepa
+#: model_terms:ir.ui.view,arch_db:ow_payment_mollie_sepa.res_partner_view_form_sepa
+msgid "<span class=\"o_stat_text\">Mandates</span>"
+msgstr "<span class=\"o_stat_text\">Machtigingen</span>"
+
+#. module: ow_payment_mollie_sepa
+#: model_terms:ir.ui.view,arch_db:ow_payment_mollie_sepa.payment_provider_form_sepa
+msgid ""
+"<span class=\"text-muted\" invisible=\"not sepa_enabled\">\n"
+"                        Automatic collection requires the cron\n"
+"                        \"Mollie SEPA: automatic daily collection\" to be enabled.\n"
+"                    </span>"
+msgstr ""
+"<span class=\"text-muted\" invisible=\"not sepa_enabled\">\n"
+"                        Automatische incasso vereist dat de geplande actie\n"
+"                        \"Mollie SEPA: automatic daily collection\" actief is.\n"
+"                    </span>"
+
+#. module: ow_payment_mollie_sepa
+#: model_terms:ir.ui.view,arch_db:ow_payment_mollie_sepa.payment_provider_form_sepa
+msgid "<span> per direct debit (Mollie default limit: 1,000.00 EUR)</span>"
+msgstr "<span> per incasso (standaardlimiet Mollie: 1.000,00 EUR)</span>"
+
+#. module: ow_payment_mollie_sepa
+#: model_terms:ir.ui.view,arch_db:ow_payment_mollie_sepa.report_sepa_mandate_document
+msgid "<strong>Account holder:</strong>"
+msgstr "<strong>Tenaamstelling:</strong>"
+
+#. module: ow_payment_mollie_sepa
+#: model_terms:ir.ui.view,arch_db:ow_payment_mollie_sepa.report_sepa_mandate_document
+msgid "<strong>Address:</strong>"
+msgstr "<strong>Adres:</strong>"
+
+#. module: ow_payment_mollie_sepa
+#: model_terms:ir.ui.view,arch_db:ow_payment_mollie_sepa.report_sepa_mandate_document
+msgid "<strong>City:</strong>"
+msgstr "<strong>Plaats:</strong>"
+
+#. module: ow_payment_mollie_sepa
+#: model_terms:ir.ui.view,arch_db:ow_payment_mollie_sepa.report_sepa_mandate_document
+msgid "<strong>Company name:</strong>"
+msgstr "<strong>Bedrijfsnaam:</strong>"
+
+#. module: ow_payment_mollie_sepa
+#: model_terms:ir.ui.view,arch_db:ow_payment_mollie_sepa.report_sepa_mandate_document
+msgid "<strong>Country:</strong>"
+msgstr "<strong>Land:</strong>"
+
+#. module: ow_payment_mollie_sepa
+#: model_terms:ir.ui.view,arch_db:ow_payment_mollie_sepa.report_sepa_mandate_document
+msgid "<strong>Creditor identifier:</strong>"
+msgstr "<strong>Incassant-ID:</strong>"
+
+#. module: ow_payment_mollie_sepa
+#: model_terms:ir.ui.view,arch_db:ow_payment_mollie_sepa.report_sepa_mandate_document
+msgid "<strong>Date of signature:</strong>"
+msgstr "<strong>Datum ondertekening:</strong>"
+
+#. module: ow_payment_mollie_sepa
+#: model_terms:ir.ui.view,arch_db:ow_payment_mollie_sepa.report_sepa_mandate_document
+msgid "<strong>Full name:</strong>"
+msgstr "<strong>Volledige naam:</strong>"
+
+#. module: ow_payment_mollie_sepa
+#: model_terms:ir.ui.view,arch_db:ow_payment_mollie_sepa.report_sepa_mandate_document
+msgid "<strong>IBAN (account number):</strong>"
+msgstr "<strong>IBAN (rekeningnummer):</strong>"
+
+#. module: ow_payment_mollie_sepa
+#: model_terms:ir.ui.view,arch_db:ow_payment_mollie_sepa.report_sepa_mandate_document
+msgid "<strong>Identification code (optional):</strong>"
+msgstr "<strong>Identificatiecode (niet verplicht):</strong>"
+
+#. module: ow_payment_mollie_sepa
+#: model_terms:ir.ui.view,arch_db:ow_payment_mollie_sepa.report_sepa_mandate_document
+msgid "<strong>Mandate reference:</strong>"
+msgstr "<strong>Kenmerk machtiging:</strong>"
+
+#. module: ow_payment_mollie_sepa
+#: model_terms:ir.ui.view,arch_db:ow_payment_mollie_sepa.report_sepa_mandate_document
+msgid "<strong>Place of signature:</strong>"
+msgstr "<strong>Plaats ondertekening:</strong>"
+
+#. module: ow_payment_mollie_sepa
+#: model_terms:ir.ui.view,arch_db:ow_payment_mollie_sepa.report_sepa_mandate_document
+msgid "<strong>Signature:</strong>"
+msgstr "<strong>Handtekening:</strong>"
+
+#. module: ow_payment_mollie_sepa
+#: model_terms:ir.ui.view,arch_db:ow_payment_mollie_sepa.report_sepa_mandate_document
+msgid "<strong>Transaction type:</strong> recurring"
+msgstr "<strong>Transactietype:</strong> doorlopend"
+
+#. module: ow_payment_mollie_sepa
+#: model_terms:ir.ui.view,arch_db:ow_payment_mollie_sepa.report_sepa_mandate_document
+msgid "<strong>Zip:</strong>"
+msgstr "<strong>Postcode:</strong>"
+
+#. module: ow_payment_mollie_sepa
+#. odoo-python
+#: code:addons/ow_payment_mollie_sepa/models/mollie_sepa_batch.py:0
+msgid "A batch with direct debits sent to Mollie cannot be deleted."
+msgstr "Een batch met incasso's die al naar Mollie zijn verstuurd, kan niet worden verwijderd."
+
+#. module: ow_payment_mollie_sepa
+#. odoo-python
+#: code:addons/ow_payment_mollie_sepa/models/mollie_sepa_batch_line.py:0
+msgid "A direct debit is already running in batch %s."
+msgstr "Er loopt al een incasso in batch %s."
+
+#. module: ow_payment_mollie_sepa
+#. odoo-python
+#: code:addons/ow_payment_mollie_sepa/models/mollie_sepa_batch_line.py:0
+msgid "A direct debit of batch %s is being booked."
+msgstr "Een incasso uit batch %s wordt nog geboekt."
+
+#. module: ow_payment_mollie_sepa
+#. odoo-python
+#: code:addons/ow_payment_mollie_sepa/models/payment_provider.py:0
+msgid "A mandate needs a known customer."
+msgstr "Voor een machtiging is een bekende klant nodig."
+
+#. module: ow_payment_mollie_sepa
+#. odoo-python
+#: code:addons/ow_payment_mollie_sepa/wizards/mollie_sepa_mandate_wizard.py:0
+msgid ""
+"A mandate with reference %s already exists (customer %s). Mandate references"
+" must be unique."
+msgstr "Er bestaat al een machtiging met kenmerk %s (klant %s). Machtigingskenmerken moeten uniek zijn."
+
+#. module: ow_payment_mollie_sepa
+#: model:ir.model.constraint,message:ow_payment_mollie_sepa.constraint_mollie_sepa_customer_partner_provider_mode_uniq
+msgid "A partner can only have one Mollie customer per provider and mode."
+msgstr "Een relatie kan per provider en modus maar één Mollie-klant hebben."
+
+#. module: ow_payment_mollie_sepa
+#: model:ir.model.fields,help:ow_payment_mollie_sepa.field_mollie_sepa_mandate_wizard__mandate_reference
+msgid ""
+"A unique reference identifying this mandate. Banks may decline direct debits"
+" when the reference is reused."
+msgstr "Een uniek kenmerk voor deze machtiging. Banken kunnen incasso's weigeren als het kenmerk opnieuw wordt gebruikt."
+
+#. module: ow_payment_mollie_sepa
+#: model:ir.model.fields,field_description:ow_payment_mollie_sepa.field_mollie_sepa_batch_line__amount
+msgid "Amount"
+msgstr "Bedrag"
+
+#. module: ow_payment_mollie_sepa
+#: model_terms:ir.ui.view,arch_db:ow_payment_mollie_sepa.payment_token_search_sepa
+#: model_terms:ir.ui.view,arch_db:ow_payment_mollie_sepa.payment_token_view_form_sepa
+msgid "Archived"
+msgstr "Gearchiveerd"
+
+#. module: ow_payment_mollie_sepa
+#: model:ir.model.fields,help:ow_payment_mollie_sepa.field_payment_token__sepa_superseded
+msgid ""
+"Archived because the customer granted a newer mandate online. Syncing from "
+"Mollie does not restore it."
+msgstr "Gearchiveerd omdat de klant online een nieuwere machtiging heeft afgegeven. Synchroniseren met Mollie zet deze niet terug."
+
+#. module: ow_payment_mollie_sepa
+#: model_terms:ir.ui.view,arch_db:ow_payment_mollie_sepa.portal_my_home_sepa_mandate
+msgid "Authorize the automatic collection of your invoices"
+msgstr "Geef toestemming om uw facturen automatisch te incasseren"
+
+#. module: ow_payment_mollie_sepa
+#: model:ir.model.fields,field_description:ow_payment_mollie_sepa.field_payment_provider__sepa_auto_collect
+msgid "Automatic Daily Collection"
+msgstr "Automatische dagelijkse incasso"
+
+#. module: ow_payment_mollie_sepa
+#: model_terms:ir.ui.view,arch_db:ow_payment_mollie_sepa.payment_token_view_form_sepa
+msgid "Bank"
+msgstr "Bank"
+
+#. module: ow_payment_mollie_sepa
+#: model:ir.model.fields,field_description:ow_payment_mollie_sepa.field_mollie_sepa_mandate_wizard__bank_id
+msgid "Bank Account"
+msgstr "Bankrekening"
+
+#. module: ow_payment_mollie_sepa
+#: model:ir.model.fields,field_description:ow_payment_mollie_sepa.field_payment_transaction__sepa_failure_reason
+msgid "Bank Reason"
+msgstr "Reden bank"
+
+#. module: ow_payment_mollie_sepa
+#: model:ir.model.fields,field_description:ow_payment_mollie_sepa.field_mollie_sepa_batch_line__batch_id
+msgid "Batch"
+msgstr "Batch"
+
+#. module: ow_payment_mollie_sepa
+#. odoo-python
+#: code:addons/ow_payment_mollie_sepa/models/mollie_sepa_batch.py:0
+msgid ""
+"Batch %s is not a draft. Every collection runs in a new batch: create a new "
+"batch instead."
+msgstr "Batch %s is geen concept. Elke incassoronde draait in een nieuwe batch: maak een nieuwe batch aan."
+
+#. module: ow_payment_mollie_sepa
+#: model:ir.model.fields,field_description:ow_payment_mollie_sepa.field_mollie_sepa_batch__name
+msgid "Batch Reference"
+msgstr "Batchreferentie"
+
+#. module: ow_payment_mollie_sepa
+#: model_terms:ir.ui.view,arch_db:ow_payment_mollie_sepa.sepa_mandate_page
+msgid "By granting this mandate you authorize"
+msgstr "Door deze machtiging af te geven, machtigt u"
+
+#. module: ow_payment_mollie_sepa
+#: model_terms:ir.ui.view,arch_db:ow_payment_mollie_sepa.report_sepa_mandate_document
+msgid "By signing this form, you authorize (A)"
+msgstr "Door ondertekening van dit formulier geeft u toestemming aan (A)"
+
+#. module: ow_payment_mollie_sepa
+#: model_terms:ir.ui.view,arch_db:ow_payment_mollie_sepa.mollie_sepa_batch_view_form
+#: model_terms:ir.ui.view,arch_db:ow_payment_mollie_sepa.mollie_sepa_mandate_wizard_view_form
+msgid "Cancel"
+msgstr "Annuleren"
+
+#. module: ow_payment_mollie_sepa
+#: model_terms:ir.ui.view,arch_db:ow_payment_mollie_sepa.mollie_sepa_batch_view_form
+msgid ""
+"Cancel this batch? Direct debits that Mollie already processes cannot be "
+"canceled anymore."
+msgstr "Deze batch annuleren? Incasso's die Mollie al verwerkt, kunnen niet meer worden geannuleerd."
+
+#. module: ow_payment_mollie_sepa
+#: model:ir.model.fields.selection,name:ow_payment_mollie_sepa.selection__mollie_sepa_batch__state__cancel
+#: model:ir.model.fields.selection,name:ow_payment_mollie_sepa.selection__mollie_sepa_batch_line__state__cancel
+msgid "Canceled"
+msgstr "Geannuleerd"
+
+#. module: ow_payment_mollie_sepa
+#. odoo-python
+#: code:addons/ow_payment_mollie_sepa/models/payment_transaction.py:0
+msgid ""
+"Chargeback of %(amount)s received from Mollie for payment %(ref)s. The money"
+" was returned to the customer: reopen the invoice (book the reversal) and "
+"contact the customer."
+msgstr "Terugboeking (chargeback) van %(amount)s ontvangen van Mollie voor betaling %(ref)s. Het geld is teruggestort aan de klant: heropen de factuur (boek de terugboeking) en neem contact op met de klant."
+
+#. module: ow_payment_mollie_sepa
+#: model:ir.model.fields.selection,name:ow_payment_mollie_sepa.selection__account_move__sepa_line_state__charged_back
+#: model:ir.model.fields.selection,name:ow_payment_mollie_sepa.selection__mollie_sepa_batch_line__state__charged_back
+msgid "Charged Back"
+msgstr "Teruggeboekt"
+
+#. module: ow_payment_mollie_sepa
+#: model:ir.model.fields,field_description:ow_payment_mollie_sepa.field_payment_transaction__sepa_amount_charged_back
+msgid "Charged Back Amount"
+msgstr "Teruggeboekt bedrag"
+
+#. module: ow_payment_mollie_sepa
+#: model:ir.model.fields.selection,name:ow_payment_mollie_sepa.selection__account_move__sepa_line_state__done
+#: model:ir.model.fields.selection,name:ow_payment_mollie_sepa.selection__mollie_sepa_batch__state__collected
+#: model:ir.model.fields.selection,name:ow_payment_mollie_sepa.selection__mollie_sepa_batch_line__state__done
+#: model_terms:ir.ui.view,arch_db:ow_payment_mollie_sepa.mollie_sepa_batch_view_search
+msgid "Collected"
+msgstr "Geïncasseerd"
+
+#. module: ow_payment_mollie_sepa
+#: model:ir.model.fields,field_description:ow_payment_mollie_sepa.field_mollie_sepa_batch__collected_amount
+msgid "Collected Amount"
+msgstr "Geïncasseerd bedrag"
+
+#. module: ow_payment_mollie_sepa
+#: model:ir.model.fields.selection,name:ow_payment_mollie_sepa.selection__mollie_sepa_batch__state__collecting
+#: model_terms:ir.ui.view,arch_db:ow_payment_mollie_sepa.mollie_sepa_batch_view_search
+msgid "Collecting"
+msgstr "Bezig met incasseren"
+
+#. module: ow_payment_mollie_sepa
+#: model:ir.ui.menu,name:ow_payment_mollie_sepa.menu_mollie_sepa_batch
+msgid "Collection Batches"
+msgstr "Incassobatches"
+
+#. module: ow_payment_mollie_sepa
+#: model:ir.model.fields,field_description:ow_payment_mollie_sepa.field_mollie_sepa_batch__currency_id
+msgid "Collection Currency"
+msgstr "Incassovaluta"
+
+#. module: ow_payment_mollie_sepa
+#: model:ir.model.fields,field_description:ow_payment_mollie_sepa.field_mollie_sepa_batch__date
+#: model_terms:ir.ui.view,arch_db:ow_payment_mollie_sepa.mollie_sepa_batch_view_search
+msgid "Collection Date"
+msgstr "Incassodatum"
+
+#. module: ow_payment_mollie_sepa
+#: model:ir.model.fields,field_description:ow_payment_mollie_sepa.field_mollie_sepa_batch__line_ids
+#: model_terms:ir.ui.view,arch_db:ow_payment_mollie_sepa.mollie_sepa_batch_view_form
+msgid "Collection Lines"
+msgstr "Incassoregels"
+
+#. module: ow_payment_mollie_sepa
+#: model:ir.model.fields,field_description:ow_payment_mollie_sepa.field_mollie_sepa_batch__company_id
+#: model:ir.model.fields,field_description:ow_payment_mollie_sepa.field_mollie_sepa_batch_line__company_id
+msgid "Company"
+msgstr "Bedrijf"
+
+#. module: ow_payment_mollie_sepa
+#: model:ir.model.fields.selection,name:ow_payment_mollie_sepa.selection__mollie_sepa_batch__state__done
+#: model_terms:ir.ui.view,arch_db:ow_payment_mollie_sepa.mollie_sepa_batch_view_search
+msgid "Completed"
+msgstr "Voltooid"
+
+#. module: ow_payment_mollie_sepa
+#: model:ir.model.fields,field_description:ow_payment_mollie_sepa.field_payment_token__sepa_consumer_account
+msgid "Consumer Account (IBAN)"
+msgstr "Rekening debiteur (IBAN)"
+
+#. module: ow_payment_mollie_sepa
+#: model:ir.model.fields,field_description:ow_payment_mollie_sepa.field_mollie_sepa_mandate_wizard__consumer_name
+#: model:ir.model.fields,field_description:ow_payment_mollie_sepa.field_payment_token__sepa_consumer_name
+msgid "Consumer Name"
+msgstr "Naam debiteur"
+
+#. module: ow_payment_mollie_sepa
+#: model:ir.model,name:ow_payment_mollie_sepa.model_res_partner
+msgid "Contact"
+msgstr "Contact"
+
+#. module: ow_payment_mollie_sepa
+#. odoo-python
+#: code:addons/ow_payment_mollie_sepa/models/payment_provider.py:0
+msgid "Could not establish the connection to the payment provider."
+msgstr "Kan geen verbinding maken met de betaalprovider."
+
+#. module: ow_payment_mollie_sepa
+#: model_terms:ir.actions.act_window,help:ow_payment_mollie_sepa.mollie_sepa_batch_action
+msgid "Create a new collection batch"
+msgstr "Maak een nieuwe incassobatch aan"
+
+#. module: ow_payment_mollie_sepa
+#: model:ir.model.fields,field_description:ow_payment_mollie_sepa.field_mollie_sepa_batch__create_uid
+#: model:ir.model.fields,field_description:ow_payment_mollie_sepa.field_mollie_sepa_batch_line__create_uid
+#: model:ir.model.fields,field_description:ow_payment_mollie_sepa.field_mollie_sepa_customer__create_uid
+#: model:ir.model.fields,field_description:ow_payment_mollie_sepa.field_mollie_sepa_mandate_wizard__create_uid
+msgid "Created by"
+msgstr "Aangemaakt door"
+
+#. module: ow_payment_mollie_sepa
+#: model:ir.model.fields,field_description:ow_payment_mollie_sepa.field_mollie_sepa_batch__create_date
+#: model:ir.model.fields,field_description:ow_payment_mollie_sepa.field_mollie_sepa_batch_line__create_date
+#: model:ir.model.fields,field_description:ow_payment_mollie_sepa.field_mollie_sepa_customer__create_date
+#: model:ir.model.fields,field_description:ow_payment_mollie_sepa.field_mollie_sepa_mandate_wizard__create_date
+msgid "Created on"
+msgstr "Aangemaakt op"
+
+#. module: ow_payment_mollie_sepa
+#: model_terms:ir.ui.view,arch_db:ow_payment_mollie_sepa.report_sepa_mandate_document
+msgid "Creditor"
+msgstr "Incassant"
+
+#. module: ow_payment_mollie_sepa
+#: model:ir.model.fields,field_description:ow_payment_mollie_sepa.field_payment_provider__sepa_creditor_identifier
+msgid "Creditor Identifier"
+msgstr "Incassant-ID"
+
+#. module: ow_payment_mollie_sepa
+#: model:ir.model.fields,field_description:ow_payment_mollie_sepa.field_mollie_sepa_batch_line__currency_id
+msgid "Currency"
+msgstr "Valuta"
+
+#. module: ow_payment_mollie_sepa
+#: model:ir.model.fields,field_description:ow_payment_mollie_sepa.field_mollie_sepa_batch_line__partner_id
+#: model:ir.model.fields,field_description:ow_payment_mollie_sepa.field_mollie_sepa_mandate_wizard__partner_id
+msgid "Customer"
+msgstr "Klant"
+
+#. module: ow_payment_mollie_sepa
+#: model_terms:ir.ui.view,arch_db:ow_payment_mollie_sepa.sepa_mandate_page
+msgid "Customer:"
+msgstr "Klant:"
+
+#. module: ow_payment_mollie_sepa
+#: model:ir.model.fields,field_description:ow_payment_mollie_sepa.field_mollie_sepa_mandate_wizard__signature_date
+msgid "Date of Signature"
+msgstr "Datum ondertekening"
+
+#. module: ow_payment_mollie_sepa
+#: model:ir.model.fields,field_description:ow_payment_mollie_sepa.field_payment_provider__sepa_retry_delay_days
+msgid "Days Between Attempts"
+msgstr "Dagen tussen pogingen"
+
+#. module: ow_payment_mollie_sepa
+#. odoo-python
+#: code:addons/ow_payment_mollie_sepa/models/mollie_sepa_batch.py:0
+msgid "Direct Debit Transactions"
+msgstr "Incassotransacties"
+
+#. module: ow_payment_mollie_sepa
+#: model_terms:ir.ui.view,arch_db:ow_payment_mollie_sepa.payment_token_view_form_sepa
+msgid "Direct Debits"
+msgstr "Incasso's"
+
+#. module: ow_payment_mollie_sepa
+#. odoo-python
+#: code:addons/ow_payment_mollie_sepa/models/payment_transaction.py:0
+msgid ""
+"Direct debit %(ref)s can no longer be canceled at Mollie (status: "
+"%(status)s)."
+msgstr "Incasso %(ref)s kan niet meer worden geannuleerd bij Mollie (status: %(status)s)."
+
+#. module: ow_payment_mollie_sepa
+#. odoo-python
+#: code:addons/ow_payment_mollie_sepa/models/payment_transaction.py:0
+msgid ""
+"Direct debit %s may have been sent to Mollie; refresh the batch status "
+"before canceling it."
+msgstr "Incasso %s is mogelijk al naar Mollie verstuurd; haal eerst de status van de batch op voordat u annuleert."
+
+#. module: ow_payment_mollie_sepa
+#: model:ir.model.fields,field_description:ow_payment_mollie_sepa.field_account_move__display_name
+#: model:ir.model.fields,field_description:ow_payment_mollie_sepa.field_mollie_sepa_batch__display_name
+#: model:ir.model.fields,field_description:ow_payment_mollie_sepa.field_mollie_sepa_batch_line__display_name
+#: model:ir.model.fields,field_description:ow_payment_mollie_sepa.field_mollie_sepa_customer__display_name
+#: model:ir.model.fields,field_description:ow_payment_mollie_sepa.field_mollie_sepa_mandate_wizard__display_name
+#: model:ir.model.fields,field_description:ow_payment_mollie_sepa.field_payment_provider__display_name
+#: model:ir.model.fields,field_description:ow_payment_mollie_sepa.field_payment_token__display_name
+#: model:ir.model.fields,field_description:ow_payment_mollie_sepa.field_payment_transaction__display_name
+#: model:ir.model.fields,field_description:ow_payment_mollie_sepa.field_res_partner__display_name
+msgid "Display Name"
+msgstr "Weergavenaam"
+
+#. module: ow_payment_mollie_sepa
+#: model:ir.model.fields.selection,name:ow_payment_mollie_sepa.selection__mollie_sepa_batch__state__draft
+#: model:ir.model.fields.selection,name:ow_payment_mollie_sepa.selection__mollie_sepa_batch_line__state__draft
+#: model_terms:ir.ui.view,arch_db:ow_payment_mollie_sepa.mollie_sepa_batch_view_search
+msgid "Draft"
+msgstr "Concept"
+
+#. module: ow_payment_mollie_sepa
+#: model:ir.model.fields,help:ow_payment_mollie_sepa.field_payment_provider__sepa_enabled
+msgid ""
+"Enable SEPA Direct Debit mandates and automatic collection (incasso) of open"
+" invoices through this provider."
+msgstr "Schakel SEPA-incassomachtigingen en automatische incasso van openstaande facturen via deze provider in."
+
+#. module: ow_payment_mollie_sepa
+#: model_terms:ir.actions.act_window,help:ow_payment_mollie_sepa.mollie_sepa_batch_action
+msgid ""
+"Every collection runs in its own batch: click New, fetch the\n"
+"                open invoices covered by a SEPA mandate, then start the direct\n"
+"                debits. They are sent to Mollie in the background, one invoice at\n"
+"                a time. The batch completes automatically as Mollie reports the\n"
+"                collected and failed direct debits."
+msgstr ""
+"Elke incassoronde draait in een eigen batch: klik op Nieuw, haal de\n"
+"                openstaande facturen met een SEPA-machtiging op en start daarna de\n"
+"                incasso's. Ze worden op de achtergrond, factuur voor factuur, naar\n"
+"                Mollie verstuurd. De batch wordt automatisch afgerond zodra Mollie de\n"
+"                geslaagde en mislukte incasso's meldt."
+
+#. module: ow_payment_mollie_sepa
+#: model:ir.model.fields.selection,name:ow_payment_mollie_sepa.selection__account_move__sepa_line_state__failed
+#: model:ir.model.fields.selection,name:ow_payment_mollie_sepa.selection__mollie_sepa_batch_line__state__failed
+msgid "Failed"
+msgstr "Mislukt"
+
+#. module: ow_payment_mollie_sepa
+#: model:ir.model.fields,field_description:ow_payment_mollie_sepa.field_mollie_sepa_batch__failed_amount
+msgid "Failed Amount"
+msgstr "Mislukt bedrag"
+
+#. module: ow_payment_mollie_sepa
+#: model_terms:ir.ui.view,arch_db:ow_payment_mollie_sepa.mollie_sepa_batch_view_form
+msgid "Fetch Open Invoices"
+msgstr "Openstaande facturen ophalen"
+
+#. module: ow_payment_mollie_sepa
+#: model_terms:ir.ui.view,arch_db:ow_payment_mollie_sepa.sepa_mandate_page
+msgid "Grant a mandate"
+msgstr "Machtiging afgeven"
+
+#. module: ow_payment_mollie_sepa
+#: model_terms:ir.ui.view,arch_db:ow_payment_mollie_sepa.sepa_mandate_page
+msgid "Grant mandate with"
+msgstr "Machtiging afgeven met"
+
+#. module: ow_payment_mollie_sepa
+#: model:ir.model.fields,field_description:ow_payment_mollie_sepa.field_res_partner__has_sepa_mandate
+#: model:ir.model.fields,field_description:ow_payment_mollie_sepa.field_res_users__has_sepa_mandate
+msgid "Has SEPA Mandate"
+msgstr "Heeft SEPA-machtiging"
+
+#. module: ow_payment_mollie_sepa
+#: model:ir.model.fields,field_description:ow_payment_mollie_sepa.field_mollie_sepa_mandate_wizard__iban
+msgid "IBAN"
+msgstr "IBAN"
+
+#. module: ow_payment_mollie_sepa
+#: model:ir.model.fields,field_description:ow_payment_mollie_sepa.field_account_move__id
+#: model:ir.model.fields,field_description:ow_payment_mollie_sepa.field_mollie_sepa_batch__id
+#: model:ir.model.fields,field_description:ow_payment_mollie_sepa.field_mollie_sepa_batch_line__id
+#: model:ir.model.fields,field_description:ow_payment_mollie_sepa.field_mollie_sepa_customer__id
+#: model:ir.model.fields,field_description:ow_payment_mollie_sepa.field_mollie_sepa_mandate_wizard__id
+#: model:ir.model.fields,field_description:ow_payment_mollie_sepa.field_payment_provider__id
+#: model:ir.model.fields,field_description:ow_payment_mollie_sepa.field_payment_token__id
+#: model:ir.model.fields,field_description:ow_payment_mollie_sepa.field_payment_transaction__id
+#: model:ir.model.fields,field_description:ow_payment_mollie_sepa.field_res_partner__id
+msgid "ID"
+msgstr "ID"
+
+#. module: ow_payment_mollie_sepa
+#: model_terms:ir.ui.view,arch_db:ow_payment_mollie_sepa.report_sepa_mandate_document
+msgid ""
+"If you do not agree with a debit, you can have it refunded. Contact your bank\n"
+"                    within eight weeks after the debit. Ask your bank about the conditions."
+msgstr ""
+"Als u het niet eens bent met een afschrijving, kunt u deze laten terugboeken. Neem hiervoor\n"
+"                    binnen acht weken na afschrijving contact op met uw bank. Vraag uw bank naar de voorwaarden."
+
+#. module: ow_payment_mollie_sepa
+#: model:ir.model.fields.selection,name:ow_payment_mollie_sepa.selection__payment_token__sepa_status__invalid
+#: model_terms:ir.ui.view,arch_db:ow_payment_mollie_sepa.payment_token_search_sepa
+msgid "Invalid"
+msgstr "Ongeldig"
+
+#. module: ow_payment_mollie_sepa
+#. odoo-python
+#: code:addons/ow_payment_mollie_sepa/wizards/mollie_sepa_mandate_wizard.py:0
+msgid "Invalid IBAN: %s"
+msgstr "Ongeldige IBAN: %s"
+
+#. module: ow_payment_mollie_sepa
+#: model:ir.model.fields,field_description:ow_payment_mollie_sepa.field_mollie_sepa_batch_line__invoice_id
+msgid "Invoice"
+msgstr "Factuur"
+
+#. module: ow_payment_mollie_sepa
+#. odoo-python
+#: code:addons/ow_payment_mollie_sepa/models/mollie_sepa_batch_line.py:0
+msgid "Invoice locked by another process; retried on the next run."
+msgstr "Factuur is vergrendeld door een ander proces; wordt bij de volgende ronde opnieuw geprobeerd."
+
+#. module: ow_payment_mollie_sepa
+#: model:ir.model.fields,help:ow_payment_mollie_sepa.field_mollie_sepa_batch__date
+msgid ""
+"Invoices due up to this date are fetched, and the direct debits are sent to "
+"Mollie from this date on."
+msgstr "Facturen die uiterlijk op deze datum vervallen worden opgehaald, en de incasso's worden vanaf deze datum naar Mollie verstuurd."
+
+#. module: ow_payment_mollie_sepa
+#: model:ir.model,name:ow_payment_mollie_sepa.model_account_move
+msgid "Journal Entry"
+msgstr "Boeking"
+
+#. module: ow_payment_mollie_sepa
+#: model:ir.model.fields,field_description:ow_payment_mollie_sepa.field_mollie_sepa_batch__write_uid
+#: model:ir.model.fields,field_description:ow_payment_mollie_sepa.field_mollie_sepa_batch_line__write_uid
+#: model:ir.model.fields,field_description:ow_payment_mollie_sepa.field_mollie_sepa_customer__write_uid
+#: model:ir.model.fields,field_description:ow_payment_mollie_sepa.field_mollie_sepa_mandate_wizard__write_uid
+msgid "Last Updated by"
+msgstr "Laatst bijgewerkt door"
+
+#. module: ow_payment_mollie_sepa
+#: model:ir.model.fields,field_description:ow_payment_mollie_sepa.field_mollie_sepa_batch__write_date
+#: model:ir.model.fields,field_description:ow_payment_mollie_sepa.field_mollie_sepa_batch_line__write_date
+#: model:ir.model.fields,field_description:ow_payment_mollie_sepa.field_mollie_sepa_customer__write_date
+#: model:ir.model.fields,field_description:ow_payment_mollie_sepa.field_mollie_sepa_mandate_wizard__write_date
+msgid "Last Updated on"
+msgstr "Laatst bijgewerkt op"
+
+#. module: ow_payment_mollie_sepa
+#: model:ir.model.fields,field_description:ow_payment_mollie_sepa.field_mollie_sepa_batch__lines_count
+msgid "Lines Count"
+msgstr "Aantal regels"
+
+#. module: ow_payment_mollie_sepa
+#: model:ir.model.fields.selection,name:ow_payment_mollie_sepa.selection__mollie_sepa_customer__mode__live
+#: model:ir.model.fields.selection,name:ow_payment_mollie_sepa.selection__payment_token__sepa_mode__live
+msgid "Live"
+msgstr "Live"
+
+#. module: ow_payment_mollie_sepa
+#: model_terms:ir.ui.view,arch_db:ow_payment_mollie_sepa.payment_token_view_form_sepa
+msgid "Mandate"
+msgstr "Machtiging"
+
+#. module: ow_payment_mollie_sepa
+#: model:ir.model.fields,field_description:ow_payment_mollie_sepa.field_mollie_sepa_mandate_wizard__mandate_reference
+#: model:ir.model.fields,field_description:ow_payment_mollie_sepa.field_payment_token__sepa_mandate_reference
+msgid "Mandate Reference"
+msgstr "Machtigingskenmerk"
+
+#. module: ow_payment_mollie_sepa
+#: model:ir.model.fields,field_description:ow_payment_mollie_sepa.field_payment_provider__sepa_mandate_ref_prefix
+msgid "Mandate Reference Prefix"
+msgstr "Prefix machtigingskenmerk"
+
+#. module: ow_payment_mollie_sepa
+#: model:ir.model.fields,field_description:ow_payment_mollie_sepa.field_payment_token__sepa_status
+msgid "Mandate Status"
+msgstr "Status machtiging"
+
+#. module: ow_payment_mollie_sepa
+#: model:ir.model.fields,help:ow_payment_mollie_sepa.field_res_partner__sepa_form_reference
+#: model:ir.model.fields,help:ow_payment_mollie_sepa.field_res_users__sepa_form_reference
+msgid "Mandate reference printed on the last SEPA mandate form."
+msgstr "Machtigingskenmerk op het laatst afgedrukte SEPA-machtigingsformulier."
+
+#. module: ow_payment_mollie_sepa
+#: model:ir.model.fields,field_description:ow_payment_mollie_sepa.field_payment_provider__sepa_max_amount
+msgid "Max Amount per Direct Debit"
+msgstr "Maximumbedrag per incasso"
+
+#. module: ow_payment_mollie_sepa
+#: model:ir.model.fields,field_description:ow_payment_mollie_sepa.field_payment_provider__sepa_retry_max_attempts
+msgid "Max Collection Attempts"
+msgstr "Maximaal aantal incassopogingen"
+
+#. module: ow_payment_mollie_sepa
+#: model:ir.model.fields,help:ow_payment_mollie_sepa.field_payment_provider__sepa_max_amount
+msgid ""
+"Maximum amount collected per invoice with a single direct debit. Mollie's "
+"default limit is 1000.00 EUR per transaction."
+msgstr "Maximumbedrag dat per factuur met één incasso wordt geïnd. De standaardlimiet van Mollie is 1.000,00 EUR per transactie."
+
+#. module: ow_payment_mollie_sepa
+#: model:ir.model.fields,help:ow_payment_mollie_sepa.field_payment_provider__sepa_retry_max_attempts
+msgid ""
+"Maximum number of direct debits sent for the same invoice by the line "
+"generation (failed attempts included). Set to 0 for no limit."
+msgstr "Maximaal aantal incasso's dat de regelgeneratie voor dezelfde factuur verstuurt (mislukte pogingen meegeteld). Zet op 0 voor geen limiet."
+
+#. module: ow_payment_mollie_sepa
+#: model:ir.model.fields,field_description:ow_payment_mollie_sepa.field_mollie_sepa_batch_line__message
+msgid "Message"
+msgstr "Bericht"
+
+#. module: ow_payment_mollie_sepa
+#: model:ir.model.fields,help:ow_payment_mollie_sepa.field_payment_provider__sepa_retry_delay_days
+msgid ""
+"Minimum number of days between a failed direct debit and the next attempt "
+"for the same invoice."
+msgstr "Minimaal aantal dagen tussen een mislukte incasso en de volgende poging voor dezelfde factuur."
+
+#. module: ow_payment_mollie_sepa
+#: model:ir.model.fields,field_description:ow_payment_mollie_sepa.field_mollie_sepa_customer__mode
+msgid "Mode"
+msgstr "Modus"
+
+#. module: ow_payment_mollie_sepa
+#: model:ir.model.fields,help:ow_payment_mollie_sepa.field_payment_token__sepa_mode
+msgid ""
+"Mode (API key) of the provider when this token was created. A test-mode "
+"mandate cannot be charged in live mode and vice versa."
+msgstr "Modus (API-sleutel) van de provider bij het aanmaken van deze token. Een testmachtiging kan niet live worden geïncasseerd en omgekeerd."
+
+#. module: ow_payment_mollie_sepa
+#: model_terms:ir.ui.view,arch_db:ow_payment_mollie_sepa.payment_token_view_form_sepa
+msgid "Mollie"
+msgstr "Mollie"
+
+#. module: ow_payment_mollie_sepa
+#: model:ir.model,name:ow_payment_mollie_sepa.model_mollie_sepa_customer
+msgid "Mollie Customer"
+msgstr "Mollie-klant"
+
+#. module: ow_payment_mollie_sepa
+#: model:ir.model.fields,field_description:ow_payment_mollie_sepa.field_mollie_sepa_customer__customer_id
+msgid "Mollie Customer ID"
+msgstr "Mollie-klant-ID"
+
+#. module: ow_payment_mollie_sepa
+#: model:ir.model.fields,field_description:ow_payment_mollie_sepa.field_res_partner__mollie_sepa_customer_ids
+#: model:ir.model.fields,field_description:ow_payment_mollie_sepa.field_res_users__mollie_sepa_customer_ids
+msgid "Mollie Customers"
+msgstr "Mollie-klanten"
+
+#. module: ow_payment_mollie_sepa
+#: model:ir.model.fields,field_description:ow_payment_mollie_sepa.field_payment_token__sepa_mode
+msgid "Mollie Mode"
+msgstr "Mollie-modus"
+
+#. module: ow_payment_mollie_sepa
+#: model:ir.model,name:ow_payment_mollie_sepa.model_mollie_sepa_batch
+msgid "Mollie SEPA Collection Batch"
+msgstr "Mollie SEPA-incassobatch"
+
+#. module: ow_payment_mollie_sepa
+#: model:ir.model,name:ow_payment_mollie_sepa.model_mollie_sepa_batch_line
+msgid "Mollie SEPA Collection Batch Line"
+msgstr "Mollie SEPA-incassobatchregel"
+
+#. module: ow_payment_mollie_sepa
+#: model:ir.actions.server,name:ow_payment_mollie_sepa.cron_sepa_auto_collect_ir_actions_server
+msgid "Mollie SEPA: automatic daily collection"
+msgstr "Mollie SEPA: automatische dagelijkse incasso"
+
+#. module: ow_payment_mollie_sepa
+#: model:ir.actions.server,name:ow_payment_mollie_sepa.cron_sepa_refresh_pending_transactions_ir_actions_server
+msgid "Mollie SEPA: poll pending direct debits"
+msgstr "Mollie SEPA: lopende incasso's ophalen"
+
+#. module: ow_payment_mollie_sepa
+#: model:ir.actions.server,name:ow_payment_mollie_sepa.cron_sepa_process_collections_ir_actions_server
+msgid "Mollie SEPA: send scheduled direct debits"
+msgstr "Mollie SEPA: geplande incasso's versturen"
+
+#. module: ow_payment_mollie_sepa
+#: model:ir.actions.server,name:ow_payment_mollie_sepa.cron_sepa_sync_mandates_ir_actions_server
+msgid "Mollie SEPA: sync mandate statuses"
+msgstr "Mollie SEPA: status machtigingen synchroniseren"
+
+#. module: ow_payment_mollie_sepa
+#: model:ir.model.fields,field_description:ow_payment_mollie_sepa.field_payment_transaction__mollie_status
+msgid "Mollie Status"
+msgstr "Mollie-status"
+
+#. module: ow_payment_mollie_sepa
+#: model:ir.model.fields,field_description:ow_payment_mollie_sepa.field_mollie_sepa_batch_line__mollie_test_url
+#: model:ir.model.fields,field_description:ow_payment_mollie_sepa.field_payment_transaction__mollie_test_url
+msgid "Mollie Test Link"
+msgstr "Mollie-testlink"
+
+#. module: ow_payment_mollie_sepa
+#. odoo-python
+#: code:addons/ow_payment_mollie_sepa/wizards/mollie_sepa_mandate_wizard.py:0
+msgid ""
+"Mollie refused to create the mandate. Check the IBAN, the consumer name and "
+"the signature date, and see the payment logs for the exact error."
+msgstr "Mollie heeft het aanmaken van de machtiging geweigerd. Controleer de IBAN, de naam van de debiteur en de datum van ondertekening, en bekijk de betaallogs voor de exacte foutmelding."
+
+#. module: ow_payment_mollie_sepa
+#. odoo-python
+#: code:addons/ow_payment_mollie_sepa/models/payment_transaction.py:0
+msgid "Mollie test mode: set the result of direct debit %s here:"
+msgstr "Mollie-testmodus: stel hier het resultaat van incasso %s in:"
+
+#. module: ow_payment_mollie_sepa
+#. odoo-python
+#: code:addons/ow_payment_mollie_sepa/models/mollie_sepa_batch.py:0
+msgid "New"
+msgstr "Nieuw"
+
+#. module: ow_payment_mollie_sepa
+#. odoo-python
+#: code:addons/ow_payment_mollie_sepa/models/account_move.py:0
+msgid "No Mollie provider with SEPA Direct Debit is enabled for company %s."
+msgstr "Er is geen Mollie-provider met SEPA-incasso actief voor bedrijf %s."
+
+#. module: ow_payment_mollie_sepa
+#: model_terms:ir.actions.act_window,help:ow_payment_mollie_sepa.payment_token_action_sepa
+msgid "No SEPA mandates yet"
+msgstr "Nog geen SEPA-machtigingen"
+
+#. module: ow_payment_mollie_sepa
+#. odoo-python
+#: code:addons/ow_payment_mollie_sepa/models/mollie_sepa_batch.py:0
+msgid ""
+"No open invoices can be collected through a SEPA direct debit at this moment.\n"
+"\n"
+"Requirements: posted invoices in %(currency)s due by %(date)s, for customers with an active SEPA mandate and SEPA collection enabled, no direct debit already running for those invoices, amount up to %(max).2f, and the retry rules of the provider respected."
+msgstr ""
+"Er kunnen op dit moment geen openstaande facturen via SEPA-incasso worden geïnd.\n"
+"\n"
+"Voorwaarden: geboekte facturen in %(currency)s die uiterlijk op %(date)s vervallen, van klanten met een actieve SEPA-machtiging en SEPA-incasso ingeschakeld, zonder lopende incasso voor die facturen, een bedrag tot %(max).2f, en binnen de herhaalregels van de provider."
+
+#. module: ow_payment_mollie_sepa
+#. odoo-python
+#: code:addons/ow_payment_mollie_sepa/models/mollie_sepa_batch_line.py:0
+msgid "No valid SEPA mandate for this customer."
+msgstr "Geen geldige SEPA-machtiging voor deze klant."
+
+#. module: ow_payment_mollie_sepa
+#: model:ir.model.fields.selection,name:ow_payment_mollie_sepa.selection__account_move__sepa_line_state__none
+msgid "None"
+msgstr "Geen"
+
+#. module: ow_payment_mollie_sepa
+#. odoo-python
+#: code:addons/ow_payment_mollie_sepa/models/mollie_sepa_batch_line.py:0
+msgid "Online payment %s is still being processed."
+msgstr "Online betaling %s wordt nog verwerkt."
+
+#. module: ow_payment_mollie_sepa
+#. odoo-python
+#: code:addons/ow_payment_mollie_sepa/models/mollie_sepa_batch.py:0
+msgid "Only a draft batch can be collected."
+msgstr "Alleen een conceptbatch kan worden geïncasseerd."
+
+#. module: ow_payment_mollie_sepa
+#. odoo-python
+#: code:addons/ow_payment_mollie_sepa/models/res_partner.py:0
+msgid "Only accountants can create SEPA mandate links."
+msgstr "Alleen boekhouders kunnen links voor SEPA-machtigingen aanmaken."
+
+#. module: ow_payment_mollie_sepa
+#. odoo-python
+#: code:addons/ow_payment_mollie_sepa/models/mollie_sepa_batch.py:0
+msgid "Only an open batch can be canceled."
+msgstr "Alleen een openstaande batch kan worden geannuleerd."
+
+#. module: ow_payment_mollie_sepa
+#. odoo-python
+#: code:addons/ow_payment_mollie_sepa/models/mollie_sepa_batch_line.py:0
+msgid "Only posted customer invoices can be collected."
+msgstr "Alleen geboekte klantfacturen kunnen worden geïncasseerd."
+
+#. module: ow_payment_mollie_sepa
+#: model_terms:ir.ui.view,arch_db:ow_payment_mollie_sepa.res_partner_view_form_sepa
+msgid ""
+"Only register this mandate after the customer signed the SEPA Direct Debit "
+"authorization. The mandate becomes active at Mollie immediately."
+msgstr "Registreer deze machtiging pas nadat de klant de SEPA-incassomachtiging heeft ondertekend. De machtiging is direct actief bij Mollie."
+
+#. module: ow_payment_mollie_sepa
+#: model:ir.model.fields,help:ow_payment_mollie_sepa.field_res_partner__sepa_collect_enabled
+#: model:ir.model.fields,help:ow_payment_mollie_sepa.field_res_users__sepa_collect_enabled
+msgid ""
+"Open invoices of this customer are included in SEPA collection batches. "
+"Enabled automatically when a mandate is registered."
+msgstr "Openstaande facturen van deze klant worden meegenomen in SEPA-incassobatches. Wordt automatisch ingeschakeld wanneer een machtiging wordt geregistreerd."
+
+#. module: ow_payment_mollie_sepa
+#: model:ir.model.fields,field_description:ow_payment_mollie_sepa.field_mollie_sepa_customer__partner_id
+msgid "Partner"
+msgstr "Relatie"
+
+#. module: ow_payment_mollie_sepa
+#: model:ir.model,name:ow_payment_mollie_sepa.model_payment_provider
+msgid "Payment Provider"
+msgstr "Betaalprovider"
+
+#. module: ow_payment_mollie_sepa
+#: model:ir.model,name:ow_payment_mollie_sepa.model_payment_token
+msgid "Payment Token"
+msgstr "Betaaltoken"
+
+#. module: ow_payment_mollie_sepa
+#: model:ir.model,name:ow_payment_mollie_sepa.model_payment_transaction
+#: model:ir.model.fields,field_description:ow_payment_mollie_sepa.field_mollie_sepa_batch_line__transaction_id
+msgid "Payment Transaction"
+msgstr "Betaaltransactie"
+
+#. module: ow_payment_mollie_sepa
+#: model:ir.model.fields.selection,name:ow_payment_mollie_sepa.selection__payment_token__sepa_status__pending
+#: model_terms:ir.ui.view,arch_db:ow_payment_mollie_sepa.payment_token_search_sepa
+msgid "Pending"
+msgstr "In behandeling"
+
+#. module: ow_payment_mollie_sepa
+#: model:ir.model.fields.selection,name:ow_payment_mollie_sepa.selection__account_move__sepa_line_state__pending
+#: model:ir.model.fields.selection,name:ow_payment_mollie_sepa.selection__mollie_sepa_batch_line__state__pending
+msgid "Pending at Mollie"
+msgstr "In behandeling bij Mollie"
+
+#. module: ow_payment_mollie_sepa
+#: model_terms:ir.ui.view,arch_db:ow_payment_mollie_sepa.report_sepa_mandate_document
+msgid "Please complete where necessary."
+msgstr "Vul a.u.b. waar nodig de gegevens aan."
+
+#. module: ow_payment_mollie_sepa
+#: model:ir.model.fields,help:ow_payment_mollie_sepa.field_payment_provider__sepa_mandate_ref_prefix
+msgid ""
+"Prefix used to build the unique mandate reference sent to Mollie. Some banks"
+" decline direct debits when the reference is not unique."
+msgstr "Prefix voor het unieke machtigingskenmerk dat naar Mollie wordt gestuurd. Sommige banken weigeren incasso's als het kenmerk niet uniek is."
+
+#. module: ow_payment_mollie_sepa
+#: model_terms:ir.ui.view,arch_db:ow_payment_mollie_sepa.res_partner_view_form_sepa
+msgid "Print Mandate Form"
+msgstr "Machtigingsformulier afdrukken"
+
+#. module: ow_payment_mollie_sepa
+#: model:ir.model.fields,field_description:ow_payment_mollie_sepa.field_res_partner__sepa_form_reference
+#: model:ir.model.fields,field_description:ow_payment_mollie_sepa.field_res_users__sepa_form_reference
+msgid "Printed Mandate Reference"
+msgstr "Afgedrukt machtigingskenmerk"
+
+#. module: ow_payment_mollie_sepa
+#. odoo-python
+#: code:addons/ow_payment_mollie_sepa/models/payment_transaction.py:0
+msgid "Process SEPA chargeback"
+msgstr "SEPA-terugboeking verwerken"
+
+#. module: ow_payment_mollie_sepa
+#: model:ir.model.fields,field_description:ow_payment_mollie_sepa.field_mollie_sepa_batch__provider_id
+#: model:ir.model.fields,field_description:ow_payment_mollie_sepa.field_mollie_sepa_customer__provider_id
+#: model:ir.model.fields,field_description:ow_payment_mollie_sepa.field_mollie_sepa_mandate_wizard__provider_id
+msgid "Provider"
+msgstr "Provider"
+
+#. module: ow_payment_mollie_sepa
+#: model:ir.model.fields,help:ow_payment_mollie_sepa.field_payment_transaction__mollie_status
+msgid "Raw payment status as last reported by Mollie."
+msgstr "Ruwe betaalstatus zoals laatst gemeld door Mollie."
+
+#. module: ow_payment_mollie_sepa
+#: model:ir.model.fields,help:ow_payment_mollie_sepa.field_payment_transaction__sepa_failure_reason
+msgid "Reason code reported by the bank for a failed direct debit."
+msgstr "Redencode van de bank voor een mislukte incasso."
+
+#. module: ow_payment_mollie_sepa
+#: model_terms:ir.ui.view,arch_db:ow_payment_mollie_sepa.mollie_sepa_batch_view_form
+msgid "Refresh Status"
+msgstr "Status ophalen"
+
+#. module: ow_payment_mollie_sepa
+#: model_terms:ir.ui.view,arch_db:ow_payment_mollie_sepa.mollie_sepa_mandate_wizard_view_form
+#: model_terms:ir.ui.view,arch_db:ow_payment_mollie_sepa.res_partner_view_form_sepa
+msgid "Register Mandate"
+msgstr "Machtiging registreren"
+
+#. module: ow_payment_mollie_sepa
+#. odoo-python
+#: code:addons/ow_payment_mollie_sepa/models/res_partner.py:0
+#: model:ir.model,name:ow_payment_mollie_sepa.model_mollie_sepa_mandate_wizard
+msgid "Register SEPA Direct Debit Mandate"
+msgstr "SEPA-incassomachtiging registreren"
+
+#. module: ow_payment_mollie_sepa
+#: model_terms:ir.ui.view,arch_db:ow_payment_mollie_sepa.mollie_sepa_mandate_wizard_view_form
+msgid "Register SEPA Mandate"
+msgstr "SEPA-machtiging registreren"
+
+#. module: ow_payment_mollie_sepa
+#: model_terms:ir.actions.act_window,help:ow_payment_mollie_sepa.payment_token_action_sepa
+msgid ""
+"Register a mandate via the customer form (\"Register Mandate\") or let\n"
+"                the customer authorize one through a first payment (iDEAL, Bancontact, ...)."
+msgstr ""
+"Registreer een machtiging via de relatiekaart (\"Machtiging registreren\") of laat\n"
+"                de klant er een verlenen via een eerste betaling (iDEAL, Bancontact, ...)."
+
+#. module: ow_payment_mollie_sepa
+#: model:ir.model.fields,field_description:ow_payment_mollie_sepa.field_payment_token__sepa_superseded
+msgid "Replaced by a Newer Mandate"
+msgstr "Vervangen door nieuwere machtiging"
+
+#. module: ow_payment_mollie_sepa
+#: model_terms:ir.ui.view,arch_db:ow_payment_mollie_sepa.res_partner_view_form_sepa
+msgid "Request Mandate"
+msgstr "Machtiging aanvragen"
+
+#. module: ow_payment_mollie_sepa
+#. odoo-python
+#: code:addons/ow_payment_mollie_sepa/models/res_partner.py:0
+msgid "Request SEPA Mandate"
+msgstr "SEPA-machtiging aanvragen"
+
+#. module: ow_payment_mollie_sepa
+#: model:ir.model.fields,field_description:ow_payment_mollie_sepa.field_res_partner__sepa_collect_enabled
+#: model:ir.model.fields,field_description:ow_payment_mollie_sepa.field_res_users__sepa_collect_enabled
+msgid "SEPA Collection"
+msgstr "SEPA-incasso"
+
+#. module: ow_payment_mollie_sepa
+#. odoo-python
+#: code:addons/ow_payment_mollie_sepa/models/account_move.py:0
+msgid "SEPA Collection %s"
+msgstr "SEPA-incasso %s"
+
+#. module: ow_payment_mollie_sepa
+#: model_terms:ir.ui.view,arch_db:ow_payment_mollie_sepa.mollie_sepa_batch_view_form
+msgid "SEPA Collection Batch"
+msgstr "SEPA-incassobatch"
+
+#. module: ow_payment_mollie_sepa
+#: model:ir.actions.act_window,name:ow_payment_mollie_sepa.mollie_sepa_batch_action
+#: model_terms:ir.ui.view,arch_db:ow_payment_mollie_sepa.mollie_sepa_batch_view_list
+msgid "SEPA Collection Batches"
+msgstr "SEPA-incassobatches"
+
+#. module: ow_payment_mollie_sepa
+#: model:ir.model.fields,field_description:ow_payment_mollie_sepa.field_payment_transaction__sepa_batch_line_id
+msgid "SEPA Collection Line"
+msgstr "SEPA-incassoregel"
+
+#. module: ow_payment_mollie_sepa
+#: model:ir.model.fields,field_description:ow_payment_mollie_sepa.field_account_bank_statement_line__sepa_line_state
+#: model:ir.model.fields,field_description:ow_payment_mollie_sepa.field_account_move__sepa_line_state
+#: model:ir.model.fields,field_description:ow_payment_mollie_sepa.field_payment_provider__sepa_enabled
+#: model:ir.ui.menu,name:ow_payment_mollie_sepa.menu_mollie_sepa_root
+#: model_terms:ir.ui.view,arch_db:ow_payment_mollie_sepa.payment_provider_form_sepa
+#: model_terms:ir.ui.view,arch_db:ow_payment_mollie_sepa.portal_my_home_sepa_mandate
+#: model_terms:ir.ui.view,arch_db:ow_payment_mollie_sepa.res_partner_view_form_sepa
+#: model_terms:ir.ui.view,arch_db:ow_payment_mollie_sepa.view_move_form_sepa
+msgid "SEPA Direct Debit"
+msgstr "SEPA-incasso"
+
+#. module: ow_payment_mollie_sepa
+#: model_terms:ir.ui.view,arch_db:ow_payment_mollie_sepa.sepa_mandate_page
+msgid "SEPA Direct Debit is not available at the moment."
+msgstr "SEPA-incasso is op dit moment niet beschikbaar."
+
+#. module: ow_payment_mollie_sepa
+#. odoo-python
+#: code:addons/ow_payment_mollie_sepa/models/payment_provider.py:0
+msgid "SEPA Direct Debit is not available."
+msgstr "SEPA-incasso is niet beschikbaar."
+
+#. module: ow_payment_mollie_sepa
+#: model_terms:ir.ui.view,arch_db:ow_payment_mollie_sepa.sepa_mandate_page
+msgid "SEPA Direct Debit mandate"
+msgstr "Machtiging SEPA-incasso"
+
+#. module: ow_payment_mollie_sepa
+#. odoo-python
+#: code:addons/ow_payment_mollie_sepa/wizards/mollie_sepa_mandate_wizard.py:0
+msgid ""
+"SEPA Direct Debit mandate %(ref)s registered at Mollie for IBAN %(iban)s "
+"(status: %(status)s)."
+msgstr "SEPA-incassomachtiging %(ref)s geregistreerd bij Mollie voor IBAN %(iban)s (status: %(status)s)."
+
+#. module: ow_payment_mollie_sepa
+#: model_terms:ir.ui.view,arch_db:ow_payment_mollie_sepa.report_sepa_mandate_document
+msgid "SEPA Direct Debit mandate (recurring)"
+msgstr "Machtiging doorlopende SEPA-incasso"
+
+#. module: ow_payment_mollie_sepa
+#: model:ir.model.fields,help:ow_payment_mollie_sepa.field_mollie_sepa_batch__currency_id
+#: model:ir.model.fields,help:ow_payment_mollie_sepa.field_mollie_sepa_batch_line__currency_id
+msgid "SEPA Direct Debit only exists in euro, whatever the company currency."
+msgstr "SEPA-incasso bestaat alleen in euro, ongeacht de valuta van het bedrijf."
+
+#. module: ow_payment_mollie_sepa
+#: model:ir.model.fields,field_description:ow_payment_mollie_sepa.field_account_bank_statement_line__sepa_mandate_available
+#: model:ir.model.fields,field_description:ow_payment_mollie_sepa.field_account_move__sepa_mandate_available
+#: model:ir.model.fields,field_description:ow_payment_mollie_sepa.field_payment_token__is_sepa_mandate
+#: model_terms:ir.ui.view,arch_db:ow_payment_mollie_sepa.payment_token_view_form_sepa
+msgid "SEPA Mandate"
+msgstr "SEPA-machtiging"
+
+#. module: ow_payment_mollie_sepa
+#: model:ir.model.fields,field_description:ow_payment_mollie_sepa.field_res_partner__sepa_mandate_count
+#: model:ir.model.fields,field_description:ow_payment_mollie_sepa.field_res_users__sepa_mandate_count
+msgid "SEPA Mandate Count"
+msgstr "Aantal SEPA-machtigingen"
+
+#. module: ow_payment_mollie_sepa
+#: model:ir.actions.report,name:ow_payment_mollie_sepa.action_report_sepa_mandate
+msgid "SEPA Mandate Form"
+msgstr "SEPA-machtigingsformulier"
+
+#. module: ow_payment_mollie_sepa
+#. odoo-python
+#: code:addons/ow_payment_mollie_sepa/models/res_partner.py:0
+#: model:ir.actions.act_window,name:ow_payment_mollie_sepa.payment_token_action_sepa
+#: model:ir.model.fields,field_description:ow_payment_mollie_sepa.field_res_partner__sepa_token_ids
+#: model:ir.model.fields,field_description:ow_payment_mollie_sepa.field_res_users__sepa_token_ids
+#: model:ir.ui.menu,name:ow_payment_mollie_sepa.menu_mollie_sepa_mandates
+#: model_terms:ir.ui.view,arch_db:ow_payment_mollie_sepa.payment_token_search_sepa
+#: model_terms:ir.ui.view,arch_db:ow_payment_mollie_sepa.payment_token_view_list_sepa
+msgid "SEPA Mandates"
+msgstr "SEPA-machtigingen"
+
+#. module: ow_payment_mollie_sepa
+#: model:ir.model.fields,field_description:ow_payment_mollie_sepa.field_payment_transaction__sepa_request_sent
+msgid "SEPA Request Sent"
+msgstr "SEPA-verzoek verstuurd"
+
+#. module: ow_payment_mollie_sepa
+#: model:ir.model.fields,help:ow_payment_mollie_sepa.field_payment_provider__sepa_creditor_identifier
+msgid ""
+"SEPA creditor identifier used by Mollie for the direct debits, printed on "
+"mandate forms. Filled automatically from the first Mollie direct debit."
+msgstr "SEPA-incassant-ID waaronder Mollie de incasso's uitvoert; staat op het machtigingsformulier. Wordt automatisch ingevuld bij de eerste Mollie-incasso."
+
+#. module: ow_payment_mollie_sepa
+#. odoo-python
+#: code:addons/ow_payment_mollie_sepa/models/payment_transaction.py:0
+msgid ""
+"SEPA direct debit %(ref)s failed at Mollie (%(msg)s). The invoice remains "
+"open and can be collected again once the customer has sorted out their bank."
+msgstr "SEPA-incasso %(ref)s is mislukt bij Mollie (%(msg)s). De factuur blijft open en kan opnieuw worden geïncasseerd zodra de klant het met de bank heeft opgelost."
+
+#. module: ow_payment_mollie_sepa
+#. odoo-python
+#: code:addons/ow_payment_mollie_sepa/models/mollie_sepa_batch_line.py:0
+msgid ""
+"SEPA direct debit skipped: no valid mandate registered for this customer. "
+"The invoice remains open."
+msgstr "SEPA-incasso overgeslagen: geen geldige machtiging geregistreerd voor deze klant. De factuur blijft open."
+
+#. module: ow_payment_mollie_sepa
+#. odoo-python
+#: code:addons/ow_payment_mollie_sepa/models/payment_transaction.py:0
+msgid "SEPA mandates %(old)s archived: replaced by mandate %(new)s."
+msgstr "SEPA-machtigingen %(old)s gearchiveerd: vervangen door machtiging %(new)s."
+
+#. module: ow_payment_mollie_sepa
+#. odoo-python
+#: code:addons/ow_payment_mollie_sepa/models/res_partner.py:0
+msgid "SEPA mandates synced from Mollie (%d found)."
+msgstr "SEPA-machtigingen gesynchroniseerd vanuit Mollie (%d gevonden)."
+
+#. module: ow_payment_mollie_sepa
+#: model:mail.template,name:ow_payment_mollie_sepa.mail_template_sepa_mandate_request
+msgid "SEPA: mandate request"
+msgstr "SEPA: machtiging aanvragen"
+
+#. module: ow_payment_mollie_sepa
+#: model:ir.model.fields.selection,name:ow_payment_mollie_sepa.selection__account_move__sepa_line_state__draft
+msgid "Scheduled in a batch"
+msgstr "Ingepland in een batch"
+
+#. module: ow_payment_mollie_sepa
+#: model:ir.model.fields,help:ow_payment_mollie_sepa.field_payment_transaction__sepa_request_sent
+msgid ""
+"Set (and committed) right before the direct debit is requested at Mollie. A "
+"transaction with this flag but without provider reference may exist at "
+"Mollie and must be recovered, never sent as a new payment."
+msgstr "Wordt gezet (en vastgelegd) vlak voordat de incasso bij Mollie wordt aangevraagd. Een transactie met deze vlag maar zonder providerreferentie kan bij Mollie bestaan en moet worden hersteld, nooit als nieuwe betaling verstuurd."
+
+#. module: ow_payment_mollie_sepa
+#: model_terms:ir.ui.view,arch_db:ow_payment_mollie_sepa.mollie_sepa_batch_view_form
+msgid "Set result"
+msgstr "Resultaat instellen"
+
+#. module: ow_payment_mollie_sepa
+#: model_terms:ir.ui.view,arch_db:ow_payment_mollie_sepa.report_sepa_mandate_document
+msgid "Signature"
+msgstr "Handtekening"
+
+#. module: ow_payment_mollie_sepa
+#: model:ir.model.fields,field_description:ow_payment_mollie_sepa.field_payment_token__sepa_signature_date
+msgid "Signature Date"
+msgstr "Datum ondertekening"
+
+#. module: ow_payment_mollie_sepa
+#: model_terms:ir.ui.view,arch_db:ow_payment_mollie_sepa.mollie_sepa_batch_view_form
+msgid "Start Collection"
+msgstr "Incasso starten"
+
+#. module: ow_payment_mollie_sepa
+#: model:ir.model.fields,field_description:ow_payment_mollie_sepa.field_mollie_sepa_batch__state
+#: model:ir.model.fields,field_description:ow_payment_mollie_sepa.field_mollie_sepa_batch_line__state
+msgid "State"
+msgstr "Status"
+
+#. module: ow_payment_mollie_sepa
+#. odoo-python
+#: code:addons/ow_payment_mollie_sepa/models/mollie_sepa_batch.py:0
+msgid "Status refreshed from Mollie."
+msgstr "Status opgehaald bij Mollie."
+
+#. module: ow_payment_mollie_sepa
+#: model_terms:ir.ui.view,arch_db:ow_payment_mollie_sepa.res_partner_view_form_sepa
+msgid "Sync from Mollie"
+msgstr "Synchroniseren met Mollie"
+
+#. module: ow_payment_mollie_sepa
+#: model:ir.model.fields.selection,name:ow_payment_mollie_sepa.selection__mollie_sepa_customer__mode__test
+#: model:ir.model.fields.selection,name:ow_payment_mollie_sepa.selection__payment_token__sepa_mode__test
+msgid "Test"
+msgstr "Test"
+
+#. module: ow_payment_mollie_sepa
+#: model:ir.model.fields,help:ow_payment_mollie_sepa.field_mollie_sepa_batch_line__mollie_test_url
+#: model:ir.model.fields,help:ow_payment_mollie_sepa.field_payment_transaction__mollie_test_url
+msgid "Test mode only: Mollie page to set the final status of the payment."
+msgstr "Alleen testmodus: Mollie-pagina om de eindstatus van de betaling in te stellen."
+
+#. module: ow_payment_mollie_sepa
+#: model_terms:ir.ui.view,arch_db:ow_payment_mollie_sepa.sepa_mandate_page
+msgid "Thank you! Your mandate for account"
+msgstr "Bedankt! Uw machtiging voor rekening"
+
+#. module: ow_payment_mollie_sepa
+#. odoo-python
+#: code:addons/ow_payment_mollie_sepa/wizards/mollie_sepa_mandate_wizard.py:0
+msgid ""
+"The Mollie customer could not be created. Check the provider's API key and "
+"logs."
+msgstr "De Mollie-klant kon niet worden aangemaakt. Controleer de API-sleutel van de provider en de logs."
+
+#. module: ow_payment_mollie_sepa
+#. odoo-python
+#: code:addons/ow_payment_mollie_sepa/models/payment_token.py:0
+msgid ""
+"The SEPA direct debit mandate %(ref)s is invalid at Mollie. Automatic "
+"collection is disabled for this customer until a new mandate is registered."
+msgstr "De SEPA-incassomachtiging %(ref)s is ongeldig bij Mollie. Automatische incasso is uitgeschakeld voor deze klant totdat een nieuwe machtiging is geregistreerd."
+
+#. module: ow_payment_mollie_sepa
+#. odoo-python
+#: code:addons/ow_payment_mollie_sepa/models/mollie_sepa_batch.py:0
+msgid "The batch was canceled."
+msgstr "De batch is geannuleerd."
+
+#. module: ow_payment_mollie_sepa
+#. odoo-python
+#: code:addons/ow_payment_mollie_sepa/models/mollie_sepa_batch_line.py:0
+msgid "The collection amount must be positive."
+msgstr "Het incassobedrag moet positief zijn."
+
+#. module: ow_payment_mollie_sepa
+#: model:ir.model.fields,help:ow_payment_mollie_sepa.field_mollie_sepa_mandate_wizard__bank_id
+msgid "The customer's IBAN that will be debited through this mandate."
+msgstr "De IBAN van de klant die via deze machtiging wordt geïncasseerd."
+
+#. module: ow_payment_mollie_sepa
+#: model:ir.model.fields,help:ow_payment_mollie_sepa.field_mollie_sepa_mandate_wizard__signature_date
+msgid ""
+"The date on which the customer signed (or accepted) the SEPA Direct Debit "
+"mandate."
+msgstr "De datum waarop de klant de SEPA-incassomachtiging heeft ondertekend (of geaccepteerd)."
+
+#. module: ow_payment_mollie_sepa
+#. odoo-python
+#: code:addons/ow_payment_mollie_sepa/models/mollie_sepa_batch.py:0
+msgid ""
+"The direct debits are being sent to Mollie in the background. Refresh the "
+"batch in a moment to follow the progress."
+msgstr "De incasso's worden op de achtergrond naar Mollie verstuurd. Ververs de batch zo meteen om de voortgang te volgen."
+
+#. module: ow_payment_mollie_sepa
+#. odoo-python
+#: code:addons/ow_payment_mollie_sepa/models/mollie_sepa_batch_line.py:0
+msgid "The invoice belongs to another company."
+msgstr "De factuur hoort bij een ander bedrijf."
+
+#. module: ow_payment_mollie_sepa
+#. odoo-python
+#: code:addons/ow_payment_mollie_sepa/models/mollie_sepa_batch_line.py:0
+msgid "The invoice is already paid."
+msgstr "De factuur is al betaald."
+
+#. module: ow_payment_mollie_sepa
+#. odoo-python
+#: code:addons/ow_payment_mollie_sepa/models/mollie_sepa_batch_line.py:0
+msgid "The invoice is already scheduled in batch %s."
+msgstr "De factuur is al ingepland in batch %s."
+
+#. module: ow_payment_mollie_sepa
+#: model_terms:ir.ui.view,arch_db:ow_payment_mollie_sepa.mollie_sepa_mandate_wizard_view_form
+msgid ""
+"The mandate is created at Mollie right away and becomes\n"
+"                    directly chargeable (SEPA SDD Core paper mandate). Make sure\n"
+"                    the customer has actually signed the mandate authorization and\n"
+"                    pre-notify new collection runs in time."
+msgstr ""
+"De machtiging wordt direct bij Mollie aangemaakt en is meteen\n"
+"                    incasseerbaar (SEPA SDD Core papieren machtiging). Zorg dat\n"
+"                    de klant de machtiging echt heeft ondertekend en kondig\n"
+"                    nieuwe incassorondes tijdig vooraf aan."
+
+#. module: ow_payment_mollie_sepa
+#: model_terms:ir.ui.view,arch_db:ow_payment_mollie_sepa.sepa_mandate_page
+msgid "The new mandate replaces the current one."
+msgstr "De nieuwe machtiging vervangt de huidige."
+
+#. module: ow_payment_mollie_sepa
+#: model_terms:ir.ui.view,arch_db:ow_payment_mollie_sepa.sepa_mandate_page
+msgid "The payment could not be started. Please try again or contact us."
+msgstr "De betaling kon niet worden gestart. Probeer het opnieuw of neem contact met ons op."
+
+#. module: ow_payment_mollie_sepa
+#. odoo-python
+#: code:addons/ow_payment_mollie_sepa/models/payment_provider.py:0
+msgid ""
+"The payment provider rejected the request.\n"
+"%s"
+msgstr ""
+"De betaalprovider heeft het verzoek geweigerd.\n"
+"%s"
+
+#. module: ow_payment_mollie_sepa
+#: model_terms:ir.ui.view,arch_db:ow_payment_mollie_sepa.sepa_mandate_page
+msgid ""
+"The payment was not completed, so no mandate was granted. You can try again "
+"below."
+msgstr "De betaling is niet afgerond, dus er is geen machtiging afgegeven. U kunt het hieronder opnieuw proberen."
+
+#. module: ow_payment_mollie_sepa
+#. odoo-python
+#: code:addons/ow_payment_mollie_sepa/models/mollie_sepa_batch.py:0
+msgid "The provider belongs to another company."
+msgstr "De provider hoort bij een ander bedrijf."
+
+#. module: ow_payment_mollie_sepa
+#. odoo-python
+#: code:addons/ow_payment_mollie_sepa/models/mollie_sepa_batch.py:0
+msgid "The provider of batch %s is disabled."
+msgstr "De provider van batch %s is uitgeschakeld."
+
+#. module: ow_payment_mollie_sepa
+#. odoo-python
+#: code:addons/ow_payment_mollie_sepa/wizards/mollie_sepa_mandate_wizard.py:0
+msgid "The signature date cannot be in the future."
+msgstr "De datum van ondertekening kan niet in de toekomst liggen."
+
+#. module: ow_payment_mollie_sepa
+#: model:ir.model.fields,help:ow_payment_mollie_sepa.field_payment_token__sepa_status
+msgid "The status of the SEPA mandate at Mollie, as last synced."
+msgstr "De status van de SEPA-machtiging bij Mollie, zoals laatst gesynchroniseerd."
+
+#. module: ow_payment_mollie_sepa
+#: model:ir.model.fields,help:ow_payment_mollie_sepa.field_payment_token__sepa_mandate_reference
+msgid "The unique mandate reference registered at Mollie and the bank."
+msgstr "Het unieke machtigingskenmerk dat bij Mollie en de bank is geregistreerd."
+
+#. module: ow_payment_mollie_sepa
+#: model_terms:ir.ui.view,arch_db:ow_payment_mollie_sepa.sepa_mandate_page
+msgid "There is an active mandate for account"
+msgstr "Er is een actieve machtiging voor rekening"
+
+#. module: ow_payment_mollie_sepa
+#. odoo-python
+#: code:addons/ow_payment_mollie_sepa/models/mollie_sepa_batch.py:0
+msgid "This batch has no lines to collect."
+msgstr "Deze batch heeft geen regels om te incasseren."
+
+#. module: ow_payment_mollie_sepa
+#. odoo-python
+#: code:addons/ow_payment_mollie_sepa/models/account_move.py:0
+msgid "This customer has no valid SEPA mandate."
+msgstr "Deze klant heeft geen geldige SEPA-machtiging."
+
+#. module: ow_payment_mollie_sepa
+#. odoo-python
+#: code:addons/ow_payment_mollie_sepa/wizards/mollie_sepa_mandate_wizard.py:0
+msgid "This does not look like a valid IBAN: %s"
+msgstr "Dit lijkt geen geldige IBAN: %s"
+
+#. module: ow_payment_mollie_sepa
+#. odoo-python
+#: code:addons/ow_payment_mollie_sepa/models/payment_provider.py:0
+msgid "This payment method cannot be used to grant a mandate."
+msgstr "Met deze betaalmethode kan geen machtiging worden afgegeven."
+
+#. module: ow_payment_mollie_sepa
+#: model_terms:ir.ui.view,arch_db:ow_payment_mollie_sepa.res_partner_view_form_sepa
+msgid ""
+"Tip: mandates can also be created automatically when the\n"
+"                        customer authorizes a first payment with iDEAL, Bancontact,\n"
+"                        Belfius, EPS, KBC, MyBank or Pay by Bank through \"Request Mandate\"\n"
+"                        or the customer portal."
+msgstr ""
+"Tip: machtigingen ontstaan ook automatisch wanneer de klant een eerste\n"
+"                        betaling doet met iDEAL, Bancontact, Belfius, EPS, KBC, MyBank of\n"
+"                        Pay by Bank via \"Machtiging aanvragen\" of het klantportaal."
+
+#. module: ow_payment_mollie_sepa
+#: model_terms:ir.ui.view,arch_db:ow_payment_mollie_sepa.sepa_mandate_page
+msgid ""
+"To confirm your bank account you pay a symbolic amount of EUR 0.01 with your\n"
+"                    bank. This amount is not invoiced."
+msgstr ""
+"Ter bevestiging van uw bankrekening betaalt u een symbolisch bedrag van EUR 0,01 via\n"
+"                    uw bank. Dit bedrag wordt niet gefactureerd."
+
+#. module: ow_payment_mollie_sepa
+#: model_terms:ir.ui.view,arch_db:ow_payment_mollie_sepa.mollie_sepa_batch_view_form
+#: model_terms:ir.ui.view,arch_db:ow_payment_mollie_sepa.mollie_sepa_batch_view_list
+msgid "Total"
+msgstr "Totaal"
+
+#. module: ow_payment_mollie_sepa
+#: model:ir.model.fields,field_description:ow_payment_mollie_sepa.field_mollie_sepa_batch__total_amount
+msgid "Total to Collect"
+msgstr "Totaal te incasseren"
+
+#. module: ow_payment_mollie_sepa
+#: model_terms:ir.ui.view,arch_db:ow_payment_mollie_sepa.sepa_mandate_page
+msgid "Use another bank account"
+msgstr "Andere bankrekening gebruiken"
+
+#. module: ow_payment_mollie_sepa
+#: model:ir.model.fields.selection,name:ow_payment_mollie_sepa.selection__payment_token__sepa_status__valid
+#: model_terms:ir.ui.view,arch_db:ow_payment_mollie_sepa.payment_token_search_sepa
+msgid "Valid"
+msgstr "Geldig"
+
+#. module: ow_payment_mollie_sepa
+#: model:ir.model.fields,help:ow_payment_mollie_sepa.field_payment_provider__sepa_auto_collect
+msgid ""
+"When enabled, a cron creates and runs a new collection batch for every open "
+"invoice covered by a valid mandate, once per day."
+msgstr "Als dit is ingeschakeld, maakt een geplande actie eenmaal per dag een nieuwe incassobatch aan en voert die uit voor alle openstaande facturen met een geldige machtiging."
+
+#. module: ow_payment_mollie_sepa
+#. odoo-python
+#: code:addons/ow_payment_mollie_sepa/models/payment_transaction.py:0
+msgid ""
+"You granted %(company)s a SEPA direct debit mandate for account %(account)s "
+"(%(holder)s). Future invoices will be collected from this account. Did you "
+"not authorize this? Please contact us right away."
+msgstr "U heeft %(company)s een machtiging voor SEPA-incasso gegeven voor rekening %(account)s (%(holder)s). Toekomstige facturen worden van deze rekening geïncasseerd. Heeft u dit niet zelf gedaan? Neem dan direct contact met ons op."
+
+#. module: ow_payment_mollie_sepa
+#: model_terms:ir.ui.view,arch_db:ow_payment_mollie_sepa.report_sepa_mandate_document
+msgid "Your details"
+msgstr "Uw gegevens"
+
+#. module: ow_payment_mollie_sepa
+#: model_terms:ir.ui.view,arch_db:ow_payment_mollie_sepa.sepa_mandate_page
+msgid "Your payment is being processed. Refresh this page in a moment."
+msgstr "Uw betaling wordt verwerkt. Ververs deze pagina over enkele ogenblikken."
+
+#. module: ow_payment_mollie_sepa
+#: model_terms:ir.ui.view,arch_db:ow_payment_mollie_sepa.sepa_mandate_page
+msgid ""
+"has been\n"
+"                registered. You will receive a confirmation by e-mail."
+msgstr ""
+"is\n"
+"                geregistreerd. U ontvangt een bevestiging per e-mail."
+
+#. module: ow_payment_mollie_sepa
+#. odoo-python
+#: code:addons/ow_payment_mollie_sepa/models/res_partner.py:0
+msgid "partner_id"
+msgstr ""
+
+#. module: ow_payment_mollie_sepa
+#. odoo-python
+#: code:addons/ow_payment_mollie_sepa/models/mollie_sepa_batch.py:0
+msgid "sepa_batch_line_id.batch_id"
+msgstr ""
+
+#. module: ow_payment_mollie_sepa
+#: model_terms:ir.ui.view,arch_db:ow_payment_mollie_sepa.sepa_mandate_page
+msgid ""
+"to send\n"
+"                    instructions to your bank to debit your account for future invoices, and your\n"
+"                    bank to debit your account in accordance with those instructions. You are\n"
+"                    entitled to a refund from your bank under the terms and conditions of your\n"
+"                    agreement with your bank. A refund must be claimed within 8 weeks starting from\n"
+"                    the date on which your account was debited."
+msgstr ""
+"om doorlopend\n"
+"                    incasso-opdrachten naar uw bank te sturen om een bedrag van uw rekening af te schrijven voor\n"
+"                    toekomstige facturen, en uw bank om doorlopend een bedrag van uw rekening af te schrijven\n"
+"                    overeenkomstig de opdracht. Als u het niet eens bent met een afschrijving, kunt u deze laten\n"
+"                    terugboeken. Neem hiervoor binnen 8 weken na afschrijving contact op met uw bank. Vraag uw\n"
+"                    bank naar de voorwaarden."
+
+#. module: ow_payment_mollie_sepa
+#: model_terms:ir.ui.view,arch_db:ow_payment_mollie_sepa.report_sepa_mandate_document
+msgid ""
+"to send\n"
+"                    recurring instructions to your bank to debit your account and (B) your bank to\n"
+"                    debit your account in accordance with the instructions from"
+msgstr ""
+"om doorlopend\n"
+"                    incasso-opdrachten te sturen naar uw bank om een bedrag van uw rekening af te schrijven en (B) uw bank om\n"
+"                    doorlopend een bedrag van uw rekening af te schrijven overeenkomstig de opdracht van"
+
+#. module: ow_payment_mollie_sepa
+#: model:mail.template,subject:ow_payment_mollie_sepa.mail_template_sepa_mandate_request
+msgid ""
+"{{ (object.company_id or user.company_id).name }}: SEPA direct debit mandate"
+msgstr "{{ (object.company_id or user.company_id).name }}: machtiging SEPA-incasso"

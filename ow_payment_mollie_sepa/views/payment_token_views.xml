@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="payment_token_view_list_sepa" model="ir.ui.view">
+        <field name="name">payment.token.list.sepa</field>
+        <field name="model">payment.token</field>
+        <field name="arch" type="xml">
+            <list string="SEPA Mandates">
+                <field name="partner_id"/>
+                <field name="sepa_consumer_name" optional="show"/>
+                <field name="sepa_consumer_account" optional="show"/>
+                <field name="sepa_mandate_reference" optional="show"/>
+                <field name="sepa_signature_date" optional="show"/>
+                <field name="sepa_status"/>
+                <field name="sepa_mode" optional="show"/>
+                <field name="provider_ref" optional="hide"/>
+                <field name="payment_details" optional="hide"/>
+                <field name="provider_id" optional="hide"/>
+                <field name="company_id" groups="base.group_multi_company" optional="hide"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="payment_token_view_form_sepa" model="ir.ui.view">
+        <field name="name">payment.token.form.sepa</field>
+        <field name="model">payment.token</field>
+        <field name="arch" type="xml">
+            <form string="SEPA Mandate">
+                <sheet>
+                    <widget name="web_ribbon" title="Archived" bg_color="text-bg-danger" invisible="active"/>
+                    <div class="oe_title">
+                        <h1><field name="partner_id"/></h1>
+                    </div>
+                    <group>
+                        <group string="Mandate">
+                            <field name="sepa_status" widget="badge"/>
+                            <field name="sepa_mandate_reference"/>
+                            <field name="sepa_signature_date"/>
+                            <field name="active" invisible="1"/>
+                        </group>
+                        <group string="Bank">
+                            <field name="sepa_consumer_name"/>
+                            <field name="sepa_consumer_account"/>
+                            <field name="payment_details"/>
+                        </group>
+                        <group string="Mollie">
+                            <field name="provider_id"/>
+                            <field name="provider_ref"/>
+                            <field name="mollie_customer_id"/>
+                            <field name="sepa_mode"/>
+                            <field name="company_id" groups="base.group_multi_company"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Direct Debits" name="transactions">
+                            <field name="transaction_ids" readonly="1">
+                                <list>
+                                    <field name="create_date"/>
+                                    <field name="reference"/>
+                                    <field name="amount"/>
+                                    <field name="state"/>
+                                </list>
+                            </field>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="payment_token_search_sepa" model="ir.ui.view">
+        <field name="name">payment.token.search.sepa</field>
+        <field name="model">payment.token</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="partner_id"/>
+                <field name="sepa_mandate_reference"/>
+                <field name="provider_ref"/>
+                <filter name="filter_sepa_mandates" string="SEPA Mandates"
+                        domain="[('provider_ref', '=like', 'mdt_%')]"/>
+                <separator/>
+                <filter name="filter_valid" string="Valid" domain="[('sepa_status', '=', 'valid')]"/>
+                <filter name="filter_pending" string="Pending" domain="[('sepa_status', '=', 'pending')]"/>
+                <filter name="filter_invalid" string="Invalid" domain="[('sepa_status', '=', 'invalid')]"/>
+                <separator/>
+                <filter name="filter_archived" string="Archived" domain="[('active', '=', False)]"/>
+            </search>
+        </field>
+    </record>
+
+    <record id="payment_token_action_sepa" model="ir.actions.act_window">
+        <field name="name">SEPA Mandates</field>
+        <field name="res_model">payment.token</field>
+        <field name="view_mode">list,form</field>
+        <field name="domain">[('provider_ref', '=like', 'mdt_%')]</field>
+        <field name="context">{'search_default_filter_sepa_mandates': 1}</field>
+        <field name="view_ids" eval="[
+            (5, 0, 0),
+            (0, 0, {'view_mode': 'list', 'view_id': ref('payment_token_view_list_sepa')}),
+            (0, 0, {'view_mode': 'form', 'view_id': ref('payment_token_view_form_sepa')}),
+        ]"/>
+        <field name="search_view_id" ref="payment_token_search_sepa"/>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">No SEPA mandates yet</p>
+            <p>
+                Register a mandate via the customer form ("Register Mandate") or let
+                the customer authorize one through a first payment (iDEAL, Bancontact, ...).
+            </p>
+        </field>
+    </record>
+
+</odoo>

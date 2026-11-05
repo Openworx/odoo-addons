@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+
+        <record id="mail_template_sepa_mandate_request" model="mail.template">
+            <field name="name">SEPA: mandate request</field>
+            <field name="model_id" ref="base.model_res_partner"/>
+            <field name="subject">{{ (object.company_id or user.company_id).name }}: SEPA direct debit mandate</field>
+            <field name="partner_to">{{ object.id }}</field>
+            <field name="lang">{{ object.lang }}</field>
+            <field name="auto_delete" eval="True"/>
+            <field name="body_html" type="html">
+<div style="margin: 0px; padding: 0px;">
+    <p>Dear <t t-out="object.name or ''">customer</t>,</p>
+    <p>
+        From now on we would like to collect our invoices by SEPA direct debit. Please
+        authorize this through the link below. You confirm your bank account with a
+        symbolic payment of EUR 0.01 through your bank; this amount is not invoiced.
+    </p>
+    <p style="margin: 16px 0px;">
+        <a t-att-href="object.get_sepa_mandate_url()"
+           style="background-color: #875A7B; padding: 8px 16px; color: #fff; border-radius: 5px; text-decoration: none;">
+            Grant SEPA direct debit mandate
+        </a>
+    </p>
+    <p>You can withdraw the mandate at any time through your bank or by contacting us.</p>
+    <p>Kind regards,<br/><t t-out="(object.company_id or user.company_id).name or ''"/></p>
+</div>
+            </field>
+        </record>
+
+    </data>
+</odoo>

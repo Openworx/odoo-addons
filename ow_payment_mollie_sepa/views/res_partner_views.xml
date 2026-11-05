@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="res_partner_view_form_sepa" model="ir.ui.view">
+        <field name="name">res.partner.form.sepa</field>
+        <field name="model">res.partner</field>
+        <field name="inherit_id" ref="base.view_partner_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//div[@name='button_box']" position="inside">
+                <field name="sepa_mandate_count" invisible="1"/>
+                <field name="has_sepa_mandate" invisible="1"/>
+                <button name="action_view_sepa_mandates" type="object"
+                        class="oe_stat_button" icon="fa-credit-card"
+                        invisible="sepa_mandate_count == 0">
+                    <div class="o_stat_info">
+                        <field name="sepa_mandate_count" class="o_stat_value"/>
+                        <span class="o_stat_text">Mandates</span>
+                    </div>
+                </button>
+            </xpath>
+            <xpath expr="//page[@name='contact_addresses']" position="before">
+                <page string="SEPA Direct Debit" name="sepa_mandates">
+                    <div class="d-flex gap-2 mb-3">
+                        <button name="action_create_sepa_mandate" type="object"
+                                string="Register Mandate" class="btn btn-primary"
+                                groups="account.group_account_manager"
+                                confirm="Only register this mandate after the customer signed the SEPA Direct Debit authorization. The mandate becomes active at Mollie immediately."/>
+                        <button name="action_print_sepa_mandate_form" type="object"
+                                string="Print Mandate Form" class="btn btn-secondary"
+                                groups="account.group_account_manager"/>
+                        <button name="action_send_sepa_mandate_request" type="object"
+                                string="Request Mandate" class="btn btn-secondary"
+                                groups="account.group_account_manager"/>
+                        <button name="action_sync_sepa_mandates" type="object"
+                                string="Sync from Mollie" class="btn btn-secondary"
+                                groups="account.group_account_manager"/>
+                    </div>
+                    <group>
+                        <field name="sepa_collect_enabled"/>
+                    </group>
+                    <field name="sepa_token_ids" readonly="1">
+                        <list>
+                            <field name="provider_id"/>
+                            <field name="sepa_mandate_reference"/>
+                            <field name="sepa_consumer_name"/>
+                            <field name="sepa_consumer_account"/>
+                            <field name="sepa_signature_date"/>
+                            <field name="sepa_status" widget="badge"/>
+                        </list>
+                    </field>
+                    <p class="text-muted">
+                        Tip: mandates can also be created automatically when the
+                        customer authorizes a first payment with iDEAL, Bancontact,
+                        Belfius, EPS, KBC, MyBank or Pay by Bank through "Request Mandate"
+                        or the customer portal.
+                    </p>
+                </page>
+            </xpath>
+        </field>
+    </record>
+
+</odoo>

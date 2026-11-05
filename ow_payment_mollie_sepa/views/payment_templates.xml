@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+<template id="sepa_mandate_page" name="SEPA Mandate Request">
+    <t t-call="portal.frontend_layout">
+        <div class="container my-5" style="max-width: 760px;">
+            <h2>SEPA Direct Debit mandate</h2>
+            <p>Customer: <t t-out="partner.name"/></p>
+            <div t-if="error" class="alert alert-danger">
+                The payment could not be started. Please try again or contact us.
+            </div>
+            <div t-if="status == 'granted'" class="alert alert-success">
+                Thank you! Your mandate for account <t t-out="mandate.payment_details"/> has been
+                registered. You will receive a confirmation by e-mail.
+            </div>
+            <div t-elif="status == 'processing'" class="alert alert-info">
+                Your payment is being processed. Refresh this page in a moment.
+            </div>
+            <div t-elif="status == 'failed'" class="alert alert-warning">
+                The payment was not completed, so no mandate was granted. You can try again below.
+            </div>
+            <div t-elif="status == 'existing'" class="alert alert-info">
+                There is an active mandate for account <t t-out="mandate.payment_details"/>.
+                <a t-if="not show_methods and methods" t-att-href="landing_route + '?new=1'">Use another bank account</a>
+            </div>
+            <t t-if="show_methods">
+                <h3>Grant a mandate</h3>
+                <p>
+                    By granting this mandate you authorize <t t-out="company.name"/> to send
+                    instructions to your bank to debit your account for future invoices, and your
+                    bank to debit your account in accordance with those instructions. You are
+                    entitled to a refund from your bank under the terms and conditions of your
+                    agreement with your bank. A refund must be claimed within 8 weeks starting from
+                    the date on which your account was debited.
+                </p>
+                <p>
+                    To confirm your bank account you pay a symbolic amount of EUR 0.01 with your
+                    bank. This amount is not invoiced.
+                </p>
+                <p t-if="status == 'existing'">The new mandate replaces the current one.</p>
+                <t t-foreach="methods" t-as="method">
+                    <form method="post" action="/sepa/mandate/start" class="d-inline-block me-2 mb-2">
+                        <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
+                        <input type="hidden" name="payment_method_id" t-att-value="method.id"/>
+                        <t t-if="access_token">
+                            <input type="hidden" name="partner_id" t-att-value="partner.id"/>
+                            <input type="hidden" name="access_token" t-att-value="access_token"/>
+                        </t>
+                        <button type="submit" class="btn btn-primary">
+                            Grant mandate with <t t-out="method.name"/>
+                        </button>
+                    </form>
+                </t>
+            </t>
+            <p t-if="not methods">SEPA Direct Debit is not available at the moment.</p>
+        </div>
+    </t>
+</template>
+
+<template id="portal_my_home_sepa_mandate" name="SEPA Mandate Portal Entry" inherit_id="portal.portal_my_home">
+    <xpath expr="//div[@id='portal_common_category']" position="inside">
+        <t t-if="request.env['payment.provider'].sudo()._sepa_get_enabled_providers()">
+            <t t-call="portal.portal_docs_entry">
+                <t t-set="title">SEPA Direct Debit</t>
+                <t t-set="text">Authorize the automatic collection of your invoices</t>
+                <t t-set="url" t-value="'/my/sepa_mandate'"/>
+                <t t-set="config_card" t-value="True"/>
+            </t>
+        </t>
+    </xpath>
+</template>
+
+</odoo>

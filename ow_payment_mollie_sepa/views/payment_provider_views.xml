@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="payment_provider_form_sepa" model="ir.ui.view">
+        <field name="name">payment.provider.form.sepa</field>
+        <field name="model">payment.provider</field>
+        <field name="inherit_id" ref="payment_mollie.payment_provider_form"/>
+        <field name="arch" type="xml">
+            <group name="provider_credentials" position="inside">
+                <group name="sepa_group" string="SEPA Direct Debit" invisible="code != 'mollie'">
+                    <field name="sepa_enabled"/>
+                    <label for="sepa_max_amount" invisible="not sepa_enabled"/>
+                    <div name="sepa_max_amount_div" invisible="not sepa_enabled">
+                        <field name="sepa_max_amount" class="oe_inline"/>
+                        <span> per direct debit (Mollie default limit: 1,000.00 EUR)</span>
+                    </div>
+                    <field name="sepa_mandate_ref_prefix" invisible="not sepa_enabled"/>
+                    <field name="sepa_creditor_identifier" invisible="not sepa_enabled"/>
+                    <field name="sepa_retry_max_attempts" invisible="not sepa_enabled"/>
+                    <field name="sepa_retry_delay_days" invisible="not sepa_enabled"/>
+                    <field name="sepa_auto_collect" invisible="not sepa_enabled"/>
+                    <span class="text-muted" invisible="not sepa_enabled">
+                        Automatic collection requires the cron
+                        "Mollie SEPA: automatic daily collection" to be enabled.
+                    </span>
+                </group>
+            </group>
+        </field>
+    </record>
+
+</odoo>

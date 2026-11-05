@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="mollie_sepa_batch_view_list" model="ir.ui.view">
+        <field name="name">mollie.sepa.batch.list</field>
+        <field name="model">mollie.sepa.batch</field>
+        <field name="arch" type="xml">
+            <list string="SEPA Collection Batches">
+                <field name="name"/>
+                <field name="date"/>
+                <field name="provider_id" optional="hide"/>
+                <field name="lines_count"/>
+                <field name="total_amount" sum="Total"/>
+                <field name="collected_amount" sum="Total" optional="show"/>
+                <field name="failed_amount" sum="Total" optional="when_folded"/>
+                <field name="currency_id" optional="hide"/>
+                <field name="company_id" groups="base.group_multi_company" optional="hide"/>
+                <field name="state" widget="badge"
+                       decoration-info="state in ('draft', 'collecting')"
+                       decoration-warning="state == 'collected'"
+                       decoration-success="state == 'done'"
+                       decoration-danger="state == 'cancel'"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="mollie_sepa_batch_view_form" model="ir.ui.view">
+        <field name="name">mollie.sepa.batch.form</field>
+        <field name="model">mollie.sepa.batch</field>
+        <field name="arch" type="xml">
+            <form string="SEPA Collection Batch">
+                <header>
+                    <button name="action_generate_lines" type="object" string="Fetch Open Invoices"
+                            class="btn-secondary" invisible="state != 'draft'"/>
+                    <button name="action_collect" type="object" string="Start Collection"
+                            class="btn-primary" invisible="state != 'draft'"/>
+                    <button name="action_refresh" type="object" string="Refresh Status"
+                            class="btn-secondary" invisible="state not in ('collecting', 'collected')"/>
+                    <button name="action_cancel" type="object" string="Cancel"
+                            invisible="state not in ('draft', 'collecting', 'collected')"
+                            confirm="Cancel this batch? Direct debits that Mollie already processes cannot be canceled anymore."/>
+                    <field name="state" widget="statusbar" statusbar_visible="draft,collecting,collected,done"/>
+                </header>
+                <sheet>
+                    <div class="oe_title">
+                        <h1><field name="name" readonly="1"/></h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="date" readonly="state != 'draft'"/>
+                            <field name="provider_id" invisible="state != 'draft'"
+                                   options="{'no_open': True}"/>
+                            <field name="company_id" groups="base.group_multi_company"/>
+                        </group>
+                        <group>
+                            <field name="total_amount"/>
+                            <field name="collected_amount"/>
+                            <field name="failed_amount"/>
+                            <field name="currency_id" invisible="1"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Collection Lines" name="lines">
+                            <field name="line_ids" readonly="state != 'draft'">
+                                <list>
+                                    <field name="partner_id"/>
+                                    <field name="invoice_id"/>
+                                    <field name="amount" sum="Total"/>
+                                    <field name="currency_id" optional="hide"/>
+                                    <field name="transaction_id" optional="show"/>
+                                    <field name="state" widget="badge"
+                                           decoration-info="state == 'draft'"
+                                           decoration-warning="state == 'pending'"
+                                           decoration-success="state == 'done'"
+                                           decoration-danger="state in ('failed', 'charged_back')"
+                                           decoration-muted="state == 'cancel'"/>
+                                    <field name="message"/>
+                                    <field name="mollie_test_url" widget="url" optional="show"
+                                           invisible="not mollie_test_url" text="Set result"/>
+                                </list>
+                            </field>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="mollie_sepa_batch_view_search" model="ir.ui.view">
+        <field name="name">mollie.sepa.batch.search</field>
+        <field name="model">mollie.sepa.batch</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="name"/>
+                <filter name="filter_draft" string="Draft" domain="[('state', '=', 'draft')]"/>
+                <filter name="filter_collecting" string="Collecting" domain="[('state', '=', 'collecting')]"/>
+                <filter name="filter_collected" string="Collected" domain="[('state', '=', 'collected')]"/>
+                <filter name="filter_done" string="Completed" domain="[('state', '=', 'done')]"/>
+                <separator/>
+                <filter name="filter_date" string="Collection Date" date="date"/>
+            </search>
+        </field>
+    </record>
+
+    <record id="mollie_sepa_batch_action" model="ir.actions.act_window">
+        <field name="name">SEPA Collection Batches</field>
+        <field name="res_model">mollie.sepa.batch</field>
+        <field name="view_mode">list,form</field>
+        <field name="search_view_id" ref="mollie_sepa_batch_view_search"/>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">Create a new collection batch</p>
+            <p>
+                Every collection runs in its own batch: click New, fetch the
+                open invoices covered by a SEPA mandate, then start the direct
+                debits. They are sent to Mollie in the background, one invoice at
+                a time. The batch completes automatically as Mollie reports the
+                collected and failed direct debits.
+            </p>
+        </field>
+    </record>
+
+</odoo>

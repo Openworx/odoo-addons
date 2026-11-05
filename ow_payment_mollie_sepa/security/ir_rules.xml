@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+
+        <record id="mollie_sepa_batch_company_rule" model="ir.rule">
+            <field name="name">Mollie SEPA batch: multi-company</field>
+            <field name="model_id" ref="model_mollie_sepa_batch"/>
+            <field name="domain_force">[('company_id', 'in', company_ids)]</field>
+        </record>
+
+        <record id="mollie_sepa_batch_line_company_rule" model="ir.rule">
+            <field name="name">Mollie SEPA batch line: multi-company</field>
+            <field name="model_id" ref="model_mollie_sepa_batch_line"/>
+            <field name="domain_force">[('company_id', 'in', company_ids)]</field>
+        </record>
+
+    </data>
+</odoo>

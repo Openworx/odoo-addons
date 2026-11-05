@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="action_report_sepa_mandate" model="ir.actions.report">
+        <field name="name">SEPA Mandate Form</field>
+        <field name="model">res.partner</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">ow_payment_mollie_sepa.report_sepa_mandate</field>
+        <field name="report_file">ow_payment_mollie_sepa.report_sepa_mandate</field>
+        <field name="print_report_name">'SEPA mandate - %s' % object.name</field>
+    </record>
+
+    <template id="report_sepa_mandate">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="o">
+                <t t-call="ow_payment_mollie_sepa.report_sepa_mandate_document" t-lang="o.lang"/>
+            </t>
+        </t>
+    </template>
+
+    <template id="report_sepa_mandate_document">
+        <t t-set="values" t-value="o._sepa_mandate_form_values()"/>
+        <t t-set="company" t-value="values['company']"/>
+        <t t-set="dots" t-value="'......................................................'"/>
+        <t t-call="web.external_layout">
+            <div class="page">
+                <h2 class="mt-3 mb-4">SEPA Direct Debit mandate (recurring)</h2>
+                <p>
+                    By signing this form, you authorize (A) <t t-out="company.name"/> to send
+                    recurring instructions to your bank to debit your account and (B) your bank to
+                    debit your account in accordance with the instructions from
+                    <t t-out="company.name"/>.
+                </p>
+                <p>
+                    If you do not agree with a debit, you can have it refunded. Contact your bank
+                    within eight weeks after the debit. Ask your bank about the conditions.
+                </p>
+
+                <h3 class="mt-4">Creditor</h3>
+                <div class="row">
+                    <div class="col-6">
+                        <div><strong>Company name:</strong> <t t-out="company.name"/></div>
+                        <div><strong>Address:</strong> <t t-out="company.street or ''"/> <t t-out="company.street2 or ''"/></div>
+                        <div><strong>Zip:</strong> <t t-out="company.zip or ''"/></div>
+                        <div><strong>City:</strong> <t t-out="company.city or ''"/></div>
+                        <div><strong>Country:</strong> <t t-out="company.country_id.name or ''"/></div>
+                    </div>
+                    <div class="col-6">
+                        <div><strong>Creditor identifier:</strong> <t t-out="values['creditor_identifier'] or dots"/></div>
+                        <div><strong>Mandate reference:</strong> <t t-out="values['reference'] or dots"/></div>
+                        <div><strong>Transaction type:</strong> recurring</div>
+                    </div>
+                </div>
+
+                <h3 class="mt-4">Your details</h3>
+                <p>Please complete where necessary.</p>
+                <div class="row">
+                    <div class="col-6">
+                        <div><strong>Company name:</strong> <t t-out="o.name"/></div>
+                        <div><strong>Address:</strong> <t t-out="' '.join(filter(None, [o.street, o.street2])) or dots"/></div>
+                        <div><strong>Zip:</strong> <t t-out="o.zip or dots"/></div>
+                        <div><strong>City:</strong> <t t-out="o.city or dots"/></div>
+                        <div><strong>Country:</strong> <t t-out="o.country_id.name or dots"/></div>
+                    </div>
+                    <div class="col-6">
+                        <div><strong>Identification code (optional):</strong></div>
+                        <div><t t-out="dots"/></div>
+                    </div>
+                </div>
+                <div class="mt-3">
+                    <div><strong>IBAN (account number):</strong> <t t-out="values['iban'] or dots"/></div>
+                    <div><strong>Account holder:</strong> <t t-out="values['holder'] or dots"/></div>
+                </div>
+
+                <h3 class="mt-4">Signature</h3>
+                <div class="row">
+                    <div class="col-6">
+                        <div><strong>Full name:</strong> <t t-out="dots"/></div>
+                        <div class="mt-4"><strong>Signature:</strong></div>
+                    </div>
+                    <div class="col-6">
+                        <div><strong>Place of signature:</strong> <t t-out="dots"/></div>
+                        <div class="mt-4"><strong>Date of signature:</strong> <t t-out="dots"/></div>
+                    </div>
+                </div>
+            </div>
+        </t>
+    </template>
+
+</odoo>

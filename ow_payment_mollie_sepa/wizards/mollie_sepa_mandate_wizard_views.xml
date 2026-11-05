@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="mollie_sepa_mandate_wizard_view_form" model="ir.ui.view">
+        <field name="name">mollie.sepa.mandate.wizard.form</field>
+        <field name="model">mollie.sepa.mandate.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Register SEPA Mandate">
+                <group>
+                    <group>
+                        <field name="partner_id"/>
+                        <field name="bank_id" options="{'no_create': True}"/>
+                        <field name="iban" readonly="1"/>
+                    </group>
+                    <group>
+                        <field name="consumer_name"/>
+                        <field name="signature_date"/>
+                        <field name="mandate_reference"/>
+                        <field name="provider_id" groups="base.group_multi_company"/>
+                    </group>
+                </group>
+                <div class="alert alert-info" role="alert">
+                    The mandate is created at Mollie right away and becomes
+                    directly chargeable (SEPA SDD Core paper mandate). Make sure
+                    the customer has actually signed the mandate authorization and
+                    pre-notify new collection runs in time.
+                </div>
+                <footer>
+                    <button name="action_create_mandate" type="object"
+                            string="Register Mandate" class="btn-primary"/>
+                    <button special="cancel" string="Cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+</odoo>

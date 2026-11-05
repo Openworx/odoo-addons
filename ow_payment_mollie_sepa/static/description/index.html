@@ -1,0 +1,71 @@
+<h2>Mollie SEPA Direct Debit</h2>
+<p>SEPA Direct Debit collection via Mollie for Odoo 19 Community. Register SEPA mandates, collect open customer invoices by direct debit in batches, and let Odoo book the payments automatically. Built on top of the official Mollie add-on payment_mollie_official.</p>
+
+<h2>Features</h2>
+
+<h3>Mandates</h3>
+<p>Register a signed paper mandate (IBAN, account holder, signature date and a unique mandate reference) directly at Mollie, or send the customer a mandate request: through a personal link (no login needed) or the customer portal, the customer pays EUR 0.01 with iDEAL, Bancontact, Belfius, EPS, KBC, MyBank or Pay by Bank and grants the mandate. This validation payment is not booked, and the customer receives a confirmation with the masked IBAN. A new online mandate replaces the customer's older ones, so each customer has one active mandate.</p>
+<p>For paper mandates, print a ready-to-sign mandate form (PDF) on your company letterhead, with Mollie's creditor identifier and a reserved mandate reference.</p>
+
+<h3>Collection batches</h3>
+<p>Every collection run is a new batch with the invoices due by its collection date. Direct debits are sent to Mollie in the background, one invoice at a time, each with an idempotency key, so an interrupted run never creates a second payment.</p>
+
+<h3>No double debits</h3>
+<p>One central check is shared by the invoice button, the batch generation and the actual charge: the invoice is locked, its open amount is read again, and a running direct debit or online payment blocks a new one. Invoices paid in the meantime are skipped; partial payments lower the amount.</p>
+
+<h3>Automatic booking</h3>
+<p>Status updates arrive through the Mollie webhook, with an hourly poll as fallback. A collected direct debit creates the payment and reconciles the invoice; the batch completes on its own.</p>
+
+<h3>Failures and retries</h3>
+<p>A failed direct debit shows the bank reason (e.g. AM04, insufficient funds) on the batch line and the invoice, which stays open. Retries follow the provider settings: by default at most 2 attempts, 7 days apart. A revoked mandate is archived and the customer is notified in the chatter.</p>
+
+<h3>Chargebacks and test/live</h3>
+<p>Chargebacks reported by Mollie mark the line as charged back and schedule an activity on the invoice. Mollie customers and mandates are kept per provider and per mode, so a test mandate is never charged in live mode. Full IBANs are only visible to invoicing users.</p>
+
+<h2>Configuration</h2>
+<ul>
+<li>Go to Invoicing, Configuration, Payment Providers, Mollie and enter your Mollie API key (test or live).</li>
+<li>Enable SEPA Direct Debit.</li>
+<li>Optionally set the Max Amount per Direct Debit (Mollie default: 1,000.00 EUR), the Mandate Reference Prefix, Max Collection Attempts and Days Between Attempts.</li>
+<li>Creditor Identifier: printed on the mandate form. It is filled in automatically after the first direct debit; enter Mollie's creditor identifier yourself to print forms before that.</li>
+<li>For unattended collection, enable Automatic Daily Collection and activate the scheduled action "Mollie SEPA: automatic daily collection" (runs daily at 05:00 UTC).</li>
+<li>Make Odoo reachable over HTTPS and set web.base.url to that address: Mollie webhooks and the mandate request links depend on it.</li>
+<li>Configure an outgoing mail server for the mandate request and confirmation e-mails.</li>
+<li>Sync the Mollie payment methods so that SEPA Direct Debit and the bank methods are available.</li>
+</ul>
+
+<h2>Usage</h2>
+
+<h3>Register a mandate</h3>
+<p>Paper mandate: open the customer, tab SEPA Direct Debit, click Print Mandate Form and let the customer sign the PDF. Then click Register Mandate: the printed mandate reference is proposed. Mollie activates the mandate immediately.</p>
+<p>Online: open the customer, tab SEPA Direct Debit, click Request Mandate and send the e-mail. The customer opens the link, chooses a bank method and pays EUR 0.01. Portal users can also go to My Account, SEPA Direct Debit.</p>
+<p>Registering a mandate enables SEPA Collection on the customer. This opt-in can be unticked.</p>
+
+<h3>Collect</h3>
+<p>From an invoice, click SEPA Direct Debit (only shown when the customer has a valid mandate). Or go to Invoicing, Customers, SEPA Direct Debit, Collection Batches, create a batch, click Fetch Open Invoices and then Start Collection.</p>
+<p>The batch moves to Collecting while the direct debits are sent, then follows the results from Mollie. Use Refresh Status to poll Mollie immediately. Starting collections and registering mandates requires the Invoicing: Administrator access right; other invoicing users have read access.</p>
+
+<h2>Testing with Mollie test mode</h2>
+<p>With a test API key, the cents of the amount select the outcome of a direct debit:</p>
+<ul>
+<li>.00: succeeds</li>
+<li>.87: always fails</li>
+<li>.88: fails on the second attempt</li>
+<li>.89: blocked or charged back</li>
+</ul>
+<p>A test direct debit stays pending until its due date. To set the result right away, open the payment's changePaymentState link (Mollie dashboard or API), choose the status, and click Refresh Status on the batch. In test mode this link is also posted on the invoice and shown on the batch line (Mollie Test Link).</p>
+
+<h2>Limitations</h2>
+<ul>
+<li>EUR only, whatever the company currency; default limit 1,000.00 EUR per direct debit.</li>
+<li>Pre-notification (14 days by default under the SEPA rulebook) is not sent automatically.</li>
+<li>Chargebacks are flagged, not booked: the accountant books the reversal.</li>
+<li>The mandate text on the request page follows the standard EPC wording but has not been legally reviewed.</li>
+<li>The EUR 0.01 of a mandate request is not booked in Odoo; it does appear in the Mollie settlement, together with Mollie's normal transaction fee.</li>
+<li>The mandate request link does not expire; the customer is notified by e-mail of every mandate granted.</li>
+<li>Credit notes are not netted; each open invoice gets its own direct debit.</li>
+</ul>
+
+<h2>Author</h2>
+<p>Openworx, info@openworx.nl, https://www.openworx.nl</p>
+<p>License: LGPL-3</p>

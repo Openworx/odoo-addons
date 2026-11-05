@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <menuitem id="menu_mollie_sepa_root" name="SEPA Direct Debit"
+              parent="account.menu_finance_receivables"
+              sequence="35"
+              groups="account.group_account_manager"/>
+
+    <menuitem id="menu_mollie_sepa_batch" name="Collection Batches"
+              parent="menu_mollie_sepa_root"
+              action="mollie_sepa_batch_action"
+              sequence="10"/>
+
+    <menuitem id="menu_mollie_sepa_mandates" name="SEPA Mandates"
+              parent="menu_mollie_sepa_root"
+              action="payment_token_action_sepa"
+              sequence="20"
+              groups="account.group_account_manager"/>
+
+</odoo>

@@ -1,0 +1,9 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_mollie_sepa_batch_manager,mollie.sepa.batch manager,model_mollie_sepa_batch,account.group_account_manager,1,1,1,1
+access_mollie_sepa_batch_invoice,mollie.sepa.batch invoice user,model_mollie_sepa_batch,account.group_account_invoice,1,0,0,0
+access_mollie_sepa_batch_line_manager,mollie.sepa.batch.line manager,model_mollie_sepa_batch_line,account.group_account_manager,1,1,1,1
+access_mollie_sepa_batch_line_invoice,mollie.sepa.batch.line invoice user,model_mollie_sepa_batch_line,account.group_account_invoice,1,0,0,0
+access_mollie_sepa_mandate_wizard_manager,mollie.sepa.mandate.wizard manager,model_mollie_sepa_mandate_wizard,account.group_account_manager,1,1,1,0
+access_mollie_sepa_customer_manager,mollie.sepa.customer manager,model_mollie_sepa_customer,account.group_account_manager,1,0,0,0
+access_mollie_sepa_customer_invoice,mollie.sepa.customer invoice user,model_mollie_sepa_customer,account.group_account_invoice,1,0,0,0
+access_payment_provider_sepa_manager,payment.provider sepa accountant,payment.model_payment_provider,account.group_account_manager,1,0,0,0
