@@ -8,6 +8,7 @@
 | ow_mail_oauth | OAuth2 (Gmail / Microsoft 365) for ow_mail accounts |
 | ow_mcp_server | MCP server: exposes models and records safely to AI clients |
 | ow_mcp_oauth | OAuth 2.1 authorization server with Dynamic Client Registration for ow_mcp_server |
+| ow_payment_mollie_sepa | SEPA Direct Debit via Mollie: mandates (online request, printable form), collection batches and automatic booking of invoices. Requires `payment_mollie_official` from [mollie/mollie-odoo](https://github.com/mollie/mollie-odoo/tree/19.0) |
 | ow_shield | Web application firewall and security suite: request filtering, brute-force and master-password protection, session control, security scans |
 | ow_security_txt | `/.well-known/security.txt` (RFC 9116) |
 
